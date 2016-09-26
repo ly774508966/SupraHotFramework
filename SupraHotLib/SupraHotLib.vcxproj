@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Tegra-Android">
+      <Configuration>Debug</Configuration>
+      <Platform>Tegra-Android</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
@@ -8,6 +12,10 @@
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Tegra-Android">
+      <Configuration>Release</Configuration>
+      <Platform>Tegra-Android</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
@@ -49,6 +57,20 @@
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">
+    <PlatformToolset>v120</PlatformToolset>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <AndroidTargetAPI>android-21</AndroidTargetAPI>
+    <NdkToolchainVersion>clang-3.8</NdkToolchainVersion>
+    <AndroidStlType>llvm-libc++_static</AndroidStlType>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">
+    <PlatformToolset>v120</PlatformToolset>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <AndroidTargetAPI>android-21</AndroidTargetAPI>
+    <NdkToolchainVersion>clang-3.8</NdkToolchainVersion>
+    <AndroidStlType>llvm-libc++_static</AndroidStlType>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -93,6 +115,14 @@
     <LibraryPath>$(SolutionDir)Externals\libs\win\$(Platform);$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>
     <OutDir>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">
+    <OutDir>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</OutDir>
+    <TargetExt>.so</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">
+    <OutDir>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</OutDir>
+    <TargetExt>.so</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -183,6 +213,42 @@
       <AdditionalLibraryDirectories>$(SolutionDir)Externals\libs\win\$(Platform);$(LibraryPath)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">
+    <ClCompile>
+      <PreprocessorDefinitions>PLATFORM_ANDROID</PreprocessorDefinitions>
+      <CLanguageStandard>c11</CLanguageStandard>
+      <CppLanguageStandard>c++11</CppLanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)Externals\include</AdditionalIncludeDirectories>
+      <Warnings>DisableAllWarnings</Warnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>android;EGL;GLESv3;c;stdc++;c++;lua53-static;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\NVPACK\android-ndk-r12b\platforms\android-21\arch-arm\usr\lib;$(SolutionDir)Externals\libs\android</AdditionalLibraryDirectories>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>lua53-static;android;EGL;GLESv3;c;stdc++;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Externals\libs\android;C:\NVPACK\android-ndk-r12b\platforms\android-21\arch-arm\usr\lib;</AdditionalLibraryDirectories>
+      <ThinArchive>true</ThinArchive>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">
+    <ClCompile>
+      <PreprocessorDefinitions>PLATFORM_ANDROID</PreprocessorDefinitions>
+      <CLanguageStandard>c11</CLanguageStandard>
+      <CppLanguageStandard>c++11</CppLanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)Externals\include</AdditionalIncludeDirectories>
+      <Warnings>DisableAllWarnings</Warnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>android;EGL;GLESv3;c;stdc++;c++;lua53-static;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\NVPACK\android-ndk-r12b\platforms\android-21\arch-arm\usr\lib;$(SolutionDir)Externals\libs\android</AdditionalLibraryDirectories>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>lua53-static;android;EGL;GLESv3;c;stdc++;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Externals\libs\android;C:\NVPACK\android-ndk-r12b\platforms\android-21\arch-arm\usr\lib;</AdditionalLibraryDirectories>
+      <ThinArchive>true</ThinArchive>
+    </Lib>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="Camera.h" />
@@ -207,19 +273,29 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
-    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="stdafx.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="StringUtil.h" />
     <ClInclude Include="Subscriber.h" />
     <ClInclude Include="SubscriberComponent.h" />
-    <ClInclude Include="targetver.h" />
+    <ClInclude Include="targetver.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureCube.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Vec3.h" />
     <ClInclude Include="Vertex.h" />
+    <ClInclude Include="WindowAndroid.h" />
     <ClInclude Include="WindowInterface.h" />
-    <ClInclude Include="WindowWin32.h" />
+    <ClInclude Include="WindowWin32.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">true</ExcludedFromBuild>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
@@ -243,19 +319,25 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="stb_image.c" />
-    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="StringUtil.cpp" />
     <ClCompile Include="Subscriber.cpp" />
     <ClCompile Include="SubscriberComponent.cpp" />
-    <ClCompile Include="SupraHotLib.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureCube.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vec2.cpp" />
     <ClCompile Include="Vec3.cpp" />
     <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="WindowAndroid.cpp" />
     <ClCompile Include="WindowInterface.cpp" />
-    <ClCompile Include="WindowWin32.cpp" />
+    <ClCompile Include="WindowWin32.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

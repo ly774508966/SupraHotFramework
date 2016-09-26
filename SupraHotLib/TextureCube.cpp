@@ -157,7 +157,7 @@ namespace SupraHot
 				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, InternalFormat, width, height, 0, Format, Type, nullptr);
 
 				/* set texture parameters */
-#if TARGET_PLATFORM == PLATFORM_WINDOWS || TARGET_PLATFORM == PLATFORM_MAC
+#ifdef PLATFORM_WINDOWS
 				glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 #else
 				glEnable(GL_TEXTURE_CUBE_MAP);
@@ -261,7 +261,7 @@ namespace SupraHot
 					/* bind texture to buffer */
 					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &data[0]);
 
-#if TARGET_PLATFORM == PLATFORM_WINDOWS || TARGET_PLATFORM == PLATFORM_MAC
+#ifdef PLATFORM_WINDOWS
 					glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 #else
 					glEnable(GL_TEXTURE_CUBE_MAP);

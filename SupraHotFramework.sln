@@ -12,24 +12,34 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SupraHotSandbox", "SupraHot
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Tegra-Android = Debug|Tegra-Android
 		Debug|Win32 = Debug|Win32
 		Debug|x64 = Debug|x64
+		Release|Tegra-Android = Release|Tegra-Android
 		Release|Win32 = Release|Win32
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{804C2451-08E5-44C6-8D9B-B21000756D35}.Debug|Tegra-Android.ActiveCfg = Debug|Tegra-Android
+		{804C2451-08E5-44C6-8D9B-B21000756D35}.Debug|Tegra-Android.Build.0 = Debug|Tegra-Android
 		{804C2451-08E5-44C6-8D9B-B21000756D35}.Debug|Win32.ActiveCfg = Debug|Win32
 		{804C2451-08E5-44C6-8D9B-B21000756D35}.Debug|Win32.Build.0 = Debug|Win32
 		{804C2451-08E5-44C6-8D9B-B21000756D35}.Debug|x64.ActiveCfg = Debug|x64
 		{804C2451-08E5-44C6-8D9B-B21000756D35}.Debug|x64.Build.0 = Debug|x64
+		{804C2451-08E5-44C6-8D9B-B21000756D35}.Release|Tegra-Android.ActiveCfg = Release|Tegra-Android
+		{804C2451-08E5-44C6-8D9B-B21000756D35}.Release|Tegra-Android.Build.0 = Release|Tegra-Android
 		{804C2451-08E5-44C6-8D9B-B21000756D35}.Release|Win32.ActiveCfg = Release|Win32
 		{804C2451-08E5-44C6-8D9B-B21000756D35}.Release|Win32.Build.0 = Release|Win32
 		{804C2451-08E5-44C6-8D9B-B21000756D35}.Release|x64.ActiveCfg = Release|x64
 		{804C2451-08E5-44C6-8D9B-B21000756D35}.Release|x64.Build.0 = Release|x64
+		{0877516D-9AC6-4449-BF11-875610E9C751}.Debug|Tegra-Android.ActiveCfg = Debug|Tegra-Android
+		{0877516D-9AC6-4449-BF11-875610E9C751}.Debug|Tegra-Android.Build.0 = Debug|Tegra-Android
 		{0877516D-9AC6-4449-BF11-875610E9C751}.Debug|Win32.ActiveCfg = Debug|Win32
 		{0877516D-9AC6-4449-BF11-875610E9C751}.Debug|Win32.Build.0 = Debug|Win32
 		{0877516D-9AC6-4449-BF11-875610E9C751}.Debug|x64.ActiveCfg = Debug|x64
 		{0877516D-9AC6-4449-BF11-875610E9C751}.Debug|x64.Build.0 = Debug|x64
+		{0877516D-9AC6-4449-BF11-875610E9C751}.Release|Tegra-Android.ActiveCfg = Release|Tegra-Android
+		{0877516D-9AC6-4449-BF11-875610E9C751}.Release|Tegra-Android.Build.0 = Release|Tegra-Android
 		{0877516D-9AC6-4449-BF11-875610E9C751}.Release|Win32.ActiveCfg = Release|Win32
 		{0877516D-9AC6-4449-BF11-875610E9C751}.Release|Win32.Build.0 = Release|Win32
 		{0877516D-9AC6-4449-BF11-875610E9C751}.Release|x64.ActiveCfg = Release|x64

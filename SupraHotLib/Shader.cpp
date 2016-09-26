@@ -79,7 +79,7 @@ namespace SupraHot
 			}
 			else if (type == GEOMETRY_SHADER)
 			{
-#if TARGET_PLATFORM == PLATFORM_WINDOWS || TARGET_PLATFORM == PLATFORM_MAC
+#ifdef PLATFORM_WINDOWS
 				shaderC = glCreateShader(GL_GEOMETRY_SHADER);
 				GeometryShader = shaderC;
 				shaderType = "GEOMETRY_SHADER";

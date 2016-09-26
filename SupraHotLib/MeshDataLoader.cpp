@@ -179,7 +179,7 @@ namespace SupraHot
 
 			/* open binary file */
 			
-#if TARGET_PLATFORM == PLATFORM_WINDOWS || TARGET_PLATFORM == PLATFORM_MAC
+#ifdef PLATFORM_WINDOWS
 			FILE *vertex_file = NULL;
 			fopen_s(&vertex_file, pathToObjx.c_str(), "rb");
 #else

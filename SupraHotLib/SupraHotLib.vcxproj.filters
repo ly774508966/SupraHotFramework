@@ -67,6 +67,12 @@
     <Filter Include="Source Files\Math">
       <UniqueIdentifier>{76ab005e-3231-4168-860a-c7eac97a35fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Graphics\Android">
+      <UniqueIdentifier>{1a6780ba-cd8a-4861-b5e0-e52d08a37109}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Android">
+      <UniqueIdentifier>{a553edff-0b5f-4abe-9ab1-221a02d4f61f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -177,12 +183,12 @@
     <ClInclude Include="SubscriberComponent.h">
       <Filter>Header Files\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="WindowAndroid.h">
+      <Filter>Header Files\Graphics\Android</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SupraHotLib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="App.cpp">
@@ -280,6 +286,9 @@
     </ClCompile>
     <ClCompile Include="Vertex.cpp">
       <Filter>Source Files\Graphics\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowAndroid.cpp">
+      <Filter>Source Files\Graphics\Android</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
