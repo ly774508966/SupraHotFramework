@@ -1,12 +1,8 @@
-// SupraHotSandbox.cpp : Defines the entry point for the console application.
-//
+// Example app.
+// Shows how to use the lib.
+
 
 #include "stdafx.h"
-
-
-// SupraHot.cpp : Defines the entry point for the console application.
-//
-//#include "Platform.h"
 
 #ifdef PLATFORM_ANDROID
 #include "WindowAndroid.h"
