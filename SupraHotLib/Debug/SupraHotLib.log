@@ -1,0 +1,18 @@
+﻿Build started 26.09.2016 20:03:08.
+     1>Project "C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\SupraHotLib\SupraHotLib.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D GLEW_STATIC /D PLATFORM_WINDOWS /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp SupraHotLib.cpp Wurst.cpp
+         Wurst.cpp
+         SupraHotLib.cpp
+         stdafx.cpp
+         Generating Code...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\Dependencies\libs\Debug\Win32\SupraHotLib.lib" opengl32.lib glew32s.lib glfw3.lib "lua53-static.lib" /LIBPATH:C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\libs\win\Win32 /LIBPATH:C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\libs\win\Win32 /LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib" /LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\lib" /LIBPATH:"C:\Program Files (x86)\Windows Kits\8.1\lib\winv6.3\um\x86" /NOLOGO Debug\stdafx.obj
+         Debug\SupraHotLib.obj
+         Debug\Wurst.obj
+         SupraHotLib.vcxproj -> C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\Dependencies\libs\Debug\Win32\SupraHotLib.lib
+     1>Done Building Project "C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\SupraHotLib\SupraHotLib.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.59
