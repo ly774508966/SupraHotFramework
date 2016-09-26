@@ -1,9 +1,43 @@
-﻿Build started 26.09.2016 20:02:08.
+﻿Build started 26.09.2016 22:10:00.
      1>Project "C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\SupraHotLib\SupraHotLib.vcxproj" on node 2 (Build target(s)).
      1>Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\Dependencies\libs\Release\x64\SupraHotLib.lib" opengl32.lib glew32s.lib glfw3.lib "lua53-static.lib" /LIBPATH:C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\libs\win\x64 /LIBPATH:C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\libs\win\x64 /LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\amd64" /LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\lib\amd64" /LIBPATH:"C:\Program Files (x86)\Windows Kits\8.1\lib\winv6.3\um\x64" /NOLOGO /MACHINE:X64 /LTCG x64\Release\App.obj
+         x64\Release\Camera.obj
+         x64\Release\Component.obj
+         x64\Release\Entity.obj
+         x64\Release\Face.obj
+         x64\Release\FileReader.obj
+         x64\Release\FrameBufferObject.obj
+         x64\Release\FullScreenQuad.obj
+         x64\Release\LuaVM.obj
+         x64\Release\Mat4.obj
+         x64\Release\Material.obj
+         x64\Release\MaterialLoader.obj
+         x64\Release\Mesh.obj
+         x64\Release\MeshComponent.obj
+         x64\Release\MeshData.obj
+         x64\Release\MeshDataLoader.obj
+         x64\Release\Publisher.obj
+         x64\Release\Quat4.obj
+         x64\Release\Renderer.obj
+         x64\Release\Shader.obj
+         x64\Release\stb_image.obj
+         x64\Release\stdafx.obj
+         x64\Release\StringUtil.obj
+         x64\Release\Subscriber.obj
+         x64\Release\SubscriberComponent.obj
+         x64\Release\SupraHotLib.obj
+         x64\Release\Texture2D.obj
+         x64\Release\TextureCube.obj
+         x64\Release\Transform.obj
+         x64\Release\Vec2.obj
+         x64\Release\Vec3.obj
+         x64\Release\Vertex.obj
+         x64\Release\WindowInterface.obj
+         x64\Release\WindowWin32.obj
          SupraHotLib.vcxproj -> C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\Dependencies\libs\Release\x64\SupraHotLib.lib
      1>Done Building Project "C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\SupraHotLib\SupraHotLib.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.03
+Time Elapsed 00:00:01.56

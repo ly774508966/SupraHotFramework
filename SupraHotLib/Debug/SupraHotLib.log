@@ -1,18 +1,85 @@
-﻿Build started 26.09.2016 20:03:08.
+﻿Build started 26.09.2016 20:26:29.
      1>Project "C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\SupraHotLib\SupraHotLib.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D GLEW_STATIC /D PLATFORM_WINDOWS /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp SupraHotLib.cpp Wurst.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D GLEW_STATIC /D PLATFORM_WINDOWS /D BUILD_LIB /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt App.cpp Camera.cpp Component.cpp Entity.cpp Face.cpp FileReader.cpp FrameBufferObject.cpp FullScreenQuad.cpp LuaVM.cpp Mat4.cpp Material.cpp MaterialLoader.cpp Mesh.cpp MeshComponent.cpp MeshData.cpp MeshDataLoader.cpp Publisher.cpp Quat4.cpp Renderer.cpp Shader.cpp stdafx.cpp StringUtil.cpp Subscriber.cpp SubscriberComponent.cpp SupraHotLib.cpp Texture2D.cpp TextureCube.cpp Transform.cpp Vec2.cpp Vec3.cpp Vertex.cpp WindowInterface.cpp WindowWin32.cpp Wurst.cpp
          Wurst.cpp
+         WindowWin32.cpp
+         WindowInterface.cpp
+         Vertex.cpp
+         Vec3.cpp
+         Vec2.cpp
+         Transform.cpp
+         TextureCube.cpp
+         Texture2D.cpp
          SupraHotLib.cpp
+         SubscriberComponent.cpp
+         Subscriber.cpp
+         StringUtil.cpp
          stdafx.cpp
+         Shader.cpp
+         Renderer.cpp
+         Quat4.cpp
+         Publisher.cpp
+         MeshDataLoader.cpp
+         MeshData.cpp
          Generating Code...
+         Compiling...
+         MeshComponent.cpp
+         Mesh.cpp
+         MaterialLoader.cpp
+         Material.cpp
+         Mat4.cpp
+         LuaVM.cpp
+         FullScreenQuad.cpp
+         FrameBufferObject.cpp
+         FileReader.cpp
+         Face.cpp
+         Entity.cpp
+         Component.cpp
+         Camera.cpp
+         App.cpp
+         Generating Code...
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D GLEW_STATIC /D PLATFORM_WINDOWS /D BUILD_LIB /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt stb_image.c
+         stb_image.c
        Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\Dependencies\libs\Debug\Win32\SupraHotLib.lib" opengl32.lib glew32s.lib glfw3.lib "lua53-static.lib" /LIBPATH:C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\libs\win\Win32 /LIBPATH:C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\libs\win\Win32 /LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib" /LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\lib" /LIBPATH:"C:\Program Files (x86)\Windows Kits\8.1\lib\winv6.3\um\x86" /NOLOGO Debug\stdafx.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\Dependencies\libs\Debug\Win32\SupraHotLib.lib" opengl32.lib glew32s.lib glfw3.lib "lua53-static.lib" /LIBPATH:C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\libs\win\Win32 /LIBPATH:C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\libs\win\Win32 /LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib" /LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\lib" /LIBPATH:"C:\Program Files (x86)\Windows Kits\8.1\lib\winv6.3\um\x86" /NOLOGO Debug\App.obj
+         Debug\Camera.obj
+         Debug\Component.obj
+         Debug\Entity.obj
+         Debug\Face.obj
+         Debug\FileReader.obj
+         Debug\FrameBufferObject.obj
+         Debug\FullScreenQuad.obj
+         Debug\LuaVM.obj
+         Debug\Mat4.obj
+         Debug\Material.obj
+         Debug\MaterialLoader.obj
+         Debug\Mesh.obj
+         Debug\MeshComponent.obj
+         Debug\MeshData.obj
+         Debug\MeshDataLoader.obj
+         Debug\Publisher.obj
+         Debug\Quat4.obj
+         Debug\Renderer.obj
+         Debug\Shader.obj
+         Debug\stb_image.obj
+         Debug\stdafx.obj
+         Debug\StringUtil.obj
+         Debug\Subscriber.obj
+         Debug\SubscriberComponent.obj
          Debug\SupraHotLib.obj
+         Debug\Texture2D.obj
+         Debug\TextureCube.obj
+         Debug\Transform.obj
+         Debug\Vec2.obj
+         Debug\Vec3.obj
+         Debug\Vertex.obj
+         Debug\WindowInterface.obj
+         Debug\WindowWin32.obj
          Debug\Wurst.obj
          SupraHotLib.vcxproj -> C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\Dependencies\libs\Debug\Win32\SupraHotLib.lib
      1>Done Building Project "C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\SupraHotLib\SupraHotLib.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.59
+Time Elapsed 00:00:16.99

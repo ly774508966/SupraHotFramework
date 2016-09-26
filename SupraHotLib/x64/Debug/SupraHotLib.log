@@ -1,42 +1,6 @@
-﻿Build started 26.09.2016 20:15:17.
+﻿Build started 26.09.2016 22:13:19.
      1>Project "C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\SupraHotLib\SupraHotLib.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /sdl /Od /D WIN32 /D GLEW_STATIC /D PLATFORM_WINDOWS /D BUILD_LIB /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt App.cpp Camera.cpp Component.cpp Entity.cpp Face.cpp FileReader.cpp FrameBufferObject.cpp FullScreenQuad.cpp LuaVM.cpp Mat4.cpp Material.cpp MaterialLoader.cpp Mesh.cpp MeshComponent.cpp MeshData.cpp MeshDataLoader.cpp Publisher.cpp Renderer.cpp Shader.cpp StringUtil.cpp Subscriber.cpp SubscriberComponent.cpp Texture2D.cpp TextureCube.cpp Transform.cpp Vec3.cpp Vertex.cpp WindowInterface.cpp WindowWin32.cpp
-         App.cpp
-         Generating Code...
-         Compiling...
-         WindowWin32.cpp
-         WindowInterface.cpp
-         Vertex.cpp
-         Vec3.cpp
-         Transform.cpp
-         TextureCube.cpp
-         Texture2D.cpp
-         SubscriberComponent.cpp
-         Subscriber.cpp
-         StringUtil.cpp
-         Shader.cpp
-         Renderer.cpp
-         Publisher.cpp
-         MeshDataLoader.cpp
-         MeshData.cpp
-         MeshComponent.cpp
-         Mesh.cpp
-         MaterialLoader.cpp
-         Material.cpp
-         Mat4.cpp
-         Generating Code...
-         Compiling...
-         LuaVM.cpp
-         FullScreenQuad.cpp
-         FrameBufferObject.cpp
-         FileReader.cpp
-         Face.cpp
-         Entity.cpp
-         Component.cpp
-         Camera.cpp
-         Generating Code...
-       Lib:
+     1>Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\Dependencies\libs\Debug\x64\SupraHotLib.lib" opengl32.lib glew32s.lib glfw3.lib "lua53-static.lib" /LIBPATH:C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\libs\win\x64 /LIBPATH:C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\libs\win\x64 /LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\amd64" /LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\lib\amd64" /LIBPATH:"C:\Program Files (x86)\Windows Kits\8.1\lib\winv6.3\um\x64" /NOLOGO /MACHINE:X64 x64\Debug\App.obj
          x64\Debug\Camera.obj
          x64\Debug\Component.obj
@@ -71,10 +35,9 @@
          x64\Debug\Vertex.obj
          x64\Debug\WindowInterface.obj
          x64\Debug\WindowWin32.obj
-         x64\Debug\Wurst.obj
          SupraHotLib.vcxproj -> C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\Externals\Dependencies\libs\Debug\x64\SupraHotLib.lib
      1>Done Building Project "C:\Users\Sergej\Documents\Code\Cplusplus\SupraHotFramework\SupraHotLib\SupraHotLib.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:10.25
+Time Elapsed 00:00:00.36
