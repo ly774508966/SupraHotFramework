@@ -109,23 +109,23 @@ namespace SupraHot
 				}
 				else if (line.find("m ") == 0)
 				{
-					SFH_SSCANF(line.c_str(), "m %u", &meshcount);
+					SHF_SSCANF(line.c_str(), "m %u", &meshcount);
 				}
 				else if (line.find("vc") == 0)
 				{
-					SFH_SSCANF(line.c_str(), "vc %u", &vertexcount);
+					SHF_SSCANF(line.c_str(), "vc %u", &vertexcount);
 				}
 				else if (line.find("nc") == 0)
 				{
-					SFH_SSCANF(line.c_str(), "nc %u", &normalcount);
+					SHF_SSCANF(line.c_str(), "nc %u", &normalcount);
 				}
 				else if (line.find("tc") == 0)
 				{
-					SFH_SSCANF(line.c_str(), "tc %u", &tangentcount);
+					SHF_SSCANF(line.c_str(), "tc %u", &tangentcount);
 				}
 				else if (line.find("uc") == 0)
 				{
-					SFH_SSCANF(line.c_str(), "uc %u", &uvcount);
+					SHF_SSCANF(line.c_str(), "uc %u", &uvcount);
 				}
 				else if (line.find("o ") == 0)
 				{
@@ -151,13 +151,13 @@ namespace SupraHot
 				else if (line.find("wo") == 0)
 				{
 					float x, y, z;
-					SFH_SSCANF(line.c_str(), "wo %f %f %f", &x, &y, &z);
+					SHF_SSCANF(line.c_str(), "wo %f %f %f", &x, &y, &z);
 					tempMeshData->Origin = Vec3(x, y, z);
 				}
 				else if (line.find("f ") == 0)
 				{
 					unsigned int f;
-					SFH_SSCANF(line.c_str(), "f %u", &f);
+					SHF_SSCANF(line.c_str(), "f %u", &f);
 					tempMeshData->FaceCount = f;
 				}
 			}
@@ -180,22 +180,22 @@ namespace SupraHot
 			/* open binary file */
 			
 #ifdef PLATFORM_WINDOWS
-			FILE *vertex_file = NULL;
+			FILE *vertex_file = nullptr;
 			fopen_s(&vertex_file, pathToObjx.c_str(), "rb");
 #else
 			FILE *vertex_file = fopen(pathToObjx.c_str(), "rb");
 #endif
 
-			if (vertex_file == NULL)
+			if (vertex_file == nullptr)
 			{
 				printf("Can't open pathToObjx %s \n", pathToObjx.c_str());
 				return data;
 			}
 
 			/* read binary file */
-			for (unsigned int i = 0; i < meshcount; i++)
+			for (uint32 i = 0; i < meshcount; i++)
 			{
-				for (unsigned int j = 0; j < data[i]->FaceCount; j++)
+				for (uint32 j = 0, l = data[i]->FaceCount; j < l; j++)
 				{
 					Vertex v0;
 					Vertex v1;
@@ -286,7 +286,7 @@ namespace SupraHot
 					std::vector<float> binormals;
 					std::vector<float> uvcoords;
 
-					for (unsigned int i = 0; i < currentMeshData->Faces.size(); i++)
+					for (uint32 i = 0, l = currentMeshData->Faces.size(); i < l; i++)
 					{
 						positions.push_back(currentMeshData->Faces[i].GetVertex(0).GetPosition().x);
 						positions.push_back(currentMeshData->Faces[i].GetVertex(0).GetPosition().y);
@@ -390,7 +390,7 @@ namespace SupraHot
 			fclose(vertex_file);
 
 #if DEVELOPMENT == 1
-			printf("Procssed Meshs: %d with Vertexcount: %d \n", data.size(), vertexcount);
+			printf("Procssed Meshs: %llu with Vertexcount: %d \n", data.size(), vertexcount);
 #endif
 			return data;
 		}

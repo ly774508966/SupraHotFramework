@@ -51,7 +51,7 @@ namespace SupraHot
 #endif
 
 				default:
-					SFH_SPRINTF(buf, "0x%x", status);
+					SHF_SPRINTF(buf, "0x%x", status);
 					err_str = buf;
 					break;
 				}

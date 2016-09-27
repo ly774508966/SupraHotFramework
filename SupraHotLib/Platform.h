@@ -27,13 +27,13 @@
 // --------
 
 #ifdef PLATFORM_WINDOWS
-#define SFH_SPRINTF(dst, sizeinbytes, format) (sprintf_s(dst, sizeinbytes, format))
-#define SFH_SSCANF(src, format, ...) (sscanf_s(src, format, ##__VA_ARGS__))
+#define SHF_SPRINTF(dst, sizeinbytes, format) (sprintf_s(dst, sizeinbytes, format))
+#define SHF_SSCANF(src, format, ...) (sscanf_s(src, format, ##__VA_ARGS__))
 #endif
 
 #ifdef PLATFORM_ANDROID
-#define SFH_SPRINTF(dst, sizeinbytes, format) (sprintf(dst, sizeinbytes, format))
-#define SFH_SSCANF(src, format, ...) (sscanf(src, format, ##__VA_ARGS__))
+#define SHF_SPRINTF(dst, sizeinbytes, format) (sprintf(dst, sizeinbytes, format))
+#define SHF_SSCANF(src, format, ...) (sscanf(src, format, ##__VA_ARGS__))
 #endif
 
 namespace SupraHot

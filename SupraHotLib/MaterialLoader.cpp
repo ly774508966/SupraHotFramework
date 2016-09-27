@@ -36,7 +36,7 @@ namespace SupraHot
 			std::vector<std::string> fileContent = FileReader::GetInstance()->ReadFile(path);;
 
 			/* interpret material data from string vector */
-			for (unsigned int i = 0; i < fileContent.size(); i++)
+			for (size_t i = 0, l = fileContent.size(); i < l; ++i)
 			{
 				std::string line = fileContent.at(i);
 
@@ -59,43 +59,43 @@ namespace SupraHot
 				else if (line.find("Kd") == 0)
 				{
 					float x, y, z;
-					SFH_SSCANF(line.c_str(), "Kd %f %f %f", &x, &y, &z);
+					SHF_SSCANF(line.c_str(), "Kd %f %f %f", &x, &y, &z);
 					tempMaterial.SetKd(Vec3(x, y, z));
 				}
 				else if (line.find("Ka") == 0)
 				{
 					float x, y, z;
-					SFH_SSCANF(line.c_str(), "Ka %f %f %f", &x, &y, &z);
+					SHF_SSCANF(line.c_str(), "Ka %f %f %f", &x, &y, &z);
 					tempMaterial.SetKa(Vec3(x, y, z));
 				}
 				else if (line.find("Ks") == 0)
 				{
 					float x, y, z;
-					SFH_SSCANF(line.c_str(), "Ks %f %f %f", &x, &y, &z);
+					SHF_SSCANF(line.c_str(), "Ks %f %f %f", &x, &y, &z);
 					tempMaterial.SetKs(Vec3(x, y, z));
 				}
 				else if (line.find("Ns") == 0)
 				{
 					float ns;
-					SFH_SSCANF(line.c_str(), "Ns %f", &ns);
+					SHF_SSCANF(line.c_str(), "Ns %f", &ns);
 					tempMaterial.SetNs(ns);
 				}
 				else if (line.find("Ni") == 0)
 				{
 					float ni;
-					SFH_SSCANF(line.c_str(), "Ni %f", &ni);
+					SHF_SSCANF(line.c_str(), "Ni %f", &ni);
 					tempMaterial.SetNi(ni);
 				}
 				else if (line.find("illum") == 0)
 				{
 					unsigned int illum;
-					SFH_SSCANF(line.c_str(), "illum %u", &illum);
+					SHF_SSCANF(line.c_str(), "illum %u", &illum);
 					tempMaterial.SetIllum(illum);
 				}
 				else if (line.find("d ") == 0)
 				{
 					float d;
-					SFH_SSCANF(line.c_str(), "d %f", &d);
+					SHF_SSCANF(line.c_str(), "d %f", &d);
 					tempMaterial.SetD(d);
 				}
 				else if (line.find("map_") == 0)
