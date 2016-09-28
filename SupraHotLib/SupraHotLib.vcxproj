@@ -68,6 +68,7 @@
     <NdkToolchainVersion>clang-3.8</NdkToolchainVersion>
     <AndroidStlType>llvm-libc++_static</AndroidStlType>
     <AndroidNativeAPI>UseTarget</AndroidNativeAPI>
+    <AndroidStripLibrary>false</AndroidStripLibrary>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">
     <PlatformToolset>v120</PlatformToolset>
@@ -76,6 +77,7 @@
     <NdkToolchainVersion>clang-3.8</NdkToolchainVersion>
     <AndroidStlType>llvm-libc++_static</AndroidStlType>
     <AndroidNativeAPI>UseTarget</AndroidNativeAPI>
+    <AndroidStripLibrary>false</AndroidStripLibrary>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -233,15 +235,19 @@
       <Warnings>DisableAllWarnings</Warnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>android;EGL;GLESv3;c;stdc++;c++;lua53-static</AdditionalDependencies>
+      <AdditionalDependencies>lua53-static;</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\NVPACK\android-ndk-r12b\platforms\android-21\arch-arm\usr\lib;$(SolutionDir)Externals\libs\android</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AndroidSystemLibs>c;m;log;stdc++;c++;android;EGL;GLESv3</AndroidSystemLibs>
     </Link>
     <Lib>
       <AdditionalDependencies>lua53-static;android;EGL;GLESv3;c;stdc++;</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Externals\libs\android;C:\NVPACK\android-ndk-r12b\platforms\android-21\arch-arm\usr\lib;</AdditionalLibraryDirectories>
       <ThinArchive>true</ThinArchive>
     </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">
     <ClCompile>
@@ -252,15 +258,19 @@
       <Warnings>DisableAllWarnings</Warnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>android;EGL;GLESv3;c;stdc++;c++;lua53-static</AdditionalDependencies>
+      <AdditionalDependencies>lua53-static;</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\NVPACK\android-ndk-r12b\platforms\android-21\arch-arm\usr\lib;$(SolutionDir)Externals\libs\android</AdditionalLibraryDirectories>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <AndroidSystemLibs>c;m;log;stdc++;c++;android;EGL;GLESv3</AndroidSystemLibs>
     </Link>
     <Lib>
       <AdditionalDependencies>lua53-static;android;EGL;GLESv3;c;stdc++;</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Externals\libs\android;C:\NVPACK\android-ndk-r12b\platforms\android-21\arch-arm\usr\lib;</AdditionalLibraryDirectories>
       <ThinArchive>true</ThinArchive>
     </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />

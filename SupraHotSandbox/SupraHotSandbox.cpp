@@ -1,9 +1,6 @@
 // Example app.
 // Shows how to use the lib.
 
-
-#include "stdafx.h"
-
 #ifdef PLATFORM_ANDROID
 #include "WindowAndroid.h"
 #endif
@@ -20,7 +17,7 @@
 #include "MeshDataLoader.h"
 #include "App.h"
 #include <string>
-
+#ifdef PLATFORM_WINDOWS
 using namespace SupraHot;
 
 
@@ -147,4 +144,4 @@ int _tmain(int argc, _TCHAR* argv[])
 	return 0;
 }
 
-
+#endif
