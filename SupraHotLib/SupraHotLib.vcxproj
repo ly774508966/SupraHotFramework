@@ -101,7 +101,7 @@
     <OutDir>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</OutDir>
     <IncludePath>$(SolutionDir)Externals\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Externals\libs\win\$(Platform);$(LibraryPath)</LibraryPath>
-    <IntDir>$(SolutionDir)Intermediates\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)Intermediates\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -109,7 +109,7 @@
     <OutDir>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</OutDir>
     <IncludePath>$(SolutionDir)Externals\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Externals\libs\win\$(Platform);$(LibraryPath)</LibraryPath>
-    <IntDir>$(SolutionDir)Intermediates\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)Intermediates\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -117,7 +117,7 @@
     <LibraryPath>$(SolutionDir)Externals\libs\win\$(Platform);$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>
     <OutDir>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</OutDir>
-    <IntDir>$(SolutionDir)Intermediates\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)Intermediates\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -125,17 +125,17 @@
     <LibraryPath>$(SolutionDir)Externals\libs\win\$(Platform);$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>
     <OutDir>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</OutDir>
-    <IntDir>$(SolutionDir)Intermediates\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)Intermediates\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">
     <OutDir>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</OutDir>
     <TargetExt>.so</TargetExt>
-    <IntDir>$(SolutionDir)Intermediates\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)Intermediates\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">
     <OutDir>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</OutDir>
     <TargetExt>.so</TargetExt>
-    <IntDir>$(SolutionDir)Intermediates\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)Intermediates\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
