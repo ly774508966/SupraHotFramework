@@ -18,6 +18,7 @@
 #include "App.h"
 #include <string>
 #ifdef PLATFORM_WINDOWS
+#include <iostream>
 using namespace SupraHot;
 
 
@@ -58,7 +59,9 @@ public:
 
 	DemoApp()
 	{
+		std::cout << "PRE" << App::GetMainApp() << std::endl;
 		App::App();
+		std::cout << "POST" << App::GetMainApp() << std::endl;
 	}
 
 	~DemoApp() override
@@ -74,7 +77,7 @@ public:
 	{
 		App::Init(width, height, title);
 
-		window = new WindowWin32(this);
+		window = new WindowWin32();
 		window->Init(width, height, title);
 
 		fbo = new FrameBufferObject();

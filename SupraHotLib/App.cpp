@@ -18,9 +18,18 @@ namespace SupraHot
 	{
 	}
 
+	// ---------
+	// Main App
+	// ---------
+	static App* MainApp;
+	App* App::GetMainApp()
+	{
+		return MainApp;
+	}
+
 	void App::Init(uint32 width, uint32 height, std::string title)
 	{
-		printf("Init \n");
+		MainApp = this;
 	}
 
 	void App::Resize(uint32 width, uint32 height)

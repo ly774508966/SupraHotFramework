@@ -11,7 +11,7 @@ namespace SupraHot
 		protected:
 			void Setup() override;
 		public:
-			WindowAndroid(App* app);
+			WindowAndroid();
 			~WindowAndroid();
 
 			void Init(uint32 width, uint32 height, std::string title) override;

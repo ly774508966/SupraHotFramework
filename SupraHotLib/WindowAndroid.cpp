@@ -34,7 +34,7 @@ namespace SupraHot
 		{
 		}
 
-		WindowAndroid::WindowAndroid(App* app) : WindowInterface(app)
+		WindowAndroid::WindowAndroid()
 		{
 		}
 

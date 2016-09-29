@@ -14,7 +14,7 @@ namespace SupraHot
 			void Setup() override;
 			void PrintVersion(GLFWwindow* context);
 		public:
-			WindowWin32(App* app);
+			WindowWin32();
 			~WindowWin32();
 			void Init(uint32 width, uint32 height, std::string title) override;
 			void Resize(uint32 width, uint32 height) override;

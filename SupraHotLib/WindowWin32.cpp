@@ -33,7 +33,7 @@ namespace SupraHot
 			}
 		}
 
-		WindowWin32::WindowWin32(App* app) : WindowInterface(app)
+		WindowWin32::WindowWin32()
 		{
 			
 		}
@@ -145,7 +145,7 @@ namespace SupraHot
 
 			printf("window resized to: %d x %d \n", width, height);
 
-			mainApp->Resize(width, height);
+			App::GetMainApp()->Resize(width, height);
 		}
 
 		bool WindowWin32::ShouldClose()

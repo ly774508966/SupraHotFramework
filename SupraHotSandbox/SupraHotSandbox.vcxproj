@@ -210,6 +210,13 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
+    <AntBuild>
+      <NativeLibDirectories>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</NativeLibDirectories>
+    </AntBuild>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">
     <ClCompile>
@@ -228,6 +235,13 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
+    <AntBuild>
+      <NativeLibDirectories>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</NativeLibDirectories>
+    </AntBuild>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

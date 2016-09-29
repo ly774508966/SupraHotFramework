@@ -9,6 +9,7 @@ namespace SupraHot
 	{
 	protected:
 		Window* window;
+
 	public:
 		App();
 		virtual ~App();
@@ -22,6 +23,7 @@ namespace SupraHot
 		virtual void Destroy();
 
 		void Run();
+		static App* GetMainApp();
 	};
 };
 

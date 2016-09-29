@@ -5,9 +5,9 @@ namespace SupraHot
 {
 	namespace Graphics
 	{
-		WindowInterface::WindowInterface(App* app)
+		WindowInterface::WindowInterface()
 		{
-			this->mainApp = app;
+			
 		}
 
 		WindowInterface::~WindowInterface()

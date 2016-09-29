@@ -14,11 +14,9 @@ namespace SupraHot
 			uint32 Width, Height;
 			std::string WindowTitle;
 			float ClearColorR = 0, ClearColorG = 0, ClearColorB = 0, ClearColorA = 0;
-			App* mainApp;
-
 			virtual void Setup() = 0;
 		public:
-			WindowInterface(App* app);
+			WindowInterface();
 			virtual ~WindowInterface();
 			virtual void Init(uint32 width, uint32 height, std::string title) = 0;
 			virtual void Resize(uint32 width, uint32 height) = 0;
