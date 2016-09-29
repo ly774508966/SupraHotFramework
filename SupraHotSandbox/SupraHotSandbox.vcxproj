@@ -216,6 +216,7 @@
     </CustomBuildStep>
     <AntBuild>
       <NativeLibDirectories>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</NativeLibDirectories>
+      <AssetsDirectories>$(SolutionDir)Content</AssetsDirectories>
     </AntBuild>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">
@@ -241,6 +242,7 @@
     </CustomBuildStep>
     <AntBuild>
       <NativeLibDirectories>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</NativeLibDirectories>
+      <AssetsDirectories>$(SolutionDir)Content</AssetsDirectories>
     </AntBuild>
   </ItemDefinitionGroup>
   <ItemGroup>

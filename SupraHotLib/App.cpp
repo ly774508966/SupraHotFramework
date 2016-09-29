@@ -58,6 +58,7 @@ namespace SupraHot
 
 	void App::Run()
 	{
+		// TODO: Create a proper game loop here
 		while (true && !window->ShouldClose())
 		{
 			glViewport(0, 0, window->GetWidth(), window->GetHeight());

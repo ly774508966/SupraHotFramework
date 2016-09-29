@@ -110,6 +110,7 @@ public:
 	void Render() override
 	{
 		fbo->Attach();
+		// Render Geometry
 		fbo->Detach();
 		fbo->RenderToScreen(fboShader);
 	};
