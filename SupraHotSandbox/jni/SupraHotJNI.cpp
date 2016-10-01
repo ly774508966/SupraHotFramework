@@ -13,7 +13,7 @@ static Wurst* wurst;
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_suprahot_HelloJni_stringFromJNI(JNIEnv* env, jobject thiz)
+Java_com_suprahot_SupraHotSandbox_stringFromJNI(JNIEnv* env, jobject thiz)
 {
 	if (wurst == nullptr)
 	{
@@ -28,14 +28,14 @@ Java_com_suprahot_HelloJni_stringFromJNI(JNIEnv* env, jobject thiz)
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_suprahot_HelloJni_getString(JNIEnv* env, jobject thiz)
+Java_com_suprahot_SupraHotSandbox_getString(JNIEnv* env, jobject thiz)
 {
 	return env->NewStringUTF("TEST");
 }
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_suprahot_HelloJni_getVector(JNIEnv* env, jobject thiz)
+Java_com_suprahot_SupraHotSandbox_getVector(JNIEnv* env, jobject thiz)
 {
 	SupraHot::Math::Vec3 vector(1.1234, 2.2345, 3.3456);
 

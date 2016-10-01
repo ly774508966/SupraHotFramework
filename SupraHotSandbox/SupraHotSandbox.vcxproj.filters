@@ -38,10 +38,10 @@
     <ClCompile Include="SupraHotSandbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="jni\HelloJni.cpp">
+    <ClCompile Include="Wurst.cpp">
       <Filter>Source Files\Android</Filter>
     </ClCompile>
-    <ClCompile Include="Wurst.cpp">
+    <ClCompile Include="jni\SupraHotJNI.cpp">
       <Filter>Source Files\Android</Filter>
     </ClCompile>
   </ItemGroup>

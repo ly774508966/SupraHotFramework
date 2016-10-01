@@ -21,7 +21,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 
-public class HelloJni extends Activity
+public class SupraHotSandbox extends Activity
 {
 	private TextView tv;
 	
