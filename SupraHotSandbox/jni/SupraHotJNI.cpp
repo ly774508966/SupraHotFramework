@@ -1,45 +1,39 @@
 #include <stdio.h>
 #include <string.h>
 #include <jni.h>
-#include "../Wurst.h"
-#include <Vec3.h>
+#include <GLES3/gl3.h>
+#include <android/log.h>
 
-/* This is a trivial JNI example where we use a native method
- * to return a new VM String. See the corresponding Java source
- */
-
-static Wurst* wurst;
-
+#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
 
 extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_suprahot_SupraHotSandbox_stringFromJNI(JNIEnv* env, jobject thiz)
+JNIEXPORT void JNICALL
+Java_com_suprahot_SupraHotSandbox_initApp(JNIEnv* env, jobject thiz, jint width, jint height)
 {
-	if (wurst == nullptr)
-	{
-		wurst = new Wurst();
-		return env->NewStringUTF("Created new wurst");
-	}
-	else
-	{
-		return env->NewStringUTF(wurst->getStuff().c_str());
-	}
+	int w = width;
+	int h = height;
+	LOGI("init: %d x %d", w, h);
 }
 
 extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_suprahot_SupraHotSandbox_getString(JNIEnv* env, jobject thiz)
+JNIEXPORT void JNICALL
+Java_com_suprahot_SupraHotSandbox_progressApp(JNIEnv* env, jobject thiz)
 {
-	return env->NewStringUTF("TEST");
+	glClearColor(1, 0, 1, 1);
+	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_suprahot_SupraHotSandbox_getVector(JNIEnv* env, jobject thiz)
+JNIEXPORT void JNICALL
+Java_com_suprahot_SupraHotSandbox_resizeApp(JNIEnv* env, jobject thiz, jint width, jint height)
 {
-	SupraHot::Math::Vec3 vector(1.1234, 2.2345, 3.3456);
+	int w = width;
+	int h = height;
+	LOGI("resize: %d x %d", w, h);
+}
 
-	std::string result = std::to_string(vector.x) + " " + std::to_string(vector.y) + " " + std::to_string(vector.z);
-
-	return env->NewStringUTF(result.c_str());
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_suprahot_SupraHotSandbox_destroyApp(JNIEnv* env, jobject thiz)
+{
 }

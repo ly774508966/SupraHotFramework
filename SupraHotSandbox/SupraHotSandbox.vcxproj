@@ -201,7 +201,7 @@
       <CppLanguageStandard>c++11</CppLanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SupraHotLib;</AdditionalDependencies>
+      <AdditionalDependencies>SupraHotLib;GLESv3</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <AdditionalLibraryDirectories>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</AdditionalLibraryDirectories>
       <AndroidSystemLibs>c;m;log;stdc++;c++</AndroidSystemLibs>
@@ -227,7 +227,7 @@
       <CppLanguageStandard>c++11</CppLanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SupraHotLib;</AdditionalDependencies>
+      <AdditionalDependencies>SupraHotLib;GLESv3</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <AdditionalLibraryDirectories>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</AdditionalLibraryDirectories>
       <AndroidSystemLibs>c;m;log;stdc++;c++</AndroidSystemLibs>
