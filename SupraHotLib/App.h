@@ -23,6 +23,7 @@ namespace SupraHot
 		virtual void Destroy();
 
 		void Run();
+		void ProgressApp();
 		static App* GetMainApp();
 	};
 };

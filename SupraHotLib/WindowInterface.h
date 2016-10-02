@@ -27,6 +27,7 @@ namespace SupraHot
 
 			uint32 GetWidth() { return Width; };
 			uint32 GetHeight() { return Height; };
+			void SetClearColor(float r, float g, float b, float a);
 		};
 	};
 };

@@ -61,13 +61,18 @@ namespace SupraHot
 		// TODO: Create a proper game loop here
 		while (true && !window->ShouldClose())
 		{
-			glViewport(0, 0, window->GetWidth(), window->GetHeight());
-
-			window->Clear();
-
-			Render();
-
-			window->Update();
+			ProgressApp();
 		}
+	}
+
+	void App::ProgressApp()
+	{
+		glViewport(0, 0, window->GetWidth(), window->GetHeight());
+
+		window->Clear();
+
+		Render();
+
+		window->Update();
 	}
 };

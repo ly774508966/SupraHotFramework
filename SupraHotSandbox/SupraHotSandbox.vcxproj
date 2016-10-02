@@ -211,12 +211,12 @@
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
     <CustomBuildStep>
-      <Command>
-      </Command>
+      <Command>copy $(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\libSupraHotLib.so $(SolutionDir)Intermediates\$(ProjectName)\$(Platform)\$(Configuration)\libs\armeabi-v7a</Command>
     </CustomBuildStep>
     <AntBuild>
       <NativeLibDirectories>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</NativeLibDirectories>
       <AssetsDirectories>$(SolutionDir)Content</AssetsDirectories>
+      <NativeLibDependencies>SupraHotLib</NativeLibDependencies>
     </AntBuild>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">
@@ -237,18 +237,20 @@
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
     <CustomBuildStep>
-      <Command>
-      </Command>
+      <Command>copy $(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\libSupraHotLib.so $(SolutionDir)Intermediates\$(ProjectName)\$(Platform)\$(Configuration)\libs\armeabi-v7a</Command>
     </CustomBuildStep>
     <AntBuild>
       <NativeLibDirectories>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</NativeLibDirectories>
       <AssetsDirectories>$(SolutionDir)Content</AssetsDirectories>
+      <NativeLibDependencies>SupraHotLib</NativeLibDependencies>
     </AntBuild>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bootstrap.h" />
+    <ClInclude Include="SandBoxApp.h" />
     <ClInclude Include="stdafx.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">true</ExcludedFromBuild>
@@ -256,12 +258,6 @@
     <ClInclude Include="targetver.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Wurst.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -271,17 +267,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="SandBoxApp.cpp" />
     <ClCompile Include="stdafx.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="SupraHotSandbox.cpp" />
-    <ClCompile Include="Wurst.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="Bootstrap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <AndroidBuild Include="AndroidManifest.xml">
