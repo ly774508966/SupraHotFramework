@@ -1,8 +1,12 @@
 #pragma once
 #include <App.h>
+#include <FrameBufferObject.h>
 
 class SandBoxApp : public SupraHot::App
 {
+private:
+	SupraHot::FrameBufferObject* fbo;
+	SupraHot::Texture2D* texture;
 public:
 	SandBoxApp();
 	~SandBoxApp();

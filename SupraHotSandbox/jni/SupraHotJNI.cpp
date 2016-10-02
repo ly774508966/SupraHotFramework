@@ -6,6 +6,9 @@
 
 #include "../Bootstrap.h"
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
+#include <android/asset_manager.h>
+#include <android/asset_manager_jni.h>
+#include <FileSystem.h>
 
 
 // ----
@@ -49,7 +52,8 @@ Java_com_suprahot_SupraHotSandbox_destroyApp(JNIEnv* env, jobject thiz)
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_suprahot_SupraHotSandbox_setFileSystemPath(JNIEnv* env, jobject thiz, jstring fileSystemPath)
+Java_com_suprahot_SupraHotSandbox_setAssetManager(JNIEnv* env, jobject thiz, jobject assetManager)
 {
-
+	AAssetManager* assetMngr = AAssetManager_fromJava(env, assetManager);
+	SupraHot::Utils::FileSystem::GetInstance()->SetAssetManager(assetMngr);
 }

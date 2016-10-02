@@ -12,7 +12,7 @@ namespace SupraHot
 			char error[1024];
 			glGetShaderInfoLog(shaderID, 1024, nullptr, error);
 #if DEVELOPMENT == 1
-			printf("CheckError for %s, Type = %s \n", path.c_str(), type.c_str());
+			SHF_PRINTF("CheckError for %s, Type = %s \n", path.c_str(), type.c_str());
 			std::cout << error << std::endl;
 #endif
 		}
@@ -116,7 +116,7 @@ namespace SupraHot
 			if (err != 0)
 			{
 #if DEVELOPMENT == 1
-				printf("Error %d happened while creating the shaderProgramm \n", err);
+				SHF_PRINTF("Error %d happened while creating the shaderProgramm \n", err);
 #endif
 				return false;
 			}

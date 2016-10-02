@@ -1,5 +1,7 @@
 #include "Texture2D.h"
 #include "stb_image.h"
+#include "FileSystem.h"
+#include <stdio.h>
 
 namespace SupraHot
 {
@@ -57,7 +59,10 @@ namespace SupraHot
 
 			/* load texture with stb_image */
 			int width, height, n;
-			unsigned char * data = stbi_load(Path.c_str(), &width, &height, &n, 0);
+			//unsigned char * data = stbi_load(Path.c_str(), &width, &height, &n, 0);
+			FILE* f = Utils::FileSystem::GetInstance()->GetFile("", Path, "rb");
+			unsigned char * data = stbi_load_from_file(f, &width, &height, &n, 0);
+			std::fclose(f);
 
 			this->Width = width;
 			this->Height = height;
@@ -65,7 +70,7 @@ namespace SupraHot
 			if (!data)
 			{
 #if DEVELOPMENT == 1
-				printf("Error, while loading texture (%s): %s\n", Name.c_str(), stbi_failure_reason());
+				SHF_PRINTF("Error, while loading texture (%s): %s\n", Name.c_str(), stbi_failure_reason());
 #endif
 			}
 			else
@@ -95,7 +100,7 @@ namespace SupraHot
 				int err = glGetError();
 				if (err != 0)
 				{
-					printf("Error %d happened while loading Texture 2D \n", err);
+					SHF_PRINTF("Error %d happened while loading Texture 2D \n", err);
 				}
 #endif
 
@@ -103,7 +108,7 @@ namespace SupraHot
 				stbi_image_free(data);
 
 #if DEVELOPMENT == 1
-				printf("Loaded Texture2DGL: %s [%d X %d (%d Channels)] #%d \n", Path.c_str(), width, height, n, TextureID);
+				SHF_PRINTF("Loaded Texture2DGL: %s [%d X %d (%d Channels)] #%d \n", Path.c_str(), width, height, n, TextureID);
 #endif
 
 				glBindTexture(GL_TEXTURE_2D, 0);
@@ -111,7 +116,7 @@ namespace SupraHot
 			}
 
 #if DEVELOPMENT == 1
-			printf("Failed to load Texture: %s \n", Path.c_str());
+			SHF_PRINTF("Failed to load Texture: %s \n", Path.c_str());
 #endif
 
 			glBindTexture(GL_TEXTURE_2D, 0);
@@ -143,7 +148,7 @@ namespace SupraHot
 			int err = glGetError();
 			if (err != 0)
 			{
-				printf("Error %d happened while initializing Texture2D (%s) \n", err, Name.c_str());
+				SHF_PRINTF("Error %d happened while initializing Texture2D (%s) \n", err, Name.c_str());
 			}
 #endif
 		}
@@ -234,7 +239,7 @@ namespace SupraHot
 			TextureID = 0;
 
 #if DEVELOPMENT == 1
-			printf("Texture %s destroyed \n", this->Name.c_str());
+			SHF_PRINTF("Texture %s destroyed \n", this->Name.c_str());
 #endif
 		}
 	};

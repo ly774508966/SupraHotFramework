@@ -7,11 +7,13 @@ import android.util.Log;
 
 import android.view.Window;
 import android.view.WindowManager;
+import android.content.res.AssetManager;
 
 public class SupraHotSandbox extends Activity
 {
 	protected static SupraHotSandbox instance;
     private SupraHotGLView glView;
+    private AssetManager assetManager;
 
     /** Called when the activity is first created. */
     @Override
@@ -20,6 +22,9 @@ public class SupraHotSandbox extends Activity
         super.onCreate(savedInstanceState);
 
 		instance = this;
+
+        assetManager = getAssets();
+        setAssetManager(assetManager);
         
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -53,6 +58,8 @@ public class SupraHotSandbox extends Activity
 
     // tells the app to de-allocate all resources
     public native void destroyApp();
+
+    public native void setAssetManager(AssetManager assetManager);
 
     static {
         System.loadLibrary("SupraHotSandbox");

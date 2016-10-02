@@ -204,7 +204,7 @@
       <AdditionalDependencies>SupraHotLib;GLESv3</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <AdditionalLibraryDirectories>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</AdditionalLibraryDirectories>
-      <AndroidSystemLibs>c;m;log;stdc++;c++</AndroidSystemLibs>
+      <AndroidSystemLibs>c;m;log;stdc++;c++;android</AndroidSystemLibs>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
@@ -230,7 +230,7 @@
       <AdditionalDependencies>SupraHotLib;GLESv3</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <AdditionalLibraryDirectories>$(SolutionDir)Externals\Dependencies\libs\$(Configuration)\$(Platform)\</AdditionalLibraryDirectories>
-      <AndroidSystemLibs>c;m;log;stdc++;c++</AndroidSystemLibs>
+      <AndroidSystemLibs>c;m;log;stdc++;c++;android</AndroidSystemLibs>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
