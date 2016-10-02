@@ -7,11 +7,10 @@ namespace SupraHot
 {
 	namespace Utils
 	{
-
-
 		// ---------------------------
 		// Android FILE* API Wrapper
 		// ---------------------------
+		// Source: http://www.50ply.com/blog/2013/01/19/loading-compressed-android-assets-with-file-pointer/
 
 #ifdef PLATFORM_ANDROID
 		static int android_read(void* cookie, char* buf, int size) {
