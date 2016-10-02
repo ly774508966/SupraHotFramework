@@ -40,7 +40,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	fbo->Init(width, height);
 
 	texture = new SupraHot::Texture2D("FBO Texture");
-	//texture->Load("Images/test.png");
+	texture->Load("Images/test.png");
 
 	//texture->Init(width, height);
 }
