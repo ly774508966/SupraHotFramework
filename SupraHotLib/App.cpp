@@ -10,18 +10,10 @@
 
 #ifdef PLATFORM_EMSCRIPTEN
 #include "WindowEmscripten.h"
-#include <emscripten/emscripten.h>
 #endif
 
 namespace SupraHot
 {
-#ifdef PLATFORM_EMSCRIPTEN
-	static void dispatch()
-	{
-		App::GetMainApp()->ProgressApp();
-	}
-#endif
-
 	App::App()
 	{
 	}
@@ -42,10 +34,6 @@ namespace SupraHot
 	void App::Init(uint32 width, uint32 height, std::string title)
 	{
 		MainApp = this;
-
-#ifdef PLATFORM_EMSCRIPTEN
-		emscripten_set_main_loop(dispatch, 0, 1);
-#endif
 	}
 
 	void App::Resize(uint32 width, uint32 height)

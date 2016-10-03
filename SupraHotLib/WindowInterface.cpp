@@ -7,7 +7,7 @@ namespace SupraHot
 	{
 		WindowInterface::WindowInterface()
 		{
-			
+			SetClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		}
 
 		WindowInterface::~WindowInterface()

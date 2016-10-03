@@ -8,6 +8,8 @@ namespace SupraHot
 	{
 		class WindowEmscripten : public WindowInterface
 		{
+		private:
+			GLFWwindow* GlfwWindow;
 		protected:
 			void Setup() override;
 		public:
@@ -20,6 +22,8 @@ namespace SupraHot
 			void Update() override;
 			void Destroy() override;
 			void Clear() override;
+
+			GLFWwindow* GetGLFWWindow() { return GlfwWindow; };
 		};
 	};
 };

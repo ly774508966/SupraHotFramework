@@ -13,7 +13,10 @@ namespace SupraHot
 		protected:
 			uint32 Width, Height;
 			std::string WindowTitle;
-			float ClearColorR = 0, ClearColorG = 0, ClearColorB = 0, ClearColorA = 0;
+			float ClearColorR;
+			float ClearColorG;
+			float ClearColorB;
+			float ClearColorA;
 			virtual void Setup() = 0;
 		public:
 			WindowInterface();

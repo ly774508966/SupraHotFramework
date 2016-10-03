@@ -10,3 +10,14 @@ int _tmain(int argc, _TCHAR* argv[])
 	return 0;
 }
 #endif
+
+#ifdef PLATFORM_EMSCRIPTEN
+int main()
+{
+	SupraHot::Bootstrap::MAIN_APP app;
+	app.Init(640, 480, "Demo Application");
+	app.Run();
+	app.Destroy();
+	return 0;
+}
+#endif

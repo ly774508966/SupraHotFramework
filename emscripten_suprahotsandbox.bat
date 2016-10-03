@@ -1,0 +1,1 @@
+emcc -DPLATFORM_EMSCRIPTEN -I"Externals\include" -I"SupraHotLib" "SupraHotSandbox\SandBoxApp.cpp" "SupraHotSandbox\Bootstrap.cpp" "Externals\Dependencies\libs\emscripten\SupraHotLib.bc" -s USE_GLFW=3 -s FULL_ES3=1 --memory-init-file 0 -O3 -o "Build\emscripten\app.html"

@@ -15,6 +15,10 @@
 #include <tchar.h>
 #endif
 
+#ifdef PLATFORM_EMSCRIPTEN
+#include "WindowEmscripten.h"
+#endif
+#include <iostream>
 
 SandBoxApp::SandBoxApp()
 {
@@ -30,7 +34,6 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 #ifdef PLATFORM_WINDOWS
 	SupraHot::Utils::FileSystem::GetInstance()->SetRootPath("../Content/");
 #endif
-
 	App::Init(width, height, title);
 
 	window = new SupraHot::Window();
@@ -75,6 +78,7 @@ void SandBoxApp::Render()
 
 void SandBoxApp::Update(float deltaTime)
 {
+	window->SetClearColor(0.7f, 0.3f, 0.7f, 1.0f);
 }
 
 void SandBoxApp::LateUpdate(float deltaTime)
