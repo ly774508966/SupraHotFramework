@@ -237,7 +237,7 @@
     <Link>
       <AdditionalDependencies>lua53-static;</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\NVPACK\android-ndk-r12b\platforms\android-21\arch-arm\usr\lib;$(SolutionDir)Externals\libs\android</AdditionalLibraryDirectories>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <AndroidSystemLibs>c;m;log;stdc++;c++;android;EGL;GLESv3</AndroidSystemLibs>
     </Link>
     <Lib>

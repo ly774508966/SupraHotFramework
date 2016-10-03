@@ -8,8 +8,20 @@
 #include "WindowWin32.h"
 #endif
 
+#ifdef PLATFORM_EMSCRIPTEN
+#include "WindowEmscripten.h"
+#include <emscripten/emscripten.h>
+#endif
+
 namespace SupraHot
 {
+#ifdef PLATFORM_EMSCRIPTEN
+	static void dispatch()
+	{
+		App::GetMainApp()->ProgressApp();
+	}
+#endif
+
 	App::App()
 	{
 	}
@@ -30,6 +42,10 @@ namespace SupraHot
 	void App::Init(uint32 width, uint32 height, std::string title)
 	{
 		MainApp = this;
+
+#ifdef PLATFORM_EMSCRIPTEN
+		emscripten_set_main_loop(dispatch, 0, 1);
+#endif
 	}
 
 	void App::Resize(uint32 width, uint32 height)
@@ -56,9 +72,11 @@ namespace SupraHot
 	{
 	}
 
+	// Note: The Run()-method should only be used on desktops to keep the window open!
+	// On platforms like Android and Emscripten, we just need to call the ProgressApp()-Method in their
+	// lifecycle.
 	void App::Run()
 	{
-		// TODO: Create a proper game loop here
 		while (true && !window->ShouldClose())
 		{
 			ProgressApp();
@@ -67,9 +85,14 @@ namespace SupraHot
 
 	void App::ProgressApp()
 	{
+		// TODO: Create a proper game loop here
 		glViewport(0, 0, window->GetWidth(), window->GetHeight());
 
 		window->Clear();
+		
+		Update(0.0f);
+		LateUpdate(0.0f);
+		Tick(0.0f);
 
 		Render();
 

@@ -20,9 +20,14 @@
 #include <GLES3/gl31.h>
 #include <GLES3/gl3ext.h>
 #include <GLES3/gl3platform.h>
-
 #include <android/log.h>
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "suprahot", __VA_ARGS__))
+#endif
+
+#ifdef PLATFORM_EMSCRIPTEN
+#define GLFW_INCLUDE_ES3
+#include <emscripten/emscripten.h>
+#include <GLFW/glfw3.h>
 #endif
 
 // --------
@@ -39,6 +44,12 @@
 #define SHF_SPRINTF(dst, sizeinbytes, format) (sprintf(dst, sizeinbytes, format))
 #define SHF_SSCANF(src, format, ...) (sscanf(src, format, ##__VA_ARGS__))
 #define SHF_PRINTF(format, ...) (LOGI(format, ##__VA_ARGS__))
+#endif
+
+#ifdef PLATFORM_EMSCRIPTEN
+#define SHF_SPRINTF(dst, sizeinbytes, format) (sprintf_s(dst, sizeinbytes, format))
+#define SHF_SSCANF(src, format, ...) (sscanf_s(src, format, ##__VA_ARGS__))
+#define SHF_PRINTF(format, ...) (printf(format, ##__VA_ARGS__))
 #endif
 
 namespace SupraHot
