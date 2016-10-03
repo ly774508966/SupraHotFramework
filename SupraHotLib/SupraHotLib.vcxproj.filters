@@ -73,6 +73,12 @@
     <Filter Include="Source Files\Graphics\Android">
       <UniqueIdentifier>{a553edff-0b5f-4abe-9ab1-221a02d4f61f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Graphics\Emscripten">
+      <UniqueIdentifier>{ca6bd573-2655-4f51-95a4-d2b6c35a8050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Emscripten">
+      <UniqueIdentifier>{0f91eb92-b7e0-41dc-9958-6ccf9ba782b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -189,6 +195,9 @@
     <ClInclude Include="FileSystem.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="WindowEmscripten.h">
+      <Filter>Header Files\Graphics\Emscripten</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -295,6 +304,9 @@
     </ClCompile>
     <ClCompile Include="FileSystem.cpp">
       <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowEmscripten.cpp">
+      <Filter>Source Files\Graphics\Emscripten</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

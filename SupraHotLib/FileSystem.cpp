@@ -61,6 +61,11 @@ namespace SupraHot
 #ifdef PLATFORM_ANDROID
 			return false;
 #endif
+
+#ifdef PLATFORM_EMSCRIPTEN
+			std::ifstream infile(GetFilePath(directory, fileName).c_str());
+			return infile.good();
+#endif
 		}
 
 
@@ -80,6 +85,12 @@ namespace SupraHot
 				return nullptr;
 			}
 			return funopen(asset, android_read, android_write, android_seek, android_close);
+#endif
+
+#ifdef PLATFORM_EMSCRIPTEN
+			FILE* file = nullptr;
+			fopen_s(&file, GetFilePath(directory, fileName).c_str(), mode.c_str());
+			return file;
 #endif
 		}
 
