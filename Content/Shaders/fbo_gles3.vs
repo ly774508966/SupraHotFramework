@@ -1,4 +1,4 @@
-#version 400
+#version 300 es
 
 in vec2 vertexpos;
 in vec2 uvPos;

@@ -5,8 +5,9 @@
 class SandBoxApp : public SupraHot::App
 {
 private:
-	SupraHot::FrameBufferObject* fbo;
-	SupraHot::Texture2D* texture;
+	SupraHot::FrameBufferObject* FBO;
+	SupraHot::Texture2D* Texture;
+	SupraHot::Shader* FBOShader;
 public:
 	SandBoxApp();
 	~SandBoxApp();

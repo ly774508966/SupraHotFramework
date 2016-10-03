@@ -1,4 +1,4 @@
-#version 400
+#version 300 es
 
 uniform sampler2D in_texture;
 uniform vec2 pixelsize;

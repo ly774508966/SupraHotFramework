@@ -1,6 +1,7 @@
 #include "Platform.h"
 #include "SandBoxApp.h"
 #include <FileSystem.h>
+#include "Shader.h"
 
 #ifdef PLATFORM_ANDROID
 #include "WindowAndroid.h"
@@ -34,26 +35,42 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 	window = new SupraHot::Window();
 	window->Init(width, height, title);
-	window->SetClearColor(0.7, 0.3, 0.2, 1);
+	window->SetClearColor(0.7f, 0.3f, 0.7f, 1.0f);
 
-	fbo = new SupraHot::FrameBufferObject();
-	fbo->Init(width, height);
+	FBO = new SupraHot::FrameBufferObject();
+	FBO->Init(width, height);
 
-	texture = new SupraHot::Texture2D("FBO Texture");
-	texture->Load("Images/test.png");
+	Texture = new SupraHot::Texture2D("FBO Texture");
+	Texture->Load("Images/test.png");
 
-	//texture->Init(width, height);
+	FBO->SetReadSource(Texture);
+
+	// Load Shaders
+	FBOShader = new SupraHot::Shader();
+#ifdef PLATFORM_WINDOWS
+	FBOShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/fbo.vs");
+	FBOShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/fbo.fs");
+#endif
+
+#ifdef PLATFORM_ANDROID
+	FBOShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/fbo_gles3.vs");
+	FBOShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/fbo_gles3.fs");
+#endif
+
+	FBOShader->CompileShader();
+	FBO->SetPixelSize(FBOShader);
 }
 
 void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
 {
-	fbo->Resize(width, height);
+	FBO->Resize(width, height);
 }
 
 void SandBoxApp::Render()
 {
-	//fbo->Attach();
-	//fbo->Detach();
+	FBO->Attach();
+	FBO->Detach();
+	FBO->RenderToScreen(FBOShader);
 }
 
 void SandBoxApp::Update(float deltaTime)

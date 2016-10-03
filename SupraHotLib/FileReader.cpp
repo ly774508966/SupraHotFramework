@@ -1,6 +1,5 @@
 #include "FileReader.h"
-#include <iostream>
-#include <fstream>
+#include "FileSystem.h"
 
 namespace SupraHot
 {
@@ -24,24 +23,17 @@ namespace SupraHot
 		{
 			std::vector<std::string> fileContent;
 
-			std::ifstream stream;
-			stream.open(path);
+			FILE* file = FileSystem::GetInstance()->GetFile("", path, "rb");
 
-			if (!stream.is_open())
-			{
-				printf("Instream could not open file: %s \n", path.c_str());
-			}
-			else
+			if (file != nullptr)
 			{
 				char buf[2048];
-				while (!stream.eof())
-				{
-					stream.getline(buf, 2048);
+				while (fgets(buf, 1024, file)) {
 					fileContent.push_back(std::string(buf));
 				}
-				stream.close();
+				std::fclose(file);
 			}
-
+			
 			return fileContent;
 		}
 	};
