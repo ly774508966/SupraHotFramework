@@ -47,8 +47,8 @@
 #endif
 
 #ifdef PLATFORM_EMSCRIPTEN
-#define SHF_SPRINTF(dst, sizeinbytes, format) (sprintf_s(dst, sizeinbytes, format))
-#define SHF_SSCANF(src, format, ...) (sscanf_s(src, format, ##__VA_ARGS__))
+#define SHF_SPRINTF(dst, sizeinbytes, format) (sprintf(dst, sizeinbytes, format))
+#define SHF_SSCANF(src, format, ...) (sscanf(src, format, ##__VA_ARGS__))
 #define SHF_PRINTF(format, ...) (printf(format, ##__VA_ARGS__))
 #endif
 

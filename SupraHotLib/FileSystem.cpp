@@ -88,8 +88,7 @@ namespace SupraHot
 #endif
 
 #ifdef PLATFORM_EMSCRIPTEN
-			FILE* file = nullptr;
-			fopen_s(&file, GetFilePath(directory, fileName).c_str(), mode.c_str());
+			FILE* file = fopen(GetFilePath(directory, fileName).c_str(), mode.c_str());
 			return file;
 #endif
 		}

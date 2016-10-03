@@ -85,12 +85,14 @@ namespace SupraHot
 				shaderType = "GEOMETRY_SHADER";
 #endif
 			}
+#ifndef PLATFORM_EMSCRIPTEN
 			else if (type == GL_COMPUTE_SHADER)
 			{
 				shaderC = glCreateShader(GL_COMPUTE_SHADER);
 				ComputeShader = shaderC;
 				shaderType = "GL_COMPUTE_SHADER";
 			}
+#endif
 
 			std::string shaderSource;
 			LoadShaderInternal(pathToFile, shaderSource);

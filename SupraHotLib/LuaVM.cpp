@@ -138,7 +138,12 @@ namespace SupraHot
 	int b = 0;
 	if (!(a != b && b == 0 && a == 0))
 	{
+#ifndef PLATFORM_EMSCRIPTEN
 		exit(EXIT_FAILURE);
+#else
+		_exit(1);
+#endif
+
 	}
 }
 	};

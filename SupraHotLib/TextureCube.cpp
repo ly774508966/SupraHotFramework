@@ -205,8 +205,17 @@ namespace SupraHot
 			glGenTextures(1, &TextureID);
 			glBindTexture(GL_TEXTURE_CUBE_MAP, TextureID);
 
+#ifndef PLATFORM_EMSCRIPTEN
 			std::vector<std::string> paths = { left, right, top, bottom, front, back };
-
+#else
+			std::vector<std::string> paths;
+			paths.push_back(left);
+			paths.push_back(right);
+			paths.push_back(top);
+			paths.push_back(bottom);
+			paths.push_back(front);
+			paths.push_back(back);
+#endif
 			for (uint32 f = 0; f < 6; f++)
 			{
 				std::string path = paths[f];
