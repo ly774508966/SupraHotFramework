@@ -1,4 +1,7 @@
 #include "LuaVM.h"
+#include "FileSystem.h"
+#include <vector>
+#include "FileReader.h"
 
 namespace SupraHot
 {
@@ -25,9 +28,17 @@ namespace SupraHot
 			return instance;
 		}
 
-		bool LuaVM::RunFile(const char* path)
+		bool LuaVM::RunFile(std::string path)
 		{
-			return luaL_dofile(state, path);
+			std::vector<std::string> fileContent = Utils::FileReader::GetInstance()->ReadFile(path);
+			std::string script = "";
+
+			for (uint32 i = 0, l = fileContent.size(); i < l; ++i)
+			{
+				script += fileContent.at(i);
+			}
+
+			return luaL_dostring(state, script.c_str());
 		}
 
 		bool LuaVM::CallFunction(const char* functionName, const char* signature, ...)

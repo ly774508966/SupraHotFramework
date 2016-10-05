@@ -1,5 +1,5 @@
-op ../Content/Models/cube.objx
-mp ../Content/Models/cube.mtl
+op Models/cube.objx
+mp Models/cube.mtl
 m 1
 vc 8
 nc 8

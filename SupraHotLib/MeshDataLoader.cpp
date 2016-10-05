@@ -7,6 +7,7 @@
 #include "Face.h"
 #include "Vertex.h"
 #include "Platform.h"
+#include "FileSystem.h"
 
 namespace SupraHot
 {
@@ -68,7 +69,7 @@ namespace SupraHot
 		std::vector<MeshData*> MeshDataLoader::LoadOBJX(std::string path)
 		{
 #if DEVELOPMENT == 1
-			printf("Loading Mesh: %s \n", path.c_str());
+			SHF_PRINTF("Loading Mesh: %s \n", path.c_str());
 #endif
 
 			/* container data */
@@ -134,7 +135,7 @@ namespace SupraHot
 						data.push_back(tempMeshData);
 						Vec3 origin = tempMeshData->Origin;
 #if DEVELOPMENT == 1
-						printf("Pushing Mesh %s with %d faces at Origin [%f %f %f]\n", tempMeshData->Name.c_str(), tempMeshData->FaceCount, origin.x, origin.y, origin.z);
+						SHF_PRINTF("Pushing Mesh %s with %d faces at Origin [%f %f %f]\n", tempMeshData->Name.c_str(), tempMeshData->FaceCount, origin.x, origin.y, origin.z);
 #endif
 					}
 
@@ -168,27 +169,22 @@ namespace SupraHot
 				data.push_back(tempMeshData);
 				Vec3 origin = tempMeshData->Origin;
 #if DEVELOPMENT == 1
-				printf("Pushing Mesh %s with %d faces at Origin [%f %f %f]\n", tempMeshData->Name.c_str(), tempMeshData->FaceCount, origin.x, origin.y, origin.z);
+				SHF_PRINTF("Pushing Mesh %s with %d faces at Origin [%f %f %f]\n", tempMeshData->Name.c_str(), tempMeshData->FaceCount, origin.x, origin.y, origin.z);
 #endif
 			}
 
 
 #if DEVELOPMENT == 1
-			printf("Loading OBJX: %s \n", pathToObjx.c_str());
+			SHF_PRINTF("Loading OBJX: %s \n", pathToObjx.c_str());
 #endif
 
 			/* open binary file */
 			
-#ifdef PLATFORM_WINDOWS
-			FILE *vertex_file = nullptr;
-			fopen_s(&vertex_file, pathToObjx.c_str(), "rb");
-#else
-			FILE *vertex_file = fopen(pathToObjx.c_str(), "rb");
-#endif
-
+			FILE *vertex_file = FileSystem::GetInstance()->GetFile("", pathToObjx.c_str(), "rb");
+		
 			if (vertex_file == nullptr)
 			{
-				printf("Can't open pathToObjx %s \n", pathToObjx.c_str());
+				SHF_PRINTF("Can't open pathToObjx %s \n", pathToObjx.c_str());
 				return data;
 			}
 
@@ -244,7 +240,7 @@ namespace SupraHot
 					MeshData* currentMeshData = data[i];
 					/* generate and bind vertex array object */
 #if DEVELOPMENT == 1
-					printf("Finishing MeshGL: %s (Material: %s)\n", currentMeshData->Name.c_str(), currentMeshData->MeshMaterial.GetName().c_str());
+					SHF_PRINTF("Finishing MeshGL: %s (Material: %s)\n", currentMeshData->Name.c_str(), currentMeshData->MeshMaterial.GetName().c_str());
 #endif
 					glGenVertexArrays(1, &currentMeshData->VAOId);
 					glBindVertexArray(currentMeshData->VAOId);
@@ -368,14 +364,14 @@ namespace SupraHot
 					int err = glGetError();
 					if (err != 0)
 					{
-						printf("Error %d happened while creating mesh data gl buffer handles \n", err);
+						SHF_PRINTF("Error %d happened while creating mesh data gl buffer handles \n", err);
 					}
 #endif
 				}
 
 
 #if DEVELOPMENT == 1
-				printf("Finished Mesh: %s \n", data[i]->Name.c_str());
+				SHF_PRINTF("Finished Mesh: %s \n", data[i]->Name.c_str());
 #endif
 
 				data[i]->PositionData.clear();
@@ -390,7 +386,7 @@ namespace SupraHot
 			fclose(vertex_file);
 
 #if DEVELOPMENT == 1
-			printf("Procssed Meshs: %llu with Vertexcount: %d \n", data.size(), vertexcount);
+			SHF_PRINTF("Procssed Meshs: %u with Vertexcount: %d \n", static_cast<uint32>(data.size()), vertexcount);
 #endif
 			return data;
 		}

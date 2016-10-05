@@ -16,7 +16,6 @@ namespace SupraHot
 			std::vector<MeshData*> LoadOBJ(std::string path);
 			std::vector<MeshData*> LoadOBJX(std::string path);
 			std::vector<MeshData*> LoadFBX(std::string path);
-			std::vector<MeshData*> LoadWithAssimp(std::string path);
 			std::vector<MeshData*> LoadSHMD(std::string path);
 		public:
 			static MeshDataLoader* GetInstance();
@@ -32,6 +31,7 @@ namespace SupraHot
 			};
 
 			std::vector<MeshData*> Load(std::string path, ModelFileFormat modelFileFormat);
+			std::vector<MeshData*> LoadWithAssimp(std::string path);
 		};
 	};
 };

@@ -19,7 +19,7 @@ namespace SupraHot
 			LuaVM();
 		public:
 			static LuaVM* GetInstance();
-			bool RunFile(const char* path);
+			bool RunFile(std::string path);
 			bool CallFunction(const char *functionName, const char *signature, ...);
 			void CloseLuaVM();
 			static void Error(lua_State* L, const char* fmt, ...);

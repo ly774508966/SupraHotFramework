@@ -1,6 +1,7 @@
 #include "Platform.h"
 #include "SandBoxApp.h"
 #include <FileSystem.h>
+#include <iostream>
 #include "Shader.h"
 
 #ifdef PLATFORM_ANDROID
@@ -18,7 +19,8 @@
 #ifdef PLATFORM_EMSCRIPTEN
 #include "WindowEmscripten.h"
 #endif
-#include <iostream>
+#include <MeshDataLoader.h>
+#include <LuaVM.h>
 
 SandBoxApp::SandBoxApp()
 {
@@ -34,6 +36,11 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 #ifdef PLATFORM_WINDOWS
 	SupraHot::Utils::FileSystem::GetInstance()->SetRootPath("../Content/");
 #endif
+
+#ifdef PLATFORM_EMSCRIPTEN
+	SupraHot::Utils::FileSystem::GetInstance()->SetRootPath("Content/");
+#endif
+
 	App::Init(width, height, title);
 
 	window = new SupraHot::Window();
@@ -43,7 +50,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	FBO = new SupraHot::FrameBufferObject();
 	FBO->Init(width, height);
 
-	Texture = new SupraHot::Texture2D("FBO Texture");
+	Texture = new SupraHot::Texture2D("Pepe Texture");
 	Texture->Load("Images/test.png");
 
 	FBO->SetReadSource(Texture);
@@ -62,6 +69,18 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 	FBOShader->CompileShader();
 	FBO->SetPixelSize(FBOShader);
+
+	// Try loading a lua script and run it.
+	SupraHot::Scripting::LuaVM::GetInstance()->RunFile("Scripts/test.lua");
+
+	// Try loading objx
+	std::vector<SupraHot::MeshData*> meshData = SupraHot::Utils::MeshDataLoader::GetInstance()->Load("Models/cube.mh", SupraHot::Utils::MeshDataLoader::ModelFileFormat::OBJX);
+	SHF_PRINTF("MeshData Facecount: %d \n", meshData.at(0)->FaceCount);
+	SHF_PRINTF("Material Name %s \n", meshData.at(0)->MeshMaterial.GetName().c_str());
+	SHF_PRINTF("Material Albedo Tex ID %d \n", meshData.at(0)->MeshMaterial.GetAlbedoMap()->GetID());
+
+	// Try loading a model file with assimp
+	std::vector<SupraHot::MeshData*> meshDataAssimp = SupraHot::Utils::MeshDataLoader::GetInstance()->LoadWithAssimp("Models/cube.obj");
 }
 
 void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
@@ -91,4 +110,8 @@ void SandBoxApp::Tick(float deltaTime)
 
 void SandBoxApp::Destroy()
 {
+	Texture->Destroy();
+	FBOShader->Destroy();
+	FBO->Destroy();
+	window->Destroy();
 }

@@ -6,5 +6,5 @@ Ks 0.5 0.5 0.5
 Ni 1.0
 d 1.0
 illum 2
-map_Ns ../Content/Textures/cubetex/uv_cube_norm_sponza.png
-map_Kd ../Content/Textures/cubetex/uv_cube_diff_sponza.png
+map_Ns Textures/cubetex/uv_cube_norm_sponza.png
+map_Kd Textures/cubetex/uv_cube_diff_sponza.png
