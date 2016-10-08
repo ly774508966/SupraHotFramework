@@ -7,3 +7,7 @@ Intermediates/
 SupraHotSandbox/Tegra-Android/
 Build/
 SupraHotSandbox/assets/
+*.obj
+x64/
+SupraHotModelConverter/Lib/Debug/assimp-debug.lib
+SupraHotModelConverter/Lib/Release/assimp-release.lib

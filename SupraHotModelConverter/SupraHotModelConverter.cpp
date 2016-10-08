@@ -5,6 +5,9 @@
 #include "Model.h"
 #include <iostream>
 #include "Serialization.h"
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 struct Test
 {
@@ -111,6 +114,19 @@ int _tmain(int argc, _TCHAR* argv[])
 		{
 			printf("%f \n", readTest.floatData[i]);
 		}
+
+
+		Assimp::Importer importer;
+		uint32 flags =	aiProcess_CalcTangentSpace |
+						aiProcess_Triangulate |
+						aiProcess_JoinIdenticalVertices |
+						aiProcess_PreTransformVertices |
+						aiProcess_RemoveRedundantMaterials |
+						aiProcess_OptimizeMeshes;
+
+		const aiScene* scene = importer.ReadFile("App-Content/Pistol_Model.fbx", flags);
+
+		printf("Loaded meshes: %d \n", scene->mNumMeshes);
 
 	}
 
