@@ -39,6 +39,9 @@
     <ClInclude Include="Model.h">
       <Filter>Header Files\SHF_Deps</Filter>
     </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Header Files\SHF_Deps</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
