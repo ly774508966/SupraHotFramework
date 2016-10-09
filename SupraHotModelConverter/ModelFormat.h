@@ -17,21 +17,28 @@ namespace SupraHot
 
 		enum VertexBitfield
 		{
-			POSITION = BITFIELD(0),
-			NORMAL = BITFIELD(1),
-			UV = BITFIELD(2),
-			TANGENT = BITFIELD(3),
-			BINORMAL = BITFIELD(4),
+			POSITION	= BITFIELD(0),
+			NORMAL		= BITFIELD(1),
+			UV			= BITFIELD(2),
+			TANGENT		= BITFIELD(3),
+			BITANGENT	= BITFIELD(4),
+
+			// Combos
+			POSITION_NORMAL							= POSITION | NORMAL,
+			POSITION_UV								= POSITION | UV,
+			POSITION_NORMAL_UV						= POSITION | NORMAL | UV,
+			POSITION_NORMAL_UV_TANGENT_BITANGENT	= POSITION | NORMAL | UV | TANGENT | BITANGENT,
 		};
 
 		struct Mesh
 		{
+			char* Name;
 			uint32 VertexCount;
 			uint32 IndexCount;
 			uint32 VertexStride;
 			uint32 VertexAttributes;	// VertexBitfield
-			std::vector<uint8> Vertices;
-			std::vector<uint8> Indices;
+			float* Vertices;
+			uint32* Indices;
 		};
 
 		struct SHFModelFile
