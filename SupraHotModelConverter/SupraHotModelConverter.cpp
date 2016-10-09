@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "Model.h"
+#include "ModelFormat.h"
 #include <iostream>
 #include "Serialization.h"
 #include <assimp/Importer.hpp>
@@ -11,7 +11,7 @@
 
 struct Test
 {
-	char* header[5];
+	char* header = "SUPRA";
 
 	float x;
 	uint32 y;
@@ -20,7 +20,7 @@ struct Test
 	uint32 dataAmount;
 	float* floatData; // this could also be a void* array. then we would have to reintpret_cast<float*> it on read
 
-	char* footer[3];
+	char* footer = "HOT";
 };
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -32,7 +32,6 @@ int _tmain(int argc, _TCHAR* argv[])
 	{
 		unsigned Bit : 1; // -> max size = (2^x - 1)
 	};
-
 
 	std::cout << "Size of float: " << sizeof(float) << std::endl;
 	std::cout << "Size of uint32: " << sizeof(uint32) << std::endl;
@@ -60,16 +59,16 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
 	Test writeTest = {};
-	writeTest.header[0] = "S";
+/*	writeTest.header[0] = "S";
 	writeTest.header[1] = "U";
 	writeTest.header[2] = "P";
 	writeTest.header[3] = "R";
-	writeTest.header[4] = "A";
+	writeTest.header[4] = "A";*/
 	writeTest.x = 13.37f;
 	writeTest.y = 13399;
-	writeTest.footer[0] = "H";
+/*	writeTest.footer[0] = "H";
 	writeTest.footer[1] = "O";
-	writeTest.footer[2] = "T";
+	writeTest.footer[2] = "T";*/
 	writeTest.z = -0.0001345678f;
 
 	std::vector<float> uintVector;
@@ -94,9 +93,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	{
 		Test readTest = {};
-		printf("Header = %p, footer = %p", readTest.header, readTest.footer);
+		printf("Header = %s, footer = %s \n", readTest.header, readTest.footer);
 		printf("x = %f, y = %d, z = %f\n", readTest.x, readTest.y, readTest.z);
-
 
 		Serialization serialization("writeTest.bin");
 		serialization.OpenFile(Serialization::READ_BINARY);
@@ -104,6 +102,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		serialization.CloseFile();
 
 		std::cout << readTest.footer[2] << std::endl;
+		printf("Header = %s, footer = %s \n", readTest.header, readTest.footer);
 		printf("x = %f, y = %d, z = %f\n", readTest.x, readTest.y, readTest.z);
 		printf("data amount = %d\n", readTest.dataAmount);
 

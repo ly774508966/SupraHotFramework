@@ -33,9 +33,6 @@
     <ClInclude Include="Serialization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Header Files\SHF_Deps</Filter>
-    </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>Header Files\SHF_Deps</Filter>
     </ClInclude>
