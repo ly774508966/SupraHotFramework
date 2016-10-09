@@ -9,6 +9,10 @@ Otherwise it won't find the library on app start
 # Supported platforms
 ## Windows
 ## Android
-## mac OS (Currently missing some files)
-## Web	(Comming after Android & mac OS builds are done)
-## iOS	(Comming after Web)
+## mac OS (WIP)
++ WindowMac.cpp needs to be implemented
++ SandBoxApp.mm needs to be created
++ XCode project needs to be created. This will also help with compiling the lib for iOs
+## iOS	(Comming after mac)
+## Web	
++ This will eventually be done after all other builds are good to go.
