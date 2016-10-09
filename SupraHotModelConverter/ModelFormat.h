@@ -17,11 +17,11 @@ namespace SupraHot
 
 		enum VertexBitfield
 		{
-			POSITION	= BITFIELD(0),
-			NORMAL		= BITFIELD(1),
-			UV			= BITFIELD(2),
-			TANGENT		= BITFIELD(3),
-			BITANGENT	= BITFIELD(4),
+			POSITION	= BITSHIFT(0),
+			NORMAL		= BITSHIFT(1),
+			UV			= BITSHIFT(2),
+			TANGENT		= BITSHIFT(3),
+			BITANGENT	= BITSHIFT(4),
 
 			// Combos
 			POSITION_NORMAL							= POSITION | NORMAL,

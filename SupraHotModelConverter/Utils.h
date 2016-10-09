@@ -8,4 +8,4 @@ typedef short				int16;
 typedef int					int32;
 typedef long long			int64;
 
-#define BITFIELD(num) (1 << num)
+#define BITSHIFT(num) (1 << num)
