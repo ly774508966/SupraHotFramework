@@ -34,12 +34,15 @@ namespace SupraHot
 		{
 			std::string Name;
 			
-			uint32 VertexCount;
-			uint32 IndexCount;
-			uint32 VertexStride;
-			uint32 VertexAttributes;	// VertexBitfield
+			uint32 VertexCount = 0;
+			uint32 IndexCount = 0;
+			uint32 FaceCount = 0;
+			uint32 VertexStride = 0;
+			uint32 VertexStrideBytes = 0;
+			uint32 VertexAttributes = 0;	// VertexBitfield
+			uint64 ElementCount = 0;
 
-			uint32 MaterialID;
+			uint32 MaterialID = 0;
 
 			float* Vertices;
 			uint32* Indices;

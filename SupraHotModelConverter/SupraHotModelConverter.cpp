@@ -15,12 +15,12 @@ int _tmain(int argc, _TCHAR* argv[])
 	using namespace Graphics;
 
 	Assimp::Importer importer;
-	uint32 flags =	aiProcess_CalcTangentSpace |
-					aiProcess_Triangulate |
-					aiProcess_JoinIdenticalVertices |
-					//aiProcess_PreTransformVertices |
-					aiProcess_RemoveRedundantMaterials |
-					aiProcess_OptimizeMeshes;
+	uint32 flags = aiProcess_CalcTangentSpace |
+		aiProcess_Triangulate |
+		aiProcess_JoinIdenticalVertices |
+		//aiProcess_PreTransformVertices |
+		aiProcess_RemoveRedundantMaterials |
+		aiProcess_OptimizeMeshes;
 
 	const aiScene* scene = importer.ReadFile("App-Content/Sponza.fbx", flags);
 	std::vector<Mesh> loadedMeshes;
@@ -110,6 +110,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		loadedMaterials.push_back(material);
 	}
 
+
+	std::vector<std::vector<float>> meshIDToVertexFloatData;
 	for (uint32 i = 0, l = scene->mNumMeshes; i < l; ++i)
 	{
 		Mesh mesh;
@@ -117,33 +119,85 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		const aiMesh& assimpMesh = *scene->mMeshes[i];
 
-		// Set vertex attributes
 
+		// Build up mesh
+		mesh.Name = assimpMesh.mName.C_Str();
+		mesh.MaterialID = assimpMesh.mMaterialIndex;
+
+		// Set vertex & index count
+		mesh.VertexCount = assimpMesh.mNumVertices;
+		mesh.FaceCount = assimpMesh.mNumFaces;
+		mesh.IndexCount = assimpMesh.mNumFaces * 3;
+		mesh.ElementCount = 0;
+
+		std::vector<float> floatVertexData;
+
+		// Set vertices and vertex attributes
 		if (assimpMesh.HasPositions())
 		{
 			mesh.VertexAttributes += POSITION;
-			mesh.VertexStride += 3 * sizeof(float);
+			mesh.VertexStride += 3;
+
+			for (uint64 v = 0; v < mesh.VertexCount; ++v)
+			{
+				const aiVector3D& vertex = assimpMesh.mVertices[v];
+				floatVertexData.push_back(vertex.x);
+				floatVertexData.push_back(vertex.y);
+				floatVertexData.push_back(vertex.z);
+			}
 		}
 
 		if (assimpMesh.HasNormals())
 		{
 			mesh.VertexAttributes += NORMAL;
-			mesh.VertexStride += 3 * sizeof(float);
+			mesh.VertexStride += 3;
+
+			for (uint64 v = 0; v < mesh.VertexCount; ++v)
+			{
+				// todo: memcpy data directly into the floatVertexData vector!
+				const aiVector3D& vertex = assimpMesh.mNormals[v];
+				floatVertexData.push_back(vertex.x);
+				floatVertexData.push_back(vertex.y);
+				floatVertexData.push_back(vertex.z);
+			}
 		}
 
 		if (assimpMesh.HasTextureCoords(0))
 		{
 			mesh.VertexAttributes += UV;
-			mesh.VertexStride += 2 * sizeof(float);
+			mesh.VertexStride += 2;
+
+			for (uint64 v = 0; v < mesh.VertexCount; ++v)
+			{
+				const aiVector3D& vertex = assimpMesh.mTextureCoords[0][v];
+				floatVertexData.push_back(vertex.x);
+				floatVertexData.push_back(vertex.y);
+			}
 		}
 
 		if (assimpMesh.HasTangentsAndBitangents())
 		{
 			mesh.VertexAttributes += TANGENT;
-			mesh.VertexStride += 3 * sizeof(float);
+			mesh.VertexStride += 3;
+
+			for (uint64 v = 0; v < mesh.VertexCount; ++v)
+			{
+				const aiVector3D& vertex = assimpMesh.mTangents[v];
+				floatVertexData.push_back(vertex.x);
+				floatVertexData.push_back(vertex.y);
+				floatVertexData.push_back(vertex.z);
+			}
 
 			mesh.VertexAttributes += BITANGENT;
-			mesh.VertexStride += 3 * sizeof(float);
+			mesh.VertexStride += 3;
+
+			for (uint64 v = 0; v < mesh.VertexCount; ++v)
+			{
+				const aiVector3D& vertex = assimpMesh.mBitangents[v];
+				floatVertexData.push_back(vertex.x);
+				floatVertexData.push_back(vertex.y);
+				floatVertexData.push_back(vertex.z);
+			}
 
 			// NOTE:
 			// If we need binormals, we can easily compute them from the
@@ -152,18 +206,11 @@ int _tmain(int argc, _TCHAR* argv[])
 			// This needs to be done for every vertex per Face (Triangle || Quad)
 		}
 
-		// Build up mesh
-		mesh.Name = assimpMesh.mName.C_Str();
-		mesh.MaterialID = assimpMesh.mMaterialIndex;
+		mesh.ElementCount = mesh.VertexCount * mesh.VertexStride;
+		mesh.VertexStrideBytes = mesh.VertexStride * sizeof(float);
+		meshIDToVertexFloatData.push_back(floatVertexData);
 
-
-		// TODO: Build up vertex data
-
-		mesh.VertexCount = 0;
-		mesh.IndexCount = 0;
-		
-		mesh.Vertices;
-		mesh.Indices;
+		mesh.Vertices = meshIDToVertexFloatData[i].data();
 
 		loadedMeshes.push_back(mesh);
 	}
@@ -179,9 +226,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	serialization.OpenFile(Serialization::WRITE_BINARY);
 	serialization.WriteToFile(modelFile);
 	serialization.CloseFile();
-	
+
 	printf("W mesh count: %d \n", modelFile.MeshCount);
-	
+
 	{
 		SHFModelFile readModel;
 		Serialization serialization1("modelwritetest.bin");
@@ -204,15 +251,30 @@ int _tmain(int argc, _TCHAR* argv[])
 			Mesh mesh = readModel.Meshes[i];
 			Material material = readModel.Materials[mesh.MaterialID];
 
-			printf("mesh name | %s \n", mesh.Name.c_str());
+			/*printf("mesh name | %s \n", mesh.Name.c_str());
 			printf("material name | %s \n", material.Name.c_str());
 			printf("mesh.MaterialID | %d \n", mesh.MaterialID);
 			printf("Kd | %f %f %f \n", material.Kd.x, material.Kd.y, material.Kd.z);
 			printf("Ka | %f %f %f \n", material.Ka.x, material.Ka.y, material.Ka.z);
 			printf("Ks | %f %f %f \n", material.Ks.x, material.Ks.y, material.Ks.z);
 			printf("Ke | %f %f %f \n", material.Ke.x, material.Ke.y, material.Ke.z);
-			printf("- - - - - - - - - - - - - - -  \n");
+			printf("- - - - - - - - - - - - - - -  \n");*/
 		}
+
+
+		// Index
+
+		Mesh mesh = readModel.Meshes[0];
+		printf("R IndexCount: %d \n", mesh.IndexCount);
+		printf("R FaceCount: %d \n", mesh.FaceCount);
+		printf("R VertexCount: %d \n", mesh.VertexCount);
+
+		for (uint32 i = (mesh.VertexCount * 4 * 3 + mesh.VertexCount * 2) - 3; i < mesh.VertexCount * 4 * 3 + mesh.VertexCount * 2; ++i)
+		{
+			printf("index: %f \n", mesh.Vertices[i]);
+		}
+
+
 
 		printf("FILE FOOTER = %s \n", readModel.Footer.c_str());
 	}
