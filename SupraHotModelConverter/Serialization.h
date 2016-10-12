@@ -5,6 +5,11 @@
 
 namespace SupraHot
 {
+	namespace Graphics{
+		struct Mesh;
+		struct SHFModelFile;
+	}
+
 	class Serialization
 	{
 	private:
@@ -25,26 +30,16 @@ namespace SupraHot
 
 		void OpenFile(MODE mode);
 
-		template<typename T> void WriteToFile(const T& data);
-		void Write(uint64 size, const void* data);
+		void WriteToFile(const Graphics::SHFModelFile& data);
+		//void Write(uint64 size, uint64 amount, const void* data);
+		template<typename T> void Write(uint64 size, uint64 amount, const T* data);
+		void Write(uint64 size, uint64 amount, Graphics::Mesh* data);
 
-
-		template<typename T> void ReadFile(T& data);
-		void Read(uint64 size, void* data);
-
+		void ReadFile(Graphics::SHFModelFile& data);
+		//void Read(uint64 size, uint64 amount, void* data);
+		template<typename T> void Read(uint64 size, uint64 amount, T* data);
+		void Read(uint64 size, uint64 amount, Graphics::Mesh* data);
 
 		void CloseFile();
 	};
-
-	template <typename T>
-	void Serialization::WriteToFile(const T& data)
-	{
-		Write(sizeof(T), &data);
-	}
-
-	template <typename T>
-	void Serialization::ReadFile(T& data)
-	{
-		Read(sizeof(T), &data);
-	}
 };

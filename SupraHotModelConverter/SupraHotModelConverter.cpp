@@ -9,11 +9,16 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#define WRITE 1
+#define READ 1
+
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	using namespace SupraHot;
 	using namespace Graphics;
 
+#if WRITE == 1
 	Assimp::Importer importer;
 	uint32 flags = aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
@@ -206,7 +211,9 @@ int _tmain(int argc, _TCHAR* argv[])
 			// This needs to be done for every vertex per Face (Triangle || Quad)
 		}
 
+		mesh.IndexCountBytes = mesh.IndexCount * sizeof(uint32);
 		mesh.ElementCount = mesh.VertexCount * mesh.VertexStride;
+		mesh.ElementCountBytes = mesh.ElementCount * sizeof(float);
 		mesh.VertexStrideBytes = mesh.VertexStride * sizeof(float);
 		meshIDToVertexFloatData.push_back(floatVertexData);
 
@@ -228,7 +235,10 @@ int _tmain(int argc, _TCHAR* argv[])
 	serialization.CloseFile();
 
 	printf("W mesh count: %d \n", modelFile.MeshCount);
+#endif
 
+
+#if READ == 1
 	{
 		SHFModelFile readModel;
 		Serialization serialization1("modelwritetest.bin");
@@ -236,49 +246,19 @@ int _tmain(int argc, _TCHAR* argv[])
 		serialization1.ReadFile(readModel);
 		serialization1.CloseFile();
 
-		printf("FILE HEADER = %s \n", readModel.Header.c_str());
-
-		for (uint32 i = 0, l = readModel.MaterialCount; i < l; i++)
+		printf("(R) Header %s \n", readModel.Header.c_str());
+		printf("(R) Mesh count : %d \n", readModel.MeshCount);
+		printf("(R) Material count : %d \n", readModel.MaterialCount);
+		printf("(R) Footer %s \n", readModel.Footer.c_str());
+		
+		for (uint32 i = 0; i < readModel.MaterialCount; i++)
 		{
-			Material material = readModel.Materials[i];
-			printf("material name | %s \n", material.Name.c_str());
+			Material& material = readModel.Materials[i];
+			printf("(R) Material name: %s \n", material.Name.c_str());
 		}
 
-
-		printf("R mesh count: %d \n", readModel.MeshCount);
-		for (uint32 i = 0, l = readModel.MeshCount; i < l; i++)
-		{
-			Mesh mesh = readModel.Meshes[i];
-			Material material = readModel.Materials[mesh.MaterialID];
-
-			/*printf("mesh name | %s \n", mesh.Name.c_str());
-			printf("material name | %s \n", material.Name.c_str());
-			printf("mesh.MaterialID | %d \n", mesh.MaterialID);
-			printf("Kd | %f %f %f \n", material.Kd.x, material.Kd.y, material.Kd.z);
-			printf("Ka | %f %f %f \n", material.Ka.x, material.Ka.y, material.Ka.z);
-			printf("Ks | %f %f %f \n", material.Ks.x, material.Ks.y, material.Ks.z);
-			printf("Ke | %f %f %f \n", material.Ke.x, material.Ke.y, material.Ke.z);
-			printf("- - - - - - - - - - - - - - -  \n");*/
-		}
-
-
-		// Index
-
-		Mesh mesh = readModel.Meshes[0];
-		printf("R IndexCount: %d \n", mesh.IndexCount);
-		printf("R FaceCount: %d \n", mesh.FaceCount);
-		printf("R VertexCount: %d \n", mesh.VertexCount);
-
-		for (uint32 i = (mesh.VertexCount * 4 * 3 + mesh.VertexCount * 2) - 3; i < mesh.VertexCount * 4 * 3 + mesh.VertexCount * 2; ++i)
-		{
-			printf("index: %f \n", mesh.Vertices[i]);
-		}
-
-
-
-		printf("FILE FOOTER = %s \n", readModel.Footer.c_str());
 	}
-
+#endif
 	return 0;
 }
 

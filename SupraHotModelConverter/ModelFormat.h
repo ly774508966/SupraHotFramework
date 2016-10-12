@@ -41,6 +41,8 @@ namespace SupraHot
 			uint32 VertexStrideBytes = 0;
 			uint32 VertexAttributes = 0;	// VertexBitfield
 			uint64 ElementCount = 0;
+			uint64 ElementCountBytes = 0;
+			uint64 IndexCountBytes = 0;
 
 			uint32 MaterialID = 0;
 
@@ -53,11 +55,11 @@ namespace SupraHot
 		{
 			std::string Name;
 
-			std::string AlbedoMapPath;
-			std::string NormalMapPath;
-			std::string SpecularMapPath;
-			std::string ShininessReflectionMapPath;
-			std::string OpacityMapPath;
+			std::string AlbedoMapPath = "";
+			std::string NormalMapPath = "";
+			std::string SpecularMapPath = "";
+			std::string ShininessReflectionMapPath = "";
+			std::string OpacityMapPath = "";
 			
 			uint32 ID = 0;
 			float Ns = 0;				// specular exponent
@@ -70,12 +72,14 @@ namespace SupraHot
 			float F0 = 0.04f;           // Fresnel0 0.0f = base reflectivity
 		};
 
+
 		struct SHFModelFile
 		{
 			std::string Header = "SUPRA";
 
 			uint32 MeshCount;
 			Mesh* Meshes;
+
 			uint32 MaterialCount;
 			Material* Materials;
 
