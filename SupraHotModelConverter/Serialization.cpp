@@ -75,14 +75,53 @@ namespace SupraHot
 
 	void Serialization::Write(uint64 size, uint64 amount, Graphics::Mesh* data)
 	{
-		printf("WRITE MESH \n");
-		fwrite(data, size, amount, CurrentFile);
+
+		for (uint64 i = 0; i < amount; ++i)
+		{
+			Graphics::Mesh& mesh = data[i];
+
+			//printf("(W) Mesh: %s \n", data[i].Name.c_str());
+
+			Write(sizeof(mesh.Name), 1, &mesh.Name);
+			Write(sizeof(mesh.IndexCount), 1, &mesh.IndexCount);
+			Write(sizeof(mesh.FaceCount), 1, &mesh.FaceCount);
+			Write(sizeof(mesh.VertexStride), 1, &mesh.VertexStride);
+			Write(sizeof(mesh.VertexStrideBytes), 1, &mesh.VertexStrideBytes);
+			Write(sizeof(mesh.VertexAttributes), 1, &mesh.VertexAttributes);
+			Write(sizeof(mesh.ElementCount), 1, &mesh.ElementCount);
+			Write(sizeof(mesh.ElementCountBytes), 1, &mesh.ElementCountBytes);
+			Write(sizeof(mesh.IndexCountBytes), 1, &mesh.IndexCountBytes);
+			Write(sizeof(mesh.MaterialID), 1, &mesh.MaterialID);
+			Write(sizeof(float), mesh.ElementCount, &mesh.Vertices[0]);
+			Write(sizeof(uint32), mesh.IndexCount, &mesh.Indices[0]);
+		}
+
 	}
 
 	void Serialization::Read(uint64 size, uint64 amount, Graphics::Mesh* data)
 	{
-		printf("READ MESH \n");
-		fread(data, size, amount, CurrentFile);
+		
+		for (uint64 i = 0; i < amount; ++i)
+		{
+			Graphics::Mesh& mesh = data[i];
+
+			Read(sizeof(mesh.Name), 1, &mesh.Name);
+			Read(sizeof(mesh.IndexCount), 1, &mesh.IndexCount);
+			Read(sizeof(mesh.FaceCount), 1, &mesh.FaceCount);
+			Read(sizeof(mesh.VertexStride), 1, &mesh.VertexStride);
+			Read(sizeof(mesh.VertexStrideBytes), 1, &mesh.VertexStrideBytes);
+			Read(sizeof(mesh.VertexAttributes), 1, &mesh.VertexAttributes);
+			Read(sizeof(mesh.ElementCount), 1, &mesh.ElementCount);
+			Read(sizeof(mesh.ElementCountBytes), 1, &mesh.ElementCountBytes);
+			Read(sizeof(mesh.IndexCountBytes), 1, &mesh.IndexCountBytes);
+			Read(sizeof(mesh.MaterialID), 1, &mesh.MaterialID);
+
+			mesh.Vertices = new float[mesh.ElementCount];
+			Read(sizeof(float), mesh.ElementCount, mesh.Vertices);
+
+			mesh.Indices = new uint32[mesh.IndexCount];
+			Read(sizeof(uint32), mesh.IndexCount, mesh.Indices);
+		}
 	}
 
 	void Serialization::CloseFile()

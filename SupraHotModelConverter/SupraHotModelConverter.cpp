@@ -117,6 +117,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
 	std::vector<std::vector<float>> meshIDToVertexFloatData;
+	std::vector<std::vector<uint32>> meshIDToIndexUint32Data;
 	for (uint32 i = 0, l = scene->mNumMeshes; i < l; ++i)
 	{
 		Mesh mesh;
@@ -136,6 +137,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		mesh.ElementCount = 0;
 
 		std::vector<float> floatVertexData;
+		std::vector<uint32> uint32IndexData;
 
 		// Set vertices and vertex attributes
 		if (assimpMesh.HasPositions())
@@ -211,13 +213,31 @@ int _tmain(int argc, _TCHAR* argv[])
 			// This needs to be done for every vertex per Face (Triangle || Quad)
 		}
 
+		// get index data
+		const uint64 numTriangles = assimpMesh.mNumFaces;
+		for (uint64 faceIndex = 0; faceIndex < numTriangles; ++faceIndex)
+		{
+			const aiFace& triangleFace = assimpMesh.mFaces[faceIndex];
+			
+			//if (triangleFace.mNumIndices == 3)
+			{
+				uint32IndexData.push_back(triangleFace.mIndices[0]);
+				uint32IndexData.push_back(triangleFace.mIndices[1]);
+				uint32IndexData.push_back(triangleFace.mIndices[2]);
+			} 
+			
+		}
+
 		mesh.IndexCountBytes = mesh.IndexCount * sizeof(uint32);
 		mesh.ElementCount = mesh.VertexCount * mesh.VertexStride;
 		mesh.ElementCountBytes = mesh.ElementCount * sizeof(float);
 		mesh.VertexStrideBytes = mesh.VertexStride * sizeof(float);
+
 		meshIDToVertexFloatData.push_back(floatVertexData);
+		meshIDToIndexUint32Data.push_back(uint32IndexData);
 
 		mesh.Vertices = meshIDToVertexFloatData[i].data();
+		mesh.Indices = meshIDToIndexUint32Data[i].data();
 
 		loadedMeshes.push_back(mesh);
 	}
@@ -255,6 +275,12 @@ int _tmain(int argc, _TCHAR* argv[])
 		{
 			Material& material = readModel.Materials[i];
 			printf("(R) Material name: %s \n", material.Name.c_str());
+		}
+
+		for (uint32 i = 0; i < readModel.MeshCount; i++)
+		{
+			Mesh& mesh = readModel.Meshes[i];
+			printf("(R) Mesh name: %s \n", mesh.Name.c_str());
 		}
 
 	}
