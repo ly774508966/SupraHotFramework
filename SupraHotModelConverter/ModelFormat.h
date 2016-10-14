@@ -6,13 +6,15 @@ namespace SupraHot
 {
 	namespace Graphics
 	{
+		using namespace Math;
+
 		struct Vertex
 		{
-			Math::Vec3 Position;
-			Math::Vec3 Normal;
-			Math::Vec2 UV;
-			Math::Vec3 Tangent;
-			Math::Vec3 BiNormal;
+			Vec3 Position;
+			Vec3 Normal;
+			Vec2 UV;
+			Vec3 Tangent;
+			Vec3 BiNormal;
 		};
 
 		enum VertexBitfield
@@ -32,7 +34,8 @@ namespace SupraHot
 
 		struct Mesh
 		{
-			std::string Name;
+			uint32 NameLength = 0;
+			char* Name;
 			
 			uint32 VertexCount = 0;
 			uint32 IndexCount = 0;
@@ -40,9 +43,9 @@ namespace SupraHot
 			uint32 VertexStride = 0;
 			uint32 VertexStrideBytes = 0;
 			uint32 VertexAttributes = 0;	// VertexBitfield
-			uint64 ElementCount = 0;
-			uint64 ElementCountBytes = 0;
-			uint64 IndexCountBytes = 0;
+			uint32 ElementCount = 0;
+			uint32 ElementCountBytes = 0;
+			uint32 IndexCountBytes = 0;
 
 			uint32 MaterialID = 0;
 
@@ -50,16 +53,27 @@ namespace SupraHot
 			uint32* Indices;
 		};
 
-		using namespace Math;
 		struct Material
 		{
-			std::string Name;
+			std::string namecopy;
 
-			std::string AlbedoMapPath = "";
-			std::string NormalMapPath = "";
-			std::string SpecularMapPath = "";
-			std::string ShininessReflectionMapPath = "";
-			std::string OpacityMapPath = "";
+			uint32 NameLength = 0;
+			char* Name;
+
+			//uint32 AlbeoMapPathLength = 0;
+			std::string AlbedoMapPath;
+			
+			//uint32 NormalMapPathLength = 0;
+			std::string NormalMapPath;
+
+			//uint32 SpecularMapPathLength = 0;
+			std::string SpecularMapPath;
+
+			//uint32 ShininessReflectionMapPathLength = 0;
+			std::string ShininessReflectionMapPath;
+
+			//uint32 OpacityMapPathLength = 0;
+			std::string OpacityMapPath;
 			
 			uint32 ID = 0;
 			float Ns = 0;				// specular exponent
