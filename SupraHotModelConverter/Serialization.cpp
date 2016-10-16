@@ -42,7 +42,14 @@ namespace SupraHot
 
 	void Serialization::ReadFile(Graphics::SHFModelFile& data)
 	{
-		Read(sizeof(char), 5, &data.Header);
+		data.Header = "";
+		void* tempVoidArray = new void*[5];
+		Read(sizeof(char), 5, tempVoidArray);
+		for (uint32 c = 0; c < 5; c++)
+		{
+			data.Header += reinterpret_cast<char*>(tempVoidArray)[c];
+		}
+		delete tempVoidArray;
 
 		Read(sizeof(uint32), 1, &data.MeshCount);
 
@@ -54,7 +61,14 @@ namespace SupraHot
 		data.Materials = new Graphics::Material[data.MaterialCount];
 		Read(sizeof(Graphics::Material), data.MaterialCount, data.Materials);
 
-		Read(sizeof(char), 3, &data.Footer);
+		data.Footer = "";
+		tempVoidArray = new void*[3];
+		Read(sizeof(char), 3, tempVoidArray);
+		for (uint32 c = 0; c < 3; c++)
+		{
+			data.Footer += reinterpret_cast<char*>(tempVoidArray)[c];
+		}
+		delete tempVoidArray;
 	}
 
 	template <typename T>

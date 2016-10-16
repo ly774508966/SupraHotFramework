@@ -21,6 +21,9 @@
 #endif
 #include <MeshDataLoader.h>
 #include <LuaVM.h>
+#include <SHFMBinaryLoader.h>
+#include "Platform.h"
+using namespace SupraHot;
 
 SandBoxApp::SandBoxApp()
 {
@@ -81,6 +84,24 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 	// Try loading a model file with assimp
 	std::vector<SupraHot::MeshData*> meshDataAssimp = SupraHot::Utils::MeshDataLoader::GetInstance()->LoadWithAssimp("Models/cube.obj");
+
+	// Try loading shfm
+	Utils::SHFModelFile model = Utils::SHFMBinaryLoader::GetInstance().LoadFromFile("Models/Pistol_Model.shfm");
+	SHF_PRINTF("(R) Header %s \n", model.Header.c_str());
+	SHF_PRINTF("(R) Mesh count : %d \n", model.MeshCount);
+	SHF_PRINTF("(R) Material count : %d \n", model.MaterialCount);
+	SHF_PRINTF("(R) Footer %s \n", model.Footer.c_str());
+
+	for (uint32 i = 0; i < model.MaterialCount; i++)
+	{
+		Utils::SHFModel::Material& material = model.Materials[i];
+		SHF_PRINTF("(R) Material name: %s \n", material.Name.c_str());
+		SHF_PRINTF("(R) Material albedo: %s \n", material.AlbedoMapPath.c_str());
+		SHF_PRINTF("(R) Material normal map: %s \n", material.NormalMapPath.c_str());
+		SHF_PRINTF("(R) Material specular: %s \n", material.SpecularMapPath.c_str());
+		SHF_PRINTF("- - - - - - - - \n");
+	}
+
 }
 
 void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)

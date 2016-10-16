@@ -14,9 +14,9 @@ namespace SupraHot
 		private:
 			Vec3 Position;
 			Vec3 Normal;
+			Vec2 UV;
 			Vec3 Tangent;
 			Vec3 BiNormal;
-			Vec2 UvCoord;
 		public:
 			Vertex();
 			~Vertex();

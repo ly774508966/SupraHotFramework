@@ -296,6 +296,7 @@
     <ClInclude Include="Quat4.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="SHFMBinaryLoader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="stdafx.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">true</ExcludedFromBuild>
@@ -356,6 +357,7 @@
     <ClCompile Include="Quat4.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="SHFMBinaryLoader.cpp" />
     <ClCompile Include="stb_image.c" />
     <ClCompile Include="stdafx.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">true</ExcludedFromBuild>

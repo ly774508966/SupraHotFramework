@@ -36,7 +36,7 @@ namespace SupraHot
 
 		void Vertex::SetUVCoord(const Vec2& uvCoord)
 		{
-			this->UvCoord = uvCoord;
+			this->UV = uvCoord;
 		}
 
 		Vec3 Vertex::GetPosition()
@@ -61,7 +61,7 @@ namespace SupraHot
 
 		Vec2 Vertex::GetUVCoord()
 		{
-			return UvCoord;
+			return UV;
 		}
 	};
 };
