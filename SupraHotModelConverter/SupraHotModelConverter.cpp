@@ -9,16 +9,80 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <sstream>
+#include "StringUtils.h"
 
-#define WRITE 0
-#define READ 1
+#define READ 0
+#define BUILD_AS_TOOL 1
 
-int _tmain(int argc, _TCHAR* argv[])
+
+int _tmain(int argc, char* argv[])
 {
 	using namespace SupraHot;
 	using namespace Graphics;
 
-#if WRITE == 1
+#if READ == 1
+	{
+		SHFModelFile readModel;
+		Serialization serialization1("App-Content/Sponza.shfm");
+		serialization1.OpenFile(Serialization::READ_BINARY);
+		serialization1.ReadFile(readModel);
+		serialization1.CloseFile();
+
+		printf("(R) Header %s \n", readModel.Header.c_str());
+		printf("(R) Mesh count : %d \n", readModel.MeshCount);
+		printf("(R) Material count : %d \n", readModel.MaterialCount);
+		printf("(R) Footer %s \n", readModel.Footer.c_str());
+
+		for (uint32 i = 0; i < readModel.MaterialCount; i++)
+		{
+			Material& material = readModel.Materials[i];
+			printf("(R) Material name: %s \n", material.Name.c_str());
+			printf("(R) AlbedoMapPath: %s \n", material.AlbedoMapPath.c_str());
+			printf("(R) NormalMapPath: %s \n", material.NormalMapPath.c_str());
+			printf("(R) SpecularMapPath: %s \n", material.SpecularMapPath.c_str());
+			printf("(R) ShininessReflectionMapPath: %s \n", material.ShininessReflectionMapPath.c_str());
+			printf("(R) OpacityMapPath: %s \n", material.OpacityMapPath.c_str());
+			printf("- - - - - - - - \n");
+		}
+
+		for (uint32 i = 0; i < readModel.MeshCount; i++)
+		{
+			Mesh& mesh = readModel.Meshes[i];
+			printf("(R) Mesh name: %s \n", mesh.Name.c_str());
+			printf("(R) Vertex count: %d \n", mesh.VertexCount);
+			printf("(R) Index count: %d \n", mesh.IndexCount);
+			printf("(R) Face count: %d \n", mesh.FaceCount);
+			printf("(R) Element count: %d \n", mesh.ElementCount);
+			printf("(R) Material name: %s \n", readModel.Materials[mesh.MaterialID].Name.c_str());
+			printf("- - - - - - - - \n");
+		}
+
+	}
+#endif
+
+#if BUILD_AS_TOOL == 1
+
+	if (argc < 2)
+	{
+		std::cout << "Usage: Supra Hot Model Converter (.fbx/.obj/.collada to SHFModelFormat(.shfm)) [output_filename]" << std::endl;
+		return -1;
+	}
+
+	std::string path = argv[1];
+	auto split = SplitString(path, "/\\");
+	std::string s_Name = split.back();
+
+	std::string outputPath;
+	if (argc > 2)
+	{
+		outputPath = argv[2];
+	}
+	else
+	{
+		std::size_t found = s_Name.find_last_of(".");
+		outputPath = s_Name.substr(0, found) + std::string(".shfm");
+	}
+
 	Assimp::Importer importer;
 	uint32 flags = aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
@@ -27,7 +91,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		aiProcess_RemoveRedundantMaterials |
 		aiProcess_OptimizeMeshes;
 
-	const aiScene* scene = importer.ReadFile("App-Content/Sponza.fbx", flags);
+	const aiScene* scene = importer.ReadFile(s_Name, flags);
 	std::vector<Mesh> loadedMeshes;
 	std::vector<Material> loadedMaterials;
 
@@ -227,14 +291,14 @@ int _tmain(int argc, _TCHAR* argv[])
 		for (uint64 faceIndex = 0; faceIndex < numTriangles; ++faceIndex)
 		{
 			const aiFace& triangleFace = assimpMesh.mFaces[faceIndex];
-			
+
 			//if (triangleFace.mNumIndices == 3)
 			{
 				uint32IndexData.push_back(triangleFace.mIndices[0]);
 				uint32IndexData.push_back(triangleFace.mIndices[1]);
 				uint32IndexData.push_back(triangleFace.mIndices[2]);
-			} 
-			
+			}
+
 		}
 
 		mesh.IndexCountBytes = mesh.IndexCount * sizeof(uint32);
@@ -251,7 +315,6 @@ int _tmain(int argc, _TCHAR* argv[])
 		loadedMeshes.push_back(mesh);
 	}
 
-
 	printf("Writing to file..... \n");
 
 	SHFModelFile modelFile;
@@ -260,53 +323,13 @@ int _tmain(int argc, _TCHAR* argv[])
 	modelFile.MaterialCount = scene->mNumMaterials;
 	modelFile.Materials = loadedMaterials.data();
 
-	Serialization serialization("modelwritetest.bin");
+	Serialization serialization(outputPath);
 	serialization.OpenFile(Serialization::WRITE_BINARY);
 	serialization.WriteToFile(modelFile);
 	serialization.CloseFile();
 
 	printf("Done writing %d meshes to file.\n", modelFile.MeshCount);
-#endif
 
-
-#if READ == 1
-	{
-		SHFModelFile readModel;
-		Serialization serialization1("modelwritetest.bin");
-		serialization1.OpenFile(Serialization::READ_BINARY);
-		serialization1.ReadFile(readModel);
-		serialization1.CloseFile();
-
-		printf("(R) Header %s \n", readModel.Header.c_str());
-		printf("(R) Mesh count : %d \n", readModel.MeshCount);
-		printf("(R) Material count : %d \n", readModel.MaterialCount);
-		printf("(R) Footer %s \n", readModel.Footer.c_str());
-
-		for (uint32 i = 0; i < readModel.MaterialCount; i++)
-		{
-			Material& material = readModel.Materials[i];
-			printf("(R) Material name: %s \n", material.Name.c_str());
-			printf("(R) AlbedoMapPath: %s \n", material.AlbedoMapPath.c_str());
-			printf("(R) NormalMapPath: %s \n", material.NormalMapPath.c_str());
-			printf("(R) SpecularMapPath: %s \n", material.SpecularMapPath.c_str());
-			printf("(R) ShininessReflectionMapPath: %s \n", material.ShininessReflectionMapPath.c_str());
-			printf("(R) OpacityMapPath: %s \n", material.OpacityMapPath.c_str());
-			printf("- - - - - - - - \n");
-		}
-
-		for (uint32 i = 0; i < readModel.MeshCount; i++)
-		{
-			Mesh& mesh = readModel.Meshes[i];
-			printf("(R) Mesh name: %s \n", mesh.Name.c_str());
-			printf("(R) Vertex count: %d \n", mesh.VertexCount);
-			printf("(R) Index count: %d \n", mesh.IndexCount);
-			printf("(R) Face count: %d \n", mesh.FaceCount);
-			printf("(R) Element count: %d \n", mesh.ElementCount);
-			printf("(R) Material name: %s \n", readModel.Materials[mesh.MaterialID].Name.c_str());
-			printf("- - - - - - - - \n");
-		}
-
-	}
 #endif
 
 	printf("Exiting... \n");
