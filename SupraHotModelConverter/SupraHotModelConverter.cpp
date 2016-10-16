@@ -10,7 +10,7 @@
 #include <assimp/postprocess.h>
 #include <sstream>
 
-#define WRITE 1
+#define WRITE 0
 #define READ 1
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -30,8 +30,6 @@ int _tmain(int argc, _TCHAR* argv[])
 	const aiScene* scene = importer.ReadFile("App-Content/Sponza.fbx", flags);
 	std::vector<Mesh> loadedMeshes;
 	std::vector<Material> loadedMaterials;
-
-	std::vector<std::string*> cuck;
 
 	for (uint32 i = 0, l = scene->mNumMaterials; i < l; i++)
 	{
@@ -304,6 +302,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			printf("(R) Index count: %d \n", mesh.IndexCount);
 			printf("(R) Face count: %d \n", mesh.FaceCount);
 			printf("(R) Element count: %d \n", mesh.ElementCount);
+			printf("(R) Material name: %s \n", readModel.Materials[mesh.MaterialID].Name.c_str());
 			printf("- - - - - - - - \n");
 		}
 

@@ -19,24 +19,24 @@ namespace SupraHot
 
 		enum VertexBitfield
 		{
-			POSITION	= BITSHIFT(0),
-			NORMAL		= BITSHIFT(1),
-			UV			= BITSHIFT(2),
-			TANGENT		= BITSHIFT(3),
-			BITANGENT	= BITSHIFT(4),
+			POSITION = BITSHIFT(0),
+			NORMAL = BITSHIFT(1),
+			UV = BITSHIFT(2),
+			TANGENT = BITSHIFT(3),
+			BITANGENT = BITSHIFT(4),
 
 			// Combos
-			POSITION_NORMAL							= POSITION | NORMAL,
-			POSITION_UV								= POSITION | UV,
-			POSITION_NORMAL_UV						= POSITION | NORMAL | UV,
-			POSITION_NORMAL_UV_TANGENT_BITANGENT	= POSITION | NORMAL | UV | TANGENT | BITANGENT,
+			POSITION_NORMAL = POSITION | NORMAL,
+			POSITION_UV = POSITION | UV,
+			POSITION_NORMAL_UV = POSITION | NORMAL | UV,
+			POSITION_NORMAL_UV_TANGENT_BITANGENT = POSITION | NORMAL | UV | TANGENT | BITANGENT,
 		};
 
 		struct Mesh
 		{
 			uint32 NameLength = 0;
 			std::string Name;
-			
+
 			uint32 VertexCount = 0;
 			uint32 IndexCount = 0;
 			uint32 FaceCount = 0;
@@ -60,7 +60,7 @@ namespace SupraHot
 
 			uint32 AlbeoMapPathLength = 0;
 			std::string AlbedoMapPath;
-			
+
 			uint32 NormalMapPathLength = 0;
 			std::string NormalMapPath;
 
@@ -72,7 +72,7 @@ namespace SupraHot
 
 			uint32 OpacityMapPathLength = 0;
 			std::string OpacityMapPath;
-			
+
 			uint32 ID = 0;
 			float Ns = 0;				// specular exponent
 			Vec3 Ka;					// ambient

@@ -24,8 +24,8 @@ namespace SupraHot
 	void Serialization::WriteToFile(const Graphics::SHFModelFile& data)
 	{
 		Write(sizeof(char), 5, &data.Header);
-		
-		Write(sizeof(uint32), 1, &data.MeshCount);		
+
+		Write(sizeof(uint32), 1, &data.MeshCount);
 		Write(sizeof(Graphics::Mesh), data.MeshCount, &data.Meshes[0]);
 
 		Write(sizeof(uint32), 1, &data.MaterialCount);
@@ -43,14 +43,14 @@ namespace SupraHot
 	void Serialization::ReadFile(Graphics::SHFModelFile& data)
 	{
 		Read(sizeof(char), 5, &data.Header);
-		
+
 		Read(sizeof(uint32), 1, &data.MeshCount);
 
 		data.Meshes = new Graphics::Mesh[data.MeshCount];
 		Read(sizeof(Graphics::Mesh), data.MeshCount, data.Meshes);
 
 		Read(sizeof(uint32), 1, &data.MaterialCount);
-		
+
 		data.Materials = new Graphics::Material[data.MaterialCount];
 		Read(sizeof(Graphics::Material), data.MaterialCount, data.Materials);
 
@@ -76,25 +76,25 @@ namespace SupraHot
 			Write(sizeof(uint32), 1, &mesh.VertexCount);
 
 			Write(sizeof(uint32), 1, &mesh.IndexCount);
-			
+
 			Write(sizeof(uint32), 1, &mesh.FaceCount);
-			
+
 			Write(sizeof(uint32), 1, &mesh.VertexStride);
-			
+
 			Write(sizeof(uint32), 1, &mesh.VertexStrideBytes);
-			
+
 			Write(sizeof(uint32), 1, &mesh.VertexAttributes);
-			
+
 			Write(sizeof(uint32), 1, &mesh.ElementCount);
-			
+
 			Write(sizeof(uint32), 1, &mesh.ElementCountBytes);
-			
+
 			Write(sizeof(uint32), 1, &mesh.IndexCountBytes);
-			
+
 			Write(sizeof(uint32), 1, &mesh.MaterialID);
-			
+
 			Write(sizeof(float), mesh.ElementCount, &mesh.Vertices[0]);
-			
+
 			Write(sizeof(uint32), mesh.IndexCount, &mesh.Indices[0]);
 		}
 
@@ -142,7 +142,7 @@ namespace SupraHot
 
 	void Serialization::Read(uint64 size, uint64 amount, Graphics::Mesh* data)
 	{
-		
+
 		for (uint64 i = 0; i < amount; ++i)
 		{
 			Graphics::Mesh& mesh = data[i];
@@ -194,9 +194,9 @@ namespace SupraHot
 			for (uint32 c = 0; c < material.NameLength; c++)
 			{
 				material.Name += reinterpret_cast<char*>(tempVoidArray)[c];
-			}			
+			}
 			delete tempVoidArray;
-			
+
 			// Read Albedo map path
 			Read(sizeof(uint32), 1, &material.AlbeoMapPathLength);
 			tempVoidArray = new void*[material.AlbeoMapPathLength];
@@ -248,7 +248,7 @@ namespace SupraHot
 			}
 			delete tempVoidArray;
 
-			
+
 			Read(sizeof(uint32), 1, &material.ID);
 			Read(sizeof(float), 1, &material.Ns);
 
