@@ -23,21 +23,16 @@ namespace SupraHot
 
 	void Serialization::WriteToFile(const Graphics::SHFModelFile& data)
 	{
-		Write(sizeof(data.Header), 1, &data.Header);
+		Write(sizeof(char), 5, &data.Header);
 		
-		Write(sizeof(data.MeshCount), 1, &data.MeshCount);
+		Write(sizeof(uint32), 1, &data.MeshCount);		
 		Write(sizeof(Graphics::Mesh), data.MeshCount, &data.Meshes[0]);
 
-		Write(sizeof(data.MaterialCount), 1, &data.MaterialCount);
+		Write(sizeof(uint32), 1, &data.MaterialCount);
 		Write(sizeof(Graphics::Material), data.MaterialCount, &data.Materials[0]);
 
-		Write(sizeof(data.Footer), 1, &data.Footer);
+		Write(sizeof(char), 3, &data.Footer);
 	}
-
-/*	void Serialization::Write(uint64 size, uint64 amount, const void* data)
-	{
-		fwrite(data, size, amount, CurrentFile);
-	}*/
 
 	template <typename T>
 	void Serialization::Write(uint64 size, uint64 amount, const T* data)
@@ -47,25 +42,20 @@ namespace SupraHot
 
 	void Serialization::ReadFile(Graphics::SHFModelFile& data)
 	{
-		Read(sizeof(data.Header), 1, &data.Header);
+		Read(sizeof(char), 5, &data.Header);
 		
-		Read(sizeof(data.MeshCount), 1, &data.MeshCount);
+		Read(sizeof(uint32), 1, &data.MeshCount);
 
 		data.Meshes = new Graphics::Mesh[data.MeshCount];
 		Read(sizeof(Graphics::Mesh), data.MeshCount, data.Meshes);
 
-		Read(sizeof(data.MaterialCount), 1, &data.MaterialCount);
+		Read(sizeof(uint32), 1, &data.MaterialCount);
 		
 		data.Materials = new Graphics::Material[data.MaterialCount];
 		Read(sizeof(Graphics::Material), data.MaterialCount, data.Materials);
 
-		Read(sizeof(data.Footer), 1, &data.Footer);
+		Read(sizeof(char), 3, &data.Footer);
 	}
-
-/*	void Serialization::Read(uint64 size, uint64 amount, void* data)
-	{
-		
-	}*/
 
 	template <typename T>
 	void Serialization::Read(uint64 size, uint64 amount, T* data)
@@ -80,19 +70,31 @@ namespace SupraHot
 		{
 			Graphics::Mesh& mesh = data[i];
 
-			Write(sizeof(mesh.NameLength), 1, &mesh.NameLength);
-			Write(sizeof(char), mesh.NameLength, &mesh.Name[0]);
-			Write(sizeof(mesh.VertexCount), 1, &mesh.VertexCount);
-			Write(sizeof(mesh.IndexCount), 1, &mesh.IndexCount);
-			Write(sizeof(mesh.FaceCount), 1, &mesh.FaceCount);
-			Write(sizeof(mesh.VertexStride), 1, &mesh.VertexStride);
-			Write(sizeof(mesh.VertexStrideBytes), 1, &mesh.VertexStrideBytes);
-			Write(sizeof(mesh.VertexAttributes), 1, &mesh.VertexAttributes);
-			Write(sizeof(mesh.ElementCount), 1, &mesh.ElementCount);
-			Write(sizeof(mesh.ElementCountBytes), 1, &mesh.ElementCountBytes);
-			Write(sizeof(mesh.IndexCountBytes), 1, &mesh.IndexCountBytes);
-			Write(sizeof(mesh.MaterialID), 1, &mesh.MaterialID);
+			Write(sizeof(uint32), 1, &mesh.NameLength);
+			Write(sizeof(char), mesh.NameLength, &mesh.Name.c_str()[0]);
+
+			Write(sizeof(uint32), 1, &mesh.VertexCount);
+
+			Write(sizeof(uint32), 1, &mesh.IndexCount);
+			
+			Write(sizeof(uint32), 1, &mesh.FaceCount);
+			
+			Write(sizeof(uint32), 1, &mesh.VertexStride);
+			
+			Write(sizeof(uint32), 1, &mesh.VertexStrideBytes);
+			
+			Write(sizeof(uint32), 1, &mesh.VertexAttributes);
+			
+			Write(sizeof(uint32), 1, &mesh.ElementCount);
+			
+			Write(sizeof(uint32), 1, &mesh.ElementCountBytes);
+			
+			Write(sizeof(uint32), 1, &mesh.IndexCountBytes);
+			
+			Write(sizeof(uint32), 1, &mesh.MaterialID);
+			
 			Write(sizeof(float), mesh.ElementCount, &mesh.Vertices[0]);
+			
 			Write(sizeof(uint32), mesh.IndexCount, &mesh.Indices[0]);
 		}
 
@@ -106,40 +108,35 @@ namespace SupraHot
 
 			// Write material
 
-			Write(sizeof(material.NameLength), 1, &material.NameLength);
-			Write(sizeof(char), material.NameLength, &material.namecopy.c_str()[0]);
-			printf("(Write) material.name | %s \n", material.namecopy.c_str());
+			Write(sizeof(uint32), 1, &material.NameLength);
+			Write(sizeof(char), material.NameLength, &material.Name.c_str()[0]);
 
-			Write(sizeof(material.ID), 1, &material.ID);
-			Write(sizeof(material.Ns), 1, &material.Ns);
+			Write(sizeof(uint32), 1, &material.AlbeoMapPathLength);
+			Write(sizeof(char), material.AlbeoMapPathLength, &material.AlbedoMapPath.c_str()[0]);
 
-			Write(sizeof(material.Ka), 1, &material.Ka);
-			Write(sizeof(material.Kd), 1, &material.Kd);
-			Write(sizeof(material.Ks), 1, &material.Ks);
-			Write(sizeof(material.Ke), 1, &material.Ke);
+			Write(sizeof(uint32), 1, &material.NormalMapPathLength);
+			Write(sizeof(char), material.NormalMapPathLength, &material.NormalMapPath.c_str()[0]);
 
-			Write(sizeof(material.Roughness), 1, &material.Roughness);
-			Write(sizeof(material.Metalness), 1, &material.Metalness);
-			Write(sizeof(material.F0), 1, &material.F0);
+			Write(sizeof(uint32), 1, &material.SpecularMapPathLength);
+			Write(sizeof(char), material.SpecularMapPathLength, &material.SpecularMapPath.c_str()[0]);
 
-			/*
-			
-			
-			//uint32 AlbeoMapPathLength = 0;
-			std::string AlbedoMapPath;
+			Write(sizeof(uint32), 1, &material.ShininessReflectionMapPathLength);
+			Write(sizeof(char), material.ShininessReflectionMapPathLength, &material.ShininessReflectionMapPath.c_str()[0]);
 
-			//uint32 NormalMapPathLength = 0;
-			std::string NormalMapPath;
+			Write(sizeof(uint32), 1, &material.OpacityMapPathLength);
+			Write(sizeof(char), material.OpacityMapPathLength, &material.OpacityMapPath.c_str()[0]);
 
-			//uint32 SpecularMapPathLength = 0;
-			std::string SpecularMapPath;
+			Write(sizeof(uint32), 1, &material.ID);
+			Write(sizeof(float), 1, &material.Ns);
 
-			//uint32 ShininessReflectionMapPathLength = 0;
-			std::string ShininessReflectionMapPath;
+			Write(sizeof(Math::Vec3), 1, &material.Ka);
+			Write(sizeof(Math::Vec3), 1, &material.Kd);
+			Write(sizeof(Math::Vec3), 1, &material.Ks);
+			Write(sizeof(Math::Vec3), 1, &material.Ke);
 
-			//uint32 OpacityMapPathLength = 0;
-			std::string OpacityMapPath;
-			*/
+			Write(sizeof(float), 1, &material.Roughness);
+			Write(sizeof(float), 1, &material.Metalness);
+			Write(sizeof(float), 1, &material.F0);
 		}
 	}
 
@@ -150,21 +147,25 @@ namespace SupraHot
 		{
 			Graphics::Mesh& mesh = data[i];
 
-			Read(sizeof(mesh.NameLength), 1, &mesh.NameLength);
+			Read(sizeof(uint32), 1, &mesh.NameLength);
+			void* tempVoidArray = new void*[mesh.NameLength];
+			Read(sizeof(char), mesh.NameLength, tempVoidArray);
+			for (uint32 c = 0; c < mesh.NameLength; c++)
+			{
+				mesh.Name += reinterpret_cast<char*>(tempVoidArray)[c];
+			}
+			delete tempVoidArray;
 
-			mesh.Name = new char[mesh.NameLength];
-			Read(sizeof(char), mesh.NameLength, mesh.Name);
-
-			Read(sizeof(mesh.VertexCount), 1, &mesh.VertexCount);
-			Read(sizeof(mesh.IndexCount), 1, &mesh.IndexCount);
-			Read(sizeof(mesh.FaceCount), 1, &mesh.FaceCount);
-			Read(sizeof(mesh.VertexStride), 1, &mesh.VertexStride);
-			Read(sizeof(mesh.VertexStrideBytes), 1, &mesh.VertexStrideBytes);
-			Read(sizeof(mesh.VertexAttributes), 1, &mesh.VertexAttributes);
-			Read(sizeof(mesh.ElementCount), 1, &mesh.ElementCount);
-			Read(sizeof(mesh.ElementCountBytes), 1, &mesh.ElementCountBytes);
-			Read(sizeof(mesh.IndexCountBytes), 1, &mesh.IndexCountBytes);
-			Read(sizeof(mesh.MaterialID), 1, &mesh.MaterialID);
+			Read(sizeof(uint32), 1, &mesh.VertexCount);
+			Read(sizeof(uint32), 1, &mesh.IndexCount);
+			Read(sizeof(uint32), 1, &mesh.FaceCount);
+			Read(sizeof(uint32), 1, &mesh.VertexStride);
+			Read(sizeof(uint32), 1, &mesh.VertexStrideBytes);
+			Read(sizeof(uint32), 1, &mesh.VertexAttributes);
+			Read(sizeof(uint32), 1, &mesh.ElementCount);
+			Read(sizeof(uint32), 1, &mesh.ElementCountBytes);
+			Read(sizeof(uint32), 1, &mesh.IndexCountBytes);
+			Read(sizeof(uint32), 1, &mesh.MaterialID);
 
 			mesh.Vertices = new float[mesh.ElementCount];
 			Read(sizeof(float), mesh.ElementCount, mesh.Vertices);
@@ -182,41 +183,83 @@ namespace SupraHot
 
 			// Read material
 
-			Read(sizeof(material.NameLength), 1, &material.NameLength);
+			Read(sizeof(uint32), 1, &material.NameLength);
 
-			Read(sizeof(char), material.NameLength, (void*)material.namecopy.data());
-			material.Name = const_cast<char*>(material.namecopy.c_str());
+			// Note: Yes, yes this sucks... but it works for now.
+			// Also, if i just copy the char* directly into the std::string.data(), the app crashes.
+
+			// Read Material name
+			void* tempVoidArray = new void*[material.NameLength];
+			Read(sizeof(char), material.NameLength, tempVoidArray);
+			for (uint32 c = 0; c < material.NameLength; c++)
+			{
+				material.Name += reinterpret_cast<char*>(tempVoidArray)[c];
+			}			
+			delete tempVoidArray;
 			
-			Read(sizeof(material.ID), 1, &material.ID);
-			Read(sizeof(material.Ns), 1, &material.Ns);
-
-			Read(sizeof(material.Ka), 1, &material.Ka);
-			Read(sizeof(material.Kd), 1, &material.Kd);
-			Read(sizeof(material.Ks), 1, &material.Ks);
-			Read(sizeof(material.Ke), 1, &material.Ke);
-
-			Read(sizeof(material.Roughness), 1, &material.Roughness);
-			Read(sizeof(material.Metalness), 1, &material.Metalness);
-			Read(sizeof(material.F0), 1, &material.F0);
-
-			/*
+			// Read Albedo map path
+			Read(sizeof(uint32), 1, &material.AlbeoMapPathLength);
+			tempVoidArray = new void*[material.AlbeoMapPathLength];
+			Read(sizeof(char), material.AlbeoMapPathLength, tempVoidArray);
+			for (uint32 c = 0; c < material.AlbeoMapPathLength; c++)
+			{
+				material.AlbedoMapPath += reinterpret_cast<char*>(tempVoidArray)[c];
+			}
+			delete tempVoidArray;
 
 
-			//uint32 AlbeoMapPathLength = 0;
-			std::string AlbedoMapPath;
+			// Read normal map path
+			Read(sizeof(uint32), 1, &material.NormalMapPathLength);
+			tempVoidArray = new void*[material.NormalMapPathLength];
+			Read(sizeof(char), material.NormalMapPathLength, tempVoidArray);
+			for (uint32 c = 0; c < material.NormalMapPathLength; c++)
+			{
+				material.NormalMapPath += reinterpret_cast<char*>(tempVoidArray)[c];
+			}
+			delete tempVoidArray;
 
-			//uint32 NormalMapPathLength = 0;
-			std::string NormalMapPath;
+			// Read specular map path
+			Read(sizeof(uint32), 1, &material.SpecularMapPathLength);
+			tempVoidArray = new void*[material.SpecularMapPathLength];
+			Read(sizeof(char), material.SpecularMapPathLength, tempVoidArray);
+			for (uint32 c = 0; c < material.SpecularMapPathLength; c++)
+			{
+				material.SpecularMapPath += reinterpret_cast<char*>(tempVoidArray)[c];
+			}
+			delete tempVoidArray;
 
-			//uint32 SpecularMapPathLength = 0;
-			std::string SpecularMapPath;
+			// Read shininess map
+			Read(sizeof(uint32), 1, &material.ShininessReflectionMapPathLength);
+			tempVoidArray = new void*[material.ShininessReflectionMapPathLength];
+			Read(sizeof(char), material.ShininessReflectionMapPathLength, tempVoidArray);
+			for (uint32 c = 0; c < material.ShininessReflectionMapPathLength; c++)
+			{
+				material.ShininessReflectionMapPath += reinterpret_cast<char*>(tempVoidArray)[c];
+			}
+			delete tempVoidArray;
 
-			//uint32 ShininessReflectionMapPathLength = 0;
-			std::string ShininessReflectionMapPath;
+			// Read opacity map path
+			Read(sizeof(uint32), 1, &material.OpacityMapPathLength);
+			tempVoidArray = new void*[material.OpacityMapPathLength];
+			Read(sizeof(char), material.OpacityMapPathLength, tempVoidArray);
+			for (uint32 c = 0; c < material.OpacityMapPathLength; c++)
+			{
+				material.OpacityMapPath += reinterpret_cast<char*>(tempVoidArray)[c];
+			}
+			delete tempVoidArray;
 
-			//uint32 OpacityMapPathLength = 0;
-			std::string OpacityMapPath;
-			*/
+			
+			Read(sizeof(uint32), 1, &material.ID);
+			Read(sizeof(float), 1, &material.Ns);
+
+			Read(sizeof(Math::Vec3), 1, &material.Ka);
+			Read(sizeof(Math::Vec3), 1, &material.Kd);
+			Read(sizeof(Math::Vec3), 1, &material.Ks);
+			Read(sizeof(Math::Vec3), 1, &material.Ke);
+
+			Read(sizeof(float), 1, &material.Roughness);
+			Read(sizeof(float), 1, &material.Metalness);
+			Read(sizeof(float), 1, &material.F0);
 		}
 	}
 

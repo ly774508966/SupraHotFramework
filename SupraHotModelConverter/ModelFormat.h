@@ -35,7 +35,7 @@ namespace SupraHot
 		struct Mesh
 		{
 			uint32 NameLength = 0;
-			char* Name;
+			std::string Name;
 			
 			uint32 VertexCount = 0;
 			uint32 IndexCount = 0;
@@ -55,24 +55,22 @@ namespace SupraHot
 
 		struct Material
 		{
-			std::string namecopy;
-
 			uint32 NameLength = 0;
-			char* Name;
+			std::string Name;
 
-			//uint32 AlbeoMapPathLength = 0;
+			uint32 AlbeoMapPathLength = 0;
 			std::string AlbedoMapPath;
 			
-			//uint32 NormalMapPathLength = 0;
+			uint32 NormalMapPathLength = 0;
 			std::string NormalMapPath;
 
-			//uint32 SpecularMapPathLength = 0;
+			uint32 SpecularMapPathLength = 0;
 			std::string SpecularMapPath;
 
-			//uint32 ShininessReflectionMapPathLength = 0;
+			uint32 ShininessReflectionMapPathLength = 0;
 			std::string ShininessReflectionMapPath;
 
-			//uint32 OpacityMapPathLength = 0;
+			uint32 OpacityMapPathLength = 0;
 			std::string OpacityMapPath;
 			
 			uint32 ID = 0;

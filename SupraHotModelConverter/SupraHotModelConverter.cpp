@@ -10,7 +10,7 @@
 #include <assimp/postprocess.h>
 #include <sstream>
 
-#define WRITE 0
+#define WRITE 1
 #define READ 1
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -49,8 +49,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		// Blender -> Texture -> Diffuse -> Color
 		if (mat.GetTexture(aiTextureType_DIFFUSE, 0, &diffuseTexPath) == aiReturn_SUCCESS)
 		{
-			material.AlbedoMapPath = std::string(diffuseTexPath.C_Str());
-			//material.AlbeoMapPathLength = static_cast<uint32>(material.AlbedoMapPath.length());
+			material.AlbedoMapPath = std::string(const_cast<char*>(diffuseTexPath.C_Str()));
+			material.AlbeoMapPathLength = static_cast<uint32>(diffuseTexPath.length);
 		}
 
 		// Normal map
@@ -58,16 +58,16 @@ int _tmain(int argc, _TCHAR* argv[])
 		if (mat.GetTexture(aiTextureType_NORMALS, 0, &normalMapPath) == aiReturn_SUCCESS
 			|| mat.GetTexture(aiTextureType_HEIGHT, 0, &normalMapPath) == aiReturn_SUCCESS)
 		{
-			material.NormalMapPath = std::string(normalMapPath.C_Str());
-			//material.NormalMapPathLength = static_cast<uint32>(material.NormalMapPath.length());
+			material.NormalMapPath = std::string(const_cast<char*>(normalMapPath.C_Str()));
+			material.NormalMapPathLength = static_cast<uint32>(normalMapPath.length);
 		}
 
 		// Roughness map
 		// Blender -> Texture -> Specular -> Color
 		if (mat.GetTexture(aiTextureType_SPECULAR, 0, &specularMapPath) == aiReturn_SUCCESS)
 		{
-			material.SpecularMapPath = std::string(specularMapPath.C_Str());
-			//material.SpecularMapPathLength = static_cast<uint32>(material.SpecularMapPath.length());
+			material.SpecularMapPath = std::string(const_cast<char*>(specularMapPath.C_Str()));
+			material.SpecularMapPathLength = static_cast<uint32>(specularMapPath.length);
 		}
 
 		// Metalness map
@@ -75,16 +75,16 @@ int _tmain(int argc, _TCHAR* argv[])
 		if (mat.GetTexture(aiTextureType_SHININESS, 0, &shininessReflectionMapPath) == aiReturn_SUCCESS
 			|| mat.GetTexture(aiTextureType_REFLECTION, 0, &shininessReflectionMapPath) == aiReturn_SUCCESS)
 		{
-			material.ShininessReflectionMapPath = std::string(shininessReflectionMapPath.C_Str());
-			//material.ShininessReflectionMapPathLength = static_cast<uint32>(material.ShininessReflectionMapPath.length());
+			material.ShininessReflectionMapPath = std::string(const_cast<char*>(shininessReflectionMapPath.C_Str()));
+			material.ShininessReflectionMapPathLength = static_cast<uint32>(shininessReflectionMapPath.length);
 		}
 
 		// Alpha mask
 		// Blender -> ....?
 		if (mat.GetTexture(aiTextureType_OPACITY, 0, &opacityMapPath) == aiReturn_SUCCESS)
 		{
-			material.OpacityMapPath = std::string(opacityMapPath.C_Str());
-			//material.OpacityMapPathLength = static_cast<uint32>(material.OpacityMapPath.length());
+			material.OpacityMapPath = std::string(const_cast<char*>(opacityMapPath.C_Str()));
+			material.OpacityMapPathLength = static_cast<uint32>(opacityMapPath.length);
 		}
 
 
@@ -92,10 +92,9 @@ int _tmain(int argc, _TCHAR* argv[])
 		aiString materialName = {};
 		mat.Get(AI_MATKEY_NAME, materialName);
 
-		material.NameLength = static_cast<uint32>(materialName.length);
-		material.namecopy = std::string(const_cast<char*>(materialName.C_Str()));
-		material.Name = "x";
-				
+		material.Name = std::string(const_cast<char*>(materialName.C_Str()));
+		material.NameLength = static_cast<uint32>(material.Name.length());
+
 		mat.Get(AI_MATKEY_SHININESS, material.Ns);
 
 		// Temp color
@@ -126,7 +125,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		loadedMaterials.push_back(material);
 	}
 
-	printf("process meshes now \n");
+	printf("Processing meshes now.... \n");
 
 	std::vector<std::vector<float>> meshIDToVertexFloatData;
 	std::vector<std::vector<uint32>> meshIDToIndexUint32Data;
@@ -138,7 +137,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		const aiMesh& assimpMesh = *scene->mMeshes[i];
 
 		// Build up mesh
-		mesh.Name = const_cast<char*>(assimpMesh.mName.C_Str());
+		mesh.Name = std::string(const_cast<char*>(assimpMesh.mName.C_Str()));
 		mesh.NameLength = static_cast<uint32>(assimpMesh.mName.length);
 		mesh.MaterialID = assimpMesh.mMaterialIndex;
 
@@ -255,7 +254,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 
 
-	printf(" Write file now \n");
+	printf("Writing to file..... \n");
 
 	SHFModelFile modelFile;
 	modelFile.MeshCount = scene->mNumMeshes;
@@ -268,7 +267,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	serialization.WriteToFile(modelFile);
 	serialization.CloseFile();
 
-	printf("W mesh count: %d \n", modelFile.MeshCount);
+	printf("Done writing %d meshes to file.\n", modelFile.MeshCount);
 #endif
 
 
@@ -284,36 +283,34 @@ int _tmain(int argc, _TCHAR* argv[])
 		printf("(R) Mesh count : %d \n", readModel.MeshCount);
 		printf("(R) Material count : %d \n", readModel.MaterialCount);
 		printf("(R) Footer %s \n", readModel.Footer.c_str());
-		
+
 		for (uint32 i = 0; i < readModel.MaterialCount; i++)
 		{
 			Material& material = readModel.Materials[i];
-			printf("(R) Material name: %s \n", material.Name);
-
-			//printf("(R) AlbedoMapPath: %s \n", material.AlbedoMapPath.c_str());
-			/*printf("(R) NormalMapPath: %s \n", material.NormalMapPath.c_str());
+			printf("(R) Material name: %s \n", material.Name.c_str());
+			printf("(R) AlbedoMapPath: %s \n", material.AlbedoMapPath.c_str());
+			printf("(R) NormalMapPath: %s \n", material.NormalMapPath.c_str());
 			printf("(R) SpecularMapPath: %s \n", material.SpecularMapPath.c_str());
 			printf("(R) ShininessReflectionMapPath: %s \n", material.ShininessReflectionMapPath.c_str());
-			printf("(R) OpacityMapPath: %s \n", material.OpacityMapPath.c_str());*/
+			printf("(R) OpacityMapPath: %s \n", material.OpacityMapPath.c_str());
 			printf("- - - - - - - - \n");
 		}
 
 		for (uint32 i = 0; i < readModel.MeshCount; i++)
 		{
 			Mesh& mesh = readModel.Meshes[i];
-			//printf("(R) Mesh name: %s \n", mesh.Name);
-			/*
+			printf("(R) Mesh name: %s \n", mesh.Name.c_str());
 			printf("(R) Vertex count: %d \n", mesh.VertexCount);
 			printf("(R) Index count: %d \n", mesh.IndexCount);
 			printf("(R) Face count: %d \n", mesh.FaceCount);
 			printf("(R) Element count: %d \n", mesh.ElementCount);
-			printf("- - - - - - - - \n");*/
+			printf("- - - - - - - - \n");
 		}
 
 	}
 #endif
 
-	printf("exiting \n");
+	printf("Exiting... \n");
 	return 0;
 }
 
