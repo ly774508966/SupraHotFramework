@@ -76,15 +76,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	// Try loading a lua script and run it.
 	SupraHot::Scripting::LuaVM::GetInstance()->RunFile("Scripts/test.lua");
 
-	// Try loading objx
-	std::vector<SupraHot::MeshData*> meshData = SupraHot::Utils::MeshDataLoader::GetInstance()->Load("Models/cube.mh", SupraHot::Utils::MeshDataLoader::ModelFileFormat::OBJX);
-	SHF_PRINTF("MeshData Facecount: %d \n", meshData.at(0)->FaceCount);
-	SHF_PRINTF("Material Name %s \n", meshData.at(0)->MeshMaterial.GetName().c_str());
-	SHF_PRINTF("Material Albedo Tex ID %d \n", meshData.at(0)->MeshMaterial.GetAlbedoMap()->GetID());
-
-	// Try loading a model file with assimp
-	std::vector<SupraHot::MeshData*> meshDataAssimp = SupraHot::Utils::MeshDataLoader::GetInstance()->LoadWithAssimp("Models/cube.obj");
-
+#if 0
 	// Try loading shfm
 	Utils::SHFModelFile model = Utils::SHFMBinaryLoader::GetInstance().LoadFromFile("Models/Pistol_Model.shfm");
 	SHF_PRINTF("(R) Header %s \n", model.Header.c_str());
@@ -101,7 +93,13 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 		SHF_PRINTF("(R) Material specular: %s \n", material.SpecularMapPath.c_str());
 		SHF_PRINTF("- - - - - - - - \n");
 	}
+#endif
 
+
+	std::vector<MeshData*> meshData = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol_Model.shfm");
+
+	// Todo: Write .dds-Texture loader.
+	// Need this for 2D textures, but also for dds-cubes with mip maps!
 }
 
 void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)

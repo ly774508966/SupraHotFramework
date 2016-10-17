@@ -20,17 +20,15 @@ namespace SupraHot
 
 		public:
 			std::string Name;
-			float Ns = 0;				// specular exponent
-			float D = 0;				// dissolve factor
-			float Ni = 0;				// optical density
-			int Illum = 0;				// illumination model 
+			uint32 ID = 0;
 			Vec3 Ka;					// ambient reflectivity
 			Vec3 Kd;					// diffuse reflectivity
 			Vec3 Ks;					// specular reflectivity
+			Vec3 Ke;					// emissive color
+			float Ns = 0;				// specular exponent
 			float Roughness = 0.0f;     // default roughness
 			float Metalness = 0.0f;     // defaul metalness
 			float F0 = 0.04f;           // Fresnel0 0.0f = base reflectivity
-			Vec3 Color;					// Albedo color
 
 			Material();
 			~Material();
@@ -55,22 +53,15 @@ namespace SupraHot
 			void SetKd(Vec3 v);
 			void SetKa(Vec3 v);
 			void SetKs(Vec3 v);
-			void SetColor(Vec3 v);
+			void SetKe(Vec3 v);
 
 			Vec3 GetKd();
 			Vec3 GetKa();
 			Vec3 GetKs();
-			Vec3 GetColor();
+			Vec3 GetKe();
 
 			void SetNs(float ns);
-			void SetNi(float ni);
-			void SetD(float d);
-			void SetIllum(unsigned int illum);
-
 			float GetNs();
-			float GetNi();
-			float GetD();
-			unsigned int GetIllum();
 
 			void SetRoughness(float r);
 			void SetMetalness(float m);

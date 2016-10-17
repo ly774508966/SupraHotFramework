@@ -59,7 +59,7 @@ namespace SupraHot
 
 			/* load texture with stb_image */
 			int width, height, n;
-			//unsigned char * data = stbi_load(Path.c_str(), &width, &height, &n, 0);
+
 			FILE* f = Utils::FileSystem::GetInstance()->GetFile("", Path, "rb");
 			unsigned char * data = stbi_load_from_file(f, &width, &height, &n, 0);
 			std::fclose(f);

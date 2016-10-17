@@ -87,9 +87,9 @@ namespace SupraHot
 			this->Ks = v;
 		}
 
-		void Material::SetColor(Vec3 v)
+		void Material::SetKe(Vec3 v)
 		{
-			this->Color = v;
+			this->Ke = v;
 		}
 
 		Vec3 Material::GetKd()
@@ -107,9 +107,9 @@ namespace SupraHot
 			return Ks;
 		}
 
-		Vec3 Material::GetColor()
+		Vec3 Material::GetKe()
 		{
-			return Color;
+			return Ke;
 		}
 
 		void Material::SetNs(float ns)
@@ -117,39 +117,9 @@ namespace SupraHot
 			this->Ns = ns;
 		}
 
-		void Material::SetNi(float ni)
-		{
-			this->Ni = ni;
-		}
-
-		void Material::SetD(float d)
-		{
-			this->D = d;
-		}
-
-		void Material::SetIllum(unsigned illum)
-		{
-			this->Illum = illum;
-		}
-
 		float Material::GetNs()
 		{
 			return Ns;
-		}
-
-		float Material::GetNi()
-		{
-			return Ni;
-		}
-
-		float Material::GetD()
-		{
-			return D;
-		}
-
-		unsigned Material::GetIllum()
-		{
-			return Illum;
 		}
 
 		void Material::SetRoughness(float r)

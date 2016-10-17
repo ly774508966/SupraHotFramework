@@ -8,6 +8,7 @@
 #include "Vertex.h"
 #include "Platform.h"
 #include "FileSystem.h"
+#include "SHFMBinaryLoader.h"
 
 namespace SupraHot
 {
@@ -30,40 +31,9 @@ namespace SupraHot
 		{
 		}
 
-		std::vector<MeshData*> MeshDataLoader::Load(std::string path, ModelFileFormat modelFileFormat)
+		std::vector<MeshData*> MeshDataLoader::Load(std::string pathToSHFM)
 		{
-			switch (modelFileFormat)
-			{
-			case OBJ:
-				return LoadOBJ(path);
-			case OBJX:
-				return LoadOBJX(path);
-			case FBX:
-				return LoadFBX(path);
-			case SHMD:
-				return LoadSHMD(path);
-			}
-
-			return std::vector<MeshData*>();
-		}
-
-		std::vector<MeshData*> MeshDataLoader::LoadOBJ(std::string path)
-		{
-			std::vector<MeshData*> meshes;
-
-			// scan file for .mtl-path
-			// load .mtl file and textures (btw. try to cache textures by file path. need to write a clever system for memory freeing)
-
-			// load vertex data
-
-			// re-create normals
-
-			// re-create tangents
-
-
-			// or better yet.. just use assimp
-
-			return meshes;
+			return LoadSHFM(pathToSHFM);
 		}
 
 		std::vector<MeshData*> MeshDataLoader::LoadOBJX(std::string path)
@@ -282,64 +252,64 @@ namespace SupraHot
 					std::vector<float> binormals;
 					std::vector<float> uvcoords;
 
-					for (uint32 i = 0, l = currentMeshData->Faces.size(); i < l; i++)
+					for (uint32 j = 0, l = static_cast<uint32>(currentMeshData->Faces.size()); j < l; j++)
 					{
-						positions.push_back(currentMeshData->Faces[i].GetVertex(0).GetPosition().x);
-						positions.push_back(currentMeshData->Faces[i].GetVertex(0).GetPosition().y);
-						positions.push_back(currentMeshData->Faces[i].GetVertex(0).GetPosition().z);
+						positions.push_back(currentMeshData->Faces[j].GetVertex(0).GetPosition().x);
+						positions.push_back(currentMeshData->Faces[j].GetVertex(0).GetPosition().y);
+						positions.push_back(currentMeshData->Faces[j].GetVertex(0).GetPosition().z);
 
-						positions.push_back(currentMeshData->Faces[i].GetVertex(1).GetPosition().x);
-						positions.push_back(currentMeshData->Faces[i].GetVertex(1).GetPosition().y);
-						positions.push_back(currentMeshData->Faces[i].GetVertex(1).GetPosition().z);
+						positions.push_back(currentMeshData->Faces[j].GetVertex(1).GetPosition().x);
+						positions.push_back(currentMeshData->Faces[j].GetVertex(1).GetPosition().y);
+						positions.push_back(currentMeshData->Faces[j].GetVertex(1).GetPosition().z);
 
-						positions.push_back(currentMeshData->Faces[i].GetVertex(2).GetPosition().x);
-						positions.push_back(currentMeshData->Faces[i].GetVertex(2).GetPosition().y);
-						positions.push_back(currentMeshData->Faces[i].GetVertex(2).GetPosition().z);
+						positions.push_back(currentMeshData->Faces[j].GetVertex(2).GetPosition().x);
+						positions.push_back(currentMeshData->Faces[j].GetVertex(2).GetPosition().y);
+						positions.push_back(currentMeshData->Faces[j].GetVertex(2).GetPosition().z);
 
-						normals.push_back(currentMeshData->Faces[i].GetVertex(0).GetNormal().x);
-						normals.push_back(currentMeshData->Faces[i].GetVertex(0).GetNormal().y);
-						normals.push_back(currentMeshData->Faces[i].GetVertex(0).GetNormal().z);
+						normals.push_back(currentMeshData->Faces[j].GetVertex(0).GetNormal().x);
+						normals.push_back(currentMeshData->Faces[j].GetVertex(0).GetNormal().y);
+						normals.push_back(currentMeshData->Faces[j].GetVertex(0).GetNormal().z);
 
-						normals.push_back(currentMeshData->Faces[i].GetVertex(1).GetNormal().x);
-						normals.push_back(currentMeshData->Faces[i].GetVertex(1).GetNormal().y);
-						normals.push_back(currentMeshData->Faces[i].GetVertex(1).GetNormal().z);
+						normals.push_back(currentMeshData->Faces[j].GetVertex(1).GetNormal().x);
+						normals.push_back(currentMeshData->Faces[j].GetVertex(1).GetNormal().y);
+						normals.push_back(currentMeshData->Faces[j].GetVertex(1).GetNormal().z);
 
-						normals.push_back(currentMeshData->Faces[i].GetVertex(2).GetNormal().x);
-						normals.push_back(currentMeshData->Faces[i].GetVertex(2).GetNormal().y);
-						normals.push_back(currentMeshData->Faces[i].GetVertex(2).GetNormal().z);
+						normals.push_back(currentMeshData->Faces[j].GetVertex(2).GetNormal().x);
+						normals.push_back(currentMeshData->Faces[j].GetVertex(2).GetNormal().y);
+						normals.push_back(currentMeshData->Faces[j].GetVertex(2).GetNormal().z);
 
-						tangents.push_back(currentMeshData->Faces[i].GetVertex(0).GetTangent().x);
-						tangents.push_back(currentMeshData->Faces[i].GetVertex(0).GetTangent().y);
-						tangents.push_back(currentMeshData->Faces[i].GetVertex(0).GetTangent().z);
+						tangents.push_back(currentMeshData->Faces[j].GetVertex(0).GetTangent().x);
+						tangents.push_back(currentMeshData->Faces[j].GetVertex(0).GetTangent().y);
+						tangents.push_back(currentMeshData->Faces[j].GetVertex(0).GetTangent().z);
 
-						tangents.push_back(currentMeshData->Faces[i].GetVertex(1).GetTangent().x);
-						tangents.push_back(currentMeshData->Faces[i].GetVertex(1).GetTangent().y);
-						tangents.push_back(currentMeshData->Faces[i].GetVertex(1).GetTangent().z);
+						tangents.push_back(currentMeshData->Faces[j].GetVertex(1).GetTangent().x);
+						tangents.push_back(currentMeshData->Faces[j].GetVertex(1).GetTangent().y);
+						tangents.push_back(currentMeshData->Faces[j].GetVertex(1).GetTangent().z);
 
-						tangents.push_back(currentMeshData->Faces[i].GetVertex(2).GetTangent().x);
-						tangents.push_back(currentMeshData->Faces[i].GetVertex(2).GetTangent().y);
-						tangents.push_back(currentMeshData->Faces[i].GetVertex(2).GetTangent().z);
+						tangents.push_back(currentMeshData->Faces[j].GetVertex(2).GetTangent().x);
+						tangents.push_back(currentMeshData->Faces[j].GetVertex(2).GetTangent().y);
+						tangents.push_back(currentMeshData->Faces[j].GetVertex(2).GetTangent().z);
 
-						binormals.push_back(currentMeshData->Faces[i].GetVertex(0).GetBiNormal().x);
-						binormals.push_back(currentMeshData->Faces[i].GetVertex(0).GetBiNormal().y);
-						binormals.push_back(currentMeshData->Faces[i].GetVertex(0).GetBiNormal().z);
+						binormals.push_back(currentMeshData->Faces[j].GetVertex(0).GetBiNormal().x);
+						binormals.push_back(currentMeshData->Faces[j].GetVertex(0).GetBiNormal().y);
+						binormals.push_back(currentMeshData->Faces[j].GetVertex(0).GetBiNormal().z);
 
-						binormals.push_back(currentMeshData->Faces[i].GetVertex(1).GetBiNormal().x);
-						binormals.push_back(currentMeshData->Faces[i].GetVertex(1).GetBiNormal().y);
-						binormals.push_back(currentMeshData->Faces[i].GetVertex(1).GetBiNormal().z);
+						binormals.push_back(currentMeshData->Faces[j].GetVertex(1).GetBiNormal().x);
+						binormals.push_back(currentMeshData->Faces[j].GetVertex(1).GetBiNormal().y);
+						binormals.push_back(currentMeshData->Faces[j].GetVertex(1).GetBiNormal().z);
 
-						binormals.push_back(currentMeshData->Faces[i].GetVertex(2).GetBiNormal().x);
-						binormals.push_back(currentMeshData->Faces[i].GetVertex(2).GetBiNormal().y);
-						binormals.push_back(currentMeshData->Faces[i].GetVertex(2).GetBiNormal().z);
+						binormals.push_back(currentMeshData->Faces[j].GetVertex(2).GetBiNormal().x);
+						binormals.push_back(currentMeshData->Faces[j].GetVertex(2).GetBiNormal().y);
+						binormals.push_back(currentMeshData->Faces[j].GetVertex(2).GetBiNormal().z);
 
-						uvcoords.push_back(currentMeshData->Faces[i].GetVertex(0).GetUVCoord().x);
-						uvcoords.push_back(currentMeshData->Faces[i].GetVertex(0).GetUVCoord().y);
+						uvcoords.push_back(currentMeshData->Faces[j].GetVertex(0).GetUVCoord().x);
+						uvcoords.push_back(currentMeshData->Faces[j].GetVertex(0).GetUVCoord().y);
 
-						uvcoords.push_back(currentMeshData->Faces[i].GetVertex(1).GetUVCoord().x);
-						uvcoords.push_back(currentMeshData->Faces[i].GetVertex(1).GetUVCoord().y);
+						uvcoords.push_back(currentMeshData->Faces[j].GetVertex(1).GetUVCoord().x);
+						uvcoords.push_back(currentMeshData->Faces[j].GetVertex(1).GetUVCoord().y);
 
-						uvcoords.push_back(currentMeshData->Faces[i].GetVertex(2).GetUVCoord().x);
-						uvcoords.push_back(currentMeshData->Faces[i].GetVertex(2).GetUVCoord().y);
+						uvcoords.push_back(currentMeshData->Faces[j].GetVertex(2).GetUVCoord().x);
+						uvcoords.push_back(currentMeshData->Faces[j].GetVertex(2).GetUVCoord().y);
 					}
 
 					glBindBuffer(GL_ARRAY_BUFFER, currentMeshData->PositionBufferHandle);
@@ -391,18 +361,87 @@ namespace SupraHot
 			return data;
 		}
 
-		std::vector<MeshData*> MeshDataLoader::LoadFBX(std::string path)
+		std::vector<MeshData*> MeshDataLoader::LoadSHFM(std::string path)
 		{
-			return std::vector<MeshData*>();
-		}
+			SHFModelFile model = SHFMBinaryLoader::GetInstance().LoadFromFile(path);
 
-		std::vector<MeshData*> MeshDataLoader::LoadWithAssimp(std::string path)
-		{
-			return std::vector<MeshData*>();
-		}
 
-		std::vector<MeshData*> MeshDataLoader::LoadSHMD(std::string path)
-		{
+			// Create map for materials
+			std::unordered_map<uint32, Graphics::Material*> materialsMap;
+
+
+			for (uint32 i = 0; i < model.MeshCount; i++)
+			{
+				SHFModel::Mesh& modelMesh = model.Meshes[i];
+				SHFModel::Material& modelMaterial = model.Materials[modelMesh.MaterialID];
+				
+				// Load material, if it wasn't loaded before.
+				if (materialsMap.find(modelMesh.MaterialID) == materialsMap.end())
+				{
+					#if DEVELOPMENT == 1
+						SHF_PRINTF("Generating material %s \n", modelMaterial.Name.c_str());
+					#endif
+
+					// Set values
+					Graphics::Material* material = new Graphics::Material();
+					material->ID = modelMaterial.ID;
+					material->Name = modelMaterial.Name;
+					material->Ka = modelMaterial.Ka; 
+					material->Kd = modelMaterial.Kd; 
+					material->Ks = modelMaterial.Ks; 
+					material->Ke = modelMaterial.Ke; 
+					material->Ns = modelMaterial.Ns; 
+					material->Roughness = modelMaterial.Roughness;
+					material->Metalness = modelMaterial.Metalness;
+					material->F0 = modelMaterial.F0;
+
+					// Load textures.
+					if (modelMaterial.AlbeoMapPathLength > 0)
+					{
+						// Load albedo map
+					}
+
+					if (modelMaterial.NormalMapPathLength > 0)
+					{
+						// Load normal map
+					}
+
+					if (modelMaterial.SpecularMapPathLength > 0)
+					{
+						// Load roughness map
+					}
+
+					if (modelMaterial.ShininessReflectionMapPathLength > 0)
+					{
+						// Load metalness map
+					}
+
+					// Todo: We also need to create VMF roughness maps from metalness & roughness
+
+					if (modelMaterial.OpacityMapPathLength > 0)
+					{
+						// Load alpha map
+
+						// If we have an alpha mask, we can combine it with the albedo map!
+						// There is currently no need to waste memory for another r8-texture
+					}
+
+					// Push material into hashmap
+					materialsMap[modelMesh.MaterialID] = material; 
+					// std::make_pair(key,value)
+				}
+			}
+
+
+			for (uint32 i = 0; i < model.MaterialCount; i++)
+			{
+				SHFModel::Material& material = model.Materials[i];
+				
+				// Interpret data here.
+
+				// Load materials when needed.
+			}
+
 			return std::vector<MeshData*>();
 		}
 	};

@@ -84,19 +84,19 @@ namespace SupraHot
 				{
 					float ni;
 					SHF_SSCANF(line.c_str(), "Ni %f", &ni);
-					tempMaterial.SetNi(ni);
+					//tempMaterial.SetNi(ni);
 				}
 				else if (line.find("illum") == 0)
 				{
 					unsigned int illum;
 					SHF_SSCANF(line.c_str(), "illum %u", &illum);
-					tempMaterial.SetIllum(illum);
+					//tempMaterial.SetIllum(illum);
 				}
 				else if (line.find("d ") == 0)
 				{
 					float d;
 					SHF_SSCANF(line.c_str(), "d %f", &d);
-					tempMaterial.SetD(d);
+				//	tempMaterial.SetD(d);
 				}
 				else if (line.find("map_") == 0)
 				{
