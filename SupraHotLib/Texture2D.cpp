@@ -330,8 +330,9 @@ namespace SupraHot
 				SHF_PRINTF("is header10 \n");
 			}
 
-			uint32 formatColorComponents = 0;
+			uint32 formatColorComponents;
 			uint32 formatSize = 0;
+			bool isGL_BGRA = false;
 
 			if ((header.Format.flags 
 				& (Utils::DDSUtil::DDPF_RGB 
@@ -378,14 +379,11 @@ namespace SupraHot
 						header.Format.Mask.z == 0x000000FF &&
 						header.Format.Mask.w == 0xFF000000)
 					{
-						// BGRA
-						printf("BGRA \n");
-#ifndef PLATFORM_ANDROID
-						Format = GL_BGRA;
-						InternalFormat = GL_BGRA;
-#else
-						SHF_PRINTF("Texture format BGRA is not supported by Android. \n");
-#endif
+						SHF_PRINTF("Gonna convert GBRA to RGBA \n");
+						Format = GL_RGBA;
+						InternalFormat = GL_RGBA8;
+
+						isGL_BGRA = true;
 						formatSize = sizeof(uint32);
 					}
 
@@ -396,7 +394,7 @@ namespace SupraHot
 					{
 						// RGBA
 						Format = GL_RGBA;
-						InternalFormat = GL_RGBA;
+						InternalFormat = GL_RGBA8;
 						formatSize = sizeof(uint32);
 					}
 				}
@@ -414,72 +412,65 @@ namespace SupraHot
 			uint32 mipMapCount = (header.Flags & Utils::DDSUtil::ddsFlag::DDSD_MIPMAPCOUNT) ? header.MipMapLevels : 1;
 			uint32 faceCount = (header.CubemapFlags & Utils::DDSUtil::ddsCubemapflag::DDSCAPS2_CUBEMAP) ? 6 : 1;
 			uint32 depthCount = (header.CubemapFlags & Utils::DDSUtil::ddsCubemapflag::DDSCAPS2_VOLUME) ? header.Depth : 1;
-
-			SHF_PRINTF("mip map count = %d \n", mipMapCount);
-			SHF_PRINTF("faceCount = %d \n", faceCount);
-			SHF_PRINTF("depthCount = %d \n", depthCount);
-
-
-			// Now that we now the format, we can load the texture.
-			
-			//texture Texture(getTarget(Header, Header10), Format, 
-			//texture::dim_type(Header.Width, Header.Height, DepthCount), std::max<std::size_t>(Header10.ArraySize, 1), FaceCount, MipMapCount);
-
-			// assert(Offset + Texture.size() == Size);
-			
-			
+		
+			uint64 totalBufferOffset = 0;
+			uint64 bufferElements = 0;
 			uint64 bufferSize = 0;
+
 			for (uint32 mip = 0; mip < mipMapCount; mip++)
 			{
 				uint32 divider = static_cast<uint32>(pow(2, mip));
 				uint32 targetWidth = header.Width / divider;
 				uint32 targetHeight = header.Height / divider;
-				bufferSize += (targetWidth * targetHeight * faceCount);
-			}
-			
-			if (Format == GL_RGBA || 
-#ifndef PLATFORM_ANDROID
-				Format == GL_BGRA ||
-#endif
-				Format == GL_RGB)
-			{
-				uint32* buffer = new uint32[bufferSize];
-				std::memcpy(buffer, (Data + Offset), bufferSize * formatSize);
+				bufferElements = (targetWidth * targetHeight * faceCount);
+				bufferSize = bufferElements * formatSize;
 
-#ifdef PLATFORM_ANDROID
-				// This converts the format GL_BGRA to GL_RGBA on the fly for each pixel.
-				for (uint32 pixel = 0; pixel < bufferSize; pixel++)
+				if (Format == GL_RGBA || 
+	#ifndef PLATFORM_ANDROID
+					Format == GL_BGRA ||
+	#endif
+					Format == GL_RGB)
 				{
-					uint32 comp = buffer[pixel];
+					uint32* buffer = new uint32[bufferElements];
+					std::memcpy(buffer, (Data + Offset + totalBufferOffset), bufferSize);
+					totalBufferOffset += bufferSize;
 
-					uint32 r = (comp & 0x000000FF);
-					uint32 g = (comp & 0x0000FF00) >> 8;
-					uint32 b = (comp & 0x00FF0000) >> 16;
-					uint32 a = (comp & 0xFF000000) >> 24;
+					if (isGL_BGRA)
+					{
+						// This converts the format GL_BGRA to GL_RGBA on the fly for each pixel.
+						for (uint64 pixel = 0; pixel < bufferElements; pixel++)
+						{
+							uint32 comp = buffer[pixel];
 
-					buffer[pixel] = (a << 24) + (r << 16) + (g << 8) + b;
+							uint32 r = (comp & 0x000000FF);
+							uint32 g = (comp & 0x0000FF00) >> 8;
+							uint32 b = (comp & 0x00FF0000) >> 16;
+							uint32 a = (comp & 0xFF000000) >> 24;
+
+							buffer[pixel] = (a << 24) + (r << 16) + (g << 8) + b;
+						}
+					} 
+					else
+					{
+						// just flip the texture on Y.	
+					}
+
+					SHF_PRINTF("Mip: %d | [%d x %d] \n", mip, targetWidth, targetHeight);
+					glTexImage2D(GL_TEXTURE_2D, mip, InternalFormat, targetWidth, targetHeight, 0, Format, Type, &buffer[0]);
+					
+					// need to free the memory.
+					delete buffer; 
+				} 
+				else if (Format == GL_RGBA16F)
+				{
+					//half;
 				}
-#endif
+				else if (Format == GL_RGBA32F)
+				{
+					float* buffer = new float[bufferSize];
+					std::memcpy(&buffer, Data + Offset, bufferSize * formatSize);
+				}
 
-				/* bind texture to buffer */
-				glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, header.Width, header.Height, 0, Format, Type, &buffer[0]);
-
-
-				// actually we might wanna build up the mips individually.. mip by mip & slap it in there with the GL calls!
-
-				/* generate mipmaps */
-				glGenerateMipmap(static_cast<GLenum>(GL_TEXTURE_2D));
-
-				// need to free the memory.
-			} 
-			else if (Format == GL_RGBA16F)
-			{
-				//half;
-			}
-			else if (Format == GL_RGBA32F)
-			{
-				float* buffer = new float[bufferSize];
-				std::memcpy(&buffer, Data + Offset, bufferSize * formatSize);
 			}
 
 		}

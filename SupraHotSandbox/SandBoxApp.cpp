@@ -104,7 +104,8 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	// Try to load a 2d .dds file
 
 	Texture2D* ddsTexture = new Texture2D("DDS Test");
-	ddsTexture->Load("Textures/test/Cerberus_A.dds");
+	//ddsTexture->Load("Textures/test/Cerberus_A.dds");
+	ddsTexture->Load("Textures/test/lion.dds");
 	// ddsTexture.Load("Textures/test/GraceCathedral.dds");
 	FBO->SetReadSource(ddsTexture);
 }

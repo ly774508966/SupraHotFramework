@@ -10,5 +10,4 @@ void main()
 {
 	vec2 pos = vec2(gl_FragCoord) * pixelsize;
 	FragColor = texture(in_texture, pos);
-	//FragColor = vec4(outUV.rg, 0, 1);
 }
