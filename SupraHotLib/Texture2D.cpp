@@ -10,9 +10,6 @@ namespace SupraHot
 {
 	namespace Graphics
 	{
-
-
-
 		Texture2D::Texture2D()
 		{
 			this->TextureID = 0;
@@ -83,14 +80,18 @@ namespace SupraHot
 			if (fileExtension == "dds" || fileExtension == "DDS")
 			{
 				// Load .dds
+
 				LoadDDS(f);
-				// File closed inside function
+
+				// File is being closed inside function
 			}
 			else
 			{
 				// Load with stbi
+
 				LoadWithSTBImage(f);
-				// file closed inside function
+
+				// File is being closed inside function
 			}
 
 			glBindTexture(GL_TEXTURE_2D, 0);
@@ -306,19 +307,11 @@ namespace SupraHot
 
 			Utils::DDSUtil::ddsHeader const & header(*reinterpret_cast<Utils::DDSUtil::ddsHeader const *>(Data));
 
-#if DEVELOPMENT == 1
-			SHF_PRINTF("Dimensions = [%d x %d]\n", header.Width, header.Height);
-			SHF_PRINTF("Mips = [%d]\n", header.MipMapLevels);
-			SHF_PRINTF("Magic = [%s] \n", header.Magic);
-#endif
-
 			if (strncmp(header.Magic, "DDS ", 4) != 0)
 			{
 				glDeleteTextures(1, &TextureID);
 				return;
 			}
-
-			// 
 
 			size_t Offset = sizeof(Utils::DDSUtil::ddsHeader);
 
@@ -341,19 +334,16 @@ namespace SupraHot
 				| Utils::DDSUtil::DDPF_ALPHA 
 				| Utils::DDSUtil::DDPF_YUV 
 				| Utils::DDSUtil::DDPF_LUMINANCE)) 
-
 				&& header.Format.flags != Utils::DDSUtil::DDPF_FOURCC_ALPHAPIXELS)
 			{
 				switch (header.Format.bpp)
 				{
 				case 8:
 				{
-					
 					break;
 				}
 				case 16:
 				{
-					
 					break;
 				}
 				case 24:
@@ -402,6 +392,7 @@ namespace SupraHot
 							header.Format.Mask.z == 0x000000FF &&
 							header.Format.Mask.w == 0xFF000000)
 					{
+						// BGRA
 						Format = GL_RGBA;
 						InternalFormat = GL_RGBA8;
 						isGL_BGRA = true;
@@ -423,9 +414,11 @@ namespace SupraHot
 			}
 			else if ((header.Format.fourCC == Utils::DDSUtil::D3DFMT_DX10) && (header10.Format != Utils::DDSUtil::DXGI_FORMAT_UNKNOWN))
 			{
-				printf("Find the right format for the header10 \n");
+				SHF_PRINTF("Find the right format for the header10 \n");
 
-				// here we need to set the right decompression shit tele
+				// here we need to set the right decompression shit to load the files.
+
+				// todo: load compressed files.....
 			}
 
 
@@ -467,6 +460,36 @@ namespace SupraHot
 				}
 
 				// Flip the texture on X-axis here.	
+				// Source: https://github.com/paroj/nv_dds/blob/master/nv_dds.cpp
+				{
+					uint32 imagesize = bufferSize / depthCount;
+					uint32 linesize = imagesize / targetHeight;
+					uint32 offset;
+
+					printf("linzesize = %d \n", linesize);
+
+					uint8 *tmp = new uint8[linesize];
+
+					for (uint32 n = 0; n < depthCount; n++) 
+					{
+						offset = imagesize * n;
+						uint8 *top = (uint8*)buffer + offset;
+						uint8 *bottom = top + (imagesize - linesize);
+
+						for (uint32 i = 0; i < (targetHeight >> 1); i++) 
+						{
+							// swap
+							std::memcpy(tmp, bottom, linesize);
+							std::memcpy(bottom, top, linesize);
+							std::memcpy(top, tmp, linesize);
+
+							top += linesize;
+							bottom -= linesize;
+						}
+					}
+
+					delete[] tmp;
+				}
 
 				// todo: check if 32f or 16f.
 
@@ -474,7 +497,7 @@ namespace SupraHot
 				glTexImage2D(GL_TEXTURE_2D, mip, InternalFormat, targetWidth, targetHeight, 0, Format, Type, buffer);
 
 				// need to free the memory.
-				delete buffer;
+				delete[] buffer;
 			}
 		}
 	};
