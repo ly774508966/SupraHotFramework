@@ -333,6 +333,7 @@ namespace SupraHot
 			uint32 formatColorComponents;
 			uint32 formatSize = 0;
 			bool isGL_BGRA = false;
+			SHF_PRINTF("Loading DDS with %d bpp \n", header.Format.bpp);
 
 			if ((header.Format.flags 
 				& (Utils::DDSUtil::DDPF_RGB 
@@ -357,16 +358,17 @@ namespace SupraHot
 				}
 				case 24:
 				{
+					// Todo: figure this out.
 					formatColorComponents = 3;
 
-					if (header.Format.Mask.x == 0x000000FF &&
-						header.Format.Mask.y == 0x0000FF00 &&
-						header.Format.Mask.z == 0x00FF0000)
+					if (header.Format.Mask.x == 0x0000FF &&
+						header.Format.Mask.y == 0x00FF00 &&
+						header.Format.Mask.z == 0xFF0000)
 					{
 						// RGB
 						Format = GL_RGB;
 						InternalFormat = GL_RGB8;
-						formatSize = sizeof(uint32);
+						formatSize = (sizeof(uint32) / 4) * formatColorComponents;
 					}
 					break;
 				}
@@ -374,23 +376,41 @@ namespace SupraHot
 				{
 					formatColorComponents = 4;
 
-					if (header.Format.Mask.x == 0x00FF0000 &&
-						header.Format.Mask.y == 0x0000FF00 &&
-						header.Format.Mask.z == 0x000000FF &&
-						header.Format.Mask.w == 0xFF000000)
-					{
-						SHF_PRINTF("Gonna convert GBRA to RGBA \n");
-						Format = GL_RGBA;
-						InternalFormat = GL_RGBA8;
-
-						isGL_BGRA = true;
-						formatSize = sizeof(uint32);
-					}
-
 					if (header.Format.Mask.x == 0x000000FF &&
 						header.Format.Mask.y == 0x0000FF00 &&
 						header.Format.Mask.z == 0x00FF0000 &&
-						header.Format.Mask.w == 0xFF000000)
+						header.Format.Mask.w == 0x00000000)
+					{
+						// RGB
+						Format = GL_RGBA;
+						InternalFormat = GL_RGBA8;
+						formatSize = sizeof(uint32);
+					}
+					else if(header.Format.Mask.x == 0x00FF0000 &&
+							header.Format.Mask.y == 0x0000FF00 &&
+							header.Format.Mask.z == 0x000000FF &&
+							header.Format.Mask.w == 0x00000000)
+					{
+						// BGR
+						Format = GL_RGBA;
+						InternalFormat = GL_RGBA8;
+						isGL_BGRA = true;
+						formatSize = sizeof(uint32);
+					}
+					else if(header.Format.Mask.x == 0x00FF0000 &&
+							header.Format.Mask.y == 0x0000FF00 &&
+							header.Format.Mask.z == 0x000000FF &&
+							header.Format.Mask.w == 0xFF000000)
+					{
+						Format = GL_RGBA;
+						InternalFormat = GL_RGBA8;
+						isGL_BGRA = true;
+						formatSize = sizeof(uint32);
+					}
+					else if(header.Format.Mask.x == 0x000000FF &&
+							header.Format.Mask.y == 0x0000FF00 &&
+							header.Format.Mask.z == 0x00FF0000 &&
+							header.Format.Mask.w == 0xFF000000)
 					{
 						// RGBA
 						Format = GL_RGBA;
@@ -425,54 +445,37 @@ namespace SupraHot
 				bufferElements = (targetWidth * targetHeight * faceCount);
 				bufferSize = bufferElements * formatSize;
 
-				if (Format == GL_RGBA || 
-	#ifndef PLATFORM_ANDROID
-					Format == GL_BGRA ||
-	#endif
-					Format == GL_RGB)
+				void* buffer = new void*[bufferElements];
+				std::memcpy(buffer, (Data + Offset + totalBufferOffset), bufferSize);
+				totalBufferOffset += bufferSize;
+
+				if (isGL_BGRA)	// check if BGRA(uint32 per pixel)
 				{
-					uint32* buffer = new uint32[bufferElements];
-					std::memcpy(buffer, (Data + Offset + totalBufferOffset), bufferSize);
-					totalBufferOffset += bufferSize;
-
-					if (isGL_BGRA)
+					// This converts the format GL_BGRA to GL_RGBA on the fly for each pixel.
+					uint32* u32Buffer = static_cast<uint32*>(buffer);
+					for (uint64 pixel = 0; pixel < bufferElements; pixel++)
 					{
-						// This converts the format GL_BGRA to GL_RGBA on the fly for each pixel.
-						for (uint64 pixel = 0; pixel < bufferElements; pixel++)
-						{
-							uint32 comp = buffer[pixel];
+						uint32 comp = u32Buffer[pixel];
 
-							uint32 r = (comp & 0x000000FF);
-							uint32 g = (comp & 0x0000FF00) >> 8;
-							uint32 b = (comp & 0x00FF0000) >> 16;
-							uint32 a = (comp & 0xFF000000) >> 24;
+						uint32 r = (comp & 0x000000FF);
+						uint32 g = (comp & 0x0000FF00) >> 8;
+						uint32 b = (comp & 0x00FF0000) >> 16;
+						uint32 a = (comp & 0xFF000000) >> 24;
 
-							buffer[pixel] = (a << 24) + (r << 16) + (g << 8) + b;
-						}
-					} 
-					else
-					{
-						// just flip the texture on Y.	
+						u32Buffer[pixel] = (a << 24) + (r << 16) + (g << 8) + b;
 					}
-
-					SHF_PRINTF("Mip: %d | [%d x %d] \n", mip, targetWidth, targetHeight);
-					glTexImage2D(GL_TEXTURE_2D, mip, InternalFormat, targetWidth, targetHeight, 0, Format, Type, &buffer[0]);
-					
-					// need to free the memory.
-					delete buffer; 
-				} 
-				else if (Format == GL_RGBA16F)
-				{
-					//half;
-				}
-				else if (Format == GL_RGBA32F)
-				{
-					float* buffer = new float[bufferSize];
-					std::memcpy(&buffer, Data + Offset, bufferSize * formatSize);
 				}
 
+				// Flip the texture on X-axis here.	
+
+				// todo: check if 32f or 16f.
+
+				SHF_PRINTF("Mip: %d | [%d x %d] \n", mip, targetWidth, targetHeight);
+				glTexImage2D(GL_TEXTURE_2D, mip, InternalFormat, targetWidth, targetHeight, 0, Format, Type, buffer);
+
+				// need to free the memory.
+				delete buffer;
 			}
-
 		}
 	};
 };
