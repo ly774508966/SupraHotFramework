@@ -33,7 +33,7 @@ namespace SupraHot
 			std::vector<std::string> fileContent = Utils::FileReader::GetInstance()->ReadFile(path);
 			std::string script = "";
 
-			for (uint32 i = 0, l = fileContent.size(); i < l; ++i)
+			for (uint32 i = 0, l = static_cast<uint32>(fileContent.size()); i < l; ++i)
 			{
 				script += fileContent.at(i);
 			}

@@ -18,6 +18,10 @@ namespace SupraHot
 			uint32 MinFilter = GL_LINEAR_MIPMAP_LINEAR, MagFilter = GL_LINEAR;
 			uint32 Format = GL_RGBA, InternalFormat = GL_RGBA8;
 			uint32 Type = GL_UNSIGNED_BYTE;
+
+			void LoadWithSTBImage(FILE* f);
+			void LoadDDS(FILE* f);
+			void LoadDDS(char const * Data, long Size);
 		public:
 			Texture2D();
 			Texture2D(std::string name);

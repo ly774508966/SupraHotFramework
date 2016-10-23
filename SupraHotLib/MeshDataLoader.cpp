@@ -365,7 +365,6 @@ namespace SupraHot
 		{
 			SHFModelFile model = SHFMBinaryLoader::GetInstance().LoadFromFile(path);
 
-
 			// Create map for materials
 			std::unordered_map<uint32, Graphics::Material*> materialsMap;
 
@@ -399,21 +398,33 @@ namespace SupraHot
 					if (modelMaterial.AlbeoMapPathLength > 0)
 					{
 						// Load albedo map
+						Texture2D* texture = new Texture2D();
+						texture->Load(modelMaterial.AlbedoMapPath);
+						material->SetAlbedoMap(texture);
 					}
 
 					if (modelMaterial.NormalMapPathLength > 0)
 					{
 						// Load normal map
+						Texture2D* texture = new Texture2D();
+						texture->Load(modelMaterial.NormalMapPath);
+						material->SetNormalMap(texture);
 					}
 
 					if (modelMaterial.SpecularMapPathLength > 0)
 					{
 						// Load roughness map
+						Texture2D* texture = new Texture2D();
+						texture->Load(modelMaterial.SpecularMapPath);
+						material->SetRoughnessMap(texture);
 					}
 
 					if (modelMaterial.ShininessReflectionMapPathLength > 0)
 					{
 						// Load metalness map
+						Texture2D* texture = new Texture2D();
+						texture->Load(modelMaterial.ShininessReflectionMapPath);
+						material->SetMetalnessMap(texture);
 					}
 
 					// Todo: We also need to create VMF roughness maps from metalness & roughness
@@ -424,6 +435,10 @@ namespace SupraHot
 
 						// If we have an alpha mask, we can combine it with the albedo map!
 						// There is currently no need to waste memory for another r8-texture
+
+						//Texture2D* texture = new Texture2D();
+						//texture->Load(modelMaterial.OpacityMapPath);
+						//material->SetAlphamap(texture);
 					}
 
 					// Push material into hashmap

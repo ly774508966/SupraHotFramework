@@ -100,6 +100,13 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 	// Todo: Write .dds-Texture loader.
 	// Need this for 2D textures, but also for dds-cubes with mip maps!
+
+	// Try to load a 2d .dds file
+
+	Texture2D* ddsTexture = new Texture2D("DDS Test");
+	ddsTexture->Load("Textures/test/Cerberus_A.dds");
+	// ddsTexture.Load("Textures/test/GraceCathedral.dds");
+	FBO->SetReadSource(ddsTexture);
 }
 
 void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
