@@ -10,7 +10,6 @@
 #include <android/asset_manager_jni.h>
 #include <FileSystem.h>
 
-
 // ----
 // App
 // ----
@@ -24,7 +23,8 @@ Java_com_suprahot_SupraHotSandbox_initApp(JNIEnv* env, jobject thiz, jint width,
 	int h = height;
 
 	app = new SupraHot::Bootstrap::MAIN_APP();
-	app->Init(w, h, "SupraHotSandbox");
+	//app->Init(w, h, "SupraHotSandbox");
+	app->Init(w, h, SupraHot::Bootstrap::WindowTitle);
 }
 
 extern "C"

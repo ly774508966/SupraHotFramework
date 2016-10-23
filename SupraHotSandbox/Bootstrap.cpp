@@ -4,7 +4,7 @@
 int _tmain(int argc, _TCHAR* argv[])
 {
 	SupraHot::Bootstrap::MAIN_APP app;
-	app.Init(640, 480, "Demo Application");
+	app.Init(SupraHot::Bootstrap::WindowWith, SupraHot::Bootstrap::WindowHeight, SupraHot::Bootstrap::WindowTitle);
 	app.Run();
 	app.Destroy();
 	return 0;
@@ -15,7 +15,7 @@ int _tmain(int argc, _TCHAR* argv[])
 int main()
 {
 	SupraHot::Bootstrap::MAIN_APP app;
-	app.Init(640, 480, "Demo Application");
+	app.Init(SupraHot::Bootstrap::WindowWith, SupraHot::Bootstrap::WindowHeight, SupraHot::Bootstrap::WindowTitle);
 	app.Run();
 	app.Destroy();
 	return 0;

@@ -462,11 +462,9 @@ namespace SupraHot
 				// Flip the texture on X-axis here.	
 				// Source: https://github.com/paroj/nv_dds/blob/master/nv_dds.cpp
 				{
-					uint32 imagesize = bufferSize / depthCount;
-					uint32 linesize = imagesize / targetHeight;
-					uint32 offset;
-
-					printf("linzesize = %d \n", linesize);
+					uint64 imagesize = bufferSize / depthCount;
+					uint64 linesize = imagesize / targetHeight;
+					uint64 offset;
 
 					uint8 *tmp = new uint8[linesize];
 
