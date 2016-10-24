@@ -106,7 +106,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	Texture2D* ddsTexture = new Texture2D("DDS Test");
 	ddsTexture->SetWrapS(GL_CLAMP_TO_EDGE);
 	ddsTexture->SetWrapT(GL_CLAMP_TO_EDGE);
-	ddsTexture->Load("Textures/test/lion_128f.dds");
+	ddsTexture->Load("Textures/test/lion_64i.dds");
 	//ddsTexture->Load("Textures/test/lion.dds");
 	//ddsTexture->Load("Textures/test/Cerberus_A.dds");
 	//ddsTexture->Load("Textures/test/lion_bgr.dds");

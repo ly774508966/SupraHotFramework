@@ -7,12 +7,12 @@ The libSupraHotLib.so must be moved to this location: "x:\SupraHotFramework\Inte
 Otherwise it won't find the library on app start
 
 # Supported DDS formats
-128 bpp float (RGBA32f)
-64 bpp half (RGBA16f)
-64 bpp uint (RGBA16 / Short)
-32 bpp rgba (RGBA8)
-32 bpp bgra (RGBA8)
-32 bpp gbr -> (RGBA8)
++ 128 bpp float (RGBA32f)
++ 64 bpp half (RGBA16f)
++ 64 bpp uint (RGBA16 / Short) [not working for android.]
++ 32 bpp rgba (RGBA8)
++ 32 bpp bgra (RGBA8)
++ 32 bpp gbr -> (RGBA8)
 
 # Supported platforms
 ## Windows

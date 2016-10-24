@@ -434,11 +434,22 @@ namespace SupraHot
 			else if (header.Format.fourCC == Utils::DDSUtil::D3DFMT_A16B16G16R16)
 			{
 				// RGBA
+				// Todo: this does not work on android. 
+				// todo: figure this out.
+#ifdef PLATFORM_ANDROID
+				Format = GL_RGBA_INTEGER;
+				InternalFormat = GL_RGBA16UI;
+				Type = GL_UNSIGNED_SHORT;
+				formatSize = sizeof(uint16);
+				formatComponents = 4;
+#else
 				Format = GL_RGBA;
 				InternalFormat = GL_RGBA16;
 				Type = GL_UNSIGNED_SHORT;
 				formatSize = sizeof(uint16);
 				formatComponents = 4;
+#endif
+
 			}
 			else if ((header.Format.fourCC == Utils::DDSUtil::D3DFMT_DX10) && (header10.Format != Utils::DDSUtil::DXGI_FORMAT_UNKNOWN))
 			{
