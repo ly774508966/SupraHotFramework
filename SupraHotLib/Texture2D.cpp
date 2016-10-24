@@ -323,10 +323,9 @@ namespace SupraHot
 				SHF_PRINTF("is header10 \n");
 			}
 
-			uint32 formatColorComponents;
+			uint32 formatComponents = 1;
 			uint32 formatSize = 0;
 			bool isGL_BGRA = false;
-			SHF_PRINTF("Loading DDS with %d bpp \n", header.Format.bpp);
 
 			if ((header.Format.flags 
 				& (Utils::DDSUtil::DDPF_RGB 
@@ -349,23 +348,21 @@ namespace SupraHot
 				case 24:
 				{
 					// Todo: figure this out.
-					formatColorComponents = 3;
+					formatComponents = 1;
 
-					if (header.Format.Mask.x == 0x0000FF &&
-						header.Format.Mask.y == 0x00FF00 &&
-						header.Format.Mask.z == 0xFF0000)
+					if (header.Format.Mask.x == 0x000000FF &&
+						header.Format.Mask.y == 0x0000FF00 &&
+						header.Format.Mask.z == 0x00FF0000)
 					{
 						// RGB
 						Format = GL_RGB;
 						InternalFormat = GL_RGB8;
-						formatSize = (sizeof(uint32) / 4) * formatColorComponents;
+						formatSize = sizeof(uint32);
 					}
 					break;
 				}
 				case 32:
 				{
-					formatColorComponents = 4;
-
 					if (header.Format.Mask.x == 0x000000FF &&
 						header.Format.Mask.y == 0x0000FF00 &&
 						header.Format.Mask.z == 0x00FF0000 &&
@@ -374,7 +371,8 @@ namespace SupraHot
 						// RGB
 						Format = GL_RGBA;
 						InternalFormat = GL_RGBA8;
-						formatSize = sizeof(uint32);
+						formatSize = sizeof(uint8);
+						formatComponents = 4;
 					}
 					else if(header.Format.Mask.x == 0x00FF0000 &&
 							header.Format.Mask.y == 0x0000FF00 &&
@@ -385,7 +383,8 @@ namespace SupraHot
 						Format = GL_RGBA;
 						InternalFormat = GL_RGBA8;
 						isGL_BGRA = true;
-						formatSize = sizeof(uint32);
+						formatSize = sizeof(uint8);
+						formatComponents = 4;
 					}
 					else if(header.Format.Mask.x == 0x00FF0000 &&
 							header.Format.Mask.y == 0x0000FF00 &&
@@ -396,7 +395,8 @@ namespace SupraHot
 						Format = GL_RGBA;
 						InternalFormat = GL_RGBA8;
 						isGL_BGRA = true;
-						formatSize = sizeof(uint32);
+						formatSize = sizeof(uint8);
+						formatComponents = 4;
 					}
 					else if(header.Format.Mask.x == 0x000000FF &&
 							header.Format.Mask.y == 0x0000FF00 &&
@@ -406,21 +406,47 @@ namespace SupraHot
 						// RGBA
 						Format = GL_RGBA;
 						InternalFormat = GL_RGBA8;
-						formatSize = sizeof(uint32);
+						formatSize = sizeof(uint8);
+						formatComponents = 4;
 					}
 				}
 				break;
 				}
+			}
+			else if (header.Format.fourCC == Utils::DDSUtil::D3DFMT_A32B32G32R32F)
+			{
+				// RGBA
+				Format = GL_RGBA;
+				InternalFormat = GL_RGBA32F;
+				Type = GL_FLOAT;
+				formatSize = sizeof(float);
+				formatComponents = 4;
+			}
+			else if (header.Format.fourCC == Utils::DDSUtil::D3DFMT_A16B16G16R16F)
+			{
+				// RGBA
+				Format = GL_RGBA;
+				InternalFormat = GL_RGBA16F;
+				Type = GL_HALF_FLOAT;
+				formatSize = sizeof(float) / 2;
+				formatComponents = 4;
+			}
+			else if (header.Format.fourCC == Utils::DDSUtil::D3DFMT_A16B16G16R16)
+			{
+				// RGBA
+				Format = GL_RGBA;
+				InternalFormat = GL_RGBA16;
+				Type = GL_UNSIGNED_SHORT;
+				formatSize = sizeof(uint16);
+				formatComponents = 4;
 			}
 			else if ((header.Format.fourCC == Utils::DDSUtil::D3DFMT_DX10) && (header10.Format != Utils::DDSUtil::DXGI_FORMAT_UNKNOWN))
 			{
 				SHF_PRINTF("Find the right format for the header10 \n");
 
 				// here we need to set the right decompression shit to load the files.
-
 				// todo: load compressed files.....
 			}
-
 
 			uint32 mipMapCount = (header.Flags & Utils::DDSUtil::ddsFlag::DDSD_MIPMAPCOUNT) ? header.MipMapLevels : 1;
 			uint32 faceCount = (header.CubemapFlags & Utils::DDSUtil::ddsCubemapflag::DDSCAPS2_CUBEMAP) ? 6 : 1;
@@ -435,7 +461,7 @@ namespace SupraHot
 				uint32 divider = static_cast<uint32>(pow(2, mip));
 				uint32 targetWidth = header.Width / divider;
 				uint32 targetHeight = header.Height / divider;
-				bufferElements = (targetWidth * targetHeight * faceCount);
+				bufferElements = (targetWidth * targetHeight * faceCount) * formatComponents;
 				bufferSize = bufferElements * formatSize;
 
 				void* buffer = new void*[bufferElements];
