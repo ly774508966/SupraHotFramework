@@ -12,7 +12,9 @@ Otherwise it won't find the library on app start
 + 64 bpp uint (RGBA16 / Short) [not working for android.]
 + 32 bpp rgba (RGBA8)
 + 32 bpp bgra (RGBA8)
-+ 32 bpp gbr -> (RGBA8)
++ 32 bpp bgr -> (RGBA8)
+
+## Compressed dds files won't be supported
 
 # Supported platforms
 ## Windows

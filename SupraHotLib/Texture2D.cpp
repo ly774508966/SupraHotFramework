@@ -320,7 +320,6 @@ namespace SupraHot
 			{
 				std::memcpy(&header10, Data + Offset, sizeof(header10));
 				Offset += sizeof(Utils::DDSUtil::ddsHeader10);
-				SHF_PRINTF("is header10 \n");
 			}
 
 			uint32 formatComponents = 1;
@@ -453,10 +452,30 @@ namespace SupraHot
 			}
 			else if ((header.Format.fourCC == Utils::DDSUtil::D3DFMT_DX10) && (header10.Format != Utils::DDSUtil::DXGI_FORMAT_UNKNOWN))
 			{
-				SHF_PRINTF("Find the right format for the header10 \n");
+				SHF_PRINTF("header.Format.fourCC = %d \n", header.Format.fourCC);
+				SHF_PRINTF("header10.fourCC = %d \n", header10.Format);
 
-				// here we need to set the right decompression shit to load the files.
-				// todo: load compressed files.....
+/*#ifndef PLATFORM_ANDROID
+				if (header.Format.fourCC & Utils::DDSUtil::D3DFMT_DXT1)
+				{
+					Format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+					InternalFormat = GL_RGBA8;
+					formatSize = sizeof(uint8);
+					formatComponents = 4;
+				}
+				else if (header.Format.fourCC & Utils::DDSUtil::D3DFMT_DXT3)
+				{
+					Format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+					formatComponents = 4;
+					SHF_PRINTF("D3DFMT_DXT3 \n");
+				}
+				else if (header.Format.fourCC & Utils::DDSUtil::D3DFMT_DXT5)
+				{
+					Format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+					formatComponents = 4;
+					SHF_PRINTF("D3DFMT_DXT5 \n");
+				}
+#endif*/
 			}
 
 			uint32 mipMapCount = (header.Flags & Utils::DDSUtil::ddsFlag::DDSD_MIPMAPCOUNT) ? header.MipMapLevels : 1;
