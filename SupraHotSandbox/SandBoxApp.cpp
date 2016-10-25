@@ -148,12 +148,12 @@ void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
 void SandBoxApp::Render()
 {
 	FBO->Attach();
-	FBO->SetRenderTarget(FBO->GetColorRenderTarget());
+	//FBO->SetRenderTarget(FBO->GetColorRenderTarget());
 
-	EnvBox->Render(FlyCamera, FBOShader);
+	//EnvBox->Render(FlyCamera, FBOShader);
 
 	FBO->Detach();
-	FBO->SetReadSource(FBO->GetColorRenderTarget());
+	//FBO->SetReadSource(FBO->GetColorRenderTarget());
 	FBO->RenderToScreen(FBOShader);
 }
 

@@ -26,6 +26,8 @@ namespace SupraHot
 			void SetEnvironmentMap(TextureCube* enviromentMap);
 			TextureCube* GetEnvironmentMap();
 			void Render(Camera* camera, Shader* shader);
+
+			void Init();
 			void Destroy();
 		};
 	};
