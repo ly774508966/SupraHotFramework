@@ -1,13 +1,19 @@
 #pragma once
 #include <App.h>
 #include <FrameBufferObject.h>
+#include <SkyBox.h>
 
 class SandBoxApp : public SupraHot::App
 {
 private:
 	SupraHot::FrameBufferObject* FBO;
 	SupraHot::Texture2D* Texture;
+
 	SupraHot::Shader* FBOShader;
+	SupraHot::Shader* SkyBoxShader;
+
+	SupraHot::SkyBox* EnvBox;
+	SupraHot::Camera* FlyCamera;
 public:
 	SandBoxApp();
 	~SandBoxApp();

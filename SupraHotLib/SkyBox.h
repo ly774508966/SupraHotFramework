@@ -1,5 +1,7 @@
 #pragma once
 #include "Platform.h"
+#include "Vec3.h"
+#include "Quat4.h"
 
 namespace SupraHot
 {
@@ -13,6 +15,10 @@ namespace SupraHot
 		{
 		private:
 			TextureCube* EnviromentMap = nullptr;
+			Math::Vec3 Position;
+			Math::Quat4 Rotation;
+
+			void Render();
 		public:
 			SkyBox();
 			~SkyBox();

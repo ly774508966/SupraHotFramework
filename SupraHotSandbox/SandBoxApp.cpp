@@ -19,11 +19,14 @@
 #ifdef PLATFORM_EMSCRIPTEN
 #include "WindowEmscripten.h"
 #endif
+
 #include <MeshDataLoader.h>
 #include <LuaVM.h>
 #include <SHFMBinaryLoader.h>
 #include "Platform.h"
 #include <TextureCube.h>
+#include <SkyBox.h>
+
 using namespace SupraHot;
 
 SandBoxApp::SandBoxApp()
@@ -61,9 +64,14 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 	// Load Shaders
 	FBOShader = new SupraHot::Shader();
+	SkyBoxShader = new SupraHot::Shader();
+
 #ifdef PLATFORM_WINDOWS
 	FBOShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/fbo.vs");
 	FBOShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/fbo.fs");
+	
+	SkyBoxShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/skybox.vs");
+	SkyBoxShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/skybox.fs");
 #endif
 
 #ifdef PLATFORM_ANDROID
@@ -73,6 +81,10 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 	FBOShader->CompileShader();
 	FBO->SetPixelSize(FBOShader);
+
+	SkyBoxShader->CompileShader();
+
+	SHF_PRINTF("SHADER COMPILED \n");
 
 	// Try loading a lua script and run it.
 	SupraHot::Scripting::LuaVM::GetInstance()->RunFile("Scripts/test.lua");
@@ -120,17 +132,28 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 					  "Textures/skyboxtest/py.png", "Textures/skyboxtest/ny.png",
 					  "Textures/skyboxtest/pz.png", "Textures/skyboxtest/nz.png");
 
+	EnvBox = new SkyBox();
+	EnvBox->SetEnvironmentMap(textureCube);
+	
+	FlyCamera = new Camera(50.0f, 0.01f, 1000.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
 }
 
 void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
 {
 	FBO->Resize(width, height);
+	FlyCamera->aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+	SHF_PRINTF("Camera aspect : %f \n", FlyCamera->aspectRatio);
 }
 
 void SandBoxApp::Render()
 {
 	FBO->Attach();
+	FBO->SetRenderTarget(FBO->GetColorRenderTarget());
+
+	EnvBox->Render(FlyCamera, FBOShader);
+
 	FBO->Detach();
+	FBO->SetReadSource(FBO->GetColorRenderTarget());
 	FBO->RenderToScreen(FBOShader);
 }
 

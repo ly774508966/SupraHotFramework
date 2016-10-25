@@ -1,6 +1,7 @@
 #include "Shader.h"
 #include "FileReader.h"
 #include "Texture2D.h"
+#include "TextureCube.h"
 #include <iostream>
 
 namespace SupraHot
@@ -40,6 +41,11 @@ namespace SupraHot
 		void Shader::Attach()
 		{
 			glUseProgram(ShaderProgrammID);
+		}
+
+		void Shader::Detach()
+		{
+			glUseProgram(0);
 		}
 
 		void Shader::Destroy()
@@ -191,6 +197,13 @@ namespace SupraHot
 		{
 			glActiveTexture(slot);
 			glBindTexture(GL_TEXTURE_2D, texture2d->GetID());
+			SetInteger(location, (slot - GL_TEXTURE0));
+		}
+
+		void Shader::SetTextureCube(int location, TextureCube* textureCube, int slot)
+		{
+			glActiveTexture(slot);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, textureCube->GetID());
 			SetInteger(location, (slot - GL_TEXTURE0));
 		}
 

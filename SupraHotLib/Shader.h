@@ -9,6 +9,7 @@ namespace SupraHot
 	using namespace Math;
 	namespace Graphics
 	{
+		class TextureCube;
 		class Texture2D;
 
 		class Shader
@@ -41,6 +42,7 @@ namespace SupraHot
 			void SetName(std::string name);
 
 			void Attach();
+			void Detach();
 			void Destroy();
 			bool LoadShaderFromFile(ShaderType type, std::string pathToFile);
 			bool CompileShader();
@@ -53,6 +55,7 @@ namespace SupraHot
 			void SetMat3(int location, const Mat4& m);
 			void SetMat4(int location, const Mat4& m);
 			void SetTexture2D(int location, Texture2D* texture2d, int slot);
+			void SetTextureCube(int location, TextureCube* texture2d, int slot);
 
 			// GL specific
 			uint32 GetShaderID();

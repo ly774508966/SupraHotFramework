@@ -19,17 +19,17 @@ namespace SupraHot
 
 		void Camera::ResetMatrices()
 		{
-			this->viewMatrix.Identity();
-			this->projectionMatrix.Identity();
+			this->ViewMatrix.Identity();
+			this->ProjectionMatrix.Identity();
 		}
 
 		void Camera::ApplyTranslation()
 		{
 			Mat4 translationMatrix;
-			translationMatrix.SetTranslationVector(-position);
+			translationMatrix.SetTranslationVector(-Position);
 
-			this->viewMatrix = translationMatrix * this->viewMatrix;
-			this->projectionMatrix = this->projectionMatrix.ProjectPerspective(fieldOfView, aspectRatio, zNear, zFar);
+			this->ViewMatrix = translationMatrix * this->ViewMatrix;
+			this->ProjectionMatrix = this->ProjectionMatrix.ProjectPerspective(fieldOfView, aspectRatio, zNear, zFar);
 		}
 
 		void Camera::ApplyRotation()
@@ -40,14 +40,14 @@ namespace SupraHot
 
 			Mat4 rotationMatrix;
 			rotationMatrix = rotationMatrix.ToRotationMatrix(totalRotation);
-			this->viewMatrix = rotationMatrix * this->viewMatrix;
+			this->ViewMatrix = rotationMatrix * this->ViewMatrix;
 
 			Quat4 xRot = Quat4(Vec3(1, 0, 0), -pitch);
 			Quat4 yRot = Quat4(Vec3(0, 1, 0), -yaw);
 			Quat4 totRot = totalRotation.Inversed();
-			forward = (totRot * Vec3(0, 0, -1)).normalized();
-			right = (totRot * Vec3(1, 0, 0)).normalized();
-			up = (totRot * Vec3(0, 1, 0)).normalized();
+			Forward = (totRot * Vec3(0, 0, -1)).normalized();
+			Right = (totRot * Vec3(1, 0, 0)).normalized();
+			Up = (totRot * Vec3(0, 1, 0)).normalized();
 		}
 
 		/*void Camera::UpdateInput(Controls* controls, float deltaTime)
@@ -105,62 +105,82 @@ namespace SupraHot
 		void Camera::moveDirection(float direction, float delta)
 		{
 			float rad = ToRadians((yaw + direction));
-			position.x -= sin(rad) * moveSpeed * delta;
-			position.z -= cos(rad) * moveSpeed * delta;
+			Position.x -= sin(rad) * moveSpeed * delta;
+			Position.z -= cos(rad) * moveSpeed * delta;
 		}
 
 		void Camera::moveYAxis(float direction, float delta)
 		{
 			float rad = ToRadians((pitch + direction));
-			position.y += sin(rad) * moveSpeed * delta;
+			Position.y += sin(rad) * moveSpeed * delta;
 		}
 
 
-		Mat4* Camera::getViewMatrix()
+		Mat4* Camera::GetViewMatrix()
 		{
-			return &this->viewMatrix;
+			return &this->ViewMatrix;
 		}
 
-		Mat4* Camera::getProjectionMatrix()
+		Mat4* Camera::GetProjectionMatrix()
 		{
-			return &this->projectionMatrix;
+			return &this->ProjectionMatrix;
 		}
 
-		Vec3 Camera::getForwardDirection()
+		Mat4* Camera::GetViewProjectionMatrix()
 		{
-			return forward;
+			return &this->ViewProjectionMatrix;
 		}
 
-		Vec3 Camera::getBackwardDirection()
+		Mat4* Camera::GetInverseProjectionViewMatrix()
 		{
-			return -forward;
+			return &this->InverseViewProjectionMatrix;
 		}
 
-		Vec3 Camera::getRightDirection()
+		void Camera::CreateViewProjectionMatrix()
 		{
-			return right;
+			ViewProjectionMatrix = ProjectionMatrix * ViewMatrix;
 		}
 
-		Vec3 Camera::getUpDirection()
+		void Camera::CreateInverseViewProjectionMatrix()
 		{
-			return up;
+			InverseViewProjectionMatrix = ViewProjectionMatrix.Inversed();
 		}
 
-		Vec3 Camera::getDownDirection()
+		Vec3 Camera::GetForwardDirection()
 		{
-			return -up;
+			return Forward;
 		}
 
-		Vec3 Camera::getLeftDirection()
+		Vec3 Camera::GetBackwardDirection()
 		{
-			return -right;
+			return -Forward;
+		}
+
+		Vec3 Camera::GetRightDirection()
+		{
+			return Right;
+		}
+
+		Vec3 Camera::GetUpDirection()
+		{
+			return Up;
+		}
+
+		Vec3 Camera::GetDownDirection()
+		{
+			return -Up;
+		}
+
+		Vec3 Camera::GetLeftDirection()
+		{
+			return -Right;
 		}
 
 		void Camera::moveFromLook(float dx, float dy, float dz, float delta)
 		{
-			position.z += (dx * (float)cos(ToRadians(yaw - 90.0f)) + dz * cos(ToRadians(yaw)) * moveSpeed) * delta;
-			position.x -= (dx * (float)sin(ToRadians(yaw - 90.0f)) + dz * sin(ToRadians(yaw)) * moveSpeed) * delta;
-			position.y += (dy * (float)sin(ToRadians(pitch - 90.0f)) + dz * sin(ToRadians(pitch)) * moveSpeed) * delta;
+			Position.z += (dx * (float)cos(ToRadians(yaw - 90.0f)) + dz * cos(ToRadians(yaw)) * moveSpeed) * delta;
+			Position.x -= (dx * (float)sin(ToRadians(yaw - 90.0f)) + dz * sin(ToRadians(yaw)) * moveSpeed) * delta;
+			Position.y += (dy * (float)sin(ToRadians(pitch - 90.0f)) + dz * sin(ToRadians(pitch)) * moveSpeed) * delta;
 		}
 
 	};
