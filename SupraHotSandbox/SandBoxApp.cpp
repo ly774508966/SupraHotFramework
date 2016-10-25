@@ -23,6 +23,7 @@
 #include <LuaVM.h>
 #include <SHFMBinaryLoader.h>
 #include "Platform.h"
+#include <TextureCube.h>
 using namespace SupraHot;
 
 SandBoxApp::SandBoxApp()
@@ -112,6 +113,13 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	//ddsTexture->Load("Textures/test/lion_bgr.dds");
 	//ddsTexture.Load("Textures/test/GraceCathedral.dds");
 	FBO->SetReadSource(ddsTexture);
+
+
+	TextureCube* textureCube = new TextureCube("CubeTexture Test");
+	textureCube->Load("Textures/skyboxtest/px.png", "Textures/skyboxtest/nx.png",
+					  "Textures/skyboxtest/py.png", "Textures/skyboxtest/ny.png",
+					  "Textures/skyboxtest/pz.png", "Textures/skyboxtest/nz.png");
+
 }
 
 void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)

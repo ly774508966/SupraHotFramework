@@ -11,12 +11,12 @@ namespace SupraHot
 		class Material
 		{
 		private:
-			Texture2D* AlbedoMap;
-			Texture2D* NormalMap;
-			Texture2D* RoughnessMap;
-			Texture2D* MetalnessMap;
-			Texture2D* SpecularMap;
-			Texture2D* ComboMap;
+			Texture2D* AlbedoMap = nullptr;
+			Texture2D* NormalMap = nullptr;
+			Texture2D* RoughnessMap = nullptr;
+			Texture2D* MetalnessMap = nullptr;
+			Texture2D* SpecularMap = nullptr;
+			Texture2D* ComboMap = nullptr;
 
 		public:
 			std::string Name;

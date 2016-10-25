@@ -452,10 +452,10 @@ namespace SupraHot
 			}
 			else if ((header.Format.fourCC == Utils::DDSUtil::D3DFMT_DX10) && (header10.Format != Utils::DDSUtil::DXGI_FORMAT_UNKNOWN))
 			{
+/*#ifndef PLATFORM_ANDROID
 				SHF_PRINTF("header.Format.fourCC = %d \n", header.Format.fourCC);
 				SHF_PRINTF("header10.fourCC = %d \n", header10.Format);
 
-/*#ifndef PLATFORM_ANDROID
 				if (header.Format.fourCC & Utils::DDSUtil::D3DFMT_DXT1)
 				{
 					Format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;

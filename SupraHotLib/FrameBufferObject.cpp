@@ -191,11 +191,13 @@ namespace SupraHot
 			if (ColorRenderTarget != nullptr)
 			{
 				ColorRenderTarget->Destroy();
+				delete ColorRenderTarget;
 			}
 
 			if (DepthRenderTarget != nullptr)
 			{
 				DepthRenderTarget->Destroy();
+				delete DepthRenderTarget;
 			}
 		}
 

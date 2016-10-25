@@ -1,6 +1,7 @@
 #include "TextureCube.h"
 #include "StringUtil.h"
 #include "stb_image.h"
+#include "FileSystem.h"
 
 namespace SupraHot
 {
@@ -222,7 +223,10 @@ namespace SupraHot
 
 				/* load texture with stb_image */
 				int width, height, n;
-				unsigned char * data = stbi_load(path.c_str(), &width, &height, &n, 0);
+
+				FILE* file = Utils::FileSystem::GetInstance()->GetFile("", path, "rb");
+				unsigned char * data = stbi_load_from_file(file, &width, &height, &n, 0);
+				std::fclose(file);
 
 				if (!data)
 				{
@@ -249,6 +253,8 @@ namespace SupraHot
 							}
 						}
 
+						/*
+						// todo: rework this
 						// flip on x axis
 						unsigned char * data2 = new unsigned char[width * height * n];
 						for (int y = 0; y < height; y++)
@@ -265,10 +271,11 @@ namespace SupraHot
 						}
 
 						data = data2;
+						*/
 					}
 
 					/* bind texture to buffer */
-					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &data[0]);
+					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, 0, InternalFormat, width, height, 0, Format, Type, &data[0]);
 
 #ifdef PLATFORM_WINDOWS
 					glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
