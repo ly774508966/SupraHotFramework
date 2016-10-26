@@ -26,6 +26,7 @@
 #include "Platform.h"
 #include <TextureCube.h>
 #include <SkyBox.h>
+#include <Controls.h>
 
 using namespace SupraHot;
 
@@ -60,7 +61,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	Texture = new SupraHot::Texture2D("Pepe Texture");
 	Texture->Load("Images/test.png");
 
-	FBO->SetReadSource(Texture);
+//	FBO->SetReadSource(Texture);
 
 	// Load Shaders
 	FBOShader = new SupraHot::Shader();
@@ -128,38 +129,53 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 
 	TextureCube* textureCube = new TextureCube("CubeTexture Test");
-	textureCube->Load("Textures/skyboxtest/px.png", "Textures/skyboxtest/nx.png",
-					  "Textures/skyboxtest/py.png", "Textures/skyboxtest/ny.png",
-					  "Textures/skyboxtest/pz.png", "Textures/skyboxtest/nz.png");
+	textureCube->Load("Images/test.png", "Images/test.png",
+					  "Images/test.png", "Images/test.png",
+					  "Images/test.png", "Images/test.png");
 
 	EnvBox = new SkyBox();
 	EnvBox->SetEnvironmentMap(textureCube);
+	EnvBox->Init();
 	
-	FlyCamera = new Camera(50.0f, 0.01f, 1000.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
+	FlyCamera = new Camera(50.0f, 0.25f, 10000.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
 }
 
 void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
 {
 	FBO->Resize(width, height);
 	FlyCamera->aspectRatio = static_cast<float>(width) / static_cast<float>(height);
-	SHF_PRINTF("Camera aspect : %f \n", FlyCamera->aspectRatio);
 }
 
 void SandBoxApp::Render()
 {
-	FBO->Attach();
-	//FBO->SetRenderTarget(FBO->GetColorRenderTarget());
+	glDisable(GL_CULL_FACE);
 
-	//EnvBox->Render(FlyCamera, FBOShader);
+	FBO->Attach();
+
+	glClearColor(0.2, 0, 0, 1);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	EnvBox->Render(FlyCamera, SkyBoxShader);
 
 	FBO->Detach();
-	//FBO->SetReadSource(FBO->GetColorRenderTarget());
+	FBO->SetReadSource(FBO->GetColorRenderTarget());
 	FBO->RenderToScreen(FBOShader);
 }
 
 void SandBoxApp::Update(float deltaTime)
 {
 	window->SetClearColor(0.7f, 0.3f, 0.7f, 1.0f);
+	Controls::update(window);
+
+	if (Controls::isKeyDown(GLFW_KEY_W))
+	{
+		FlyCamera->pitch += 0.05f;
+	} 
+	else if (Controls::isKeyDown(GLFW_KEY_S))
+	{
+		FlyCamera->pitch -= 0.05f;
+	}
+
 }
 
 void SandBoxApp::LateUpdate(float deltaTime)

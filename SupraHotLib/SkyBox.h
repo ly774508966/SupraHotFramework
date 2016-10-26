@@ -18,7 +18,11 @@ namespace SupraHot
 			Math::Vec3 Position;
 			Math::Quat4 Rotation;
 
-			void Render();
+			uint32 VAOHandle = 0;
+			uint32 IndexVBOHandle = 0;
+			uint32 VertexVBOHandle = 0;
+
+			void Render(Shader* shader);
 		public:
 			SkyBox();
 			~SkyBox();

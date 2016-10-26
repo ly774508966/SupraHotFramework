@@ -126,6 +126,13 @@ namespace SupraHot
 			
 			FBOQuad = new FullScreenQuad();
 			FBOQuad->Init();
+
+			// Generate Framebuffer
+			glGenFramebuffers(1, &FramebufferID);
+			glBindFramebuffer(GL_FRAMEBUFFER, FramebufferID);
+			AttachRenderTargets();
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			CheckError();
 		}
 
 		void FrameBufferObject::Resize(uint32 width, uint32 height)
@@ -143,6 +150,8 @@ namespace SupraHot
 		void FrameBufferObject::Attach()
 		{
 			glBindFramebuffer(GL_FRAMEBUFFER, FramebufferID);
+			AttachRenderTargets();
+
 			glClearColor(0, 0, 0, 1);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		}

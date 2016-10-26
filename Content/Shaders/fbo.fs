@@ -9,5 +9,5 @@ out vec4 FragColor;
 void main()
 {
 	vec2 pos = vec2(gl_FragCoord) * pixelsize;
-	FragColor = texture(in_texture, pos);
+	FragColor = texture(in_texture, outUV);
 }

@@ -299,7 +299,7 @@ namespace SupraHot
 					/* free stbi buffer */
 					stbi_image_free(data);
 #if DEVELOPMENT == 1
-					printf("Loaded Texture2DGL: %s [%d X %d (%d Channels)] #%d \n", path.c_str(), width, height, n, TextureID);
+					printf("Loaded TextureCube Part: %s [%d X %d (%d Channels)] #%d \n", path.c_str(), width, height, n, TextureID);
 #endif
 				}
 			}

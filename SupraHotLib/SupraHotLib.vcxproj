@@ -276,6 +276,7 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="Controls.h" />
     <ClInclude Include="DDSUtil.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Face.h" />
@@ -341,6 +342,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="Controls.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Face.cpp" />
     <ClCompile Include="FileReader.cpp" />

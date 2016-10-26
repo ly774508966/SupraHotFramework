@@ -29,7 +29,7 @@ namespace SupraHot
 			translationMatrix.SetTranslationVector(-Position);
 
 			this->ViewMatrix = translationMatrix * this->ViewMatrix;
-			this->ProjectionMatrix = this->ProjectionMatrix.ProjectPerspective(fieldOfView, aspectRatio, zNear, zFar);
+			this->ProjectionMatrix = this->ProjectionMatrix.ProjectFrustum(fieldOfView, aspectRatio, zNear, zFar);
 		}
 
 		void Camera::ApplyRotation()

@@ -399,7 +399,7 @@ namespace SupraHot
 					{
 						// Load albedo map
 						Texture2D* texture = new Texture2D();
-						texture->Load(modelMaterial.AlbedoMapPath);
+						//texture->Load(modelMaterial.AlbedoMapPath);
 						material->SetAlbedoMap(texture);
 					}
 
@@ -407,7 +407,7 @@ namespace SupraHot
 					{
 						// Load normal map
 						Texture2D* texture = new Texture2D();
-						texture->Load(modelMaterial.NormalMapPath);
+						//texture->Load(modelMaterial.NormalMapPath);
 						material->SetNormalMap(texture);
 					}
 
@@ -415,7 +415,7 @@ namespace SupraHot
 					{
 						// Load roughness map
 						Texture2D* texture = new Texture2D();
-						texture->Load(modelMaterial.SpecularMapPath);
+						//texture->Load(modelMaterial.SpecularMapPath);
 						material->SetRoughnessMap(texture);
 					}
 
@@ -423,7 +423,7 @@ namespace SupraHot
 					{
 						// Load metalness map
 						Texture2D* texture = new Texture2D();
-						texture->Load(modelMaterial.ShininessReflectionMapPath);
+						//texture->Load(modelMaterial.ShininessReflectionMapPath);
 						material->SetMetalnessMap(texture);
 					}
 

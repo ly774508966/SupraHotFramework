@@ -47,8 +47,24 @@ namespace SupraHot
 			glBindBuffer(GL_ARRAY_BUFFER, VertexHandle);
 			glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), &vertices[0], GL_STATIC_DRAW);
 
+#if DEVELOPMENT == 1
+			int err = glGetError();
+			if (err != 0)
+			{
+				SHF_PRINTF("Error %d - - - - - - -  \n", err);
+			}
+#endif
+
 			glBindBuffer(GL_ARRAY_BUFFER, UVHandle);
 			glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), &uvCoords[0], GL_STATIC_DRAW);
+
+#if DEVELOPMENT == 1
+			err = glGetError();
+			if (err != 0)
+			{
+				SHF_PRINTF("Error %d - - - - - - -  \n", err);
+			}
+#endif
 
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			glBindVertexArray(0);
@@ -94,6 +110,7 @@ namespace SupraHot
 			glBindVertexArray(GetVAOHandle());
 
 			/* Render Quad Setup */
+			shader->Attach();
 			int vertexpos = glGetAttribLocation(shader->GetShaderID(), "vertexpos");
 			int uvPos = glGetAttribLocation(shader->GetShaderID(), "uvPos");
 

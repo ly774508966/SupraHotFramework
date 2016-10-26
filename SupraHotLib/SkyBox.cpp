@@ -36,6 +36,7 @@ namespace SupraHot
 			camera->ResetMatrices();
 			camera->ApplyTranslation(); 
 			camera->ApplyRotation();
+
 			camera->CreateViewProjectionMatrix();
 			camera->CreateInverseViewProjectionMatrix();
 
@@ -45,11 +46,11 @@ namespace SupraHot
 			shader->Attach();
 
 			GLuint shaderProgramID = shader->GetShaderID();
-			shader->SetMat4(glGetUniformLocation(shaderProgramID, "ViewProjectionMatrix"), *camera->GetViewProjectionMatrix());
+			shader->SetMat4(glGetUniformLocation(shaderProgramID, "ViewProjectionMatrix"), (*camera->GetViewProjectionMatrix()));
 			shader->SetTextureCube(glGetUniformLocation(shaderProgramID, "CubeMap"), EnviromentMap, 0);
-
+			
 			// Draw the vertices
-			Render();
+			Render(shader);
 
 			shader->Detach();
 
@@ -57,17 +58,26 @@ namespace SupraHot
 			camera->Position = cameraPosition;
 		}
 
-		void SkyBox::Render()
+		void SkyBox::Render(Shader* shader)
 		{
 			// Bind GL buffers
+			glBindVertexArray(VAOHandle);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOHandle);
+
+			glUseProgram(shader->GetShaderID());
+			uint32 vertexAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexPosition");
+			glBindBuffer(GL_ARRAY_BUFFER, VertexVBOHandle);
+			glEnableVertexAttribArray(vertexAttrib);
+			glVertexAttribPointer(vertexAttrib, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
 			// DrawArray.
+			glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, nullptr);
+
+			glBindVertexArray(0);
 		}
 
 		void SkyBox::Init()
 		{
-			// Create box vertices
-
 			// Create Vertex list
 			std::vector<Vec3> Vertices;
 			std::vector<uint16> Indices;
@@ -123,7 +133,48 @@ namespace SupraHot
 			Indices.push_back(5);
 			Indices.push_back(6);
 
-			// Create GL buffers
+			Vertices.shrink_to_fit();
+			Indices.shrink_to_fit();
+
+			// Create GL buffer
+			glGenVertexArrays(1, &VAOHandle);
+			glBindVertexArray(VAOHandle);
+
+			glGenBuffers(1, &IndexVBOHandle);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOHandle);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, Indices.size() * sizeof(uint16), &Indices[0], GL_STATIC_DRAW);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+#if DEVELOPMENT == 1
+			int err = glGetError();
+			if (err != 0)
+			{
+				SHF_PRINTF("Error %d happened while generating IndexVBOHandle for skybox \n", err);
+			}
+#endif
+			std::vector<float> verts;
+			verts.shrink_to_fit();
+			for (uint32 i = 0; i < Vertices.size(); i++)
+			{
+				verts.push_back(Vertices.at(i).x);
+				verts.push_back(Vertices.at(i).y);
+				verts.push_back(Vertices.at(i).z);
+			}
+
+			glGenBuffers(1, &VertexVBOHandle);
+			glBindBuffer(GL_ARRAY_BUFFER, VertexVBOHandle);
+			glBufferData(GL_ARRAY_BUFFER, verts.size() * sizeof(float), &verts[0], GL_STATIC_DRAW);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+#if DEVELOPMENT == 1
+			err = glGetError();
+			if (err != 0)
+			{
+				SHF_PRINTF("Error %d happened while generating VertexVBOHandle for skybox \n", err);
+			}
+#endif
+			
+			glBindVertexArray(0);
 		}
 
 		void SkyBox::Destroy()
