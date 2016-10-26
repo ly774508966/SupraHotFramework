@@ -47,7 +47,7 @@ namespace SupraHot
 
 			GLuint shaderProgramID = shader->GetShaderID();
 			shader->SetMat4(glGetUniformLocation(shaderProgramID, "ViewProjectionMatrix"), (*camera->GetViewProjectionMatrix()));
-			shader->SetTextureCube(glGetUniformLocation(shaderProgramID, "CubeMap"), EnviromentMap, 0);
+			shader->SetTextureCube(glGetUniformLocation(shaderProgramID, "CubeMap"), EnviromentMap, GL_TEXTURE0);
 			
 			// Draw the vertices
 			Render(shader);

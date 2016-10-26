@@ -129,9 +129,14 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 
 	TextureCube* textureCube = new TextureCube("CubeTexture Test");
-	textureCube->Load("Images/test.png", "Images/test.png",
-					  "Images/test.png", "Images/test.png",
-					  "Images/test.png", "Images/test.png");
+	textureCube->SetWrapS(GL_CLAMP_TO_EDGE);
+	textureCube->SetWrapT(GL_CLAMP_TO_EDGE);
+	textureCube->SetFormat(GL_RGB);
+	textureCube->SetInternalFormat(GL_RGBA8);
+
+	textureCube->Load("Textures/skyboxtest/px.png", "Textures/skyboxtest/nx.png",
+					  "Textures/skyboxtest/py.png", "Textures/skyboxtest/ny.png",
+					  "Textures/skyboxtest/pz.png", "Textures/skyboxtest/nz.png");
 
 	EnvBox = new SkyBox();
 	EnvBox->SetEnvironmentMap(textureCube);
@@ -174,6 +179,15 @@ void SandBoxApp::Update(float deltaTime)
 	else if (Controls::isKeyDown(GLFW_KEY_S))
 	{
 		FlyCamera->pitch -= 0.05f;
+	}
+
+	if (Controls::isKeyDown(GLFW_KEY_A))
+	{
+		FlyCamera->yaw -= 0.05f;
+	}
+	else if (Controls::isKeyDown(GLFW_KEY_D))
+	{
+		FlyCamera->yaw += 0.05f;
 	}
 
 }

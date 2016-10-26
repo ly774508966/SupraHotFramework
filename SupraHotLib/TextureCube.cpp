@@ -236,7 +236,7 @@ namespace SupraHot
 				}
 				else
 				{
-					if (f == 2 || f == 3)
+					if (f == 3)
 					{
 						// flip on y axis
 						for (int j = 0; j * 2 < height; ++j)
@@ -274,18 +274,20 @@ namespace SupraHot
 						*/
 					}
 
-					/* bind texture to buffer */
-					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, 0, InternalFormat, width, height, 0, Format, Type, &data[0]);
+
 
 #ifdef PLATFORM_WINDOWS
-					glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+					//glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 #else
 					glEnable(GL_TEXTURE_CUBE_MAP);
 #endif
-					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, MagFilter);
+					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, MinFilter);
+					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, WrapS);
+					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, WrapT);
+
+					/* bind texture to buffer */
+					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, 0, InternalFormat, width, height, 0, Format, Type, &data[0]);
 
 #if DEVELOPMENT == 1
 					int err = glGetError();
