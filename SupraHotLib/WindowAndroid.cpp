@@ -23,10 +23,8 @@ namespace SupraHot
 			this->Width = width;
 			this->Height = height;
 
-			printf("window resized to: %d x %d \n", width, height);
-
-			// Note: This should be called directly from the Java-Class
-			App::GetMainApp()->Resize(width, height);
+			glViewport(0, 0, width, height);
+			SHF_PRINTF("window resized to: %d x %d \n", width, height);
 		}
 
 		bool WindowAndroid::ShouldClose()

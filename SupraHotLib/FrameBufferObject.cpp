@@ -164,6 +164,8 @@ namespace SupraHot
 
 		void FrameBufferObject::RenderToScreen(Shader* fboToScreenShader)
 		{
+			fboToScreenShader->Attach();
+
 			/* unbind framebuffer and use final program */
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			glClear(GL_COLOR_BUFFER_BIT);
@@ -172,12 +174,10 @@ namespace SupraHot
 			projectionMat = projectionMat.ProjectOrthographic(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0);
 
 			/* Bind Textures, G-Buffers */
-			uint32 shaderProgram = static_cast<Shader*>(fboToScreenShader)->GetShaderID();
-			glUseProgram(shaderProgram);
-
+			uint32 shaderProgram = fboToScreenShader->GetShaderID();
+		
 			SetPixelSize(fboToScreenShader);
 			fboToScreenShader->SetMat4(glGetUniformLocation(shaderProgram, "modelViewProjectionMatrix"), projectionMat);
-			//glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "modelViewProjectionMatrix"), 1, GL_FALSE, &projectionMat.m[0][0]);
 
 			glDisable(GL_DEPTH_TEST);
 			glDisable(GL_CULL_FACE);
@@ -240,6 +240,16 @@ namespace SupraHot
 		void FrameBufferObject::SetReadSource(Texture2D* readSource)
 		{
 			this->ReadSource = readSource;
+		}
+
+		uint32 FrameBufferObject::GetWidth()
+		{
+			return Width;
+		}
+
+		uint32 FrameBufferObject::GetHeight()
+		{
+			return Height;
 		}
 	};
 };

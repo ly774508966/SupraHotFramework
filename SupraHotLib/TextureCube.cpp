@@ -197,7 +197,7 @@ namespace SupraHot
 		
 		void TextureCube::LoadDDS(std::string path)
 		{
-			// 
+			// TODO: Load dds cube map
 		}
 
 		void TextureCube::Load(std::string left, std::string right, std::string top, std::string bottom, std::string front, std::string back)
@@ -231,7 +231,7 @@ namespace SupraHot
 				if (!data)
 				{
 #if DEVELOPMENT == 1
-					printf("Error, while loading texture: %s\n", stbi_failure_reason());
+					SHF_PRINTF("Error, while loading texture: %s\n", stbi_failure_reason());
 #endif
 				}
 				else
@@ -294,14 +294,14 @@ namespace SupraHot
 					if (err != 0)
 					{
 
-						printf("Error %d happened while loading Texture 2D \n", err);
+						SHF_PRINTF("Error %d happened while loading Texture 2D \n", err);
 					}
 #endif
 
 					/* free stbi buffer */
 					stbi_image_free(data);
 #if DEVELOPMENT == 1
-					printf("Loaded TextureCube Part: %s [%d X %d (%d Channels)] #%d \n", path.c_str(), width, height, n, TextureID);
+					SHF_PRINTF("Loaded TextureCube Part: %s [%d X %d (%d Channels)] #%d \n", path.c_str(), width, height, n, TextureID);
 #endif
 				}
 			}
@@ -313,12 +313,12 @@ namespace SupraHot
 			int err = glGetError();
 			if (err != 0)
 			{
-				printf("error: %d ,failed to create mipmaps for cube_map \n", err);
+				SHF_PRINTF("error: %d ,failed to create mipmaps for cube_map \n", err);
 			}
 #endif
 
 #if DEVELOPMENT == 1
-			printf("Loaded CubeMap with mipmaps \n");
+			SHF_PRINTF("Loaded CubeMap with mipmaps \n");
 #endif
 			glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 		}

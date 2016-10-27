@@ -111,16 +111,16 @@ namespace SupraHot
 
 			/* Render Quad Setup */
 			shader->Attach();
-			int vertexpos = glGetAttribLocation(shader->GetShaderID(), "vertexpos");
-			int uvPos = glGetAttribLocation(shader->GetShaderID(), "uvPos");
+			uint32 vertexPosition = glGetAttribLocation(shader->GetShaderID(), "VertexPosition");
+			uint32 uvCoord = glGetAttribLocation(shader->GetShaderID(), "UVCoord");
 
 			glBindBuffer(GL_ARRAY_BUFFER, GetVertexHandle());
-			glEnableVertexAttribArray(vertexpos);
-			glVertexAttribPointer(vertexpos, 2, GL_FLOAT, GL_FALSE, 0, static_cast<void*>(0));
+			glEnableVertexAttribArray(vertexPosition);
+			glVertexAttribPointer(vertexPosition, 2, GL_FLOAT, GL_FALSE, 0, static_cast<void*>(0));
 
 			glBindBuffer(GL_ARRAY_BUFFER, GetUVHandle());
-			glEnableVertexAttribArray(uvPos);
-			glVertexAttribPointer(uvPos, 2, GL_FLOAT, GL_FALSE, 0, static_cast<void*>(0));
+			glEnableVertexAttribArray(uvCoord);
+			glVertexAttribPointer(uvCoord, 2, GL_FLOAT, GL_FALSE, 0, static_cast<void*>(0));
 		}
 
 		void FullScreenQuad::Detach()

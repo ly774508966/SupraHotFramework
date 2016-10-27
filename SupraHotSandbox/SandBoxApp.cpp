@@ -14,6 +14,7 @@
 #include "WindowWin32.h"
 #include "stdafx.h"
 #include <tchar.h>
+#include <Controls.h>
 #endif
 
 #ifdef PLATFORM_EMSCRIPTEN
@@ -26,7 +27,6 @@
 #include "Platform.h"
 #include <TextureCube.h>
 #include <SkyBox.h>
-#include <Controls.h>
 
 using namespace SupraHot;
 
@@ -78,6 +78,9 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 #ifdef PLATFORM_ANDROID
 	FBOShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/fbo_gles3.vs");
 	FBOShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/fbo_gles3.fs");
+
+	SkyBoxShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/skybox_gles3.vs");
+	SkyBoxShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/skybox_gles3.fs");
 #endif
 
 	FBOShader->CompileShader();
@@ -120,7 +123,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	Texture2D* ddsTexture = new Texture2D("DDS Test");
 	ddsTexture->SetWrapS(GL_CLAMP_TO_EDGE);
 	ddsTexture->SetWrapT(GL_CLAMP_TO_EDGE);
-	ddsTexture->Load("Textures/test/lion_64i.dds");
+	ddsTexture->Load("Textures/test/lion_64f.dds");
 	//ddsTexture->Load("Textures/test/lion.dds");
 	//ddsTexture->Load("Textures/test/Cerberus_A.dds");
 	//ddsTexture->Load("Textures/test/lion_bgr.dds");
@@ -131,14 +134,15 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	TextureCube* textureCube = new TextureCube("CubeTexture Test");
 	textureCube->SetWrapS(GL_CLAMP_TO_EDGE);
 	textureCube->SetWrapT(GL_CLAMP_TO_EDGE);
-	textureCube->SetFormat(GL_RGB);
+	textureCube->SetWrapR(GL_CLAMP_TO_EDGE);
+	textureCube->SetFormat(GL_RGBA);
 	textureCube->SetInternalFormat(GL_RGBA8);
 
 	textureCube->Load("Textures/skyboxtest/px.png", "Textures/skyboxtest/nx.png",
 					  "Textures/skyboxtest/py.png", "Textures/skyboxtest/ny.png",
 					  "Textures/skyboxtest/pz.png", "Textures/skyboxtest/nz.png");
 
-	EnvBox = new SkyBox();
+	EnvBox = new SkyBox(); 
 	EnvBox->SetEnvironmentMap(textureCube);
 	EnvBox->Init();
 	
@@ -147,6 +151,10 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
 {
+#if PLATFORM_ANDROID
+	window->Resize(width, height);
+#endif
+
 	FBO->Resize(width, height);
 	FlyCamera->aspectRatio = static_cast<float>(width) / static_cast<float>(height);
 }
@@ -154,28 +162,28 @@ void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
 void SandBoxApp::Render()
 {
 	glDisable(GL_CULL_FACE);
-
+	
 	FBO->Attach();
-
-	glClearColor(0.2, 0, 0, 1);
-	glClear(GL_COLOR_BUFFER_BIT);
-
+	
 	EnvBox->Render(FlyCamera, SkyBoxShader);
-
+	
 	FBO->Detach();
 	FBO->SetReadSource(FBO->GetColorRenderTarget());
+
 	FBO->RenderToScreen(FBOShader);
 }
 
 void SandBoxApp::Update(float deltaTime)
 {
 	window->SetClearColor(0.7f, 0.3f, 0.7f, 1.0f);
+	
+#if PLATFORM_WINDOWS
 	Controls::update(window);
 
 	if (Controls::isKeyDown(GLFW_KEY_W))
 	{
 		FlyCamera->pitch += 0.05f;
-	} 
+	}
 	else if (Controls::isKeyDown(GLFW_KEY_S))
 	{
 		FlyCamera->pitch -= 0.05f;
@@ -190,6 +198,7 @@ void SandBoxApp::Update(float deltaTime)
 		FlyCamera->yaw += 0.05f;
 	}
 
+#endif
 }
 
 void SandBoxApp::LateUpdate(float deltaTime)

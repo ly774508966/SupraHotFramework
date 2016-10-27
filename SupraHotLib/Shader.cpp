@@ -14,7 +14,7 @@ namespace SupraHot
 			glGetShaderInfoLog(shaderID, 1024, nullptr, error);
 #if DEVELOPMENT == 1
 			SHF_PRINTF("CheckError for %s, Type = %s \n", path.c_str(), type.c_str());
-			std::cout << error << std::endl;
+			SHF_PRINTF(" %s ", error);
 #endif
 		}
 
@@ -63,7 +63,7 @@ namespace SupraHot
 			GeometryShader = 0;
 			ComputeShader = 0;
 
-			printf("ShaderGL %s #%d destroyed \n", Name.c_str(), ShaderProgrammID);
+			SHF_PRINTF("ShaderGL %s #%d destroyed \n", Name.c_str(), ShaderProgrammID);
 		}
 
 		bool Shader::LoadShaderFromFile(ShaderType type, std::string pathToFile)

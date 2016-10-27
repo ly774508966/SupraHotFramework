@@ -44,6 +44,9 @@ namespace SupraHot
 
 			Texture2D* GetColorRenderTarget();
 			Texture2D* GetDepthRenderTarget();
+
+			uint32 GetWidth();
+			uint32 GetHeight();
 		};
 	};
 };

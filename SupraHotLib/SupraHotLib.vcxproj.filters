@@ -79,6 +79,12 @@
     <Filter Include="Source Files\Graphics\Emscripten">
       <UniqueIdentifier>{0f91eb92-b7e0-41dc-9958-6ccf9ba782b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utils\Windows">
+      <UniqueIdentifier>{27c4753b-1193-4f18-8a03-8fccf9f99953}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utils\Windows">
+      <UniqueIdentifier>{12aad5bd-0103-4a1a-aaed-ce120c6d2508}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -208,7 +214,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Controls.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Utils\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -327,7 +333,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Controls.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Utils\Windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
