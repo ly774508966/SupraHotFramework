@@ -197,11 +197,47 @@ namespace SupraHot
 		
 		void TextureCube::LoadDDS(std::string path)
 		{
-			// TODO: Load dds cube map
+			this->Path = path;
+			FILE* f = Utils::FileSystem::GetInstance()->GetFile("", Path, "rb");
+
+			if (f != nullptr)
+			{
+				std::string fileExtension = Utils::StringUtil::GetFileExtension(path);
+
+				if (fileExtension == "dds" || fileExtension == "DDS")
+				{
+					// File is being closed inside function
+
+					long beg = std::ftell(f);
+					std::fseek(f, 0, SEEK_END);
+
+					long end = std::ftell(f);
+					std::fseek(f, 0, SEEK_SET);
+
+					std::vector<char> data(static_cast<long>(end - beg));
+					std::fread(&data[0], 1, data.size(), f);
+					std::fclose(f);
+
+					LoadDDS(&data[0], static_cast<long>(data.size()));
+				} 
+				else
+				{
+					std::fclose(f);
+				}
+			}
+		}
+
+		void TextureCube::LoadDDS(char const* Data, long Size)
+		{
+#if DEVELOPMENT == 1
+			SHF_PRINTF("Loading DDS %s \n", Path.c_str());
+#endif
 		}
 
 		void TextureCube::Load(std::string left, std::string right, std::string top, std::string bottom, std::string front, std::string back)
 		{
+			this->Path = left + " | " + right + " | " + top + " | " + bottom + " | " + front + " | " + back;
+
 			/* create and enable texture buffer */
 			glGenTextures(1, &TextureID);
 			glBindTexture(GL_TEXTURE_CUBE_MAP, TextureID);

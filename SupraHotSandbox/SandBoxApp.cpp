@@ -58,10 +58,9 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	FBO = new SupraHot::FrameBufferObject();
 	FBO->Init(width, height);
 
-	Texture = new SupraHot::Texture2D("Pepe Texture");
-	Texture->Load("Images/test.png");
-
-//	FBO->SetReadSource(Texture);
+	Texture = new SupraHot::Texture2D("SHF Logo");
+	Texture->Load("Images/logo.png");
+	FBO->SetReadSource(Texture);
 
 	// Load Shaders
 	FBOShader = new SupraHot::Shader();
@@ -124,13 +123,8 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	ddsTexture->SetWrapS(GL_CLAMP_TO_EDGE);
 	ddsTexture->SetWrapT(GL_CLAMP_TO_EDGE);
 	ddsTexture->Load("Textures/test/lion_64f.dds");
-	//ddsTexture->Load("Textures/test/lion.dds");
-	//ddsTexture->Load("Textures/test/Cerberus_A.dds");
-	//ddsTexture->Load("Textures/test/lion_bgr.dds");
-	//ddsTexture.Load("Textures/test/GraceCathedral.dds");
 	FBO->SetReadSource(ddsTexture);
-
-
+	
 	TextureCube* textureCube = new TextureCube("CubeTexture Test");
 	textureCube->SetWrapS(GL_CLAMP_TO_EDGE);
 	textureCube->SetWrapT(GL_CLAMP_TO_EDGE);
@@ -141,6 +135,14 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	textureCube->Load("Textures/skyboxtest/px.png", "Textures/skyboxtest/nx.png",
 					  "Textures/skyboxtest/py.png", "Textures/skyboxtest/ny.png",
 					  "Textures/skyboxtest/pz.png", "Textures/skyboxtest/nz.png");
+
+	TextureCube* ddsCubeTexture = new TextureCube("DDS Cube map");
+	ddsCubeTexture->SetWrapS(GL_CLAMP_TO_EDGE);
+	ddsCubeTexture->SetWrapT(GL_CLAMP_TO_EDGE);
+	ddsCubeTexture->SetWrapR(GL_CLAMP_TO_EDGE);
+	ddsCubeTexture->SetFormat(GL_RGBA);
+	ddsCubeTexture->SetInternalFormat(GL_RGBA8);
+	ddsCubeTexture->LoadDDS("Textures/skybox.dds");
 
 	EnvBox = new SkyBox(); 
 	EnvBox->SetEnvironmentMap(textureCube);
@@ -182,11 +184,11 @@ void SandBoxApp::Update(float deltaTime)
 
 	if (Controls::isKeyDown(GLFW_KEY_W))
 	{
-		FlyCamera->pitch += 0.05f;
+		FlyCamera->pitch -= 0.05f;
 	}
 	else if (Controls::isKeyDown(GLFW_KEY_S))
 	{
-		FlyCamera->pitch -= 0.05f;
+		FlyCamera->pitch += 0.05f;
 	}
 
 	if (Controls::isKeyDown(GLFW_KEY_A))

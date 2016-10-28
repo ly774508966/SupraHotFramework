@@ -123,7 +123,7 @@ namespace SupraHot
 			int err = glGetError();
 			if (err != 0)
 			{
-				SHF_PRINTF("Error %d happened while initializing Texture2D (%s) \n", err, Name.c_str());
+				SHF_PRINTF("Error %d happened while initializing Texture2D (%s | %s) \n", err, Name.c_str());
 			}
 #endif
 		}
@@ -231,7 +231,7 @@ namespace SupraHot
 			if (!data)
 			{
 #if DEVELOPMENT == 1
-				SHF_PRINTF("Error, while loading texture (%s): %s\n", Name.c_str(), stbi_failure_reason());
+				SHF_PRINTF("Error, while loading texture (%s): %s\n", Path.c_str(), stbi_failure_reason());
 #endif
 				glDeleteTextures(1, &TextureID);
 			}
@@ -258,11 +258,11 @@ namespace SupraHot
 				/* generate mipmaps */
 				glGenerateMipmap(static_cast<GLenum>(GL_TEXTURE_2D));
 
-#if DEVELOPMENT == 1
+#if DEVELOPMENT == 1 
 				int err = glGetError();
 				if (err != 0)
 				{
-					SHF_PRINTF("Error %d happened while loading Texture 2D \n", err);
+					SHF_PRINTF("Error %d happened while loading Texture 2D (%s) \n", err, Path.c_str());
 				}
 #endif
 

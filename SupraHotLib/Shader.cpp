@@ -133,21 +133,37 @@ namespace SupraHot
 			if (VertexShader > 0)
 			{
 				glDeleteShader(VertexShader);
+
+#if DEVELOPMENT == 1
+				SHF_PRINTF("Delete vertex shader \n");
+#endif
 			}
 
 			if (PixelShader > 0)
 			{
 				glDeleteShader(PixelShader);
+
+#if DEVELOPMENT == 1
+				SHF_PRINTF("Delete pixel shader \n");
+#endif
 			}
 
 			if (GeometryShader > 0)
 			{
 				glDeleteShader(GeometryShader);
+
+#if DEVELOPMENT == 1
+				SHF_PRINTF("Delete geometry shader \n");
+#endif
 			}
 
 			if (ComputeShader > 0)
 			{
 				glDeleteShader(ComputeShader);
+
+#if DEVELOPMENT == 1
+				SHF_PRINTF("Delete compute shader \n");
+#endif
 			}
 
 			return true;
@@ -216,6 +232,7 @@ namespace SupraHot
 		Shader::Shader()
 		{
 			ShaderProgrammID = glCreateProgram();
+			VertexShader = PixelShader = GeometryShader = ComputeShader = 0;
 		}
 
 		Shader::~Shader()

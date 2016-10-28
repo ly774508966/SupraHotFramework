@@ -17,6 +17,8 @@ namespace SupraHot
 			uint32 MinFilter = GL_LINEAR_MIPMAP_LINEAR, MagFilter = GL_LINEAR;
 			uint32 Format = GL_RGBA, InternalFormat = GL_RGBA8;
 			uint32 Type = GL_UNSIGNED_BYTE;
+
+			void LoadDDS(char const* Data, long Size);
 		public:
 			TextureCube();
 			TextureCube(std::string name);
