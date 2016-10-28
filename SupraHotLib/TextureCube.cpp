@@ -9,10 +9,12 @@ namespace SupraHot
 	{
 		TextureCube::TextureCube()
 		{
+			this->TextureID = 0;
 		}
 
 		TextureCube::TextureCube(uint32 format, uint32 internalFormat, uint32 type, uint32 wrapS, uint32 wrapT, uint32 wrapR)
 		{
+			this->TextureID = 0;
 			this->Format = format;
 			this->InternalFormat = internalFormat;
 			this->Type = type;
@@ -23,6 +25,7 @@ namespace SupraHot
 
 		TextureCube::TextureCube(uint32 format, uint32 internalFormat, uint32 type, uint32 wrapS, uint32 wrapT, uint32 wrapR, uint32 minFilter, uint32 magFilter)
 		{
+			this->TextureID = 0;
 			this->Format = format;
 			this->InternalFormat = internalFormat;
 			this->Type = type;
@@ -35,9 +38,9 @@ namespace SupraHot
 
 		TextureCube::TextureCube(std::string name)
 		{
+			this->TextureID = 0;
 			this->Name = name;
 		}
-
 
 		TextureCube::~TextureCube()
 		{
@@ -289,31 +292,12 @@ namespace SupraHot
 							}
 						}
 
-						/*
 						// todo: rework this
 						// flip on x axis
-						unsigned char * data2 = new unsigned char[width * height * n];
-						for (int y = 0; y < height; y++)
-						{
-							for (int x = 0; x < width; x++)
-							{
-								uint32 lastElement = (y * width * n) + (width * n);
-								uint32 currentElement = y * width * n;
-								data2[currentElement + x * n + 0] = data[lastElement - x * n - 0];
-								data2[currentElement + x * n + 1] = data[lastElement - x * n - 3];
-								data2[currentElement + x * n + 2] = data[lastElement - x * n - 2];
-								data2[currentElement + x * n + 3] = data[lastElement - x * n - 1];
-							}
-						}
-
-						data = data2;
-						*/
 					}
 
-
-
 #ifdef PLATFORM_WINDOWS
-					//glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+					glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 #else
 					glEnable(GL_TEXTURE_CUBE_MAP);
 #endif
