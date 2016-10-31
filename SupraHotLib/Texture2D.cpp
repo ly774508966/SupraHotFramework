@@ -559,6 +559,12 @@ namespace SupraHot
 				// need to free the memory.
 				delete[] buffer;
 			}
+
+			if (mipMapCount == 1)
+			{
+				/* generate mipmaps */
+				glGenerateMipmap(static_cast<GLenum>(GL_TEXTURE_2D));
+			}
 		}
 	};
 };
