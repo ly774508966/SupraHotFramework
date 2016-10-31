@@ -441,6 +441,11 @@ namespace SupraHot
 				Type = GL_UNSIGNED_SHORT;
 				formatSize = sizeof(uint16);
 				formatComponents = 4;
+
+#if DEVELOPMENT == 1
+				SHF_PRINTF("Format not supported on Android! \n");
+#endif
+
 #else
 				Format = GL_RGBA;
 				InternalFormat = GL_RGBA16;
@@ -491,7 +496,8 @@ namespace SupraHot
 				uint32 divider = static_cast<uint32>(pow(2, mip));
 				uint32 targetWidth = header.Width / divider;
 				uint32 targetHeight = header.Height / divider;
-				bufferElements = (targetWidth * targetHeight * faceCount) * formatComponents;
+				//bufferElements = (targetWidth * targetHeight * faceCount) * formatComponents;
+				bufferElements = (targetWidth * targetHeight) * formatComponents;
 				bufferSize = bufferElements * formatSize;
 
 				void* buffer = new void*[bufferElements];

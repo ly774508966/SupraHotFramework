@@ -2,6 +2,8 @@
 #include "StringUtil.h"
 #include "stb_image.h"
 #include "FileSystem.h"
+#include "DDSUtil.h"
+#include <cassert>
 
 namespace SupraHot
 {
@@ -198,9 +200,10 @@ namespace SupraHot
 		}
 
 		
-		void TextureCube::LoadDDS(std::string path)
+		void TextureCube::LoadDDS(std::string path, bool checkIsCube)
 		{
 			this->Path = path;
+			
 			FILE* f = Utils::FileSystem::GetInstance()->GetFile("", Path, "rb");
 
 			if (f != nullptr)
@@ -221,7 +224,7 @@ namespace SupraHot
 					std::fread(&data[0], 1, data.size(), f);
 					std::fclose(f);
 
-					LoadDDS(&data[0], static_cast<long>(data.size()));
+					LoadDDS(&data[0], static_cast<long>(data.size()), checkIsCube);
 				} 
 				else
 				{
@@ -230,11 +233,320 @@ namespace SupraHot
 			}
 		}
 
-		void TextureCube::LoadDDS(char const* Data, long Size)
+		void TextureCube::LoadDDS(char const* Data, long Size, bool checkIsCube)
 		{
 #if DEVELOPMENT == 1
 			SHF_PRINTF("Loading DDS %s \n", Path.c_str());
 #endif
+
+#if DEVELOPMENT == 1
+			assert(Data && (Size >= sizeof(Utils::DDSUtil::ddsHeader)));
+#endif
+
+			Utils::DDSUtil::ddsHeader const & header(*reinterpret_cast<Utils::DDSUtil::ddsHeader const *>(Data));
+
+			if (strncmp(header.Magic, "DDS ", 4) != 0)
+			{
+				return;
+			}
+
+			size_t Offset = sizeof(Utils::DDSUtil::ddsHeader);
+
+			Utils::DDSUtil::ddsHeader10 header10;
+			if (header.Format.flags & Utils::DDSUtil::DDPF_FOURCC && header.Format.fourCC == Utils::DDSUtil::D3DFMT_DX10)
+			{
+				std::memcpy(&header10, Data + Offset, sizeof(header10));
+				Offset += sizeof(Utils::DDSUtil::ddsHeader10);
+			}
+
+			uint32 formatComponents = 1;
+			uint32 formatSize = 0;
+			bool isGL_BGRA = false;
+
+			if ((header.Format.flags
+				& (Utils::DDSUtil::DDPF_RGB
+				| Utils::DDSUtil::DDPF_ALPHAPIXELS
+				| Utils::DDSUtil::DDPF_ALPHA
+				| Utils::DDSUtil::DDPF_YUV
+				| Utils::DDSUtil::DDPF_LUMINANCE))
+				&& header.Format.flags != Utils::DDSUtil::DDPF_FOURCC_ALPHAPIXELS)
+			{
+				switch (header.Format.bpp)
+				{
+				case 8:
+				{
+					break;
+				}
+				case 16:
+				{
+					break;
+				}
+				case 24:
+				{
+					// Todo: figure this out.
+					formatComponents = 1;
+
+					if (header.Format.Mask.x == 0x000000FF &&
+						header.Format.Mask.y == 0x0000FF00 &&
+						header.Format.Mask.z == 0x00FF0000)
+					{
+						// RGB
+						Format = GL_RGB;
+						InternalFormat = GL_RGB8;
+						formatSize = sizeof(uint32);
+					}
+
+					SHF_PRINTF("Not supported yet. \n");
+					break;
+				}
+				case 32:
+				{
+					if (header.Format.Mask.x == 0x000000FF &&
+						header.Format.Mask.y == 0x0000FF00 &&
+						header.Format.Mask.z == 0x00FF0000 &&
+						header.Format.Mask.w == 0x00000000)
+					{
+						// RGB
+						Format = GL_RGBA;
+						InternalFormat = GL_RGBA8;
+						formatSize = sizeof(uint8);
+						formatComponents = 4;
+					}
+					else if (header.Format.Mask.x == 0x00FF0000 &&
+						header.Format.Mask.y == 0x0000FF00 &&
+						header.Format.Mask.z == 0x000000FF &&
+						header.Format.Mask.w == 0x00000000)
+					{
+						// BGR
+						Format = GL_RGBA;
+						InternalFormat = GL_RGBA8;
+						isGL_BGRA = true;
+						formatSize = sizeof(uint8);
+						formatComponents = 4;
+					}
+					else if (header.Format.Mask.x == 0x00FF0000 &&
+						header.Format.Mask.y == 0x0000FF00 &&
+						header.Format.Mask.z == 0x000000FF &&
+						header.Format.Mask.w == 0xFF000000)
+					{
+						// BGRA
+						Format = GL_RGBA;
+						InternalFormat = GL_RGBA8;
+						isGL_BGRA = true;
+						formatSize = sizeof(uint8);
+						formatComponents = 4;
+					}
+					else if (header.Format.Mask.x == 0x000000FF &&
+						header.Format.Mask.y == 0x0000FF00 &&
+						header.Format.Mask.z == 0x00FF0000 &&
+						header.Format.Mask.w == 0xFF000000)
+					{
+						// RGBA
+						Format = GL_RGBA;
+						InternalFormat = GL_RGBA8;
+						formatSize = sizeof(uint8);
+						formatComponents = 4;
+					}
+				}
+				break;
+				}
+			}
+			else if (header.Format.fourCC == Utils::DDSUtil::D3DFMT_A32B32G32R32F)
+			{
+				// RGBA
+				Format = GL_RGBA;
+				InternalFormat = GL_RGBA32F;
+				Type = GL_FLOAT;
+				formatSize = sizeof(float);
+				formatComponents = 4;
+			}
+			else if (header.Format.fourCC == Utils::DDSUtil::D3DFMT_A16B16G16R16F)
+			{
+				// RGBA
+				Format = GL_RGBA;
+				InternalFormat = GL_RGBA16F;
+				Type = GL_HALF_FLOAT;
+				formatSize = sizeof(float) / 2;
+				formatComponents = 4;
+			}
+			else if (header.Format.fourCC == Utils::DDSUtil::D3DFMT_A16B16G16R16)
+			{
+				// RGBA
+				// Todo: this does not work on android. 
+				// todo: figure this out.
+#ifdef PLATFORM_ANDROID
+				Format = GL_RGBA_INTEGER;
+				InternalFormat = GL_RGBA16UI;
+				Type = GL_UNSIGNED_SHORT;
+				formatSize = sizeof(uint16);
+				formatComponents = 4;
+
+#if DEVELOPMENT == 1
+				SHF_PRINTF("Format not supported on Android! \n");
+#endif
+
+#else
+				Format = GL_RGBA;
+				InternalFormat = GL_RGBA16;
+				Type = GL_UNSIGNED_SHORT;
+				formatSize = sizeof(uint16);
+				formatComponents = 4;
+#endif
+			}
+			else if ((header.Format.fourCC == Utils::DDSUtil::D3DFMT_DX10) && (header10.Format != Utils::DDSUtil::DXGI_FORMAT_UNKNOWN))
+			{
+				if (header10.Format == Utils::DDSUtil::DXGI_FORMAT_R32G32B32A32_FLOAT)
+				{
+					// RGBA
+					Format = GL_RGBA;
+					InternalFormat = GL_RGBA32F;
+					Type = GL_FLOAT;
+					formatSize = sizeof(float);
+					formatComponents = 4;
+				} 
+				else if (header10.Format == Utils::DDSUtil::DXGI_FORMAT_R16G16B16A16_FLOAT)
+				{
+					// RGBA
+					Format = GL_RGBA;
+					InternalFormat = GL_RGBA16F;
+					Type = GL_HALF_FLOAT;
+					formatSize = sizeof(float) / 2;
+					formatComponents = 4;
+				} 
+				else if (header10.Format == Utils::DDSUtil::DXGI_FORMAT_R8G8B8A8_UNORM
+						|| header10.Format == Utils::DDSUtil::DXGI_FORMAT_R8G8B8A8_TYPELESS
+						|| header10.Format == Utils::DDSUtil::DXGI_FORMAT_R8G8B8A8_UINT)
+				{
+					Format = GL_RGBA;
+					InternalFormat = GL_RGBA8;
+					Type = GL_UNSIGNED_BYTE;
+					formatSize = sizeof(uint8);
+					formatComponents = 4;
+				}
+				else if (header10.Format == Utils::DDSUtil::DXGI_FORMAT_B8G8R8A8_UNORM
+						|| header10.Format == Utils::DDSUtil::DXGI_FORMAT_B8G8R8A8_TYPELESS
+						|| header10.Format == Utils::DDSUtil::DXGI_FORMAT_B8G8R8A8_UNORM_SRGB)
+				{
+					Format = GL_RGBA;
+					InternalFormat = GL_RGBA8;
+					Type = GL_UNSIGNED_BYTE;
+					formatSize = sizeof(uint8);
+					formatComponents = 4;
+					isGL_BGRA = true;
+				}
+				else if (header10.Format == Utils::DDSUtil::D3DFMT_A8B8G8R8)
+				{
+					Format = GL_RGBA;
+					InternalFormat = GL_RGBA8;
+					Type = GL_UNSIGNED_BYTE;
+					formatSize = sizeof(uint8);
+					formatComponents = 4;
+					isGL_BGRA = true;
+				}
+				else if (header10.Format == Utils::DDSUtil::D3DFMT_R8G8B8)
+				{
+					Format = GL_RGBA;
+					InternalFormat = GL_RGBA8;
+					formatSize = sizeof(uint8);
+					formatComponents = 4;
+				} 
+				else
+				{
+#if DEVELOPMENT == 1
+					SHF_PRINTF("Format not supported! Header = %d \n", header10.Format);
+#endif
+					return;
+				}
+			}
+
+			uint32 mipMapCount = (header.Flags & Utils::DDSUtil::ddsFlag::DDSD_MIPMAPCOUNT) ? header.MipMapLevels : 1;
+			uint32 faceCount = (header.CubemapFlags & Utils::DDSUtil::ddsCubemapflag::DDSCAPS2_CUBEMAP) ? 6 : 1;
+			uint32 depthCount = (header.CubemapFlags & Utils::DDSUtil::ddsCubemapflag::DDSCAPS2_VOLUME) ? header.Depth : 1;
+
+			if (faceCount == 1 && checkIsCube)
+			{
+#if DEVELOPMENT == 1
+				SHF_PRINTF("Supplied dds file seems to be not a cube map!\n %s.\n", this->Path.c_str());
+#endif
+			} 
+			else
+			{
+				faceCount = 6;
+			}
+
+
+			/* create and enable texture buffer */
+			glGenTextures(1, &TextureID);
+
+#ifdef PLATFORM_WINDOWS
+			glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+#else
+			glEnable(GL_TEXTURE_CUBE_MAP);
+#endif
+
+			glBindTexture(GL_TEXTURE_CUBE_MAP, TextureID);
+
+			/* set texture parameters */
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, MagFilter);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, MinFilter);
+
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, WrapS);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, WrapT);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, WrapR);
+
+
+			uint64 totalBufferOffset = 0;
+			uint64 bufferElements = 0;
+			uint64 bufferSize = 0;
+
+			for (uint32 f = 0; f < faceCount; ++f)
+			{
+				// Read the texture data here
+				for (uint32 mip = 0; mip < mipMapCount; ++mip)
+				{
+					uint32 divider = static_cast<uint32>(pow(2, mip));
+					uint32 targetWidth = header.Width / divider;
+					uint32 targetHeight = header.Height / divider;
+					bufferElements = (targetWidth * targetHeight) * formatComponents;
+					bufferSize = bufferElements * formatSize;
+
+					void* buffer = new void*[bufferElements];
+					std::memcpy(buffer, (Data + Offset + totalBufferOffset), bufferSize);
+					totalBufferOffset += bufferSize;
+
+					if (isGL_BGRA)
+					{
+						// This converts the format GL_BGRA to GL_RGBA on the fly for each pixel.
+						uint32* u32Buffer = static_cast<uint32*>(buffer);
+						for (uint64 pixel = 0; pixel < bufferElements; pixel++)
+						{
+							uint32 comp = u32Buffer[pixel];
+
+							uint32 r = (comp & 0x000000FF);
+							uint32 g = (comp & 0x0000FF00) >> 8;
+							uint32 b = (comp & 0x00FF0000) >> 16;
+							uint32 a = (comp & 0xFF000000) >> 24;
+
+							u32Buffer[pixel] = (a << 24) + (r << 16) + (g << 8) + b;
+						}
+					}
+
+					SHF_PRINTF("Face: %d | Mip: %d | [%d x %d] \n", f, mip, targetWidth, targetHeight);
+					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, mip, InternalFormat, targetWidth, targetHeight, 0, Format, Type, buffer);
+
+					// need to free the memory.
+					delete[] buffer;
+				}
+
+				// End reading texture data
+			}
+
+			if (mipMapCount == 1)
+			{
+				glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+			}
+
+			glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 		}
 
 		void TextureCube::Load(std::string left, std::string right, std::string top, std::string bottom, std::string front, std::string back)
@@ -305,6 +617,7 @@ namespace SupraHot
 					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, MinFilter);
 					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, WrapS);
 					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, WrapT);
+					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, WrapR);
 
 					/* bind texture to buffer */
 					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, 0, InternalFormat, width, height, 0, Format, Type, &data[0]);

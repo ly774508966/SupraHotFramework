@@ -135,7 +135,8 @@ namespace SupraHot
 				glDeleteShader(VertexShader);
 
 #if DEVELOPMENT == 1
-				SHF_PRINTF("Delete vertex shader \n");
+				SHF_PRINTF("Delete vertex shader: %d \n", VertexShader);
+				VertexShader = 0;
 #endif
 			}
 
@@ -144,7 +145,8 @@ namespace SupraHot
 				glDeleteShader(PixelShader);
 
 #if DEVELOPMENT == 1
-				SHF_PRINTF("Delete pixel shader \n");
+				SHF_PRINTF("Delete pixel shader: %d \n", PixelShader);
+				PixelShader = 0;
 #endif
 			}
 
@@ -153,7 +155,8 @@ namespace SupraHot
 				glDeleteShader(GeometryShader);
 
 #if DEVELOPMENT == 1
-				SHF_PRINTF("Delete geometry shader \n");
+				SHF_PRINTF("Delete geometry shader: %d \n", GeometryShader);
+				GeometryShader = 0;
 #endif
 			}
 
@@ -162,7 +165,8 @@ namespace SupraHot
 				glDeleteShader(ComputeShader);
 
 #if DEVELOPMENT == 1
-				SHF_PRINTF("Delete compute shader \n");
+				SHF_PRINTF("Delete compute shader: %d \n", ComputeShader);
+				ComputeShader = 0;
 #endif
 			}
 

@@ -18,7 +18,7 @@ namespace SupraHot
 			uint32 Format = GL_RGBA, InternalFormat = GL_RGBA8;
 			uint32 Type = GL_UNSIGNED_BYTE;
 
-			void LoadDDS(char const* Data, long Size);
+			void LoadDDS(char const* Data, long Size, bool checkIsCube);
 		public:
 			TextureCube();
 			TextureCube(std::string name);
@@ -50,7 +50,7 @@ namespace SupraHot
 			void Destroy();
 
 			void Init(uint32 width, uint32 height);
-			void LoadDDS(std::string path);
+			void LoadDDS(std::string path, bool checkIsCube);
 			void Load(std::string left, std::string right, std::string top, std::string bottom, std::string front, std::string back);
 		};
 	}

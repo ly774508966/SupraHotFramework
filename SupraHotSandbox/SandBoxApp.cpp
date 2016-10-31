@@ -129,8 +129,6 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	textureCube->SetWrapS(GL_CLAMP_TO_EDGE);
 	textureCube->SetWrapT(GL_CLAMP_TO_EDGE);
 	textureCube->SetWrapR(GL_CLAMP_TO_EDGE);
-	textureCube->SetFormat(GL_RGBA);
-	textureCube->SetInternalFormat(GL_RGBA8);
 
 	textureCube->Load("Textures/skyboxtest/px.png", "Textures/skyboxtest/nx.png",
 					  "Textures/skyboxtest/py.png", "Textures/skyboxtest/ny.png",
@@ -140,12 +138,13 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	ddsCubeTexture->SetWrapS(GL_CLAMP_TO_EDGE);
 	ddsCubeTexture->SetWrapT(GL_CLAMP_TO_EDGE);
 	ddsCubeTexture->SetWrapR(GL_CLAMP_TO_EDGE);
-	ddsCubeTexture->SetFormat(GL_RGBA);
-	ddsCubeTexture->SetInternalFormat(GL_RGBA8);
-	ddsCubeTexture->LoadDDS("Textures/skybox.dds");
+
+	//ddsCubeTexture->LoadDDS("Textures/Random/GraceCathedral.dds", false);
+	//ddsCubeTexture->LoadDDS("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds", true);
+	ddsCubeTexture->LoadDDS("Textures/MonValley_G_DirtRoad_3k/Specular.dds", true);
 
 	EnvBox = new SkyBox(); 
-	EnvBox->SetEnvironmentMap(textureCube);
+	EnvBox->SetEnvironmentMap(ddsCubeTexture);
 	EnvBox->Init();
 	
 	FlyCamera = new Camera(50.0f, 0.25f, 10000.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
