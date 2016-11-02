@@ -123,7 +123,7 @@ namespace SupraHot
 			int err = glGetError();
 			if (err != 0)
 			{
-				SHF_PRINTF("Error %d happened while initializing Texture2D (%s | %s) \n", err, Name.c_str());
+				SHF_PRINTF("Error %d happened while initializing Texture2D (%s | %s) \n", err, Name.c_str(), Path.c_str());
 			}
 #endif
 		}
@@ -521,7 +521,7 @@ namespace SupraHot
 					}
 				}
 
-				// Flip the texture on X-axis here.	
+				// Flip the texture on X-axis here.	(flips the picture upside down)
 				// Source: https://github.com/paroj/nv_dds/blob/master/nv_dds.cpp
 				{
 					uint64 imagesize = bufferSize / depthCount;

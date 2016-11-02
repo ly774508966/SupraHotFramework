@@ -529,7 +529,9 @@ namespace SupraHot
 
 							u32Buffer[pixel] = (a << 24) + (r << 16) + (g << 8) + b;
 						}
-					}
+					}		
+
+					// Todo: mirror image on y axis. (from left to right)
 
 					SHF_PRINTF("Face: %d | Mip: %d | [%d x %d] \n", f, mip, targetWidth, targetHeight);
 					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, mip, InternalFormat, targetWidth, targetHeight, 0, Format, Type, buffer);

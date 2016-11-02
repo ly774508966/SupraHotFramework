@@ -142,6 +142,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	//ddsCubeTexture->LoadDDS("Textures/Random/GraceCathedral.dds", false);
 	//ddsCubeTexture->LoadDDS("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds", true);
 	ddsCubeTexture->LoadDDS("Textures/MonValley_G_DirtRoad_3k/Specular.dds", true);
+	//ddsCubeTexture->LoadDDS("Textures/Random/miptest.dds", false);
 
 	EnvBox = new SkyBox(); 
 	EnvBox->SetEnvironmentMap(ddsCubeTexture);
