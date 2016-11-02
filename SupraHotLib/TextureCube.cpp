@@ -225,6 +225,8 @@ namespace SupraHot
 					std::fclose(f);
 
 					LoadDDS(&data[0], static_cast<long>(data.size()), checkIsCube);
+					
+					data.clear();
 				} 
 				else
 				{
@@ -317,7 +319,7 @@ namespace SupraHot
 						header.Format.Mask.z == 0x000000FF &&
 						header.Format.Mask.w == 0x00000000)
 					{
-						// BGR
+						// BGRload
 						Format = GL_RGBA;
 						InternalFormat = GL_RGBA8;
 						isGL_BGRA = true;
