@@ -200,7 +200,7 @@ namespace SupraHot
 		}
 
 		
-		void TextureCube::LoadDDS(std::string path, bool checkIsCube)
+		void TextureCube::LoadDDS(std::string path, bool checkIsCube, bool flipX)
 		{
 			this->Path = path;
 			
@@ -224,7 +224,7 @@ namespace SupraHot
 					std::fread(&data[0], 1, data.size(), f);
 					std::fclose(f);
 
-					LoadDDS(&data[0], static_cast<long>(data.size()), checkIsCube);
+					LoadDDS(&data[0], static_cast<long>(data.size()), checkIsCube, flipX);
 					
 					data.clear();
 				} 
@@ -235,7 +235,7 @@ namespace SupraHot
 			}
 		}
 
-		void TextureCube::LoadDDS(char const* Data, long Size, bool checkIsCube)
+		void TextureCube::LoadDDS(char const* Data, long Size, bool checkIsCube, bool flipX)
 		{
 #if DEVELOPMENT == 1
 			SHF_PRINTF("Loading DDS %s \n", Path.c_str());
@@ -534,9 +534,51 @@ namespace SupraHot
 					}		
 
 					// Todo: mirror image on y axis. (from left to right)
+					if(flipX) {
+						uint64 imagesize = bufferSize / depthCount;
+						uint64 linesize = imagesize / targetHeight;
+
+						uint8 *top = (uint8*)buffer;
+						void* swapPixel = malloc(formatComponents * formatSize);
+						uint64 pixelSize = formatComponents * formatSize;
+
+						for (uint32 y = 0; y < targetHeight; y++)
+						{
+							
+							for (uint32 x = 0; x < targetWidth / 2; x++)
+							{
+								
+								uint8* leftMarker = top + (x * pixelSize);
+								uint8* rightMarker = top + ((targetWidth - 1 - x) * pixelSize);
+							
+								std::memcpy(swapPixel, leftMarker, pixelSize);
+								std::memcpy(leftMarker, rightMarker, pixelSize);
+								std::memcpy(rightMarker, swapPixel, pixelSize);
+
+							}
+
+							top += linesize;
+						}
+						
+						free(swapPixel);
+					}
 
 					SHF_PRINTF("Face: %d | Mip: %d | [%d x %d] \n", f, mip, targetWidth, targetHeight);
-					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, mip, InternalFormat, targetWidth, targetHeight, 0, Format, Type, buffer);
+
+					uint32 targetFace = GL_TEXTURE_CUBE_MAP_POSITIVE_X + f;
+					if (flipX)
+					{
+						if (f == 0)
+						{
+							targetFace = GL_TEXTURE_CUBE_MAP_NEGATIVE_X;
+						}
+						else if (f == 1)
+						{
+							targetFace = GL_TEXTURE_CUBE_MAP_POSITIVE_X;
+						}
+					}
+
+					glTexImage2D(targetFace, mip, InternalFormat, targetWidth, targetHeight, 0, Format, Type, buffer);
 
 					// need to free the memory.
 					delete[] buffer;
