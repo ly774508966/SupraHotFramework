@@ -210,11 +210,11 @@
     <ClInclude Include="DDSUtil.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="SkyBox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Controls.h">
       <Filter>Header Files\Utils\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBox.h">
+      <Filter>Header Files\Graphics\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -329,11 +329,11 @@
     <ClCompile Include="SHFMBinaryLoader.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="SkyBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Controls.cpp">
       <Filter>Source Files\Utils\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>Source Files\Graphics\Common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

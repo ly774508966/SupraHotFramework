@@ -539,22 +539,20 @@ namespace SupraHot
 						uint64 linesize = imagesize / targetHeight;
 
 						uint8 *top = (uint8*)buffer;
-						void* swapPixel = malloc(formatComponents * formatSize);
 						uint64 pixelSize = formatComponents * formatSize;
+						void* swapPixel = malloc(pixelSize);
 
 						for (uint32 y = 0; y < targetHeight; y++)
 						{
 							
 							for (uint32 x = 0; x < targetWidth / 2; x++)
 							{
-								
 								uint8* leftMarker = top + (x * pixelSize);
 								uint8* rightMarker = top + ((targetWidth - 1 - x) * pixelSize);
 							
 								std::memcpy(swapPixel, leftMarker, pixelSize);
 								std::memcpy(leftMarker, rightMarker, pixelSize);
 								std::memcpy(rightMarker, swapPixel, pixelSize);
-
 							}
 
 							top += linesize;

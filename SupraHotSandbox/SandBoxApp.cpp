@@ -67,19 +67,19 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	SkyBoxShader = new SupraHot::Shader();
 
 #ifdef PLATFORM_WINDOWS
-	FBOShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/fbo.vs");
-	FBOShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/fbo.fs");
+	FBOShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/fbo.vs.glsl");
+	FBOShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/fbo.fs.glsl");
 	
-	SkyBoxShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/skybox.vs");
-	SkyBoxShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/skybox.fs");
+	SkyBoxShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/skybox.vs.glsl");
+	SkyBoxShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/skybox.fs.glsl");
 #endif
 
 #ifdef PLATFORM_ANDROID
-	FBOShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/fbo_gles3.vs");
-	FBOShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/fbo_gles3.fs");
+	FBOShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/fbo_gles3.vs.glsl");
+	FBOShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/fbo_gles3.fs.glsl");
 
-	SkyBoxShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/skybox_gles3.vs");
-	SkyBoxShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/skybox_gles3.fs");
+	SkyBoxShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/skybox_gles3.vs.glsl");
+	SkyBoxShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/skybox_gles3.fs.glsl");
 #endif
 
 	FBOShader->CompileShader();
@@ -111,25 +111,19 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	}
 #endif
 
-
 	std::vector<MeshData*> meshData = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol_Model.shfm");
 
-	// Todo: Write .dds-Texture loader.
-	// Need this for 2D textures, but also for dds-cubes with mip maps!
-
 	// Try to load a 2d .dds file
-
 	Texture2D* ddsTexture = new Texture2D("DDS Test");
 	ddsTexture->SetWrapS(GL_CLAMP_TO_EDGE);
 	ddsTexture->SetWrapT(GL_CLAMP_TO_EDGE);
-	ddsTexture->Load("Textures/test/lion_64f.dds");
+	ddsTexture->Load("Textures/test/lion_128f.dds");
 	FBO->SetReadSource(ddsTexture);
 	
 	TextureCube* textureCube = new TextureCube("CubeTexture Test");
 	textureCube->SetWrapS(GL_CLAMP_TO_EDGE);
 	textureCube->SetWrapT(GL_CLAMP_TO_EDGE);
 	textureCube->SetWrapR(GL_CLAMP_TO_EDGE);
-
 	textureCube->Load("Textures/skyboxtest/px.png", "Textures/skyboxtest/nx.png",
 					  "Textures/skyboxtest/py.png", "Textures/skyboxtest/ny.png",
 					  "Textures/skyboxtest/pz.png", "Textures/skyboxtest/nz.png");
@@ -163,8 +157,6 @@ void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
 
 void SandBoxApp::Render()
 {
-	glDisable(GL_CULL_FACE);
-	
 	FBO->Attach();
 	
 	EnvBox->Render(FlyCamera, SkyBoxShader);

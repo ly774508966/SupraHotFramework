@@ -2,6 +2,7 @@
 #include "Platform.h"
 #include "Vec3.h"
 #include "Quat4.h"
+#include "Vec2.h"
 
 namespace SupraHot
 {
@@ -15,8 +16,11 @@ namespace SupraHot
 		{
 		private:
 			TextureCube* EnviromentMap = nullptr;
-			Math::Vec3 Position;
+			// todo: add sphere map option here.
+
+			// Todo: Use this for rendering
 			Math::Quat4 Rotation;
+			Math::Vec2 Scale;
 
 			uint32 VAOHandle = 0;
 			uint32 IndexVBOHandle = 0;
