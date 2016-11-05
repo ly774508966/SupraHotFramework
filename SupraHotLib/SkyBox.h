@@ -8,6 +8,7 @@ namespace SupraHot
 {
 	namespace Graphics
 	{
+		class Texture2D;
 		class Shader;
 		class Camera;
 		class TextureCube;
@@ -15,8 +16,8 @@ namespace SupraHot
 		class SkyBox
 		{
 		private:
-			TextureCube* EnviromentMap = nullptr;
-			// todo: add sphere map option here.
+			TextureCube* CubeMap = nullptr;
+			Texture2D* SphereMap = nullptr;
 
 			// Todo: Use this for rendering
 			Math::Quat4 Rotation;
@@ -32,7 +33,9 @@ namespace SupraHot
 			~SkyBox();
 
 			void SetEnvironmentMap(TextureCube* enviromentMap);
-			TextureCube* GetEnvironmentMap();
+			void SetEnvironmentMap(Texture2D* enviromentMap);
+			TextureCube* GetCubeMap();
+			Texture2D* GetSphereMap();
 			void Render(Camera* camera, Shader* shader);
 
 			void Init();

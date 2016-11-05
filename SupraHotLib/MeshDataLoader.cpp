@@ -203,7 +203,7 @@ namespace SupraHot
 				data[i]->HasNormalData = true;
 				data[i]->HasUVData = true;
 				data[i]->HasTangentData = true;
-				data[i]->HasBiNormalData = true;
+				data[i]->HasBiTangentData = true;
 			
 				// Generate GL Buffer Handles
 				{
@@ -241,9 +241,9 @@ namespace SupraHot
 						glGenBuffers(1, &currentMeshData->TangentBufferHandle);
 					}
 
-					if (currentMeshData->HasBiNormalData)
+					if (currentMeshData->HasBiTangentData)
 					{
-						glGenBuffers(1, &currentMeshData->BiNormalBufferHandle);
+						glGenBuffers(1, &currentMeshData->BiTangentBufferHandle);
 					}
 
 					std::vector<float> positions;
@@ -321,7 +321,7 @@ namespace SupraHot
 					glBindBuffer(GL_ARRAY_BUFFER, currentMeshData->TangentBufferHandle);
 					glBufferData(GL_ARRAY_BUFFER, tangents.size() * sizeof(float), &tangents[0], GL_STATIC_DRAW);
 
-					glBindBuffer(GL_ARRAY_BUFFER, currentMeshData->BiNormalBufferHandle);
+					glBindBuffer(GL_ARRAY_BUFFER, currentMeshData->BiTangentBufferHandle);
 					glBufferData(GL_ARRAY_BUFFER, binormals.size() * sizeof(float), &binormals[0], GL_STATIC_DRAW);
 
 					glBindBuffer(GL_ARRAY_BUFFER, currentMeshData->UVBufferHandle);
@@ -348,7 +348,7 @@ namespace SupraHot
 				data[i]->NormalData.clear();
 				data[i]->UVData.clear();
 				data[i]->TangentData.clear();
-				data[i]->BiNormalData.clear();
+				data[i]->BiTangentData.clear();
 				data[i]->IndexData.clear();
 
 			}
@@ -367,6 +367,7 @@ namespace SupraHot
 
 			// Create map for materials
 			std::unordered_map<uint32, Graphics::Material*> materialsMap;
+			std::vector<MeshData*> meshes {};
 
 
 			for (uint32 i = 0; i < model.MeshCount; i++)
@@ -399,7 +400,7 @@ namespace SupraHot
 					{
 						// Load albedo map
 						Texture2D* texture = new Texture2D();
-						//texture->Load(modelMaterial.AlbedoMapPath);
+						texture->Load(modelMaterial.AlbedoMapPath);
 						material->SetAlbedoMap(texture);
 					}
 
@@ -407,7 +408,7 @@ namespace SupraHot
 					{
 						// Load normal map
 						Texture2D* texture = new Texture2D();
-						//texture->Load(modelMaterial.NormalMapPath);
+						texture->Load(modelMaterial.NormalMapPath);
 						material->SetNormalMap(texture);
 					}
 
@@ -415,7 +416,7 @@ namespace SupraHot
 					{
 						// Load roughness map
 						Texture2D* texture = new Texture2D();
-						//texture->Load(modelMaterial.SpecularMapPath);
+						texture->Load(modelMaterial.SpecularMapPath);
 						material->SetRoughnessMap(texture);
 					}
 
@@ -423,7 +424,7 @@ namespace SupraHot
 					{
 						// Load metalness map
 						Texture2D* texture = new Texture2D();
-						//texture->Load(modelMaterial.ShininessReflectionMapPath);
+						texture->Load(modelMaterial.ShininessReflectionMapPath);
 						material->SetMetalnessMap(texture);
 					}
 
@@ -457,7 +458,45 @@ namespace SupraHot
 				// Load materials when needed.
 			}
 
-			return std::vector<MeshData*>();
+
+			for (uint32 i = 0; i < model.MeshCount; i++)
+			{
+				SHFModel::Mesh& modelMesh = model.Meshes[i];
+				MeshData* meshData = new MeshData();
+
+				SHF_PRINTF("VertexCount: %d \n", modelMesh.VertexCount);
+				SHF_PRINTF("ElementCount: %d \n", modelMesh.ElementCount);
+				SHF_PRINTF("FaceCount: %d \n", modelMesh.FaceCount);
+				SHF_PRINTF("IndexCount: %d \n", modelMesh.IndexCount);
+				SHF_PRINTF("VertexAttributes: %d \n", modelMesh.VertexAttributes == SHFModel::VertexBitfield::POSITION_NORMAL_UV_TANGENT_BITANGENT);
+				SHF_PRINTF("- - - - - - - - - - - \n");
+
+				if (modelMesh.VertexAttributes == SHFModel::VertexBitfield::POSITION)
+				{
+					meshData->HasPositionData = true;
+				}
+				else if (modelMesh.VertexAttributes == SHFModel::VertexBitfield::POSITION_NORMAL)
+				{
+					meshData->HasPositionData = true;
+					meshData->HasNormalData = true;
+				}
+				else if (modelMesh.VertexAttributes == SHFModel::VertexBitfield::POSITION_NORMAL_UV)
+				{
+					meshData->HasPositionData = true;
+					meshData->HasNormalData = true;
+					meshData->HasUVData = true;
+				}
+				else if (modelMesh.VertexAttributes == SHFModel::VertexBitfield::POSITION_NORMAL_UV_TANGENT_BITANGENT)
+				{
+					meshData->HasPositionData = true;
+					meshData->HasNormalData = true;
+					meshData->HasUVData = true;
+					meshData->HasBiTangentData = true;
+					meshData->HasTangentData = true;
+				}
+			}
+
+			return meshes;
 		}
 	};
 };

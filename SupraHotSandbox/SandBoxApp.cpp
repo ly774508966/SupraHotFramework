@@ -64,28 +64,33 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 	// Load Shaders
 	FBOShader = new SupraHot::Shader();
-	SkyBoxShader = new SupraHot::Shader();
+	SkyBoxCubeShader = new SupraHot::Shader();
+	SkyBoxSphereShader = new SupraHot::Shader();
 
 #ifdef PLATFORM_WINDOWS
 	FBOShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/fbo.vs.glsl");
 	FBOShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/fbo.fs.glsl");
 	
-	SkyBoxShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/skybox.vs.glsl");
-	SkyBoxShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/skybox.fs.glsl");
+	SkyBoxCubeShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/skybox.vs.glsl");
+	SkyBoxCubeShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/skybox.fs.glsl");
+
+	SkyBoxSphereShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/skybox.vs.glsl");
+	SkyBoxSphereShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/skybox-sphere.fs.glsl");
 #endif
 
 #ifdef PLATFORM_ANDROID
 	FBOShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/fbo_gles3.vs.glsl");
 	FBOShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/fbo_gles3.fs.glsl");
 
-	SkyBoxShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/skybox_gles3.vs.glsl");
-	SkyBoxShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/skybox_gles3.fs.glsl");
+	SkyBoxCubeShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/skybox_gles3.vs.glsl");
+	SkyBoxCubeShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/skybox_gles3.fs.glsl");
 #endif
 
 	FBOShader->CompileShader();
 	FBO->SetPixelSize(FBOShader);
 
-	SkyBoxShader->CompileShader();
+	SkyBoxCubeShader->CompileShader();
+	SkyBoxSphereShader->CompileShader();
 
 	SHF_PRINTF("SHADER COMPILED \n");
 
@@ -111,7 +116,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	}
 #endif
 
-	std::vector<MeshData*> meshData = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol_Model.shfm");
+	std::vector<MeshData*> meshData = Utils::MeshDataLoader::GetInstance()->Load("Models/cube.shfm");
 
 	// Try to load a 2d .dds file
 	Texture2D* ddsTexture = new Texture2D("DDS Test");
@@ -124,9 +129,9 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	textureCube->SetWrapS(GL_CLAMP_TO_EDGE);
 	textureCube->SetWrapT(GL_CLAMP_TO_EDGE);
 	textureCube->SetWrapR(GL_CLAMP_TO_EDGE);
-	textureCube->Load("Textures/skyboxtest/px.png", "Textures/skyboxtest/nx.png",
-					  "Textures/skyboxtest/py.png", "Textures/skyboxtest/ny.png",
-					  "Textures/skyboxtest/pz.png", "Textures/skyboxtest/nz.png");
+	textureCube->Load("Textures/Bridge2/px.png", "Textures/Bridge2/nx.png",
+					  "Textures/Bridge2/py.png", "Textures/Bridge2/ny.png",
+					  "Textures/Bridge2/pz.png", "Textures/Bridge2/nz.png");
 
 	TextureCube* ddsCubeTexture = new TextureCube("DDS Cube map");
 	ddsCubeTexture->SetWrapS(GL_CLAMP_TO_EDGE);
@@ -138,11 +143,17 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	ddsCubeTexture->LoadDDS("Textures/MonValley_G_DirtRoad_3k/Specular.dds", true, true);
 	//ddsCubeTexture->LoadDDS("Textures/Random/miptest.dds", false);
 
+	Texture2D* sphereMap = new Texture2D("sphere map");
+	sphereMap->SetWrapS(GL_CLAMP_TO_EDGE);
+	sphereMap->SetWrapT(GL_CLAMP_TO_EDGE);
+	sphereMap->Load("Textures/MonValley_G_DirtRoad_3k/Static.dds");
+
 	EnvBox = new SkyBox(); 
 	EnvBox->SetEnvironmentMap(ddsCubeTexture);
+	//EnvBox->SetEnvironmentMap(sphereMap);
 	EnvBox->Init();
 	
-	FlyCamera = new Camera(50.0f, 0.25f, 10000.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
+	FlyCamera = new Camera(75.0f, 0.25f, 10000.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
 }
 
 void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
@@ -157,9 +168,17 @@ void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
 
 void SandBoxApp::Render()
 {
+	FlyCamera->ResetMatrices();
+
+	FlyCamera->ApplyRotation();
+	FlyCamera->ApplyTranslation();
+	
+	FlyCamera->CreateViewProjectionMatrix();
+	FlyCamera->CreateInverseViewProjectionMatrix();
+
 	FBO->Attach();
 	
-	EnvBox->Render(FlyCamera, SkyBoxShader);
+	EnvBox->Render(FlyCamera, SkyBoxCubeShader);
 	
 	FBO->Detach();
 	FBO->SetReadSource(FBO->GetColorRenderTarget());
@@ -172,24 +191,24 @@ void SandBoxApp::Update(float deltaTime)
 	window->SetClearColor(0.7f, 0.3f, 0.7f, 1.0f);
 	
 #if PLATFORM_WINDOWS
-	Controls::update(window);
+	Controls::Update(window);
 
-	if (Controls::isKeyDown(GLFW_KEY_W))
-	{
-		FlyCamera->pitch -= 0.05f;
-	}
-	else if (Controls::isKeyDown(GLFW_KEY_S))
+	if (Controls::IsKeyDown(GLFW_KEY_W))
 	{
 		FlyCamera->pitch += 0.05f;
 	}
-
-	if (Controls::isKeyDown(GLFW_KEY_A))
+	else if (Controls::IsKeyDown(GLFW_KEY_S))
 	{
-		FlyCamera->yaw -= 0.05f;
+		FlyCamera->pitch -= 0.05f;
 	}
-	else if (Controls::isKeyDown(GLFW_KEY_D))
+
+	if (Controls::IsKeyDown(GLFW_KEY_A))
 	{
 		FlyCamera->yaw += 0.05f;
+	}
+	else if (Controls::IsKeyDown(GLFW_KEY_D))
+	{
+		FlyCamera->yaw -= 0.05f;
 	}
 
 #endif

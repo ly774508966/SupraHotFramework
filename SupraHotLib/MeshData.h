@@ -20,14 +20,14 @@ namespace SupraHot
 			uint32 IndexBufferHandle;
 			uint32 PositionBufferHandle;
 			uint32 NormalBufferHandle;
-			uint32 BiNormalBufferHandle;
+			uint32 BiTangentBufferHandle;
 			uint32 TangentBufferHandle;
 			uint32 UVBufferHandle;
 
 			std::vector<uint32> IndexData;
 			std::vector<Vec3> PositionData;
 			std::vector<Vec3> NormalData;
-			std::vector<Vec3> BiNormalData;
+			std::vector<Vec3> BiTangentData;
 			std::vector<Vec3> TangentData;
 			std::vector<Vec2> UVData;
 
@@ -39,7 +39,7 @@ namespace SupraHot
 			bool HasIndexData = false;
 			bool HasPositionData = false;
 			bool HasNormalData = false;
-			bool HasBiNormalData = false;
+			bool HasBiTangentData = false;
 			bool HasTangentData = false;
 			bool HasUVData = false;
 

@@ -4,12 +4,12 @@
 namespace SupraHot {
 	class Controls{
 	public:
-		static bool isKeyDown(int keycode);
-		static bool isKeyUp(int keycode);
-		static bool isKeyPressed(int keycode);
-		static bool isMouseButtonDown(int keycode);
-		static bool isMouseButtonUp(int keycode);
-		static bool isMouseButtonPressed(int keycode);
-		static void update(Graphics::WindowWin32* window);
+		static bool IsKeyDown(int keycode);
+		static bool IsKeyUp(int keycode);
+		static bool IsKeyPressed(int keycode);
+		static bool IsMouseButtonDown(int keycode);
+		static bool IsMouseButtonUp(int keycode);
+		static bool IsMouseButtonPressed(int keycode);
+		static void Update(Graphics::WindowWin32* window);
 	};
 };

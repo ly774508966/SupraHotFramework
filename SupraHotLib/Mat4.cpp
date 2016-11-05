@@ -303,6 +303,29 @@ namespace SupraHot
 			m[0][2] = z*x*t - y*s;		m[1][2] = z*y*t + x*s;		m[2][2] = z*z*t + c;
 		}
 
+		void Mat4::SetRotation(const float angle, const Vec3& axis)
+		{
+			float x = axis.x;
+			float y = axis.y;
+			float z = axis.z;
+
+			float c = cos(angle * (float)M_PI / 180);
+			float s = sin(angle * (float)M_PI / 180);
+			float t = 1 - c;
+
+			m[0][0] = x*x*t + c;
+			m[1][0] = x*y*t - z*s;
+			m[2][0] = x*z*t + y*s;
+
+			m[0][1] = y*x*t + z*s;
+			m[1][1] = y*y*t + c;
+			m[2][1] = y*z*t - x*s;
+
+			m[0][2] = z*x*t - y*s;
+			m[1][2] = z*y*t + x*s;
+			m[2][2] = z*z*t + c;
+		}
+
 		void Mat4::SetScale(const Vec3& scale)
 		{
 			m[0][0] = scale.x;

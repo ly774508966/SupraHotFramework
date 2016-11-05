@@ -38,6 +38,7 @@ namespace SupraHot
 			void SetUpVector(const Vec3& v);
 			void SetTranslationVector(const Vec3& v);
 			void SetRotation(const Quat4& q);
+			void SetRotation(const float angle, const Vec3& axis);
 			void SetScale(const Vec3& scale);
 
 			Vec3 GetForwardVector() const { return Vec3(m[0][0], m[0][1], m[0][2]); }

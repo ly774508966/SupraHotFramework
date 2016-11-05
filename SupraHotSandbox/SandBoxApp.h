@@ -10,7 +10,8 @@ private:
 	SupraHot::Texture2D* Texture;
 
 	SupraHot::Shader* FBOShader;
-	SupraHot::Shader* SkyBoxShader;
+	SupraHot::Shader* SkyBoxCubeShader;
+	SupraHot::Shader* SkyBoxSphereShader;
 
 	SupraHot::SkyBox* EnvBox;
 	SupraHot::Camera* FlyCamera;

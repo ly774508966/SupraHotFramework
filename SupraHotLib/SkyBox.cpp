@@ -1,5 +1,6 @@
 #include "SkyBox.h"
 #include "TextureCube.h"
+#include "Texture2D.h"
 #include "Camera.h"
 #include "Shader.h"
 #include <vector>
@@ -18,36 +19,46 @@ namespace SupraHot
 
 		void SkyBox::SetEnvironmentMap(TextureCube* enviromentMap)
 		{
-			this->EnviromentMap = enviromentMap;
+			this->CubeMap = enviromentMap;
 		}
 
-		TextureCube* SkyBox::GetEnvironmentMap()
+		void SkyBox::SetEnvironmentMap(Texture2D* enviromentMap)
 		{
-			return EnviromentMap;
+			this->SphereMap = enviromentMap;
+		}
+
+		TextureCube* SkyBox::GetCubeMap()
+		{
+			return CubeMap;
+		}
+
+		Texture2D* SkyBox::GetSphereMap()
+		{
+			return SphereMap;
 		}
 
 		// TODO: Use Position & Quaternion instead!
 		//		This will make this class more resuable. But for now it is ok.
 		void SkyBox::Render(Camera* camera, Shader* shader)
 		{
-			Vec3 cameraPosition = camera->Position;
-			camera->Position.x = camera->Position.y = camera->Position.z = 0;
-
-			camera->ResetMatrices();
-			camera->ApplyTranslation(); 
-			camera->ApplyRotation();
-
-			camera->CreateViewProjectionMatrix();
-			camera->CreateInverseViewProjectionMatrix();
-
 			glDisable(GL_DEPTH_TEST);
+			glDepthMask(GL_FALSE);
 
 			// Render Skybox here
 			shader->Attach();
 
 			GLuint shaderProgramID = shader->GetShaderID();
-			shader->SetMat4(glGetUniformLocation(shaderProgramID, "ViewProjectionMatrix"), (*camera->GetViewProjectionMatrix()));
-			shader->SetTextureCube(glGetUniformLocation(shaderProgramID, "CubeMap"), EnviromentMap, GL_TEXTURE0);
+			shader->SetMat4(glGetUniformLocation(shaderProgramID, "ViewMatrix"), (*camera->GetViewMatrix()));
+			shader->SetMat4(glGetUniformLocation(shaderProgramID, "ProjectionMatrix"), (*camera->GetProjectionMatrix()));
+			
+			if (CubeMap != nullptr)
+			{
+				shader->SetTextureCube(glGetUniformLocation(shaderProgramID, "CubeMap"), CubeMap, GL_TEXTURE0);
+			}
+			else if (SphereMap != nullptr)
+			{
+				shader->SetTexture2D(glGetUniformLocation(shaderProgramID, "SphereMap"), SphereMap, GL_TEXTURE0);
+			}
 			
 			// Draw the vertices
 			Render(shader);
@@ -55,7 +66,7 @@ namespace SupraHot
 			shader->Detach();
 
 			glEnable(GL_DEPTH_TEST);
-			camera->Position = cameraPosition;
+			glDepthMask(GL_TRUE);
 		}
 
 		void SkyBox::Render(Shader* shader)
@@ -79,62 +90,63 @@ namespace SupraHot
 		void SkyBox::Init()
 		{
 			// Create Vertex list
-			std::vector<Vec3> Vertices;
-			std::vector<uint16> Indices;
+			std::vector<Vec3> vertices;
+			std::vector<uint16> indices;
+			float scale = 1.0f;
 
-			Vertices.push_back(Vec3(-1.0f, 1.0f, 1.0f));
-			Vertices.push_back(Vec3(-1.0f, -1.0f, 1.0f));
-			Vertices.push_back(Vec3(1.0f, -1.0f, 1.0f));
-			Vertices.push_back(Vec3(1.0f, 1.0f, 1.0f));
-			Vertices.push_back(Vec3(-1.0f, 1.0f, -1.0f));
-			Vertices.push_back(Vec3(-1.0f, -1.0f, -1.0f));
-			Vertices.push_back(Vec3(1.0f, -1.0f, -1.0f));
-			Vertices.push_back(Vec3(1.0f, 1.0f, -1.0f));
+			vertices.push_back(Vec3(-1.0f * scale, 1.0f * scale, 1.0f * scale));
+			vertices.push_back(Vec3(-1.0f * scale, -1.0f * scale, 1.0f * scale));
+			vertices.push_back(Vec3(1.0f * scale, -1.0f * scale, 1.0f * scale));
+			vertices.push_back(Vec3(1.0f * scale, 1.0f * scale, 1.0f * scale));
+			vertices.push_back(Vec3(-1.0f * scale, 1.0f * scale, -1.0f * scale));
+			vertices.push_back(Vec3(-1.0f * scale, -1.0f * scale, -1.0f * scale));
+			vertices.push_back(Vec3(1.0f * scale, -1.0f * scale, -1.0f * scale));
+			vertices.push_back(Vec3(1.0f * scale, 1.0f * scale, -1.0f * scale));
 
-			Indices.push_back(0);
-			Indices.push_back(1);
-			Indices.push_back(2);
-			Indices.push_back(0);
-			Indices.push_back(3);
-			Indices.push_back(2);
+			indices.push_back(0);
+			indices.push_back(1);
+			indices.push_back(2);
+			indices.push_back(0);
+			indices.push_back(3);
+			indices.push_back(2);
 
-			Indices.push_back(2);
-			Indices.push_back(3);
-			Indices.push_back(6);
-			Indices.push_back(3);
-			Indices.push_back(7);
-			Indices.push_back(6);
+			indices.push_back(2);
+			indices.push_back(3);
+			indices.push_back(6);
+			indices.push_back(3);
+			indices.push_back(7);
+			indices.push_back(6);
 
-			Indices.push_back(4);
-			Indices.push_back(5);
-			Indices.push_back(6);
-			Indices.push_back(4);
-			Indices.push_back(7);
-			Indices.push_back(6);
+			indices.push_back(4);
+			indices.push_back(5);
+			indices.push_back(6);
+			indices.push_back(4);
+			indices.push_back(7);
+			indices.push_back(6);
 
-			Indices.push_back(0);
-			Indices.push_back(1);
-			Indices.push_back(5);
-			Indices.push_back(0);
-			Indices.push_back(4);
-			Indices.push_back(5);
+			indices.push_back(0);
+			indices.push_back(1);
+			indices.push_back(5);
+			indices.push_back(0);
+			indices.push_back(4);
+			indices.push_back(5);
 
-			Indices.push_back(0);
-			Indices.push_back(3);
-			Indices.push_back(4);
-			Indices.push_back(3);
-			Indices.push_back(4);
-			Indices.push_back(7);
+			indices.push_back(0);
+			indices.push_back(3);
+			indices.push_back(4);
+			indices.push_back(3);
+			indices.push_back(4);
+			indices.push_back(7);
 
-			Indices.push_back(1);
-			Indices.push_back(2);
-			Indices.push_back(6);
-			Indices.push_back(1);
-			Indices.push_back(5);
-			Indices.push_back(6);
+			indices.push_back(1);
+			indices.push_back(2);
+			indices.push_back(6);
+			indices.push_back(1);
+			indices.push_back(5);
+			indices.push_back(6);
 
-			Vertices.shrink_to_fit();
-			Indices.shrink_to_fit();
+			vertices.shrink_to_fit();
+			indices.shrink_to_fit();
 
 			// Create GL buffer
 			glGenVertexArrays(1, &VAOHandle);
@@ -142,7 +154,7 @@ namespace SupraHot
 
 			glGenBuffers(1, &IndexVBOHandle);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexVBOHandle);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, Indices.size() * sizeof(uint16), &Indices[0], GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint16), &indices[0], GL_STATIC_DRAW);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 #if DEVELOPMENT == 1
@@ -154,11 +166,11 @@ namespace SupraHot
 #endif
 			std::vector<float> verts;
 			verts.shrink_to_fit();
-			for (uint32 i = 0; i < Vertices.size(); i++)
+			for (uint32 i = 0; i < vertices.size(); i++)
 			{
-				verts.push_back(Vertices.at(i).x);
-				verts.push_back(Vertices.at(i).y);
-				verts.push_back(Vertices.at(i).z);
+				verts.push_back(vertices.at(i).x);
+				verts.push_back(vertices.at(i).y);
+				verts.push_back(vertices.at(i).z);
 			}
 
 			glGenBuffers(1, &VertexVBOHandle);
@@ -179,10 +191,16 @@ namespace SupraHot
 
 		void SkyBox::Destroy()
 		{
-			if (EnviromentMap != nullptr)
+			if (CubeMap != nullptr)
 			{
-				EnviromentMap->Destroy();
-				delete EnviromentMap;
+				CubeMap->Destroy();
+				delete CubeMap;
+			}
+
+			if (SphereMap != nullptr)
+			{
+				SphereMap->Destroy();
+				delete SphereMap;
 			}
 		}
 

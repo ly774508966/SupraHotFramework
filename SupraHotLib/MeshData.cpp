@@ -18,7 +18,7 @@ namespace SupraHot
 			IndexData.clear();
 			PositionData.clear();
 			NormalData.clear();
-			BiNormalData.clear();
+			BiTangentData.clear();
 			TangentData.clear();
 			UVData.clear();
 
@@ -34,12 +34,12 @@ namespace SupraHot
 
 			if (HasNormalData)
 			{
-				glDeleteBuffers(1, &BiNormalBufferHandle);
+				glDeleteBuffers(1, &BiTangentBufferHandle);
 			}
 
-			if (HasBiNormalData)
+			if (HasBiTangentData)
 			{
-				glDeleteBuffers(1, &BiNormalBufferHandle);
+				glDeleteBuffers(1, &BiTangentBufferHandle);
 			}
 
 			if (HasTangentData)

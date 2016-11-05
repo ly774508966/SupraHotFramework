@@ -35,7 +35,7 @@ namespace SupraHot
 		void Camera::ApplyRotation()
 		{
 			Quat4 xRotation = Quat4(Vec3(1, 0, 0), pitch).Normalized();
-			Quat4 yRotation = Quat4(xRotation.GetUp(), yaw).Normalized();
+			Quat4 yRotation = Quat4(Vec3(0, 1, 0), yaw).Normalized();
 			Quat4 totalRotation = (yRotation * xRotation).Normalized();
 
 			Mat4 rotationMatrix;
