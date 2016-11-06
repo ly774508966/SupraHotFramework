@@ -564,6 +564,9 @@ namespace SupraHot
 			{
 				/* generate mipmaps */
 				glGenerateMipmap(static_cast<GLenum>(GL_TEXTURE_2D));
+#if DEVELOPMENT == 1
+				SHF_PRINTF("Generating missing mips... \n");
+#endif
 			}
 		}
 	};

@@ -84,8 +84,11 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 	SkyBoxCubeShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/skybox_gles3.vs.glsl");
 	SkyBoxCubeShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/skybox_gles3.fs.glsl");
-#endif
 
+	SkyBoxSphereShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/skybox_gles3.vs.glsl");
+	SkyBoxSphereShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/skybox-sphere_gles3.fs.glsl");
+#endif
+	
 	FBOShader->CompileShader();
 	FBO->SetPixelSize(FBOShader);
 
@@ -96,7 +99,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 	// Try loading a lua script and run it.
 	SupraHot::Scripting::LuaVM::GetInstance()->RunFile("Scripts/test.lua");
-
+	
 #if 0
 	// Try loading shfm
 	Utils::SHFModelFile model = Utils::SHFMBinaryLoader::GetInstance().LoadFromFile("Models/Pistol_Model.shfm");
@@ -147,13 +150,14 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	sphereMap->SetWrapS(GL_CLAMP_TO_EDGE);
 	sphereMap->SetWrapT(GL_CLAMP_TO_EDGE);
 	sphereMap->Load("Textures/MonValley_G_DirtRoad_3k/Static.dds");
+	sphereMap->Destroy();
 
 	EnvBox = new SkyBox(); 
 	EnvBox->SetEnvironmentMap(ddsCubeTexture);
 	//EnvBox->SetEnvironmentMap(sphereMap);
-	EnvBox->Init();
+	EnvBox->Init(); 
 	
-	FlyCamera = new Camera(75.0f, 0.25f, 10000.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
+	FlyCamera = new Camera(50.0f, 0.05f, 100.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
 }
 
 void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)

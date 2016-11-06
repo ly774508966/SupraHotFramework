@@ -7,5 +7,7 @@ out vec4 FragColor;
 
 void main(){
 	vec3 r = normalize(UntransformedVertexPosition);
-	FragColor = texture(CubeMap, r);
+	vec4 tex = texture(CubeMap, r);
+	vec3 p3 = vec3(1.0 / 2.2);
+	FragColor = vec4(pow(tex.rgb, p3), 1);
 }
