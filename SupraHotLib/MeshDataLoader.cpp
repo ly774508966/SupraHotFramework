@@ -212,8 +212,8 @@ namespace SupraHot
 #if DEVELOPMENT == 1
 					SHF_PRINTF("Finishing MeshGL: %s (Material: %s)\n", currentMeshData->Name.c_str(), currentMeshData->MeshMaterial.GetName().c_str());
 #endif
-					glGenVertexArrays(1, &currentMeshData->VAOId);
-					glBindVertexArray(currentMeshData->VAOId);
+					glGenVertexArrays(1, &currentMeshData->VAOHandle);
+					glBindVertexArray(currentMeshData->VAOHandle);
 
 					/* genereate vertex buffers */
 					if (currentMeshData->HasIndexData)
@@ -366,7 +366,7 @@ namespace SupraHot
 			SHFModelFile model = SHFMBinaryLoader::GetInstance().LoadFromFile(path);
 
 			// Create map for materials
-			std::unordered_map<uint32, Graphics::Material*> materialsMap;
+			std::unordered_map<uint32, Graphics::Material> materialsMap;
 			std::vector<MeshData*> meshes {};
 
 
@@ -383,17 +383,17 @@ namespace SupraHot
 					#endif
 
 					// Set values
-					Graphics::Material* material = new Graphics::Material();
-					material->ID = modelMaterial.ID;
-					material->Name = modelMaterial.Name;
-					material->Ka = modelMaterial.Ka; 
-					material->Kd = modelMaterial.Kd; 
-					material->Ks = modelMaterial.Ks; 
-					material->Ke = modelMaterial.Ke; 
-					material->Ns = modelMaterial.Ns; 
-					material->Roughness = modelMaterial.Roughness;
-					material->Metalness = modelMaterial.Metalness;
-					material->F0 = modelMaterial.F0;
+					Graphics::Material material = Graphics::Material();
+					material.ID = modelMaterial.ID;
+					material.Name = modelMaterial.Name;
+					material.Ka = modelMaterial.Ka; 
+					material.Kd = modelMaterial.Kd; 
+					material.Ks = modelMaterial.Ks; 
+					material.Ke = modelMaterial.Ke; 
+					material.Ns = modelMaterial.Ns; 
+					material.Roughness = modelMaterial.Roughness;
+					material.Metalness = modelMaterial.Metalness;
+					material.F0 = modelMaterial.F0;
 
 					// Load textures.
 					if (modelMaterial.AlbeoMapPathLength > 0)
@@ -401,7 +401,7 @@ namespace SupraHot
 						// Load albedo map
 						Texture2D* texture = new Texture2D();
 						texture->Load(modelMaterial.AlbedoMapPath);
-						material->SetAlbedoMap(texture);
+						material.SetAlbedoMap(texture);
 					}
 
 					if (modelMaterial.NormalMapPathLength > 0)
@@ -409,7 +409,7 @@ namespace SupraHot
 						// Load normal map
 						Texture2D* texture = new Texture2D();
 						texture->Load(modelMaterial.NormalMapPath);
-						material->SetNormalMap(texture);
+						material.SetNormalMap(texture);
 					}
 
 					if (modelMaterial.SpecularMapPathLength > 0)
@@ -417,7 +417,7 @@ namespace SupraHot
 						// Load roughness map
 						Texture2D* texture = new Texture2D();
 						texture->Load(modelMaterial.SpecularMapPath);
-						material->SetRoughnessMap(texture);
+						material.SetRoughnessMap(texture);
 					}
 
 					if (modelMaterial.ShininessReflectionMapPathLength > 0)
@@ -425,7 +425,7 @@ namespace SupraHot
 						// Load metalness map
 						Texture2D* texture = new Texture2D();
 						texture->Load(modelMaterial.ShininessReflectionMapPath);
-						material->SetMetalnessMap(texture);
+						material.SetMetalnessMap(texture);
 					}
 
 					// Todo: We also need to create VMF roughness maps from metalness & roughness
@@ -464,12 +464,8 @@ namespace SupraHot
 				SHFModel::Mesh& modelMesh = model.Meshes[i];
 				MeshData* meshData = new MeshData();
 
-				SHF_PRINTF("VertexCount: %d \n", modelMesh.VertexCount);
-				SHF_PRINTF("ElementCount: %d \n", modelMesh.ElementCount);
-				SHF_PRINTF("FaceCount: %d \n", modelMesh.FaceCount);
-				SHF_PRINTF("IndexCount: %d \n", modelMesh.IndexCount);
-				SHF_PRINTF("VertexAttributes: %d \n", modelMesh.VertexAttributes == SHFModel::VertexBitfield::POSITION_NORMAL_UV_TANGENT_BITANGENT);
-				SHF_PRINTF("- - - - - - - - - - - \n");
+				meshData->Name = modelMesh.Name;
+				meshData->MeshMaterial = materialsMap[modelMesh.MaterialID];
 
 				if (modelMesh.VertexAttributes == SHFModel::VertexBitfield::POSITION)
 				{
@@ -494,6 +490,58 @@ namespace SupraHot
 					meshData->HasBiTangentData = true;
 					meshData->HasTangentData = true;
 				}
+
+				// Generate vao
+				glGenVertexArrays(1, &meshData->VAOHandle);
+				glBindVertexArray(meshData->VAOHandle);
+
+				// Determine index type and size
+				bool indices16Bit = true;
+				std::vector<uint16> Indices16BitVector;
+
+				if (modelMesh.IndexCount <= 0xffff)
+				{
+					meshData->GlIndexType = GL_UNSIGNED_SHORT;
+					indices16Bit = true;
+				} 
+				else
+				{
+					meshData->GlIndexType = GL_UNSIGNED_INT;
+					indices16Bit = false;
+				}
+
+				// Copy data
+				for (uint32 index = 0, l = modelMesh.IndexCount; index < l; index++)
+				{
+					uint32 vertIndex = modelMesh.Indices[index];
+					Indices16BitVector.push_back(static_cast<uint16>(vertIndex));
+				}
+
+				// Generate index buffer
+				glGenBuffers(1, &meshData->IndexBufferHandle);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshData->IndexBufferHandle);
+
+				if (indices16Bit)
+				{
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, modelMesh.IndexCount * sizeof(uint16), &Indices16BitVector[0], GL_STATIC_DRAW);
+				}
+				else
+				{
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, modelMesh.IndexCount * sizeof(uint32), &modelMesh.Indices[0], GL_STATIC_DRAW);
+				}
+
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+
+				// Generate Vertex buffer
+				glGenBuffers(1, &meshData->VertexBufferHandle);
+				glBindBuffer(GL_ARRAY_BUFFER, meshData->VertexBufferHandle);
+				
+				// Size = VertexCount * number of floats per vertex * sizeof(float)
+				glBufferData(GL_ARRAY_BUFFER, modelMesh.VertexCount * modelMesh.VertexStride * sizeof(float), &modelMesh.Vertices[0], GL_STATIC_DRAW);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+				glBindVertexArray(0);
 			}
 
 			return meshes;

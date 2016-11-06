@@ -119,7 +119,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	}
 #endif
 
-	std::vector<MeshData*> meshData = Utils::MeshDataLoader::GetInstance()->Load("Models/cube.shfm");
+	std::vector<MeshData*> meshData = Utils::MeshDataLoader::GetInstance()->Load("Models/cube2.shfm");
 
 	// Try to load a 2d .dds file
 	Texture2D* ddsTexture = new Texture2D("DDS Test");

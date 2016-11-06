@@ -88,6 +88,7 @@ int _tmain(int argc, char* argv[])
 		aiProcess_Triangulate |
 		aiProcess_JoinIdenticalVertices |
 		//aiProcess_PreTransformVertices |
+		aiProcess_GenNormals |
 		aiProcess_RemoveRedundantMaterials |
 		aiProcess_OptimizeMeshes;
 
