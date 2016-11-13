@@ -29,7 +29,7 @@ namespace SupraHot
 			translationMatrix.SetTranslationVector(-Position);
 
 			this->ViewMatrix = translationMatrix * this->ViewMatrix;
-			this->ProjectionMatrix = this->ProjectionMatrix.ProjectFrustum(fieldOfView, aspectRatio, zNear, zFar);
+			this->ProjectionMatrix = this->ProjectionMatrix.ProjectPerspective(fieldOfView, aspectRatio, zNear, zFar);
 		}
 
 		void Camera::ApplyRotation()
@@ -49,48 +49,6 @@ namespace SupraHot
 			Right = (totRot * Vec3(1, 0, 0)).normalized();
 			Up = (totRot * Vec3(0, 1, 0)).normalized();
 		}
-
-		/*void Camera::UpdateInput(Controls* controls, float deltaTime)
-		{
-			mouseGrabbed = controls->IsMouseGrabbed();
-
-			mouseX = static_cast<float>(controls->GetMouseX());
-			mouseY = static_cast<float>(controls->GetMouseY());
-
-			mouseDX = static_cast<float>(controls->GetMouseDX());
-			mouseDY = static_cast<float>(controls->GetMouseDY());
-
-			// update yaw & pitch
-			if (mouseGrabbed)
-			{
-				pitch += mouseDY * mouseSpeed * deltaTime;
-				yaw += mouseDX * mouseSpeed * deltaTime;
-			}
-			else
-			{
-				mouseDX = 0;
-				mouseDY = 0;
-			}
-
-			if (pitch > 90.0f)
-			{
-				pitch = 90.0f;
-			}
-			else if (pitch < -90.0f)
-			{
-				pitch = -90.0f;
-			}
-
-			if (yaw < 0.0f)
-			{
-				yaw += 360.0f;
-			}
-			else if (yaw > 360.0f)
-			{
-				yaw -= 360.0f;
-			}
-
-		}*/
 
 		void Camera::setMouseSpeed(float speed)
 		{

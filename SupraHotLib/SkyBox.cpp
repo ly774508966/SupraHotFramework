@@ -42,7 +42,7 @@ namespace SupraHot
 		void SkyBox::Render(Camera* camera, Shader* shader)
 		{
 			glDisable(GL_DEPTH_TEST);
-			glDepthMask(GL_FALSE);
+			// glDepthMask(GL_FALSE);
 
 			// Render Skybox here
 			shader->Attach();
@@ -66,7 +66,7 @@ namespace SupraHot
 			shader->Detach();
 
 			glEnable(GL_DEPTH_TEST);
-			glDepthMask(GL_TRUE);
+			// glDepthMask(GL_TRUE);
 		}
 
 		void SkyBox::Render(Shader* shader)

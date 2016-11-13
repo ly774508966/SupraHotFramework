@@ -27,6 +27,7 @@
 #include "Platform.h"
 #include <TextureCube.h>
 #include <SkyBox.h>
+#include <MeshDataRenderer.h>
 
 using namespace SupraHot;
 
@@ -42,51 +43,55 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 {
 	// First we need to initialize the filesystem
 #ifdef PLATFORM_WINDOWS
-	SupraHot::Utils::FileSystem::GetInstance()->SetRootPath("../Content/");
+	Utils::FileSystem::GetInstance()->SetRootPath("../Content/");
 #endif
 
 #ifdef PLATFORM_EMSCRIPTEN
-	SupraHot::Utils::FileSystem::GetInstance()->SetRootPath("Content/");
+	Utils::FileSystem::GetInstance()->SetRootPath("Content/");
 #endif
 
 	App::Init(width, height, title);
 
-	window = new SupraHot::Window();
+	window = new Window();
 	window->Init(width, height, title);
 	window->SetClearColor(0.7f, 0.3f, 0.7f, 1.0f);
 
-	FBO = new SupraHot::FrameBufferObject();
+	FBO = new FrameBufferObject();
 	FBO->Init(width, height);
 
-	Texture = new SupraHot::Texture2D("SHF Logo");
+	Texture = new Texture2D("SHF Logo");
 	Texture->Load("Images/logo.png");
 	FBO->SetReadSource(Texture);
 
 	// Load Shaders
-	FBOShader = new SupraHot::Shader();
-	SkyBoxCubeShader = new SupraHot::Shader();
-	SkyBoxSphereShader = new SupraHot::Shader();
+	FBOShader = new Shader();
+	SimpleMeshShader = new Shader();
+	SkyBoxCubeShader = new Shader();
+	SkyBoxSphereShader = new Shader();
 
 #ifdef PLATFORM_WINDOWS
-	FBOShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/fbo.vs.glsl");
-	FBOShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/fbo.fs.glsl");
+	FBOShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/fbo.vs.glsl");
+	FBOShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/fbo.fs.glsl");
 	
-	SkyBoxCubeShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/skybox.vs.glsl");
-	SkyBoxCubeShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/skybox.fs.glsl");
+	SkyBoxCubeShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/skybox.vs.glsl");
+	SkyBoxCubeShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/skybox.fs.glsl");
 
-	SkyBoxSphereShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/skybox.vs.glsl");
-	SkyBoxSphereShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/skybox-sphere.fs.glsl");
+	SkyBoxSphereShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/skybox.vs.glsl");
+	SkyBoxSphereShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/skybox-sphere.fs.glsl");
+
+	SimpleMeshShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/simple-mesh.vs.glsl");
+	SimpleMeshShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/simple-mesh.fs.glsl");
 #endif
 
 #ifdef PLATFORM_ANDROID
-	FBOShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/fbo_gles3.vs.glsl");
-	FBOShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/fbo_gles3.fs.glsl");
+	FBOShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/fbo_gles3.vs.glsl");
+	FBOShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/fbo_gles3.fs.glsl");
 
-	SkyBoxCubeShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/skybox_gles3.vs.glsl");
-	SkyBoxCubeShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/skybox_gles3.fs.glsl");
+	SkyBoxCubeShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/skybox_gles3.vs.glsl");
+	SkyBoxCubeShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/skybox_gles3.fs.glsl");
 
-	SkyBoxSphereShader->LoadShaderFromFile(SupraHot::Shader::VERTEX_SHADER, "Shaders/skybox_gles3.vs.glsl");
-	SkyBoxSphereShader->LoadShaderFromFile(SupraHot::Shader::PIXEL_SHADER, "Shaders/skybox-sphere_gles3.fs.glsl");
+	SkyBoxSphereShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/skybox_gles3.vs.glsl");
+	SkyBoxSphereShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/skybox-sphere_gles3.fs.glsl");
 #endif
 	
 	FBOShader->CompileShader();
@@ -95,10 +100,13 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	SkyBoxCubeShader->CompileShader();
 	SkyBoxSphereShader->CompileShader();
 
+	SimpleMeshShader->CompileShader();
+	FBO->SetPixelSize(SimpleMeshShader);
+
 	SHF_PRINTF("SHADER COMPILED \n");
 
 	// Try loading a lua script and run it.
-	SupraHot::Scripting::LuaVM::GetInstance()->RunFile("Scripts/test.lua");
+	Scripting::LuaVM::GetInstance()->RunFile("Scripts/test.lua");
 	
 #if 0
 	// Try loading shfm
@@ -119,7 +127,8 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	}
 #endif
 
-	std::vector<MeshData*> meshData = Utils::MeshDataLoader::GetInstance()->Load("Models/cube2.shfm");
+	MeshDataVector = Utils::MeshDataLoader::GetInstance()->Load("Models/cube2.shfm");
+	SHF_PRINTF("MeshDataVector.size = %llu \n", MeshDataVector.size());
 
 	// Try to load a 2d .dds file
 	Texture2D* ddsTexture = new Texture2D("DDS Test");
@@ -150,11 +159,11 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	sphereMap->SetWrapS(GL_CLAMP_TO_EDGE);
 	sphereMap->SetWrapT(GL_CLAMP_TO_EDGE);
 	sphereMap->Load("Textures/MonValley_G_DirtRoad_3k/Static.dds");
-	sphereMap->Destroy();
+	//sphereMap->Destroy();
 
 	EnvBox = new SkyBox(); 
-	EnvBox->SetEnvironmentMap(ddsCubeTexture);
-	//EnvBox->SetEnvironmentMap(sphereMap);
+	//EnvBox->SetEnvironmentMap(ddsCubeTexture);
+	EnvBox->SetEnvironmentMap(sphereMap);
 	EnvBox->Init(); 
 	
 	FlyCamera = new Camera(50.0f, 0.05f, 100.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
@@ -181,8 +190,13 @@ void SandBoxApp::Render()
 	FlyCamera->CreateInverseViewProjectionMatrix();
 
 	FBO->Attach();
-	
-	EnvBox->Render(FlyCamera, SkyBoxCubeShader);
+
+	EnvBox->Render(FlyCamera, SkyBoxSphereShader);
+
+	for (MeshData* meshData : MeshDataVector)
+	{
+		MeshDataRenderer::GetInstance().Render(FlyCamera, meshData, SimpleMeshShader);
+	}
 	
 	FBO->Detach();
 	FBO->SetReadSource(FBO->GetColorRenderTarget());
@@ -199,11 +213,13 @@ void SandBoxApp::Update(float deltaTime)
 
 	if (Controls::IsKeyDown(GLFW_KEY_W))
 	{
-		FlyCamera->pitch += 0.05f;
+		//FlyCamera->pitch += 0.05f;
+		FlyCamera->moveFromLook(0, 0, -1, 0.016);
 	}
 	else if (Controls::IsKeyDown(GLFW_KEY_S))
 	{
-		FlyCamera->pitch -= 0.05f;
+		//FlyCamera->pitch -= 0.05f;
+		FlyCamera->moveFromLook(0, 0, 1, 0.016);
 	}
 
 	if (Controls::IsKeyDown(GLFW_KEY_A))

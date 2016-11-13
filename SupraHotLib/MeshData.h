@@ -19,6 +19,7 @@ namespace SupraHot
 			uint32 FaceCount;
 			uint32 IndexBufferHandle;
 			uint32 VertexBufferHandle;
+			
 
 
 			// The rest is only need for objx. (Which we will abandon)

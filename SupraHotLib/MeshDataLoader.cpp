@@ -466,6 +466,7 @@ namespace SupraHot
 
 				meshData->Name = modelMesh.Name;
 				meshData->MeshMaterial = materialsMap[modelMesh.MaterialID];
+				meshData->FaceCount = modelMesh.FaceCount;
 
 				if (modelMesh.VertexAttributes == SHFModel::VertexBitfield::POSITION)
 				{
@@ -523,25 +524,27 @@ namespace SupraHot
 
 				if (indices16Bit)
 				{
+					Indices16BitVector.shrink_to_fit();
 					glBufferData(GL_ELEMENT_ARRAY_BUFFER, modelMesh.IndexCount * sizeof(uint16), &Indices16BitVector[0], GL_STATIC_DRAW);
 				}
 				else
 				{
-					glBufferData(GL_ELEMENT_ARRAY_BUFFER, modelMesh.IndexCount * sizeof(uint32), &modelMesh.Indices[0], GL_STATIC_DRAW);
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, modelMesh.IndexCount * sizeof(uint32), modelMesh.Indices, GL_STATIC_DRAW);
 				}
 
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
 
 				// Generate Vertex buffer
 				glGenBuffers(1, &meshData->VertexBufferHandle);
 				glBindBuffer(GL_ARRAY_BUFFER, meshData->VertexBufferHandle);
 				
 				// Size = VertexCount * number of floats per vertex * sizeof(float)
-				glBufferData(GL_ARRAY_BUFFER, modelMesh.VertexCount * modelMesh.VertexStride * sizeof(float), &modelMesh.Vertices[0], GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, modelMesh.VertexCount * modelMesh.VertexStride * sizeof(float), modelMesh.Vertices, GL_STATIC_DRAW);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 				glBindVertexArray(0);
+
+				meshes.push_back(meshData);
 			}
 
 			return meshes;

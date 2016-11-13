@@ -2,6 +2,7 @@
 #include <App.h>
 #include <FrameBufferObject.h>
 #include <SkyBox.h>
+#include <MeshData.h>
 
 class SandBoxApp : public SupraHot::App
 {
@@ -10,11 +11,15 @@ private:
 	SupraHot::Texture2D* Texture;
 
 	SupraHot::Shader* FBOShader;
+	SupraHot::Shader* SimpleMeshShader;
 	SupraHot::Shader* SkyBoxCubeShader;
 	SupraHot::Shader* SkyBoxSphereShader;
 
 	SupraHot::SkyBox* EnvBox;
 	SupraHot::Camera* FlyCamera;
+
+	std::vector<SupraHot::MeshData*> MeshDataVector;
+
 public:
 	SandBoxApp();
 	~SandBoxApp();

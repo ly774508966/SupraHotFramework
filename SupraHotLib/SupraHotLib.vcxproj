@@ -295,6 +295,7 @@
     <ClInclude Include="MeshComponent.h" />
     <ClInclude Include="MeshData.h" />
     <ClInclude Include="MeshDataLoader.h" />
+    <ClInclude Include="MeshDataRenderer.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="Publisher.h" />
     <ClInclude Include="Quat4.h" />
@@ -361,6 +362,7 @@
     <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="MeshData.cpp" />
     <ClCompile Include="MeshDataLoader.cpp" />
+    <ClCompile Include="MeshDataRenderer.cpp" />
     <ClCompile Include="Publisher.cpp" />
     <ClCompile Include="Quat4.cpp" />
     <ClCompile Include="Renderer.cpp" />
