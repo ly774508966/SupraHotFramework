@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "Controls.h"
 
 namespace SupraHot
 {
@@ -6,10 +7,10 @@ namespace SupraHot
 	{
 		Camera::Camera(float fov, float zNear, float zFar, float aspectRatio)
 		{
-			this->fieldOfView = fov;
-			this->zNear = zNear;
-			this->zFar = zFar;
-			this->aspectRatio = aspectRatio;
+			this->FieldOfView = fov;
+			this->ZNear = zNear;
+			this->ZFar = zFar;
+			this->AspectRatio = aspectRatio;
 		}
 
 		Camera::~Camera()
@@ -23,56 +24,25 @@ namespace SupraHot
 			this->ProjectionMatrix.Identity();
 		}
 
-		void Camera::ApplyTranslation()
+		void Camera::Update(float deltaTime)
 		{
-			Mat4 translationMatrix;
-			translationMatrix.SetTranslationVector(-Position);
+			ProjectionMatrix = ProjectionMatrix.ProjectPerspective(FieldOfView, AspectRatio, ZNear, ZFar);
 
-			this->ViewMatrix = translationMatrix * this->ViewMatrix;
-			this->ProjectionMatrix = this->ProjectionMatrix.ProjectPerspective(fieldOfView, aspectRatio, zNear, zFar);
+			ProcessMouseInput(deltaTime);
+
+			Quat4 orientation = GetQuaternion();
+
+			Mat4 rotation; 
+			rotation = rotation.ToRotationMatrix(orientation.Conjugated());
+
+			Mat4 translation;
+			translation.SetTranslationVector(-Position);
+			
+			ViewMatrix = rotation * translation;
+			
+			CreateViewProjectionMatrix();
+			CreateInverseViewProjectionMatrix();
 		}
-
-		void Camera::ApplyRotation()
-		{
-			Quat4 xRotation = Quat4(Vec3(1, 0, 0), pitch).Normalized();
-			Quat4 yRotation = Quat4(Vec3(0, 1, 0), yaw).Normalized();
-			Quat4 totalRotation = (yRotation * xRotation).Normalized();
-
-			Mat4 rotationMatrix;
-			rotationMatrix = rotationMatrix.ToRotationMatrix(totalRotation);
-			this->ViewMatrix = rotationMatrix * this->ViewMatrix;
-
-			Quat4 xRot = Quat4(Vec3(1, 0, 0), -pitch);
-			Quat4 yRot = Quat4(Vec3(0, 1, 0), -yaw);
-			Quat4 totRot = totalRotation.Inversed();
-			Forward = (totRot * Vec3(0, 0, -1)).normalized();
-			Right = (totRot * Vec3(1, 0, 0)).normalized();
-			Up = (totRot * Vec3(0, 1, 0)).normalized();
-		}
-
-		void Camera::setMouseSpeed(float speed)
-		{
-			mouseSpeed = speed;
-		}
-
-		void Camera::setMoveSpeed(float speed)
-		{
-			moveSpeed = speed;
-		}
-
-		void Camera::moveDirection(float direction, float delta)
-		{
-			float rad = ToRadians((yaw + direction));
-			Position.x -= sin(rad) * moveSpeed * delta;
-			Position.z -= cos(rad) * moveSpeed * delta;
-		}
-
-		void Camera::moveYAxis(float direction, float delta)
-		{
-			float rad = ToRadians((pitch + direction));
-			Position.y += sin(rad) * moveSpeed * delta;
-		}
-
 
 		Mat4* Camera::GetViewMatrix()
 		{
@@ -94,6 +64,11 @@ namespace SupraHot
 			return &this->InverseViewProjectionMatrix;
 		}
 
+		Quat4 Camera::GetQuaternion()
+		{
+			return (Quat4(Vec3(0, 1, 0), -Yaw).Normalized() * Quat4(Vec3(1, 0, 0), -Pitch).Normalized());
+		}
+
 		void Camera::CreateViewProjectionMatrix()
 		{
 			ViewProjectionMatrix = ProjectionMatrix * ViewMatrix;
@@ -104,42 +79,24 @@ namespace SupraHot
 			InverseViewProjectionMatrix = ViewProjectionMatrix.Inversed();
 		}
 
-		Vec3 Camera::GetForwardDirection()
+		void Camera::ProcessMouseInput(float deltaTime)
 		{
-			return Forward;
-		}
+			if (Controls::GetInstance()->IsMouseButtonPressed(GLFW_MOUSE_BUTTON_1))
+			{
+				MouseGrabbed = true;
+				Controls::GetInstance()->GrabMouse();
+			}
+			else if (Controls::GetInstance()->IsMouseButtonPressed(GLFW_MOUSE_BUTTON_2))
+			{
+				MouseGrabbed = false;
+				Controls::GetInstance()->ReleaseMouse();
+			}
 
-		Vec3 Camera::GetBackwardDirection()
-		{
-			return -Forward;
+			if (MouseGrabbed)
+			{
+				Pitch += Controls::GetInstance()->MouseDY * deltaTime;
+				Yaw += Controls::GetInstance()->MouseDX * deltaTime;
+			}
 		}
-
-		Vec3 Camera::GetRightDirection()
-		{
-			return Right;
-		}
-
-		Vec3 Camera::GetUpDirection()
-		{
-			return Up;
-		}
-
-		Vec3 Camera::GetDownDirection()
-		{
-			return -Up;
-		}
-
-		Vec3 Camera::GetLeftDirection()
-		{
-			return -Right;
-		}
-
-		void Camera::moveFromLook(float dx, float dy, float dz, float delta)
-		{
-			Position.z += (dx * (float)cos(ToRadians(yaw - 90.0f)) + dz * cos(ToRadians(yaw)) * moveSpeed) * delta;
-			Position.x -= (dx * (float)sin(ToRadians(yaw - 90.0f)) + dz * sin(ToRadians(yaw)) * moveSpeed) * delta;
-			Position.y += (dy * (float)sin(ToRadians(pitch - 90.0f)) + dz * sin(ToRadians(pitch)) * moveSpeed) * delta;
-		}
-
 	};
 };

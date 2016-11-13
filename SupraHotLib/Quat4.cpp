@@ -130,6 +130,18 @@ namespace SupraHot
 			return v;
 		}
 
+		void Quat4::Conjugate()
+		{
+			v.negate();
+		}
+
+		Quat4 Quat4::Conjugated() const
+		{
+			Quat4 q = *this;
+			q.Conjugate();
+			return q;
+		}
+
 		float Quat4::GetAngle()
 		{
 			return w;
@@ -137,12 +149,12 @@ namespace SupraHot
 
 		Vec3 Quat4::GetForward() const
 		{
-			return (*this) * Vec3(0, 0, 1);
+			return (*this) * Vec3(0, 0, -1);
 		}
 
 		Vec3 Quat4::GetBack() const
 		{
-			return (*this) * Vec3(0, 0, -1);
+			return (*this) * Vec3(0, 0, 1);
 		}
 
 		Vec3 Quat4::GetUp() const

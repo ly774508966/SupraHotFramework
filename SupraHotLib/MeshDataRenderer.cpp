@@ -27,8 +27,6 @@ namespace SupraHot
 		Mat4 projectionMatrix = *camera->GetProjectionMatrix();
 
 		Mat4 modelMatrix = {};
-		modelMatrix.SetScale(Vec3(5, 1, 2));
-
 		Mat4 modelViewMatrix = viewMatrix * modelMatrix;
 		Mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix;
 

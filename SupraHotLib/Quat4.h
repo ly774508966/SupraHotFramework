@@ -30,6 +30,9 @@ namespace SupraHot
 			Vec3 GetAxis();
 			float GetAngle();
 
+			void Conjugate();
+			Quat4 Conjugated() const;
+
 			Vec3 GetForward() const;
 			Vec3 GetBack() const;
 			Vec3 GetUp() const;

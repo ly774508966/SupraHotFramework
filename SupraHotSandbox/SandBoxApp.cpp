@@ -176,19 +176,11 @@ void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
 #endif
 
 	FBO->Resize(width, height);
-	FlyCamera->aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+	FlyCamera->AspectRatio = static_cast<float>(width) / static_cast<float>(height);
 }
 
 void SandBoxApp::Render()
 {
-	FlyCamera->ResetMatrices();
-
-	FlyCamera->ApplyRotation();
-	FlyCamera->ApplyTranslation();
-	
-	FlyCamera->CreateViewProjectionMatrix();
-	FlyCamera->CreateInverseViewProjectionMatrix();
-
 	FBO->Attach();
 
 	EnvBox->Render(FlyCamera, SkyBoxSphereShader);
@@ -206,30 +198,43 @@ void SandBoxApp::Render()
 
 void SandBoxApp::Update(float deltaTime)
 {
+	deltaTime = 0.016f;
+
 	window->SetClearColor(0.7f, 0.3f, 0.7f, 1.0f);
+
+	FlyCamera->ResetMatrices();
+	FlyCamera->Update(deltaTime);
 	
 #if PLATFORM_WINDOWS
-	Controls::Update(window);
+	Controls::GetInstance()->Update(window);
 
-	if (Controls::IsKeyDown(GLFW_KEY_W))
+	if (Controls::GetInstance()->IsKeyDown(GLFW_KEY_W))
 	{
-		//FlyCamera->pitch += 0.05f;
-		FlyCamera->moveFromLook(0, 0, -1, 0.016);
+		FlyCamera->Position += FlyCamera->GetQuaternion().GetForward() * deltaTime;
 	}
-	else if (Controls::IsKeyDown(GLFW_KEY_S))
+	else if (Controls::GetInstance()->IsKeyDown(GLFW_KEY_S))
 	{
-		//FlyCamera->pitch -= 0.05f;
-		FlyCamera->moveFromLook(0, 0, 1, 0.016);
+		FlyCamera->Position += FlyCamera->GetQuaternion().GetBack() * deltaTime;
 	}
 
-	if (Controls::IsKeyDown(GLFW_KEY_A))
+	if (Controls::GetInstance()->IsKeyDown(GLFW_KEY_A))
 	{
-		FlyCamera->yaw += 0.05f;
+		FlyCamera->Position += FlyCamera->GetQuaternion().GetLeft() * deltaTime;
 	}
-	else if (Controls::IsKeyDown(GLFW_KEY_D))
+	else if (Controls::GetInstance()->IsKeyDown(GLFW_KEY_D))
 	{
-		FlyCamera->yaw -= 0.05f;
+		FlyCamera->Position += FlyCamera->GetQuaternion().GetRight() * deltaTime;
 	}
+
+	if (Controls::GetInstance()->IsKeyDown(GLFW_KEY_SPACE))
+	{
+		FlyCamera->Position += FlyCamera->GetQuaternion().GetUp() * deltaTime;
+	}
+	else if (Controls::GetInstance()->IsKeyDown(GLFW_KEY_LEFT_SHIFT))
+	{
+		FlyCamera->Position += FlyCamera->GetQuaternion().GetDown() * deltaTime;
+	}
+
 
 #endif
 }

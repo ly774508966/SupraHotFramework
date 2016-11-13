@@ -17,50 +17,44 @@ namespace SupraHot
 			Mat4 ProjectionMatrix;
 			Mat4 InverseViewProjectionMatrix;
 			Mat4 ViewProjectionMatrix;
-			Vec3 Forward;
-			Vec3 Right;
-			Vec3 Up;
-
+			
 			Vec3 Position;
-			float yaw = 0, pitch = 0;
-			float mouseX = 0, mouseY = 0, mouseDX = 0, mouseDY = 0;
-			bool mouseGrabbed = false;
+			Vec3 Rotation;
 
-			float mouseSpeed = 1.5f;
-			float moveSpeed = 5.0f;
+			float Yaw = 0, 
+				  Pitch = 0;
 
-			float fieldOfView;
-			float zNear, zFar;
-			float aspectRatio;
+			float MouseX = 0, 
+				  MouseY = 0, 
+				  MouseDX = 0, 
+				  MouseDY = 0;
+
+			bool MouseGrabbed = false;
+
+			float MouseSpeed = 1.5f;
+			float MoveSpeed = 5.0f;
+
+			float FieldOfView;
+			float ZNear, ZFar;
+			float AspectRatio;
 
 			Camera(float fov, float zNear, float zFar, float aspectRatio);
 			~Camera();
 
 			void ResetMatrices();
-			void ApplyTranslation();
-			void ApplyRotation();
-			//void UpdateInput(Controls* controls, float deltaTime);
-
-			void setMouseSpeed(float speed);
-			void setMoveSpeed(float speed);
-			void moveDirection(float direction, float delta);
-			void moveYAxis(float direction, float delta);
-			void moveFromLook(float dx, float dy, float dz, float delta);
-
-			Vec3 GetForwardDirection();
-			Vec3 GetBackwardDirection();
-			Vec3 GetRightDirection();
-			Vec3 GetLeftDirection();
-			Vec3 GetUpDirection();
-			Vec3 GetDownDirection();
+			void Update(float deltaTime);
 
 			Mat4* GetViewMatrix();
 			Mat4* GetProjectionMatrix();
 			Mat4* GetViewProjectionMatrix();
 			Mat4* GetInverseProjectionViewMatrix();
 
+			Quat4 GetQuaternion();
+
+		private:
 			void CreateViewProjectionMatrix();
 			void CreateInverseViewProjectionMatrix();
+			void ProcessMouseInput(float deltaTime);
 		};
 
 	};
