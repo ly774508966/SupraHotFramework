@@ -467,6 +467,7 @@ namespace SupraHot
 				meshData->Name = modelMesh.Name;
 				meshData->MeshMaterial = materialsMap[modelMesh.MaterialID];
 				meshData->FaceCount = modelMesh.FaceCount;
+				meshData->VertexCount = modelMesh.VertexCount;
 
 				if (modelMesh.VertexAttributes == SHFModel::VertexBitfield::POSITION)
 				{

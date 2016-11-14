@@ -1,5 +1,8 @@
 #include "Camera.h"
+
+#ifndef PLATFORM_ANDROID
 #include "Controls.h"
+#endif
 
 namespace SupraHot
 {
@@ -81,6 +84,8 @@ namespace SupraHot
 
 		void Camera::ProcessMouseInput(float deltaTime)
 		{
+
+#ifndef PLATFORM_ANDROID
 			if (Controls::GetInstance()->IsMouseButtonPressed(GLFW_MOUSE_BUTTON_1))
 			{
 				MouseGrabbed = true;
@@ -97,6 +102,7 @@ namespace SupraHot
 				Pitch += Controls::GetInstance()->MouseDY * deltaTime;
 				Yaw += Controls::GetInstance()->MouseDX * deltaTime;
 			}
+#endif
 		}
 	};
 };

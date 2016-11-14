@@ -3,6 +3,8 @@
 #include "MeshData.h"
 #include "Camera.h"
 
+#define BUFFEROFFSET(x) ( (char*) NULL + (x) )
+
 namespace SupraHot
 {
 	MeshDataRenderer::MeshDataRenderer()
@@ -32,25 +34,50 @@ namespace SupraHot
 
 		// Set camera matrices
 		shader->SetMat4(glGetUniformLocation(shaderProgramID, "ModelViewProjectionMatrix"), modelViewProjectionMatrix);
+		shader->SetMat3(glGetUniformLocation(shaderProgramID, "NormalMatrix"), modelViewMatrix);
 
 		// Bind GL buffers
 		glBindVertexArray(meshData->VAOHandle);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshData->IndexBufferHandle);
 		glBindBuffer(GL_ARRAY_BUFFER, meshData->VertexBufferHandle);
 
-		uint32 vertexPositionAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexPosition");
-		uint32 vertexNormalAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexNormal");
-		uint32 vertexUVAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexUV");
-		uint32 vertexTangentAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexTangent");
-		uint32 vertexBiTangentAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexBiTangent");
+		uint64 offset = 0;
 
-		glEnableVertexAttribArray(vertexPositionAttrib);
-		glVertexAttribPointer(vertexPositionAttrib, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+		if (meshData->HasPositionData)
+		{
+			uint32 vertexPositionAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexPosition");
+			glEnableVertexAttribArray(vertexPositionAttrib);
+			glVertexAttribPointer(vertexPositionAttrib, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+			offset += meshData->VertexCount * 3 * sizeof(float);
+		}
+
+		if (meshData->HasNormalData)
+		{
+			uint32 vertexNormalAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexNormal");
+			glEnableVertexAttribArray(vertexNormalAttrib);
+			glVertexAttribPointer(vertexNormalAttrib, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(offset));
+			offset += meshData->VertexCount * 3 * sizeof(float);
+		}
+
+		if (meshData->HasUVData)
+		{
+			uint32 vertexUVAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexUV");
+		}
+
+
+		if (meshData->HasTangentData)
+		{
+			uint32 vertexTangentAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexTangent");
+		}
+
+		if (meshData->HasBiTangentData)
+		{
+			uint32 vertexBiTangentAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexBiTangent");
+		}
 
 		// Layout
-		// Vertex attributes are stored progressively not interleaved.
-		// First come ALL positions, then ALL normals, etc.
-		// And not: Vtx, Vtx, Vtx, Nml, Nml, Nml, vtx, vtx, vtx...
+		// Vertex attributes are stored sequential & not interleaved
+		// (vtx.x,vtx.y,vtx.z...... nml.x,nml.y,nml.z......, uv.s,uv.t,uv.s,uv.t.......)
 
 		glDrawElements(GL_TRIANGLES, (meshData->FaceCount * 3), meshData->GlIndexType, nullptr);
 

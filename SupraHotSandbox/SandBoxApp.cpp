@@ -127,8 +127,8 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	}
 #endif
 
-	MeshDataVector = Utils::MeshDataLoader::GetInstance()->Load("Models/cube2.shfm");
-	SHF_PRINTF("MeshDataVector.size = %llu \n", MeshDataVector.size());
+	MeshDataVector = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol_Model.shfm");
+	//SHF_PRINTF("MeshDataVector.size = %llu \n", MeshDataVector.size());
 
 	// Try to load a 2d .dds file
 	Texture2D* ddsTexture = new Texture2D("DDS Test");
@@ -162,8 +162,8 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	//sphereMap->Destroy();
 
 	EnvBox = new SkyBox(); 
-	//EnvBox->SetEnvironmentMap(ddsCubeTexture);
-	EnvBox->SetEnvironmentMap(sphereMap);
+	EnvBox->SetEnvironmentMap(ddsCubeTexture);
+	//EnvBox->SetEnvironmentMap(sphereMap);
 	EnvBox->Init(); 
 	
 	FlyCamera = new Camera(50.0f, 0.05f, 100.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
@@ -183,7 +183,7 @@ void SandBoxApp::Render()
 {
 	FBO->Attach();
 
-	EnvBox->Render(FlyCamera, SkyBoxSphereShader);
+	EnvBox->Render(FlyCamera, SkyBoxCubeShader);
 
 	for (MeshData* meshData : MeshDataVector)
 	{

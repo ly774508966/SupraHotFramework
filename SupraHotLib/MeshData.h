@@ -17,6 +17,7 @@ namespace SupraHot
 		public:
 			uint32 VAOHandle;
 			uint32 FaceCount;
+			uint32 VertexCount;
 			uint32 IndexBufferHandle;
 			uint32 VertexBufferHandle;
 			
