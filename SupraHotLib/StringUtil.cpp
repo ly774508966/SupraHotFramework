@@ -80,6 +80,32 @@ namespace SupraHot
 			}
 		}
 
+		std::string StringUtil::GetFileNameFromPath(const std::string& str)
+		{
+
+			std::string filePath(str);
+			size_t idx = filePath.rfind(L'\\');
+			if (idx != std::wstring::npos && idx < filePath.length() - 1)
+			{
+				return filePath.substr(idx + 1);
+			}
+			else
+			{
+				idx = filePath.rfind(L'/');
+				if (idx != std::wstring::npos && idx < filePath.length() - 1)
+					return filePath.substr(idx + 1);
+				else
+					return filePath;
+			}
+		}
+
+		std::string StringUtil::GetPathFromFilePath(const std::string& str)
+		{
+			std::string filename = GetFileNameFromPath(str);
+			uint32 idx = str.rfind(filename);
+			return str.substr(0, idx);
+		}
+
 		std::string StringUtil::ToLowerCase(const std::string& str)
 		{
 			std::string copy = str;

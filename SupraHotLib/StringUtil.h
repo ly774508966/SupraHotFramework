@@ -18,6 +18,8 @@ namespace SupraHot
 			static std::string &trim(std::string &s);
 
 			static std::string GetFileExtension(const std::string& str);
+			static std::string GetFileNameFromPath(const std::string& str);
+			static std::string GetPathFromFilePath(const std::string& str);
 
 			static std::string ToLowerCase(const std::string& str);
 		};

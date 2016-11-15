@@ -28,12 +28,17 @@ namespace SupraHot
 		Mat4 viewMatrix = *camera->GetViewMatrix();
 		Mat4 projectionMatrix = *camera->GetProjectionMatrix();
 
-		Mat4 modelMatrix = {};
+		Transform modelTransform;
+		modelTransform.SetScale(Vec3(0.05f, 0.05f, 0.05f));
+		modelTransform.SetLocalRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
+
+		Mat4 modelMatrix = modelTransform.GetTransformation();
 		Mat4 modelViewMatrix = viewMatrix * modelMatrix;
 		Mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix;
 
 		// Set camera matrices
 		shader->SetMat4(glGetUniformLocation(shaderProgramID, "ModelViewProjectionMatrix"), modelViewProjectionMatrix);
+		shader->SetMat4(glGetUniformLocation(shaderProgramID, "ModelViewMatrix"), modelViewMatrix);
 		shader->SetMat3(glGetUniformLocation(shaderProgramID, "NormalMatrix"), modelViewMatrix);
 
 		// Bind GL buffers
@@ -62,17 +67,32 @@ namespace SupraHot
 		if (meshData->HasUVData)
 		{
 			uint32 vertexUVAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexUV");
+			glEnableVertexAttribArray(vertexUVAttrib);
+			glVertexAttribPointer(vertexUVAttrib, 2, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(offset));
+			offset += meshData->VertexCount * 2 * sizeof(float);
 		}
-
 
 		if (meshData->HasTangentData)
 		{
 			uint32 vertexTangentAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexTangent");
+			glEnableVertexAttribArray(vertexTangentAttrib);
+			glVertexAttribPointer(vertexTangentAttrib, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(offset));
+			offset += meshData->VertexCount * 3 * sizeof(float);
 		}
 
 		if (meshData->HasBiTangentData)
 		{
 			uint32 vertexBiTangentAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexBiTangent");
+			glEnableVertexAttribArray(vertexBiTangentAttrib);
+			glVertexAttribPointer(vertexBiTangentAttrib, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(offset));
+			offset += meshData->VertexCount * 3 * sizeof(float);
+		}
+
+		// Set textures
+
+		if (meshData->MeshMaterial.GetAlbedoMap() != nullptr)
+		{
+			shader->SetTexture2D(glGetUniformLocation(shaderProgramID, "AlbedoTexture"), meshData->MeshMaterial.GetAlbedoMap(), GL_TEXTURE0);
 		}
 
 		// Layout

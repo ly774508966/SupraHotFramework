@@ -259,6 +259,8 @@ namespace SupraHot
 				glGenerateMipmap(static_cast<GLenum>(GL_TEXTURE_2D));
 
 #if DEVELOPMENT == 1 
+				SHF_PRINTF("Generating mip maps.... \n");
+
 				int err = glGetError();
 				if (err != 0)
 				{
