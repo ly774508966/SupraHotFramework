@@ -92,6 +92,9 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 	SkyBoxSphereShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/skybox_gles3.vs.glsl");
 	SkyBoxSphereShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/skybox-sphere_gles3.fs.glsl");
+
+	SimpleMeshShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/simple-mesh_gles3.vs.glsl");
+	SimpleMeshShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/simple-mesh_gles3.fs.glsl");
 #endif
 	
 	FBOShader->CompileShader();

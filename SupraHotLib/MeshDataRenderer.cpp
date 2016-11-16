@@ -29,6 +29,7 @@ namespace SupraHot
 		Mat4 projectionMatrix = *camera->GetProjectionMatrix();
 
 		Transform modelTransform;
+		modelTransform.SetPosition(Vec3(0, 0, -5.0f));
 		modelTransform.SetScale(Vec3(0.05f, 0.05f, 0.05f));
 		modelTransform.SetLocalRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
 

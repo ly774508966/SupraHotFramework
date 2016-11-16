@@ -53,18 +53,18 @@ namespace SupraHot
 
 		bool FileSystem::FileExists(std::string directory, std::string fileName)
 		{
-#ifdef PLATFORM_WINDOWS
+#ifndef PLATFORM_ANDROID
 			std::ifstream infile(GetFilePath(directory, fileName).c_str());
 			return infile.good();
-#endif
+#else 
+			FILE* f = GetFile(directory, fileName, "rb");
+			if (f != nullptr)
+			{
+				std::fclose(f);
+				return true;
+			}
 
-#ifdef PLATFORM_ANDROID
 			return false;
-#endif
-
-#ifdef PLATFORM_EMSCRIPTEN
-			std::ifstream infile(GetFilePath(directory, fileName).c_str());
-			return infile.good();
 #endif
 		}
 
