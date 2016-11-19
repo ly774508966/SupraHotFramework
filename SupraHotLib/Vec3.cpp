@@ -111,7 +111,7 @@ namespace SupraHot
 			return sqrtf(x*x + y*y + z*z);
 		}
 
-		void Vec3::normalize()
+		void Vec3::Normalize()
 		{
 			float len = 1.0f / this->length();
 			this->x *= len;
@@ -119,54 +119,72 @@ namespace SupraHot
 			this->z *= len;
 		}
 
-		Vec3 Vec3::normalized() const
+		Vec3 Vec3::Normalized() const
 		{
 			float len = 1.0f / this->length();
 			return Vec3(x * len, y * len, z * len);
 		}
 
-		float Vec3::dot(const Vec3& v) const
+		float Vec3::Dot(const Vec3& v) const
 		{
 			return x * v.x + y * v.y + z * v.z;
 		}
 
-		Vec3 Vec3::cross(const Vec3& v) const
+		Vec3 Vec3::Cross(const Vec3& v) const
 		{
 			return Vec3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
 		}
 
-		Vec3 Vec3::negated() const
+		Vec3 Vec3::Negated() const
 		{
 			return Vec3(-x, -y, -z);
 		}
 
-		void Vec3::negate()
+		void Vec3::Negate()
 		{
 			x = -x;
 			y = -y;
 			z = -z;
 		}
 
-		Vec3 Vec3::reflect(Vec3 around) const
+		Vec3 Vec3::Reflect(Vec3 around) const
 		{
-			Vec3 normal = around.normalized();
-			return normal * -2 * dot(normal) + (*this);
+			Vec3 normal = around.Normalized();
+			return normal * -2 * Dot(normal) + (*this);
 		}
 
-		Vec3 Vec3::lerp(Vec3 target, float dt) const
+		Vec3 Vec3::Lerp(Vec3 target, float dt) const
 		{
 			return (*this) + (target - (*this))  * dt;
 		}
 
-		Vec3 Vec3::slerp(const Vec3& axis, float angle)
+		Vec3 Vec3::Slerp(const Vec3& axis, float angle)
 		{
 			float angleRad = ToRadians(angle);
-			return (*this) * cos(angleRad) + (axis * (*this).dot(axis) * (1 - cos(angleRad))) + (axis.cross((*this)) * sin(angleRad));
+			return (*this) * cos(angleRad) + (axis * (*this).Dot(axis) * (1 - cos(angleRad))) + (axis.Cross((*this)) * sin(angleRad));
 		}
 
-		float Vec3::angleBetween(Vec3 u) const
+		float Vec3::AngleBetween(Vec3 u) const
 		{
-			return static_cast<float>(acos((dot(u) / (length() * u.length()))) / M_PI * 180);
+			return static_cast<float>(acos((Dot(u) / (length() * u.length()))) / M_PI * 180);
+		}
+
+		float Vec3::AngleDirection(Vec3& forward, Vec3& direction, Vec3& up)
+		{
+			Vec3 perp = forward.Cross(direction);
+			float dir = perp.Dot(up);
+
+			if (dir > 0.0) 
+			{
+				return 1.0;
+			}
+
+			if (dir < 0.0) 
+			{
+				return -1.0;
+			}
+			
+			return 0.0;
 		}
 	}
 };

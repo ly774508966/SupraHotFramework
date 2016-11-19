@@ -301,6 +301,8 @@
     <ClInclude Include="Quat4.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderCompileOptions.h" />
+    <ClInclude Include="ShaderLibrary.h" />
     <ClInclude Include="SHFMBinaryLoader.h" />
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="stb_image.h" />
@@ -367,6 +369,8 @@
     <ClCompile Include="Quat4.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderCompileOptions.cpp" />
+    <ClCompile Include="ShaderLibrary.cpp" />
     <ClCompile Include="SHFMBinaryLoader.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="stb_image.c" />

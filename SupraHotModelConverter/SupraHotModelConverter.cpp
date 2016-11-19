@@ -283,7 +283,7 @@ int _tmain(int argc, char* argv[])
 			// NOTE:
 			// If we need binormals, we can easily compute them from the
 			// normals and tangent. The formula is:
-			// binormal = normal.cross(bitangent); 
+			// binormal = normal.Cross(bitangent); 
 			// This needs to be done for every vertex per Face (Triangle || Quad)
 		}
 

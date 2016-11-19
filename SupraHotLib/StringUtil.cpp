@@ -102,7 +102,7 @@ namespace SupraHot
 		std::string StringUtil::GetPathFromFilePath(const std::string& str)
 		{
 			std::string filename = GetFileNameFromPath(str);
-			uint32 idx = str.rfind(filename);
+			size_t idx = str.rfind(filename);
 			return str.substr(0, idx);
 		}
 

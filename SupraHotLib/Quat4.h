@@ -22,7 +22,7 @@ namespace SupraHot
 			Vec3 operator*(const Vec3& p) const;
 			Quat4 operator^(float t) const;
 			Quat4 Slerp(const Quat4& r, float t) const;
-			void toAxisAngle(Vec3& vecAxis, float& flAngle) const;
+			void ToAxisAngle(Vec3& vecAxis, float& flAngle) const;
 
 			void Normalize();
 			Quat4 Normalized() const;

@@ -253,8 +253,8 @@ namespace SupraHot
 
 		Mat4 Mat4::ConstructCameraView(const Vec3& position, const Vec3& lookDirection, const Vec3& vecUp)
 		{
-			Vec3 rightVector = lookDirection.cross(vecUp).normalized();
-			Vec3 upVector = rightVector.cross(lookDirection);
+			Vec3 rightVector = lookDirection.Cross(vecUp).Normalized();
+			Vec3 upVector = rightVector.Cross(lookDirection);
 			return Mat4(rightVector, upVector, -lookDirection, position).Inversed();
 		}
 
@@ -279,7 +279,7 @@ namespace SupraHot
 		{
 			Vec3 axis;
 			float angle;
-			q.toAxisAngle(axis, angle);
+			q.ToAxisAngle(axis, angle);
 			return RotationFromAxisAndAngle(angle, axis);
 		}
 
@@ -288,7 +288,7 @@ namespace SupraHot
 
 			Vec3 v;
 			float angle = 0;
-			q.toAxisAngle(v, angle);
+			q.ToAxisAngle(v, angle);
 
 			float x = v.x;
 			float y = v.y;

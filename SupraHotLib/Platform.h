@@ -1,3 +1,5 @@
+#pragma once
+
 #define DEVELOPMENT 1
 
 #include <string>

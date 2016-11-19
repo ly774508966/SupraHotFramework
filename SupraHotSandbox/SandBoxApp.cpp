@@ -79,8 +79,13 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	SkyBoxSphereShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/skybox.vs.glsl");
 	SkyBoxSphereShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/skybox-sphere.fs.glsl");
 
-	SimpleMeshShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/simple-mesh.vs.glsl");
-	SimpleMeshShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/simple-mesh.fs.glsl");
+
+	// Test compile options
+	ShaderCompileOptions opts;
+	opts.Define("_hasCustomValue", false);
+
+	SimpleMeshShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/simple-mesh.vs.glsl", opts);
+	SimpleMeshShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/simple-mesh.fs.glsl", opts);
 #endif
 
 #ifdef PLATFORM_ANDROID
@@ -147,6 +152,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	textureCube->Load("Textures/Bridge2/px.png", "Textures/Bridge2/nx.png",
 					  "Textures/Bridge2/py.png", "Textures/Bridge2/ny.png",
 					  "Textures/Bridge2/pz.png", "Textures/Bridge2/nz.png");
+	textureCube->Destroy();
 
 	TextureCube* ddsCubeTexture = new TextureCube("DDS Cube map");
 	ddsCubeTexture->SetWrapS(GL_CLAMP_TO_EDGE);
@@ -162,7 +168,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	sphereMap->SetWrapS(GL_CLAMP_TO_EDGE);
 	sphereMap->SetWrapT(GL_CLAMP_TO_EDGE);
 	sphereMap->Load("Textures/MonValley_G_DirtRoad_3k/Static.dds");
-	//sphereMap->Destroy();
+	sphereMap->Destroy();
 
 	EnvBox = new SkyBox(); 
 	EnvBox->SetEnvironmentMap(ddsCubeTexture);

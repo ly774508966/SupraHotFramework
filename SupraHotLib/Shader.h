@@ -1,5 +1,6 @@
 #pragma once
 #include "Platform.h"
+#include "ShaderCompileOptions.h"
 #include "Vec2.h"
 #include "Vec3.h"
 #include "Mat4.h"
@@ -15,11 +16,15 @@ namespace SupraHot
 		class Shader
 		{
 		private:
-			uint32 VertexShader, PixelShader, GeometryShader, ComputeShader;
-			uint32 ShaderProgrammID;
+			uint32 VertexShader = 0, 
+				   PixelShader = 0, 
+				   GeometryShader = 0, 
+				   ComputeShader = 0;
+
+			uint32 ShaderProgrammID = 0;
 
 			static void CheckError(uint32 shaderID, std::string type, std::string path);
-			static void LoadShaderInternal(std::string path, std::string &destination);
+			static void LoadShaderInternal(std::string path, std::string &destination, ShaderCompileOptions& compileOptions);
 
 		protected:
 			std::string Name;
@@ -44,7 +49,7 @@ namespace SupraHot
 			void Attach();
 			void Detach();
 			void Destroy();
-			bool LoadShaderFromFile(ShaderType type, std::string pathToFile);
+			bool LoadShaderFromFile(ShaderType type, std::string pathToFile, ShaderCompileOptions compileOptions = {});
 			bool CompileShader();
 
 			void SetInteger(int location, int value);

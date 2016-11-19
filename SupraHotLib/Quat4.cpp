@@ -41,8 +41,8 @@ namespace SupraHot
 		Quat4 Quat4::operator*(const Quat4& q) const
 		{
 			Quat4 result;
-			result.w = w*q.w - v.dot(q.v);
-			result.v = v*q.w + q.v*w + v.cross(q.v);
+			result.w = w*q.w - v.Dot(q.v);
+			result.v = v*q.w + q.v*w + v.Cross(q.v);
 			return result;
 		}
 
@@ -51,15 +51,15 @@ namespace SupraHot
 			Quat4 p;
 			p.w = 0;
 			p.v = V;
-			Vec3 vcV = v.cross(V);
-			return V + vcV*(2 * w) + v.cross(vcV) * 2;
+			Vec3 vcV = v.Cross(V);
+			return V + vcV*(2 * w) + v.Cross(vcV) * 2;
 		}
 
 		Quat4 Quat4::operator^(float t) const
 		{
 			float a;
 			Vec3 n;
-			toAxisAngle(n, a);
+			ToAxisAngle(n, a);
 			float at = a*t;
 			return Quat4(n, at);
 		}
@@ -69,7 +69,7 @@ namespace SupraHot
 			const Quat4& q = *this;
 			Quat4 r = other;
 
-			float flCosOmega = w*r.w + r.v.dot(v);
+			float flCosOmega = w*r.w + r.v.Dot(v);
 			if (flCosOmega < 0)
 			{
 				r.w = -r.w;
@@ -100,12 +100,12 @@ namespace SupraHot
 			return result;
 		}
 
-		void Quat4::toAxisAngle(Vec3& vecAxis, float& flAngle) const
+		void Quat4::ToAxisAngle(Vec3& vecAxis, float& flAngle) const
 		{
 			if (v.lengthSqr() < 0.0001f)
 				vecAxis = Vec3(1, 0, 0);
 			else
-				vecAxis = v.normalized();
+				vecAxis = v.Normalized();
 
 			flAngle = acosf(w) * 2.0f;
 			flAngle *= 360 / ((float)M_PI * 2);
@@ -132,7 +132,7 @@ namespace SupraHot
 
 		void Quat4::Conjugate()
 		{
-			v.negate();
+			v.Negate();
 		}
 
 		Quat4 Quat4::Conjugated() const

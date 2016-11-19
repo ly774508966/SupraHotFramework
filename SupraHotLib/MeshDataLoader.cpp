@@ -177,19 +177,19 @@ namespace SupraHot
 					v0.SetUVCoord(Vec2(binary[3], binary[4]));
 					v0.SetNormal(Vec3(binary[5], binary[6], binary[7]));
 					v0.SetTangent(Vec3(binary[24], binary[25], binary[26]));
-					v0.SetBiNormal(v0.GetNormal().cross(v0.GetTangent()));
+					v0.SetBiNormal(v0.GetNormal().Cross(v0.GetTangent()));
 
 					v1.SetPosition(Vec3(binary[8], binary[9], binary[10]));
 					v1.SetUVCoord(Vec2(binary[11], binary[12]));
 					v1.SetNormal(Vec3(binary[13], binary[14], binary[15]));
 					v1.SetTangent(Vec3(binary[24], binary[25], binary[26]));
-					v1.SetBiNormal(v1.GetNormal().cross(v1.GetTangent()));
+					v1.SetBiNormal(v1.GetNormal().Cross(v1.GetTangent()));
 
 					v2.SetPosition(Vec3(binary[16], binary[17], binary[18]));
 					v2.SetUVCoord(Vec2(binary[19], binary[20]));
 					v2.SetNormal(Vec3(binary[21], binary[22], binary[23]));
 					v2.SetTangent(Vec3(binary[24], binary[25], binary[26]));
-					v2.SetBiNormal(v2.GetNormal().cross(v2.GetTangent()));
+					v2.SetBiNormal(v2.GetNormal().Cross(v2.GetTangent()));
 
 					/* add vertices to a temp face and push that face back to the mesh */
 					face.SetVertex(v0, 0);

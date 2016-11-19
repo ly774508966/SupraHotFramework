@@ -18,11 +18,20 @@ namespace SupraHot
 #endif
 		}
 
-		void Shader::LoadShaderInternal(std::string path, std::string& destination)
+		void Shader::LoadShaderInternal(std::string path, std::string& destination, ShaderCompileOptions& compileOptions)
 		{
+			// Inject defines before the shader source code starts
+
+			for (size_t i = 0, l = compileOptions.GetDefinitions()->size(); i < l; ++i)
+			{
+				destination += "#define " + compileOptions.GetDefinitions()->at(i).Name + " " + compileOptions.GetDefinitions()->at(i).ValueString + "\n";
+			}
+
+			printf("%s \n", destination.c_str());
+
 			std::vector<std::string> fileContent = Utils::FileReader::GetInstance()->ReadFile(path);
 
-			for (unsigned int i = 0; i < fileContent.size(); i++)
+			for (size_t i = 0, l = fileContent.size(); i < l; ++i)
 			{
 				destination += fileContent[i] + "\n";
 			}
@@ -50,23 +59,22 @@ namespace SupraHot
 
 		void Shader::Destroy()
 		{
-		/*	glDetachShader(ShaderProgrammID, VertexShader);
-			glDetachShader(ShaderProgrammID, PixelShader);
-			glDetachShader(ShaderProgrammID, GeometryShader);
-			glDetachShader(ShaderProgrammID, ComputeShader);*/
+			if (ShaderProgrammID != 0)
+			{
+				glDeleteProgram(ShaderProgrammID);
 
-			glDeleteProgram(ShaderProgrammID);
+				ShaderProgrammID = 0;
+				VertexShader = 0;
+				PixelShader = 0;
+				GeometryShader = 0;
+				ComputeShader = 0;
 
-			ShaderProgrammID = 0;
-			VertexShader = 0;
-			PixelShader = 0;
-			GeometryShader = 0;
-			ComputeShader = 0;
+				SHF_PRINTF("ShaderGL %s #%d destroyed \n", Name.c_str(), ShaderProgrammID);
+			}
 
-			SHF_PRINTF("ShaderGL %s #%d destroyed \n", Name.c_str(), ShaderProgrammID);
 		}
 
-		bool Shader::LoadShaderFromFile(ShaderType type, std::string pathToFile)
+		bool Shader::LoadShaderFromFile(ShaderType type, std::string pathToFile, ShaderCompileOptions compileOptions)
 		{
 			unsigned int shaderC = 0;
 			std::string shaderType = "UNKNOWN_SHADER_TYPE";
@@ -101,7 +109,7 @@ namespace SupraHot
 #endif
 
 			std::string shaderSource;
-			LoadShaderInternal(pathToFile, shaderSource);
+			LoadShaderInternal(pathToFile, shaderSource, compileOptions);
 
 			const char* shadersource = shaderSource.c_str();
 			glShaderSource(shaderC, 1, &shadersource, nullptr);

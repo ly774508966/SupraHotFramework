@@ -8,9 +8,9 @@ uniform sampler2D AlbedoTexture;
 out vec4 FragColor;
 
 void main() {
-
-	// FragColor = vec4(TransformedVertexPosition, 1);
-	FragColor = texture(AlbedoTexture, UVCoord);
-
-	//FragColor = vec4(UVCoord.xy, 0, 1);
+	#if _hasCustomValue
+		FragColor = vec4(UVCoord.xy, 0, 1);
+	#else
+		FragColor = texture(AlbedoTexture, UVCoord);
+	#endif
 }

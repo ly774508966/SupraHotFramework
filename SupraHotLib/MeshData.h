@@ -21,8 +21,6 @@ namespace SupraHot
 			uint32 IndexBufferHandle;
 			uint32 VertexBufferHandle;
 			
-
-
 			// The rest is only need for objx. (Which we will abandon)
 			uint32 PositionBufferHandle;
 			uint32 NormalBufferHandle;
@@ -35,6 +33,8 @@ namespace SupraHot
 			std::vector<Vec3> BiTangentData;
 			std::vector<Vec3> TangentData;
 			std::vector<Vec2> UVData;
+
+			// 
 
 			Vec3 Origin;
 			std::string Name;

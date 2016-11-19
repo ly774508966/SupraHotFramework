@@ -219,6 +219,12 @@
     <ClInclude Include="MeshDataRenderer.h">
       <Filter>Header Files\Graphics\Common</Filter>
     </ClInclude>
+    <ClInclude Include="ShaderLibrary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderCompileOptions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -340,6 +346,12 @@
     </ClCompile>
     <ClCompile Include="MeshDataRenderer.cpp">
       <Filter>Source Files\Graphics\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderLibrary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderCompileOptions.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
