@@ -63,40 +63,8 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 
 	Texture = new Texture2D("SHF Logo");
 	Texture->Load("Images/logo.png");
-	FBO->SetReadSource(Texture);
-
-	// Load Shaders
-	FBOShader = new Shader();
-	SimpleMeshShader = new Shader();
-
-#ifdef PLATFORM_WINDOWS
-	FBOShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/GL/fbo.vs.glsl");
-	FBOShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/GL/fbo.fs.glsl");
-	
-	// Test compile options
-	ShaderCompileOptions opts;
-	opts.Define("_hasCustomValue", false);
-
-	SimpleMeshShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/GL/simple-mesh.vs.glsl", opts);
-	SimpleMeshShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/GL/simple-mesh.fs.glsl", opts);
-#endif
-
-#ifdef PLATFORM_ANDROID
-	FBOShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/GLES3/fbo.vs.glsl");
-	FBOShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/GLES3/fbo.fs.glsl");
-
-	SimpleMeshShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/GLES3/simple-mesh.vs.glsl");
-	SimpleMeshShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/GLES3/simple-mesh.fs.glsl");
-#endif
-	
-	FBOShader->CompileShader();
-	FBO->SetPixelSize(FBOShader);
-
-
-	SimpleMeshShader->CompileShader();
-	FBO->SetPixelSize(SimpleMeshShader);
-
-	SHF_PRINTF("SHADER COMPILED \n");
+	FBO->SetReadSource(Texture);	
+	FBO->SetPixelSize(ShaderLibrary::GetInstance()->ScreenSpace[uint32(ShaderLibrary::ScreenSpace::RenderToScreen)]);
 
 	// Try loading a lua script and run it.
 	Scripting::LuaVM::GetInstance()->RunFile("Scripts/test.lua");
@@ -177,17 +145,29 @@ void SandBoxApp::Render()
 {
 	FBO->Attach();
 
-	EnvBox->Render(FlyCamera, ShaderLibrary::GetInstance()->Skybox[ShaderLibrary::SkyboxShader::CubeMap]);
+	EnvBox->Render(FlyCamera, ShaderLibrary::GetInstance()->Skybox[uint32(ShaderLibrary::SkyboxShader::CubeMap)]);
 
 	for (MeshData* meshData : MeshDataVector)
 	{
-		MeshDataRenderer::GetInstance().Render(FlyCamera, meshData, SimpleMeshShader);
+		MeshDataRenderer::GetInstance().Render(
+			FlyCamera, 
+			meshData, 
+			ShaderLibrary::GetInstance()->MeshStatic
+			[
+				uint32(ShaderLibrary::StaticMesh::VertexShader::PositionUV)
+			]
+		);
 	}
 	
 	FBO->Detach();
 	FBO->SetReadSource(FBO->GetColorRenderTarget());
 
-	FBO->RenderToScreen(FBOShader);
+	FBO->RenderToScreen(
+		ShaderLibrary::GetInstance()->ScreenSpace
+		[
+			uint32(ShaderLibrary::ScreenSpace::RenderToScreen)
+		]
+	);
 }
 
 void SandBoxApp::Update(float deltaTime)
@@ -245,7 +225,6 @@ void SandBoxApp::Destroy()
 {
 	App::Destroy();
 	Texture->Destroy();
-	FBOShader->Destroy();
 	FBO->Destroy();
 	window->Destroy();
 }

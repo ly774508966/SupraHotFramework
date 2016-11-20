@@ -10,9 +10,6 @@ private:
 	SupraHot::FrameBufferObject* FBO;
 	SupraHot::Texture2D* Texture;
 
-	SupraHot::Shader* FBOShader;
-	SupraHot::Shader* SimpleMeshShader;
-
 	SupraHot::SkyBox* EnvBox;
 	SupraHot::Camera* FlyCamera;
 

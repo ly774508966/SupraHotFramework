@@ -20,6 +20,11 @@ namespace SupraHot
 
 		void Shader::LoadShaderInternal(std::string path, std::string& destination, ShaderCompileOptions& compileOptions)
 		{
+			std::vector<std::string> fileContent = Utils::FileReader::GetInstance()->ReadFile(path);
+
+			// Add the version first
+			destination += fileContent[0] + "\n";
+
 			// Inject defines before the shader source code starts
 
 			for (size_t i = 0, l = compileOptions.GetDefinitions()->size(); i < l; ++i)
@@ -27,11 +32,13 @@ namespace SupraHot
 				destination += "#define " + compileOptions.GetDefinitions()->at(i).Name + " " + compileOptions.GetDefinitions()->at(i).ValueString + "\n";
 			}
 
-			printf("%s \n", destination.c_str());
+			if (compileOptions.GetDefinitions()->size() > 0)
+			{
+				printf("%s \n", destination.c_str());
 
-			std::vector<std::string> fileContent = Utils::FileReader::GetInstance()->ReadFile(path);
+			}
 
-			for (size_t i = 0, l = fileContent.size(); i < l; ++i)
+			for (size_t i = 1, l = fileContent.size(); i < l; ++i)
 			{
 				destination += fileContent[i] + "\n";
 			}

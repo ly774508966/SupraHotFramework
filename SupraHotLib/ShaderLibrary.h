@@ -12,9 +12,11 @@ namespace SupraHot
 			
 		public:
 
-			struct VertexShader
+			struct StaticMesh
 			{
-				enum StaticMesh
+				// We only need the vertex shaders,
+				// since we are going to render the mesh data to a g-buffer
+				enum class VertexShader
 				{
 					Position = 0,
 					PositionNormal,
@@ -24,24 +26,9 @@ namespace SupraHot
 
 					Count
 				};
-
 			};
 
-			struct PixelShader
-			{
-				enum Mesh
-				{
-					Lambert = 0,
-					Phong,
-					GGX,
-					Cloth,
-					Skin,
-
-					Count
-				};
-			};
-
-			enum SkyboxShader
+			enum class SkyboxShader
 			{
 				CubeMap = 0,
 				SphereMap,
@@ -49,16 +36,25 @@ namespace SupraHot
 				Count
 			};
 
+			enum class ScreenSpace
+			{
+				RenderToScreen = 0,
+				
+				Count
+			};
+
 			static ShaderLibrary* GetInstance();
 			~ShaderLibrary();
 
-			Shader* Skybox[SkyboxShader::Count] = {};
+			Shader* Skybox[uint32(SkyboxShader::Count)] = {};
+			Shader* ScreenSpace[uint32(ScreenSpace::Count)] = {};
+			Shader* MeshStatic[uint32(StaticMesh::VertexShader::Count)] = {};
+
 			void Initialize();
 			void Destroy();
 
 		private:
 			ShaderLibrary();
-			Shader* MeshStatic[VertexShader::StaticMesh::Count] = {};
 		};
 	};
 };
