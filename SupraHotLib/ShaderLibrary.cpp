@@ -1,5 +1,5 @@
 #include "ShaderLibrary.h"
-
+#include <iostream>
 
 namespace SupraHot
 {
@@ -15,27 +15,44 @@ namespace SupraHot
 
 		void ShaderLibrary::Initialize()
 		{
-			// Load mesh vertex shaders
-			
+			// Init skybox shaders
+			{
+				Shader* skyboxCubeShader = new Shader();
+				skyboxCubeShader->SetName("Skybox Cubemap Shader");
+				skyboxCubeShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/GL/skybox.vs.glsl");
+				skyboxCubeShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/GL/skybox.fs.glsl");
+				skyboxCubeShader->CompileShader();
+				Skybox[SkyboxShader::CubeMap] = skyboxCubeShader;
 
+
+				Shader* skyboxSphereShader = new Shader();
+				skyboxSphereShader->SetName("Skybox Sphere Shader");
+				skyboxSphereShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/GL/skybox.vs.glsl");
+				skyboxSphereShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/GL/skybox-sphere.fs.glsl");
+				skyboxSphereShader->CompileShader();
+				Skybox[SkyboxShader::SphereMap] = skyboxSphereShader;
+			}
+
+			// Load mesh vertex shaders
 		}
 
 		void ShaderLibrary::Destroy()
 		{
 			for (uint32 i = 0, l = VertexShader::StaticMesh::Count; i < l; ++i)
 			{
-				Shader* shader = MeshStaticVS[i];
+				Shader* shader = MeshStatic[i];
 				if (shader != nullptr)
 				{
 					shader->Destroy();
 				}
 			}
 
-			for (uint32 i = 0, l = PixelShader::Mesh::Count; i < l; ++i)
+			for (uint32 i = 0, l = SkyboxShader::Count; i < l; ++i)
 			{
-				Shader* shader = MeshPS[i];
+				Shader* shader = Skybox[i];
 				if (shader != nullptr)
 				{
+					SHF_PRINTF("Destroy Shader : %s | \n", shader->GetName().c_str());
 					shader->Destroy();
 				}
 			}

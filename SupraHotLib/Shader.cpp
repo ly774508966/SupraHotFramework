@@ -45,6 +45,7 @@ namespace SupraHot
 
 		void Shader::SetName(std::string name)
 		{
+			Name = name;
 		}
 
 		void Shader::Attach()

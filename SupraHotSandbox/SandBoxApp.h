@@ -12,8 +12,6 @@ private:
 
 	SupraHot::Shader* FBOShader;
 	SupraHot::Shader* SimpleMeshShader;
-	SupraHot::Shader* SkyBoxCubeShader;
-	SupraHot::Shader* SkyBoxSphereShader;
 
 	SupraHot::SkyBox* EnvBox;
 	SupraHot::Camera* FlyCamera;

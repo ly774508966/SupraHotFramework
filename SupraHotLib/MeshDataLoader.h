@@ -13,7 +13,6 @@ namespace SupraHot
 		private:
 			MeshDataLoader();
 			std::vector<MeshData*> LoadSHFM(std::string path);
-			std::vector<MeshData*> LoadOBJX(std::string path);
 		public:
 			static MeshDataLoader* GetInstance();
 			~MeshDataLoader();

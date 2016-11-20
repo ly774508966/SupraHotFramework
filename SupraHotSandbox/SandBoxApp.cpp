@@ -28,6 +28,7 @@
 #include <TextureCube.h>
 #include <SkyBox.h>
 #include <MeshDataRenderer.h>
+#include <ShaderLibrary.h>
 
 using namespace SupraHot;
 
@@ -39,7 +40,7 @@ SandBoxApp::~SandBoxApp()
 {
 }
 
-void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::string title)
+void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::string title)
 {
 	// First we need to initialize the filesystem
 #ifdef PLATFORM_WINDOWS
@@ -50,11 +51,12 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	Utils::FileSystem::GetInstance()->SetRootPath("Content/");
 #endif
 
-	App::Init(width, height, title);
-
 	window = new Window();
 	window->Init(width, height, title);
 	window->SetClearColor(0.7f, 0.3f, 0.7f, 1.0f);
+
+	// Was excuted before the new window call
+	App::Init(width, height, title);
 
 	FBO = new FrameBufferObject();
 	FBO->Init(width, height);
@@ -66,47 +68,30 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	// Load Shaders
 	FBOShader = new Shader();
 	SimpleMeshShader = new Shader();
-	SkyBoxCubeShader = new Shader();
-	SkyBoxSphereShader = new Shader();
 
 #ifdef PLATFORM_WINDOWS
-	FBOShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/fbo.vs.glsl");
-	FBOShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/fbo.fs.glsl");
+	FBOShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/GL/fbo.vs.glsl");
+	FBOShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/GL/fbo.fs.glsl");
 	
-	SkyBoxCubeShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/skybox.vs.glsl");
-	SkyBoxCubeShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/skybox.fs.glsl");
-
-	SkyBoxSphereShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/skybox.vs.glsl");
-	SkyBoxSphereShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/skybox-sphere.fs.glsl");
-
-
 	// Test compile options
 	ShaderCompileOptions opts;
 	opts.Define("_hasCustomValue", false);
 
-	SimpleMeshShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/simple-mesh.vs.glsl", opts);
-	SimpleMeshShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/simple-mesh.fs.glsl", opts);
+	SimpleMeshShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/GL/simple-mesh.vs.glsl", opts);
+	SimpleMeshShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/GL/simple-mesh.fs.glsl", opts);
 #endif
 
 #ifdef PLATFORM_ANDROID
-	FBOShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/fbo_gles3.vs.glsl");
-	FBOShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/fbo_gles3.fs.glsl");
+	FBOShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/GLES3/fbo.vs.glsl");
+	FBOShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/GLES3/fbo.fs.glsl");
 
-	SkyBoxCubeShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/skybox_gles3.vs.glsl");
-	SkyBoxCubeShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/skybox_gles3.fs.glsl");
-
-	SkyBoxSphereShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/skybox_gles3.vs.glsl");
-	SkyBoxSphereShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/skybox-sphere_gles3.fs.glsl");
-
-	SimpleMeshShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/simple-mesh_gles3.vs.glsl");
-	SimpleMeshShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/simple-mesh_gles3.fs.glsl");
+	SimpleMeshShader->LoadShaderFromFile(Shader::VERTEX_SHADER, "Shaders/GLES3/simple-mesh.vs.glsl");
+	SimpleMeshShader->LoadShaderFromFile(Shader::PIXEL_SHADER, "Shaders/GLES3/simple-mesh.fs.glsl");
 #endif
 	
 	FBOShader->CompileShader();
 	FBO->SetPixelSize(FBOShader);
 
-	SkyBoxCubeShader->CompileShader();
-	SkyBoxSphereShader->CompileShader();
 
 	SimpleMeshShader->CompileShader();
 	FBO->SetPixelSize(SimpleMeshShader);
@@ -192,7 +177,7 @@ void SandBoxApp::Render()
 {
 	FBO->Attach();
 
-	EnvBox->Render(FlyCamera, SkyBoxCubeShader);
+	EnvBox->Render(FlyCamera, ShaderLibrary::GetInstance()->Skybox[ShaderLibrary::SkyboxShader::CubeMap]);
 
 	for (MeshData* meshData : MeshDataVector)
 	{
@@ -258,6 +243,7 @@ void SandBoxApp::Tick(float deltaTime)
 
 void SandBoxApp::Destroy()
 {
+	App::Destroy();
 	Texture->Destroy();
 	FBOShader->Destroy();
 	FBO->Destroy();

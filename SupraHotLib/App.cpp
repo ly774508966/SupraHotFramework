@@ -11,6 +11,7 @@
 #ifdef PLATFORM_EMSCRIPTEN
 #include "WindowEmscripten.h"
 #endif
+#include "ShaderLibrary.h"
 
 namespace SupraHot
 {
@@ -34,6 +35,7 @@ namespace SupraHot
 	void App::Init(uint32 width, uint32 height, std::string title)
 	{
 		MainApp = this;
+		ShaderLibrary::GetInstance()->Initialize();
 	}
 
 	void App::Resize(uint32 width, uint32 height)
@@ -58,6 +60,7 @@ namespace SupraHot
 
 	void App::Destroy()
 	{
+		ShaderLibrary::GetInstance()->Destroy();
 	}
 
 	// Note: The Run()-method should only be used on desktops to keep the window open!

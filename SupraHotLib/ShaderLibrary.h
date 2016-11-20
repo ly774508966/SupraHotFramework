@@ -9,6 +9,9 @@ namespace SupraHot
 	{
 		class ShaderLibrary
 		{
+			
+		public:
+
 			struct VertexShader
 			{
 				enum StaticMesh
@@ -22,10 +25,6 @@ namespace SupraHot
 					Count
 				};
 
-				enum Wurst
-				{
-					Start = StaticMesh::Count
-				};
 			};
 
 			struct PixelShader
@@ -42,19 +41,24 @@ namespace SupraHot
 				};
 			};
 
-		private:
-			ShaderLibrary();
-			Shader* MeshStaticVS[VertexShader::StaticMesh::Count];
-			Shader* MeshPS[PixelShader::Mesh::Count];
+			enum SkyboxShader
+			{
+				CubeMap = 0,
+				SphereMap,
 
-		public:
+				Count
+			};
+
 			static ShaderLibrary* GetInstance();
 			~ShaderLibrary();
 
+			Shader* Skybox[SkyboxShader::Count] = {};
 			void Initialize();
 			void Destroy();
 
-			Shader* GetVertexShader(VertexShader identifer);
+		private:
+			ShaderLibrary();
+			Shader* MeshStatic[VertexShader::StaticMesh::Count] = {};
 		};
 	};
 };
