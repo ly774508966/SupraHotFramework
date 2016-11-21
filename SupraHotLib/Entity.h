@@ -6,7 +6,14 @@
 
 namespace SupraHot
 {
+	namespace Graphics
+	{
+		class Camera;
+	}
+
+	class MeshComponent;
 	using namespace Math;
+
 	class Entity
 	{
 	private:

@@ -6,7 +6,7 @@ namespace SupraHot
 	class Entity;
 	class Component
 	{
-	private:
+	protected:
 		Entity* Parent;
 	public:
 		std::string Identifier = "Component";
@@ -20,11 +20,24 @@ namespace SupraHot
 			Registered();
 		};
 
+		void Remove()
+		{
+			this->Parent = nullptr;
+			Removed();
+			Destroy();
+		}
+		
 		virtual void Registered() = 0;
+		virtual void Removed() = 0;
 		virtual void Destroy() = 0;
 		virtual void Update(float deltaTime) = 0;
 		virtual void LateUpdate(float deltaTime) = 0;
 		virtual void FixedUpdate(float deltaTime) = 0;
+
+		Entity* GetParent()
+		{
+			return Parent;
+		}
 	};
 };
 

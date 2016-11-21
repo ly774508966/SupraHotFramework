@@ -1,4 +1,7 @@
 #include "Entity.h"
+#include "MeshDataRenderer.h"
+#include "MeshComponent.h"
+
 #include <vector>
 #include <algorithm>
 
@@ -38,6 +41,7 @@ namespace SupraHot
 	void Entity::RemoveComponent(Component* component)
 	{
 		Components.erase(std::remove(Components.begin(), Components.end(), component), Components.end());
+		component->Remove();
 	}
 
 	Component* Entity::AddComponent(Component* component)

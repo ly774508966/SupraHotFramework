@@ -181,7 +181,7 @@ namespace SupraHot
 				MeshData* meshData = new MeshData();
 
 				meshData->Name = modelMesh.Name;
-				meshData->MeshMaterial = materialsMap[modelMesh.MaterialID];
+				meshData->Material = materialsMap[modelMesh.MaterialID];
 				meshData->FaceCount = modelMesh.FaceCount;
 				meshData->VertexCount = modelMesh.VertexCount;
 

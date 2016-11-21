@@ -23,7 +23,7 @@ namespace SupraHot
 			
 			Vec3 Origin;
 			std::string Name;
-			Material MeshMaterial;
+			Material Material;
 			std::vector<Face> Faces; // Indices
 
 			bool HasIndexData = false;
