@@ -8,19 +8,18 @@ namespace SupraHot
 	{
 		class Material;
 		class MeshData;
-		class Shader;
 	}
 
 	class MeshComponent : public Component
 	{	
 	private:
 		Graphics::MeshData* MeshData;
-		Graphics::Shader* Shader;
+		Graphics::Material* Material;
 
 	public:
 		std::string Identifier = "MeshComponent";
 	
-		MeshComponent(Graphics::MeshData* meshData);
+		MeshComponent(Graphics::MeshData* meshData, Graphics::Material* material = nullptr);
 		~MeshComponent();
 
 		void Registered() override;
@@ -32,6 +31,5 @@ namespace SupraHot
 
 		Graphics::Material* GetMaterial();
 		Graphics::MeshData* GetMeshData();
-		Graphics::Shader* GetShader();
 	};
 };

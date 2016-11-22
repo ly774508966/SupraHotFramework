@@ -2,6 +2,7 @@
 #include "Platform.h"
 #include "Vec3.h"
 #include "Texture2D.h"
+#include "Shader.h"
 
 namespace SupraHot
 {
@@ -17,6 +18,7 @@ namespace SupraHot
 			Texture2D* MetalnessMap = nullptr;
 			Texture2D* SpecularMap = nullptr;
 			Texture2D* ComboMap = nullptr;
+			Shader* Shader = nullptr;
 
 		public:
 			std::string Name;
@@ -70,6 +72,9 @@ namespace SupraHot
 			float GetRoughness();
 			float GetMetalness();
 			float GetF0();
+
+			void SetShader(Graphics::Shader* shader);
+			Graphics::Shader* GetShader();
 
 			void Destroy();
 		};

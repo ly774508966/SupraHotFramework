@@ -1,8 +1,10 @@
-#include "Platform.h"
-#include "SandBoxApp.h"
 #include <FileSystem.h>
 #include <iostream>
+
+#include "Platform.h"
+#include "SandBoxApp.h"
 #include "Shader.h"
+#include "MeshComponent.h"
 
 #ifdef PLATFORM_ANDROID
 #include "WindowAndroid.h"
@@ -88,7 +90,33 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 	}
 #endif
 
-	MeshDataVector = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol_Model.shfm");
+	{	// Load a test model
+		std::vector<MeshData*> MeshDataVector = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol_Model.shfm");
+
+		Entity* entity = new Entity();
+
+		entity->GetTransform().SetPosition(Vec3(0, 0, -5.0f));
+		entity->GetTransform().SetScale(Vec3(0.05f, 0.05f, 0.05f));
+		entity->GetTransform().SetLocalRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
+
+		MeshComponent* meshComponent = new MeshComponent(MeshDataVector[0]);
+
+		// This should be done by default.
+		// A default material will always be assigned to mesh component.
+		// The actual material can be changed later on and the shader can be reassigned
+		meshComponent->GetMaterial()->SetShader
+		(
+			ShaderLibrary::GetInstance()->MeshStatic
+			[
+				uint32(ShaderLibrary::StaticMesh::VertexShader::PositionUV)
+			]
+		);
+		entity->AddComponent(meshComponent);
+		
+		this->Entities.push_back(entity);
+	}
+
+
 	//SHF_PRINTF("MeshDataVector.size = %llu \n", MeshDataVector.size());
 
 	// Try to load a 2d .dds file
@@ -147,17 +175,7 @@ void SandBoxApp::Render()
 
 	EnvBox->Render(FlyCamera, ShaderLibrary::GetInstance()->Skybox[uint32(ShaderLibrary::SkyboxShader::CubeMap)]);
 
-	for (MeshData* meshData : MeshDataVector)
-	{
-		MeshDataRenderer::GetInstance().Render(
-			FlyCamera, 
-			meshData, 
-			ShaderLibrary::GetInstance()->MeshStatic
-			[
-				uint32(ShaderLibrary::StaticMesh::VertexShader::PositionUV)
-			]
-		);
-	}
+	MeshDataRenderer::GetInstance().Render(FlyCamera);
 	
 	FBO->Detach();
 	FBO->SetReadSource(FBO->GetColorRenderTarget());

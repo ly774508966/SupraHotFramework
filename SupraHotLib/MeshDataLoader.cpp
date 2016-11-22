@@ -9,6 +9,7 @@
 #include "Platform.h"
 #include "FileSystem.h"
 #include "SHFMBinaryLoader.h"
+#include "ShaderLibrary.h"
 
 namespace SupraHot
 {
@@ -43,7 +44,6 @@ namespace SupraHot
 			// Create map for materials
 			std::unordered_map<uint32, Graphics::Material> materialsMap;
 			std::vector<MeshData*> meshes {};
-
 
 			for (uint32 i = 0; i < model.MeshCount; i++)
 			{
@@ -164,17 +164,6 @@ namespace SupraHot
 				}
 			}
 
-
-			for (uint32 i = 0; i < model.MaterialCount; i++)
-			{
-				SHFModel::Material& material = model.Materials[i];
-				
-				// Interpret data here.
-
-				// Load materials when needed.
-			}
-
-
 			for (uint32 i = 0; i < model.MeshCount; i++)
 			{
 				SHFModel::Mesh& modelMesh = model.Meshes[i];
@@ -262,6 +251,19 @@ namespace SupraHot
 				glBindVertexArray(0);
 
 				meshes.push_back(meshData);
+
+
+				// Assign a default shader for this material
+				// The default will be a GGX shader.
+				meshData->Material.SetShader
+				(
+					ShaderLibrary::GetInstance()->SelectShaderForMaterialAndMeshData
+					(
+						meshData,
+						&meshData->Material
+					)
+				);
+
 			}
 
 			return meshes;

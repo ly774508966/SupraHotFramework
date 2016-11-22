@@ -24,7 +24,7 @@ namespace SupraHot
 
 	void MeshDataRenderer::AddMeshComponent(MeshComponent* meshComponent)
 	{
-		if (std::find(MeshComponents.begin(), MeshComponents.end(), meshComponent) != MeshComponents.end())
+		if (std::find(MeshComponents.begin(), MeshComponents.end(), meshComponent) == MeshComponents.end())
 		{
 			MeshComponents.push_back(meshComponent);
 		}
@@ -44,7 +44,7 @@ namespace SupraHot
 
 		for (MeshComponent* meshComponent : MeshComponents)
 		{
-			Graphics::Shader* shader = meshComponent->GetShader();
+			Graphics::Shader* shader = meshComponent->GetMaterial()->GetShader();
 			Graphics::MeshData* meshData = meshComponent->GetMeshData();
 
 			// Bind shader

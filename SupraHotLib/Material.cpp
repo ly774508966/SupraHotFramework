@@ -206,5 +206,15 @@ namespace SupraHot
 		{
 			this->ComboMap = tex;
 		}
+
+		void Material::SetShader(Graphics::Shader* shader)
+		{
+			Shader = shader;
+		}
+
+		Graphics::Shader* Material::GetShader()
+		{
+			return Shader;
+		}
 	};
 };

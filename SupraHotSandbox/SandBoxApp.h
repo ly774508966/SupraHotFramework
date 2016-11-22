@@ -2,7 +2,7 @@
 #include <App.h>
 #include <FrameBufferObject.h>
 #include <SkyBox.h>
-#include <MeshData.h>
+#include <Entity.h>
 
 class SandBoxApp : public SupraHot::App
 {
@@ -13,7 +13,7 @@ private:
 	SupraHot::SkyBox* EnvBox;
 	SupraHot::Camera* FlyCamera;
 
-	std::vector<SupraHot::MeshData*> MeshDataVector;
+	std::vector<SupraHot::Entity*> Entities;
 
 public:
 	SandBoxApp();

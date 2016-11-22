@@ -13,6 +13,11 @@ namespace SupraHot
 		{
 		}
 
+		Shader* ShaderLibrary::SelectShaderForMaterialAndMeshData(Graphics::MeshData* meshData, Graphics::Material* material)
+		{
+			return nullptr;
+		}
+
 		void ShaderLibrary::Initialize()
 		{
 			std::string directoryPath = "Shaders/GL/";
