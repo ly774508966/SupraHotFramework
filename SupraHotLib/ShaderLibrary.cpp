@@ -15,7 +15,7 @@ namespace SupraHot
 
 		Shader* ShaderLibrary::SelectShaderForMaterialAndMeshData(Graphics::MeshData* meshData, Graphics::Material* material)
 		{
-			return nullptr;
+			return MeshStatic[uint32(StaticMesh::VertexShader::PositionUV)];
 		}
 
 		void ShaderLibrary::Initialize()

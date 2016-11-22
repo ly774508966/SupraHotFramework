@@ -32,18 +32,31 @@ namespace SupraHot
 		{
 		}
 
-		std::vector<MeshData*> MeshDataLoader::Load(std::string pathToSHFM)
+		std::vector<MeshComponent*> MeshDataLoader::Load(std::string pathToSHFM)
 		{
-			return LoadSHFM(pathToSHFM);
+			MeshLoadData* meshLoadData = LoadSHFM(pathToSHFM);
+			std::vector<MeshComponent*> meshComponents;
+			
+			for (size_t m = 0, l = meshLoadData->Meshes.size(); m < l; ++m)
+			{
+				MeshData* meshData = meshLoadData->Meshes[m];
+				Material* material = meshLoadData->MaterialsMap[meshLoadData->MaterialIDs[m]];
+				material->SetShader(ShaderLibrary::GetInstance()->SelectShaderForMaterialAndMeshData(meshData, material));
+				meshComponents.push_back(new MeshComponent(meshData, material));
+			}
+
+			delete meshLoadData;
+			return meshComponents;
 		}
 
-		std::vector<MeshData*> MeshDataLoader::LoadSHFM(std::string path)
+		MeshLoadData* MeshDataLoader::LoadSHFM(std::string path)
 		{
 			SHFModelFile model = SHFMBinaryLoader::GetInstance().LoadFromFile(path);
 
 			// Create map for materials
-			std::unordered_map<uint32, Graphics::Material> materialsMap;
+			std::unordered_map<uint32, Graphics::Material*> materialsMap;
 			std::vector<MeshData*> meshes {};
+			std::vector<uint32> materialIDs{};
 
 			for (uint32 i = 0; i < model.MeshCount; i++)
 			{
@@ -58,17 +71,17 @@ namespace SupraHot
 					#endif
 
 					// Set values
-					Graphics::Material material = Graphics::Material();
-					material.ID = modelMaterial.ID;
-					material.Name = modelMaterial.Name;
-					material.Ka = modelMaterial.Ka; 
-					material.Kd = modelMaterial.Kd; 
-					material.Ks = modelMaterial.Ks; 
-					material.Ke = modelMaterial.Ke; 
-					material.Ns = modelMaterial.Ns; 
-					material.Roughness = modelMaterial.Roughness;
-					material.Metalness = modelMaterial.Metalness;
-					material.F0 = modelMaterial.F0;
+					Graphics::Material* material = new Graphics::Material();
+					material->ID = modelMaterial.ID;
+					material->Name = modelMaterial.Name;
+					material->Ka = modelMaterial.Ka; 
+					material->Kd = modelMaterial.Kd; 
+					material->Ks = modelMaterial.Ks; 
+					material->Ke = modelMaterial.Ke; 
+					material->Ns = modelMaterial.Ns; 
+					material->Roughness = modelMaterial.Roughness;
+					material->Metalness = modelMaterial.Metalness;
+					material->F0 = modelMaterial.F0;
 
 					// Load textures.
 					if (modelMaterial.AlbeoMapPathLength > 0)
@@ -87,7 +100,7 @@ namespace SupraHot
 						} 
 						
 						SHF_PRINTF("directory = %s \n", Utils::StringUtil::GetPathFromFilePath(path).c_str());
-						material.SetAlbedoMap(texture);
+						material->SetAlbedoMap(texture);
 					}
 
 					if (modelMaterial.NormalMapPathLength > 0)
@@ -105,7 +118,7 @@ namespace SupraHot
 							texture->Load(modelMaterial.NormalMapPath);
 						}
 
-						material.SetNormalMap(texture);
+						material->SetNormalMap(texture);
 					}
 
 					if (modelMaterial.SpecularMapPathLength > 0)
@@ -123,7 +136,7 @@ namespace SupraHot
 							texture->Load(modelMaterial.SpecularMapPath);
 						}
 
-						material.SetRoughnessMap(texture);
+						material->SetRoughnessMap(texture);
 					}
 
 					if (modelMaterial.ShininessReflectionMapPathLength > 0)
@@ -141,7 +154,7 @@ namespace SupraHot
 							texture->Load(modelMaterial.ShininessReflectionMapPath);
 						}
 
-						material.SetMetalnessMap(texture);
+						material->SetMetalnessMap(texture);
 					}
 
 					// Todo: We also need to create VMF roughness maps from metalness & roughness
@@ -160,7 +173,6 @@ namespace SupraHot
 
 					// Push material into hashmap
 					materialsMap[modelMesh.MaterialID] = material; 
-					// std::make_pair(key,value)
 				}
 			}
 
@@ -170,7 +182,6 @@ namespace SupraHot
 				MeshData* meshData = new MeshData();
 
 				meshData->Name = modelMesh.Name;
-				meshData->Material = materialsMap[modelMesh.MaterialID];
 				meshData->FaceCount = modelMesh.FaceCount;
 				meshData->VertexCount = modelMesh.VertexCount;
 
@@ -252,21 +263,16 @@ namespace SupraHot
 
 				meshes.push_back(meshData);
 
-
-				// Assign a default shader for this material
-				// The default will be a GGX shader.
-				meshData->Material.SetShader
-				(
-					ShaderLibrary::GetInstance()->SelectShaderForMaterialAndMeshData
-					(
-						meshData,
-						&meshData->Material
-					)
-				);
-
+				// Push back the material id!
+				materialIDs.push_back(modelMesh.MaterialID);
 			}
 
-			return meshes;
+			MeshLoadData* result = new MeshLoadData();
+			result->Meshes = meshes;
+			result->MaterialsMap = materialsMap;
+			result->MaterialIDs = materialIDs;
+
+			return result;
 		}
 	};
 };

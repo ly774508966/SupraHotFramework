@@ -4,9 +4,10 @@
 
 namespace SupraHot
 {
-	MeshComponent::MeshComponent(Graphics::MeshData* meshData)
+	MeshComponent::MeshComponent(Graphics::MeshData* meshData, Graphics::Material* material)
 	{
 		MeshData = meshData;
+		Material = material;
 	}
 
 	MeshComponent::~MeshComponent()
@@ -15,19 +16,26 @@ namespace SupraHot
 
 	void MeshComponent::Registered()
 	{
-		printf("Registered MeshComponent\nAdded to MeshDataRenderer\n");
+#if DEVELOPMENT == 1
+		SHF_PRINTF("Registered MeshComponent\nAdded to MeshDataRenderer\n");
+#endif
 		MeshDataRenderer::GetInstance().AddMeshComponent(this);
 	}
 
 	void MeshComponent::Removed()
 	{
-		printf("Removed MeshComponent\nRemoved from MeshDataRenderer\n");
+#if DEVELOPMENT == 1
+		SHF_PRINTF("Removed MeshComponent\nRemoved from MeshDataRenderer\n");
+#endif
 		MeshDataRenderer::GetInstance().RemoveMeshComponent(this);
 	}
 
 	void MeshComponent::Destroy()
 	{
-		printf("Triggered destroy()-method on MeshComponent\n");
+#if DEVELOPMENT == 1
+		SHF_PRINTF("Triggered destroy()-method on MeshComponent\n");
+		SHF_PRINTF("need to destroy the material and meshdata.\n");
+#endif
 	}
 
 	void MeshComponent::Update(float deltaTime)
@@ -44,16 +52,11 @@ namespace SupraHot
 
 	Graphics::Material* MeshComponent::GetMaterial()
 	{
-		return &MeshData->Material;
+		return Material;
 	}
 
 	Graphics::MeshData* MeshComponent::GetMeshData()
 	{
 		return MeshData;
-	}
-
-	Graphics::Shader* MeshComponent::GetShader()
-	{
-		return Shader;
 	}
 };

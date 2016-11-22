@@ -46,40 +46,41 @@ namespace SupraHot
 
 	Component* Entity::AddComponent(Component* component)
 	{
-		this->Components.push_back(component);
+		Components.push_back(component);
 		component->Register(this);
 		return component;
 	}
 
 	void Entity::Update(float deltaTime)
 	{
-		for (uint32 i = 0, l = static_cast<uint32>(this->Components.size()); i < l; ++i)
+		for (uint32 i = 0, l = static_cast<uint32>(Components.size()); i < l; ++i)
 		{
-			this->Components[i]->Update(deltaTime);
+			Components[i]->Update(deltaTime);
 		}
 	} 
 
 	void Entity::LateUpdate(float deltaTime)
 	{
-		for (uint32 i = 0, l = static_cast<uint32>(this->Components.size()); i < l; ++i)
+		for (uint32 i = 0, l = static_cast<uint32>(Components.size()); i < l; ++i)
 		{
-			this->Components[i]->LateUpdate(deltaTime);
+			Components[i]->LateUpdate(deltaTime);
 		}
 	}
 
 	void Entity::FixedUpdate(float deltaTime)
 	{
-		for (uint32 i = 0, l = static_cast<uint32>(this->Components.size()); i < l; ++i)
+		for (uint32 i = 0, l = static_cast<uint32>(Components.size()); i < l; ++i)
 		{
-			this->Components[i]->FixedUpdate(deltaTime);
+			Components[i]->FixedUpdate(deltaTime);
 		}
 	}
 
 	void Entity::Destroy()
 	{
-		for (uint32 i = 0, l = static_cast<uint32>(this->Components.size()); i < l; ++i)
+		for (uint32 i = 0, l = static_cast<uint32>(Components.size()); i < l; ++i)
 		{
-			this->Components[i]->Destroy();
-		}
+			Components[i]->Destroy();
+			delete Components[i];
+		} Components.clear();
 	}
 };

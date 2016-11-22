@@ -91,7 +91,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 #endif
 
 	{	// Load a test model
-		std::vector<MeshData*> MeshDataVector = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol_Model.shfm");
+		std::vector<MeshComponent*> meshComponents = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol_Model.shfm");
 
 		Entity* entity = new Entity();
 
@@ -99,18 +99,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 		entity->GetTransform().SetScale(Vec3(0.05f, 0.05f, 0.05f));
 		entity->GetTransform().SetLocalRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
 
-		MeshComponent* meshComponent = new MeshComponent(MeshDataVector[0]);
-
-		// This should be done by default.
-		// A default material will always be assigned to mesh component.
-		// The actual material can be changed later on and the shader can be reassigned
-		meshComponent->GetMaterial()->SetShader
-		(
-			ShaderLibrary::GetInstance()->MeshStatic
-			[
-				uint32(ShaderLibrary::StaticMesh::VertexShader::PositionUV)
-			]
-		);
+		MeshComponent* meshComponent = meshComponents[0];
 		entity->AddComponent(meshComponent);
 		
 		this->Entities.push_back(entity);
@@ -124,7 +113,8 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 	ddsTexture->SetWrapS(GL_CLAMP_TO_EDGE);
 	ddsTexture->SetWrapT(GL_CLAMP_TO_EDGE);
 	ddsTexture->Load("Textures/test/lion_128f.dds");
-	FBO->SetReadSource(ddsTexture);
+	ddsTexture->Destroy();
+	delete ddsTexture;
 	
 	TextureCube* textureCube = new TextureCube("CubeTexture Test");
 	textureCube->SetWrapS(GL_CLAMP_TO_EDGE);
@@ -134,25 +124,23 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 					  "Textures/Bridge2/py.png", "Textures/Bridge2/ny.png",
 					  "Textures/Bridge2/pz.png", "Textures/Bridge2/nz.png");
 	textureCube->Destroy();
+	delete textureCube;
 
-	TextureCube* ddsCubeTexture = new TextureCube("DDS Cube map");
-	ddsCubeTexture->SetWrapS(GL_CLAMP_TO_EDGE);
-	ddsCubeTexture->SetWrapT(GL_CLAMP_TO_EDGE);
-	ddsCubeTexture->SetWrapR(GL_CLAMP_TO_EDGE);
-
-	//ddsCubeTexture->LoadDDS("Textures/Random/miptest.dds", false, false);
-	//ddsCubeTexture->LoadDDS("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds", true);
-	ddsCubeTexture->LoadDDS("Textures/MonValley_G_DirtRoad_3k/Specular.dds", true, true);
-	//ddsCubeTexture->LoadDDS("Textures/Random/miptest.dds", false);
+	DdsCubeTexture = new TextureCube("DDS Cube map");
+	DdsCubeTexture->SetWrapS(GL_CLAMP_TO_EDGE);
+	DdsCubeTexture->SetWrapT(GL_CLAMP_TO_EDGE);
+	DdsCubeTexture->SetWrapR(GL_CLAMP_TO_EDGE);
+	DdsCubeTexture->LoadDDS("Textures/MonValley_G_DirtRoad_3k/Specular.dds", true, true);
 
 	Texture2D* sphereMap = new Texture2D("sphere map");
 	sphereMap->SetWrapS(GL_CLAMP_TO_EDGE);
 	sphereMap->SetWrapT(GL_CLAMP_TO_EDGE);
 	sphereMap->Load("Textures/MonValley_G_DirtRoad_3k/Static.dds");
 	sphereMap->Destroy();
+	delete sphereMap;
 
 	EnvBox = new SkyBox(); 
-	EnvBox->SetEnvironmentMap(ddsCubeTexture);
+	EnvBox->SetEnvironmentMap(DdsCubeTexture);
 	//EnvBox->SetEnvironmentMap(sphereMap);
 	EnvBox->Init(); 
 	
@@ -241,8 +229,21 @@ void SandBoxApp::Tick(float deltaTime)
 
 void SandBoxApp::Destroy()
 {
+	for (size_t i = 0, l = Entities.size(); i < l; ++i)
+	{
+		Entities.at(i)->Destroy();
+		delete Entities.at(i);
+	} Entities.clear();
+
 	App::Destroy();
 	Texture->Destroy();
+	DdsCubeTexture->Destroy();
 	FBO->Destroy();
 	window->Destroy();
+
+	delete Texture;
+	delete DdsCubeTexture;
+	delete FBO;
+	delete window;
+	delete FlyCamera;
 }
