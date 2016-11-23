@@ -99,7 +99,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 		entity->GetTransform().SetScale(Vec3(0.05f, 0.05f, 0.05f));
 		entity->GetTransform().SetLocalRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
 
-		MeshComponent* meshComponent = meshComponents[0];
+		MeshComponent* meshComponent = meshComponents.at(0);
 		entity->AddComponent(meshComponent);
 		
 		this->Entities.push_back(entity);
@@ -229,7 +229,7 @@ void SandBoxApp::Tick(float deltaTime)
 
 void SandBoxApp::Destroy()
 {
-	for (size_t i = 0, l = Entities.size(); i < l; ++i)
+	for (uint32 i = 0, l = static_cast<uint32>(Entities.size()); i < l; ++i)
 	{
 		Entities.at(i)->Destroy();
 		delete Entities.at(i);

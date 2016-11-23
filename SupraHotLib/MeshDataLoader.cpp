@@ -87,15 +87,17 @@ namespace SupraHot
 					if (modelMaterial.AlbeoMapPathLength > 0)
 					{
 						// Load albedo map
-						Texture2D* texture = new Texture2D();
+						Texture2D* texture = nullptr;
 
 						if (FileSystem::GetInstance()->FileExists("", modelMaterial.AlbedoMapPath))
 						{
+							texture = new Texture2D();
 							texture->Load(modelMaterial.AlbedoMapPath);
 						}
 						else if (FileSystem::GetInstance()->FileExists("", Utils::StringUtil::GetPathFromFilePath(path) + modelMaterial.AlbedoMapPath))
 						{
 							modelMaterial.AlbedoMapPath = Utils::StringUtil::GetPathFromFilePath(path) + modelMaterial.AlbedoMapPath;
+							texture = new Texture2D();
 							texture->Load(modelMaterial.AlbedoMapPath);
 						} 
 						
@@ -106,15 +108,17 @@ namespace SupraHot
 					if (modelMaterial.NormalMapPathLength > 0)
 					{
 						// Load normal map
-						Texture2D* texture = new Texture2D();
+						Texture2D* texture = nullptr;
 
 						if (FileSystem::GetInstance()->FileExists("", modelMaterial.NormalMapPath))
 						{
+							texture = new Texture2D();
 							texture->Load(modelMaterial.NormalMapPath);
 						}
 						else if (FileSystem::GetInstance()->FileExists("", Utils::StringUtil::GetPathFromFilePath(path) + modelMaterial.NormalMapPath))
 						{
 							modelMaterial.NormalMapPath = Utils::StringUtil::GetPathFromFilePath(path) + modelMaterial.NormalMapPath;
+							texture = new Texture2D();
 							texture->Load(modelMaterial.NormalMapPath);
 						}
 
@@ -124,15 +128,17 @@ namespace SupraHot
 					if (modelMaterial.SpecularMapPathLength > 0)
 					{
 						// Load roughness map
-						Texture2D* texture = new Texture2D();
+						Texture2D* texture = nullptr;
 
 						if (FileSystem::GetInstance()->FileExists("", modelMaterial.SpecularMapPath))
 						{
+							texture = new Texture2D();
 							texture->Load(modelMaterial.SpecularMapPath);
 						}
 						else if (FileSystem::GetInstance()->FileExists("", Utils::StringUtil::GetPathFromFilePath(path) + modelMaterial.SpecularMapPath))
 						{
 							modelMaterial.SpecularMapPath = Utils::StringUtil::GetPathFromFilePath(path) + modelMaterial.SpecularMapPath;
+							texture = new Texture2D();
 							texture->Load(modelMaterial.SpecularMapPath);
 						}
 
@@ -142,15 +148,17 @@ namespace SupraHot
 					if (modelMaterial.ShininessReflectionMapPathLength > 0)
 					{
 						// Load metalness map
-						Texture2D* texture = new Texture2D();
+						Texture2D* texture = nullptr;
 
 						if (FileSystem::GetInstance()->FileExists("", modelMaterial.ShininessReflectionMapPath))
 						{
+							texture = new Texture2D();
 							texture->Load(modelMaterial.ShininessReflectionMapPath);
 						}
 						else if (FileSystem::GetInstance()->FileExists("", Utils::StringUtil::GetPathFromFilePath(path) + modelMaterial.ShininessReflectionMapPath))
 						{
 							modelMaterial.ShininessReflectionMapPath = Utils::StringUtil::GetPathFromFilePath(path) + modelMaterial.ShininessReflectionMapPath;
+							texture = new Texture2D();
 							texture->Load(modelMaterial.ShininessReflectionMapPath);
 						}
 

@@ -1,5 +1,6 @@
 #include "ShaderLibrary.h"
 #include <iostream>
+#include "Utility.h"
 
 namespace SupraHot
 {
@@ -55,6 +56,22 @@ namespace SupraHot
 				ScreenSpace[uint32(ScreenSpace::RenderToScreen)] = fboShader;
 
 			}
+
+			{
+				for (uint32 j = 0; j < pow(2, 3); j++)
+				{
+					
+					std::vector<bool> bools = Utils::Utility::GetBoolCombinations(j, 3);
+
+					for (uint32 i = 0; i < bools.size(); i++)
+					{
+						SHF_PRINTF("%d ", uint32(bools.at(i)));
+					}
+					SHF_PRINTF("\n");
+
+				}
+			}
+
 
 			// Load mesh vertex shaders
 			{

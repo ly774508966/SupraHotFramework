@@ -154,44 +154,68 @@ namespace SupraHot
 
 		void Material::Destroy()
 		{
-			if (AlbedoMap != nullptr && AlbedoMap->GetID() > 0)
+			if (AlbedoMap != nullptr)
 			{
-				AlbedoMap->Destroy();
+				if (AlbedoMap->GetID() > 0)
+				{
+					AlbedoMap->Destroy();
+				}
+				
 				delete AlbedoMap;
 				AlbedoMap = nullptr;
 			}
 
-			if (NormalMap != nullptr && NormalMap->GetID() > 0)
+			if (NormalMap != nullptr)
 			{
-				NormalMap->Destroy();
+				if (NormalMap->GetID() > 0)
+				{
+					NormalMap->Destroy();
+				}
+
 				delete NormalMap;
 				NormalMap = nullptr;
 			}
 
-			if (RoughnessMap != nullptr && RoughnessMap->GetID() > 0)
+			if (RoughnessMap != nullptr)
 			{
-				RoughnessMap->Destroy();
+				if (RoughnessMap->GetID() > 0)
+				{
+					RoughnessMap->Destroy();
+				}
+
 				delete RoughnessMap;
 				RoughnessMap = nullptr;
 			}
 
-			if (MetalnessMap != nullptr && MetalnessMap->GetID() > 0)
+			if (MetalnessMap != nullptr)
 			{
-				MetalnessMap->Destroy();
+				if (MetalnessMap->GetID() > 0)
+				{
+					MetalnessMap->Destroy();
+				}
+
 				delete MetalnessMap;
 				MetalnessMap = nullptr;
 			}
 
-			if (SpecularMap != nullptr && SpecularMap->GetID() > 0)
+			if (SpecularMap != nullptr)
 			{
-				SpecularMap->Destroy();
+				if (SpecularMap->GetID() > 0)
+				{
+					SpecularMap->Destroy();
+				}
+
 				delete SpecularMap;
 				SpecularMap = nullptr;
 			}
 
-			if (ComboMap != nullptr && ComboMap->GetID() > 0)
+			if (ComboMap != nullptr)
 			{
-				ComboMap->Destroy();
+				if (ComboMap->GetID() > 0)
+				{
+					ComboMap->Destroy();
+				}
+
 				delete ComboMap;
 				ComboMap = nullptr;
 			}

@@ -53,6 +53,8 @@ namespace SupraHot
 			Shader* ScreenSpace[uint32(ScreenSpace::Count)] = {};
 			Shader* MeshStatic[uint32(StaticMesh::VertexShader::Count)] = {};
 
+			Shader* MeshStatic___[uint32(StaticMesh::VertexShader::Count)] = {};
+
 			Shader* SelectShaderForMaterialAndMeshData(Graphics::MeshData* meshData, Graphics::Material* material);
 
 			void Initialize();

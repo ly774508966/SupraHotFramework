@@ -220,10 +220,13 @@
       <Filter>Header Files\Graphics\Common</Filter>
     </ClInclude>
     <ClInclude Include="ShaderLibrary.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Graphics\Common</Filter>
     </ClInclude>
     <ClInclude Include="ShaderCompileOptions.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Graphics\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -347,11 +350,14 @@
     <ClCompile Include="MeshDataRenderer.cpp">
       <Filter>Source Files\Graphics\Common</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderLibrary.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderCompileOptions.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Graphics\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderLibrary.cpp">
+      <Filter>Source Files\Graphics\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility.cpp">
+      <Filter>Source Files\Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
