@@ -58,18 +58,80 @@ namespace SupraHot
 			}
 
 			{
-				for (uint32 j = 0; j < pow(2, 3); j++)
+				ShaderCompileOptions opts;
+
+				uint32 shaderInputVertexAttribs = 3;
+				uint32 shaderInputTextures = 6;
+				
+				for (uint32 v = 0, vl = static_cast<uint32>(pow(2, shaderInputVertexAttribs)); v < vl; v++)
 				{
-					
-					std::vector<bool> bools = Utils::Utility::GetBoolCombinations(j, 3);
+					std::vector<bool> vertexAttribBools = Utils::Utility::GetBoolCombinations(v, shaderInputVertexAttribs);
 
-					for (uint32 i = 0; i < bools.size(); i++)
+					// if we have tangents but no normals, we can skip this shader
+					if (vertexAttribBools[2] && !vertexAttribBools[0])
 					{
-						SHF_PRINTF("%d ", uint32(bools.at(i)));
+						continue;
 					}
-					SHF_PRINTF("\n");
+	
+					for (uint32 t = 0, tl = static_cast<uint32>(pow(2, shaderInputTextures)); t < tl; t++)
+					{
+						bool compileShader = true;
 
+						opts.Define("_Normals", vertexAttribBools[0]);
+						opts.Define("_UV", vertexAttribBools[1]);
+						opts.Define("_Tangents", vertexAttribBools[2]);
+
+						std::vector<bool> textureBools = Utils::Utility::GetBoolCombinations(t, shaderInputTextures);
+						opts.Define("_AlbedoMap", textureBools[0]);
+						opts.Define("_NormalMap", textureBools[1]);
+						opts.Define("_RoughnessMap", textureBools[2]);
+						opts.Define("_MetalnessMap", textureBools[3]);
+						opts.Define("_SpecularMap", textureBools[4]);
+						opts.Define("_ComboMap", textureBools[5]);
+
+
+						// if we run into problems, we can comment this section out and load ALL possible permutations
+						// an then just skip the ones, which aren't compiling. LUL.
+	
+						if (textureBools[1] && !vertexAttribBools[0]) // NormalMap set to true && Normals set to false
+						{
+							compileShader = false;
+						}
+						else if (textureBools[1] && !vertexAttribBools[2]) // NormalMap set to true && Tangents set to false
+						{
+							compileShader = false;
+						}
+
+						if (!vertexAttribBools[1]) // no UV's
+						{
+							if (   textureBools[0] 
+								|| textureBools[1]
+								|| textureBools[2]
+								|| textureBools[3]
+								|| textureBools[4]
+								|| textureBools[5])
+							{
+								compileShader = false;
+							}
+							
+						}
+
+						if (compileShader)
+						{
+							// Load shader with compile options.
+							Shader* shader = new Shader();
+							shader->SetName("Mesh (....)");
+							shader->LoadShaderFromFile(Shader::VERTEX_SHADER, directoryPath + "mesh.vs.glsl", opts);
+							shader->LoadShaderFromFile(Shader::PIXEL_SHADER, directoryPath + "mesh.fs.glsl", opts);
+							shader->CompileShader();
+							MeshShaders.push_back(shader);
+						}
+
+						opts.Reset();
+					}
 				}
+
+				SHF_PRINTF("Created %llu shader permutations \n", MeshShaders.size());				
 			}
 
 
@@ -166,6 +228,7 @@ namespace SupraHot
 				if (shader != nullptr)
 				{
 					shader->Destroy();
+					delete shader;
 				}
 			}
 
@@ -175,6 +238,7 @@ namespace SupraHot
 				if (shader != nullptr)
 				{
 					shader->Destroy();
+					delete shader;
 				}
 			}
 
@@ -184,7 +248,14 @@ namespace SupraHot
 				if (shader != nullptr)
 				{
 					shader->Destroy();
+					delete shader;
 				}
+			}
+
+			for (uint32 i = 0, l = uint32(MeshShaders.size()); i < l; ++i)
+			{
+				MeshShaders[i]->Destroy();
+				delete MeshShaders[i];
 			}
 		}
 

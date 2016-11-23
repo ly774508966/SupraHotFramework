@@ -52,8 +52,7 @@ namespace SupraHot
 			Shader* Skybox[uint32(SkyboxShader::Count)] = {};
 			Shader* ScreenSpace[uint32(ScreenSpace::Count)] = {};
 			Shader* MeshStatic[uint32(StaticMesh::VertexShader::Count)] = {};
-
-			Shader* MeshStatic___[uint32(StaticMesh::VertexShader::Count)] = {};
+			std::vector<Shader*> MeshShaders;
 
 			Shader* SelectShaderForMaterialAndMeshData(Graphics::MeshData* meshData, Graphics::Material* material);
 

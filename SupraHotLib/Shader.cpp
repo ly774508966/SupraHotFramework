@@ -70,14 +70,13 @@ namespace SupraHot
 			if (ShaderProgrammID != 0)
 			{
 				glDeleteProgram(ShaderProgrammID);
+				SHF_PRINTF("ShaderGL %s #%d destroyed \n", Name.c_str(), ShaderProgrammID);
 
 				ShaderProgrammID = 0;
 				VertexShader = 0;
 				PixelShader = 0;
 				GeometryShader = 0;
 				ComputeShader = 0;
-
-				SHF_PRINTF("ShaderGL %s #%d destroyed \n", Name.c_str(), ShaderProgrammID);
 			}
 
 		}
