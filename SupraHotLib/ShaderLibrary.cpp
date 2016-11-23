@@ -1,6 +1,8 @@
 #include "ShaderLibrary.h"
 #include <iostream>
 #include "Utility.h"
+#include "MeshData.h"
+#include <map>
 
 namespace SupraHot
 {
@@ -16,7 +18,54 @@ namespace SupraHot
 
 		Shader* ShaderLibrary::SelectShaderForMaterialAndMeshData(Graphics::MeshData* meshData, Graphics::Material* material)
 		{
-			return MeshStatic[uint32(StaticMesh::VertexShader::PositionUV)];
+			uint64 shaderIndex = 0;
+
+			if (meshData->HasNormalData) 
+			{
+				shaderIndex |= uint64(MeshVertexShader::Normal);
+			}
+
+			if (meshData->HasUVData)
+			{
+				shaderIndex |= uint64(MeshVertexShader::UV);
+			}
+
+			if (meshData->HasTangentData || meshData->HasBiTangentData)
+			{
+				shaderIndex |= uint64(MeshVertexShader::TangentBiTangent);
+			}
+
+			if (material->GetAlbedoMap() != nullptr)
+			{
+				shaderIndex |= uint64(MeshPixelShader::AlbedoMap);
+			}
+
+			if (material->GetNormalMap() != nullptr)
+			{
+				shaderIndex |= uint64(MeshPixelShader::NormalMap);
+			}
+
+			if (material->GetRoughnessMap() != nullptr)
+			{
+				shaderIndex |= uint64(MeshPixelShader::RoughnessMap);
+			}
+
+			if (material->GetMetalnessMap() != nullptr)
+			{
+				shaderIndex |= uint64(MeshPixelShader::MetalnessMap);
+			}
+
+			if (material->GetSpecularMap() != nullptr)
+			{
+				shaderIndex |= uint64(MeshPixelShader::SpecularMap);
+			}
+
+			if (material->GetComboMap() != nullptr)
+			{
+				shaderIndex |= uint64(MeshPixelShader::ComboMap);
+			}
+
+			return MeshShaders[shaderIndex];
 		}
 
 		void ShaderLibrary::Initialize()
@@ -65,6 +114,7 @@ namespace SupraHot
 				
 				for (uint32 v = 0, vl = static_cast<uint32>(pow(2, shaderInputVertexAttribs)); v < vl; v++)
 				{
+					
 					std::vector<bool> vertexAttribBools = Utils::Utility::GetBoolCombinations(v, shaderInputVertexAttribs);
 
 					// if we have tangents but no normals, we can skip this shader
@@ -79,7 +129,7 @@ namespace SupraHot
 
 						opts.Define("_Normals", vertexAttribBools[0]);
 						opts.Define("_UV", vertexAttribBools[1]);
-						opts.Define("_Tangents", vertexAttribBools[2]);
+						opts.Define("_TangentsBiTangents", vertexAttribBools[2]);
 
 						std::vector<bool> textureBools = Utils::Utility::GetBoolCombinations(t, shaderInputTextures);
 						opts.Define("_AlbedoMap", textureBools[0]);
@@ -88,7 +138,6 @@ namespace SupraHot
 						opts.Define("_MetalnessMap", textureBools[3]);
 						opts.Define("_SpecularMap", textureBools[4]);
 						opts.Define("_ComboMap", textureBools[5]);
-
 
 						// if we run into problems, we can comment this section out and load ALL possible permutations
 						// an then just skip the ones, which aren't compiling. LUL.
@@ -118,13 +167,76 @@ namespace SupraHot
 
 						if (compileShader)
 						{
+							//Generate shader index
+							std::string shaderName = "";
+							
+							uint64 shaderIndex = 0;
+							if (vertexAttribBools[0])
+							{
+								shaderIndex |= uint64(MeshVertexShader::Normal);
+								shaderName += "Nrml | ";
+							}
+
+							if (vertexAttribBools[1])
+							{
+								shaderIndex |= uint64(MeshVertexShader::UV);
+								shaderName += "UV | ";
+							}
+							
+							if (vertexAttribBools[2])
+							{
+								shaderIndex |= uint64(MeshVertexShader::TangentBiTangent);
+								shaderName += "TanBiTan | ";
+							}
+
+							if (textureBools[0])
+							{
+								shaderIndex |= uint64(MeshPixelShader::AlbedoMap);
+								shaderName += "Albedo | ";
+
+							}
+
+							if (textureBools[1])
+							{
+								shaderIndex |= uint64(MeshPixelShader::NormalMap);
+								shaderName += "NrmlM | ";
+
+							}
+
+							if (textureBools[2])
+							{
+								shaderIndex |= uint64(MeshPixelShader::RoughnessMap);
+								shaderName += "Rgh | ";
+
+							}
+
+							if (textureBools[3])
+							{
+								shaderIndex |= uint64(MeshPixelShader::MetalnessMap);
+								shaderName += "Mtl | ";
+
+							}
+
+							if (textureBools[4])
+							{
+								shaderIndex |= uint64(MeshPixelShader::SpecularMap);
+								shaderName += "Spec | ";
+
+							}
+
+							if (textureBools[5])
+							{
+								shaderIndex |= uint64(MeshPixelShader::ComboMap);
+								shaderName += "Cmb | ";
+							}
+
 							// Load shader with compile options.
 							Shader* shader = new Shader();
-							shader->SetName("Mesh (....)");
+							shader->SetName("Mesh: #" + std::to_string(shaderIndex) + " (" + shaderName + ")");
 							shader->LoadShaderFromFile(Shader::VERTEX_SHADER, directoryPath + "mesh.vs.glsl", opts);
 							shader->LoadShaderFromFile(Shader::PIXEL_SHADER, directoryPath + "mesh.fs.glsl", opts);
 							shader->CompileShader();
-							MeshShaders.push_back(shader);
+							MeshShaders[shaderIndex] = shader;
 						}
 
 						opts.Reset();
@@ -252,11 +364,13 @@ namespace SupraHot
 				}
 			}
 
-			for (uint32 i = 0, l = uint32(MeshShaders.size()); i < l; ++i)
-			{
-				MeshShaders[i]->Destroy();
-				delete MeshShaders[i];
+			typedef std::unordered_map<uint64, Shader*>::iterator it_type;
+			for (it_type iterator = MeshShaders.begin(); iterator != MeshShaders.end(); ++iterator) {
+				Shader* shader = iterator->second;
+				shader->Destroy();
+				delete shader;
 			}
+
 		}
 
 		ShaderLibrary* ShaderLibrary::GetInstance()
