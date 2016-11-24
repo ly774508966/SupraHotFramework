@@ -1,6 +1,9 @@
 #version 400
 
-uniform sampler2D AlbedoTexture;
+#if _AlbedoMap
+	uniform sampler2D AlbedoTexture;
+#endif
+
 in vec3 VertexPositionVS;
 out vec4 FragColor;
 
@@ -12,12 +15,20 @@ out vec4 FragColor;
 	in vec3 NormalVS;
 #endif
 
+#if _TangentsBiTangents
+	in mat3 TangentToViewMatrix;
+#endif
+
 void main() {
 	
-	#if _UV
+	#if _UV && _AlbedoMap
 		FragColor = texture(AlbedoTexture, UVCoord);
 	#else
-		FragColor = vec4(VertexPositionVS, 1);
-	#endif
 
+		#if _Normals
+			FragColor = vec4(NormalVS, 1);
+		#else
+			FragColor = vec4(VertexPositionVS, 1);
+		#endif
+	#endif
 }

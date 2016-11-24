@@ -64,7 +64,9 @@ namespace SupraHot
 			{
 				shaderIndex |= uint64(MeshPixelShader::ComboMap);
 			}
-
+#if DEVELOPMENT == 1
+			SHF_PRINTF("Selected %s for Mesh : %s \n", MeshShaders[shaderIndex]->GetName().c_str(), meshData->Name.c_str());
+#endif
 			return MeshShaders[shaderIndex];
 		}
 
@@ -117,8 +119,12 @@ namespace SupraHot
 					
 					std::vector<bool> vertexAttribBools = Utils::Utility::GetBoolCombinations(v, shaderInputVertexAttribs);
 
+					bool hasNormals = vertexAttribBools[0];
+					bool hasUV = vertexAttribBools[1];
+					bool hasTangentBiTangent = vertexAttribBools[2];
+
 					// if we have tangents but no normals, we can skip this shader
-					if (vertexAttribBools[2] && !vertexAttribBools[0])
+					if (hasTangentBiTangent && !hasNormals)
 					{
 						continue;
 					}
@@ -127,104 +133,103 @@ namespace SupraHot
 					{
 						bool compileShader = true;
 
-						opts.Define("_Normals", vertexAttribBools[0]);
-						opts.Define("_UV", vertexAttribBools[1]);
-						opts.Define("_TangentsBiTangents", vertexAttribBools[2]);
+						opts.Define("_Normals", hasNormals);
+						opts.Define("_UV", hasUV);
+						opts.Define("_TangentsBiTangents", hasTangentBiTangent);
 
 						std::vector<bool> textureBools = Utils::Utility::GetBoolCombinations(t, shaderInputTextures);
-						opts.Define("_AlbedoMap", textureBools[0]);
-						opts.Define("_NormalMap", textureBools[1]);
-						opts.Define("_RoughnessMap", textureBools[2]);
-						opts.Define("_MetalnessMap", textureBools[3]);
-						opts.Define("_SpecularMap", textureBools[4]);
-						opts.Define("_ComboMap", textureBools[5]);
+
+						bool hasAlbedoMap = textureBools[0];
+						bool hasNormalMap = textureBools[1];
+						bool hasRoughnessMap = textureBools[2];
+						bool hasMetalnessMap = textureBools[3];
+						bool hasSpecularMap = textureBools[4];
+						bool hasComboMap = textureBools[5];
+
+						opts.Define("_AlbedoMap", hasAlbedoMap);
+						opts.Define("_NormalMap", hasNormalMap);
+						opts.Define("_RoughnessMap", hasRoughnessMap);
+						opts.Define("_MetalnessMap", hasMetalnessMap);
+						opts.Define("_SpecularMap", hasSpecularMap);
+						opts.Define("_ComboMap", hasComboMap);
 
 						// if we run into problems, we can comment this section out and load ALL possible permutations
 						// an then just skip the ones, which aren't compiling. LUL.
-	
-						if (textureBools[1] && !vertexAttribBools[0]) // NormalMap set to true && Normals set to false
+
+						if (hasNormalMap && !hasNormals) // NormalMap set to true && Normals set to false
 						{
 							compileShader = false;
 						}
-						else if (textureBools[1] && !vertexAttribBools[2]) // NormalMap set to true && Tangents set to false
+						else if (hasNormalMap && !hasTangentBiTangent) // NormalMap set to true && Tangents set to false
 						{
 							compileShader = false;
 						}
 
-						if (!vertexAttribBools[1]) // no UV's
+						if (!hasUV) // no UV's
 						{
-							if (   textureBools[0] 
-								|| textureBools[1]
-								|| textureBools[2]
-								|| textureBools[3]
-								|| textureBools[4]
-								|| textureBools[5])
+							if (hasAlbedoMap || hasNormalMap || hasRoughnessMap
+								|| hasMetalnessMap || hasSpecularMap || hasComboMap)
 							{
 								compileShader = false;
 							}
-							
+
 						}
 
 						if (compileShader)
 						{
 							//Generate shader index
 							std::string shaderName = "";
-							
+
 							uint64 shaderIndex = 0;
-							if (vertexAttribBools[0])
+							if (hasNormals)
 							{
 								shaderIndex |= uint64(MeshVertexShader::Normal);
 								shaderName += "Nrml | ";
 							}
 
-							if (vertexAttribBools[1])
+							if (hasUV)
 							{
 								shaderIndex |= uint64(MeshVertexShader::UV);
 								shaderName += "UV | ";
 							}
-							
-							if (vertexAttribBools[2])
+
+							if (hasTangentBiTangent)
 							{
 								shaderIndex |= uint64(MeshVertexShader::TangentBiTangent);
 								shaderName += "TanBiTan | ";
 							}
 
-							if (textureBools[0])
+							if (hasAlbedoMap)
 							{
 								shaderIndex |= uint64(MeshPixelShader::AlbedoMap);
 								shaderName += "Albedo | ";
-
 							}
 
-							if (textureBools[1])
+							if (hasNormalMap)
 							{
 								shaderIndex |= uint64(MeshPixelShader::NormalMap);
 								shaderName += "NrmlM | ";
-
 							}
 
-							if (textureBools[2])
+							if (hasRoughnessMap)
 							{
 								shaderIndex |= uint64(MeshPixelShader::RoughnessMap);
 								shaderName += "Rgh | ";
-
 							}
 
-							if (textureBools[3])
+							if (hasMetalnessMap)
 							{
 								shaderIndex |= uint64(MeshPixelShader::MetalnessMap);
 								shaderName += "Mtl | ";
-
 							}
 
-							if (textureBools[4])
+							if (hasSpecularMap)
 							{
 								shaderIndex |= uint64(MeshPixelShader::SpecularMap);
 								shaderName += "Spec | ";
-
 							}
 
-							if (textureBools[5])
+							if (hasComboMap)
 							{
 								shaderIndex |= uint64(MeshPixelShader::ComboMap);
 								shaderName += "Cmb | ";
@@ -243,107 +248,13 @@ namespace SupraHot
 					}
 				}
 
-				SHF_PRINTF("Created %llu shader permutations \n", MeshShaders.size());				
+				SHF_PRINTF("Created %llu shader permutations \n", MeshShaders.size());
 			}
 
-
-			// Load mesh vertex shaders
-			{
-				ShaderCompileOptions opts;
-				
-				// - - - - - - - - - - - - - - - - - - - - - - -
-				// Position
-				// - - - - - - - - - - - - - - - - - - - - - - -
-				
-				opts.Define("_Normals", false);
-				opts.Define("_UV", false);
-				opts.Define("_Tangents", false);
-				
-				Shader* meshShaderPosition = new Shader();
-				meshShaderPosition->SetName("Mesh (Position)");
-				meshShaderPosition->LoadShaderFromFile(Shader::VERTEX_SHADER, directoryPath + "mesh.vs.glsl", opts);
-				meshShaderPosition->LoadShaderFromFile(Shader::PIXEL_SHADER, directoryPath + "mesh.fs.glsl", opts);
-				meshShaderPosition->CompileShader();
-				MeshStatic[uint32(StaticMesh::VertexShader::Position)] = meshShaderPosition;
-
-				// - - - - - - - - - - - - - - - - - - - - - - -
-				// Position | Normal
-				// - - - - - - - - - - - - - - - - - - - - - - -
-
-				opts.Reset();
-				opts.Define("_Normals", true);
-				opts.Define("_UV", false);
-				opts.Define("_Tangents", false);
-
-				Shader* meshShaderPositionNormal = new Shader();
-				meshShaderPositionNormal->SetName("Mesh (Position | Normal)");
-				meshShaderPositionNormal->LoadShaderFromFile(Shader::VERTEX_SHADER, directoryPath + "mesh.vs.glsl", opts);
-				meshShaderPositionNormal->LoadShaderFromFile(Shader::PIXEL_SHADER, directoryPath + "mesh.fs.glsl", opts);
-				meshShaderPositionNormal->CompileShader();
-				MeshStatic[uint32(StaticMesh::VertexShader::PositionNormal)] = meshShaderPositionNormal;
-
-				// - - - - - - - - - - - - - - - - - - - - - - -
-				// Position | UV
-				// - - - - - - - - - - - - - - - - - - - - - - -
-
-				opts.Reset();
-				opts.Define("_Normals", false);
-				opts.Define("_UV", true);
-				opts.Define("_Tangents", false);
-
-				Shader* meshShaderPositionUV = new Shader();
-				meshShaderPositionUV->SetName("Mesh (Position | UV)");
-				meshShaderPositionUV->LoadShaderFromFile(Shader::VERTEX_SHADER, directoryPath + "mesh.vs.glsl", opts);
-				meshShaderPositionUV->LoadShaderFromFile(Shader::PIXEL_SHADER, directoryPath + "mesh.fs.glsl", opts);
-				meshShaderPositionUV->CompileShader();
-				MeshStatic[uint32(StaticMesh::VertexShader::PositionUV)] = meshShaderPositionUV;
-
-				// - - - - - - - - - - - - - - - - - - - - - - -
-				// Position | Normal | UV
-				// - - - - - - - - - - - - - - - - - - - - - - -
-
-				opts.Reset();
-				opts.Define("_Normals", true);
-				opts.Define("_UV", true);
-				opts.Define("_Tangents", false);
-
-				Shader* meshShaderPositionNormalUV = new Shader();
-				meshShaderPositionNormalUV->SetName("Mesh (Position | Normal | UV)");
-				meshShaderPositionNormalUV->LoadShaderFromFile(Shader::VERTEX_SHADER, directoryPath + "mesh.vs.glsl", opts);
-				meshShaderPositionNormalUV->LoadShaderFromFile(Shader::PIXEL_SHADER, directoryPath + "mesh.fs.glsl", opts);
-				meshShaderPositionNormalUV->CompileShader();
-				MeshStatic[uint32(StaticMesh::VertexShader::PositionNormalUV)] = meshShaderPositionNormalUV;
-
-				// - - - - - - - - - - - - - - - - - - - - - - -
-				// Position | Normal | UV | Tangent | BiTangent
-				// - - - - - - - - - - - - - - - - - - - - - - -
-
-				opts.Reset();
-				opts.Define("_Normals", true);
-				opts.Define("_UV", true);
-				opts.Define("_Tangents", true);
-
-				Shader* meshShaderPositionNormalUVTangentBiTangent = new Shader();
-				meshShaderPositionNormalUVTangentBiTangent->SetName("Mesh (Position | Normal | UV | Tangent | BiTangent)");
-				meshShaderPositionNormalUVTangentBiTangent->LoadShaderFromFile(Shader::VERTEX_SHADER, directoryPath + "mesh.vs.glsl", opts);
-				meshShaderPositionNormalUVTangentBiTangent->LoadShaderFromFile(Shader::PIXEL_SHADER, directoryPath + "mesh.fs.glsl", opts);
-				meshShaderPositionNormalUVTangentBiTangent->CompileShader();
-				MeshStatic[uint32(StaticMesh::VertexShader::PositionNormalUVTangentBiTangent)] = meshShaderPositionNormalUVTangentBiTangent;
-			}
 		}
 
 		void ShaderLibrary::Destroy()
 		{
-			for (uint32 i = 0, l = uint32(StaticMesh::VertexShader::Count); i < l; ++i)
-			{
-				Shader* shader = MeshStatic[i];
-				if (shader != nullptr)
-				{
-					shader->Destroy();
-					delete shader;
-				}
-			}
-
 			for (uint32 i = 0, l = uint32(SkyboxShader::Count); i < l; ++i)
 			{
 				Shader* shader = Skybox[i];

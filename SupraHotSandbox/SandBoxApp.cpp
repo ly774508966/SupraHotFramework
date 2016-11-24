@@ -95,13 +95,32 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 
 		Entity* entity = new Entity();
 
-		entity->GetTransform().SetPosition(Vec3(0, 0, -5.0f));
+		entity->GetTransform().SetPosition(Vec3(0, 1.0f, -5.0f));
 		entity->GetTransform().SetScale(Vec3(0.05f, 0.05f, 0.05f));
 		entity->GetTransform().SetLocalRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
 
 		MeshComponent* meshComponent = meshComponents.at(0);
 		entity->AddComponent(meshComponent);
 		
+		this->Entities.push_back(entity);
+
+		// Remove Albedomap & reselect a valid shader for the mesh component
+		/*meshComponent->GetMaterial()->GetAlbedoMap()->Destroy();
+		meshComponent->GetMaterial()->SetAlbedoMap(nullptr);
+
+		meshComponent->GetMaterial()->SetShader(
+			ShaderLibrary::GetInstance()->SelectShaderForMaterialAndMeshData(
+				meshComponent->GetMeshData(), meshComponent->GetMaterial()
+			)
+		);*/
+	}
+
+	std::vector<MeshComponent*> meshComponents = Utils::MeshDataLoader::GetInstance()->Load("Models/Sponza_M.shfm");
+	for (MeshComponent* meshComponent : meshComponents)
+	{
+		Entity* entity = new Entity();
+		entity->GetTransform().SetScale(Vec3(0.02f, 0.02f, 0.02f));
+		entity->AddComponent(meshComponent);
 		this->Entities.push_back(entity);
 	}
 

@@ -15,23 +15,6 @@ namespace SupraHot
 		{
 			
 		public:
-
-			struct StaticMesh
-			{
-				// We only need the vertex shaders,
-				// since we are going to render the mesh data to a g-buffer
-				enum class VertexShader
-				{
-					Position = 0,
-					PositionNormal,
-					PositionUV,
-					PositionNormalUV,
-					PositionNormalUVTangentBiTangent,
-
-					Count
-				};
-			};
-
 			enum class SkyboxShader
 			{
 				CubeMap = 0,
@@ -73,7 +56,6 @@ namespace SupraHot
 
 			Shader* Skybox[uint32(SkyboxShader::Count)] = {};
 			Shader* ScreenSpace[uint32(ScreenSpace::Count)] = {};
-			Shader* MeshStatic[uint32(StaticMesh::VertexShader::Count)] = {};
 			std::unordered_map<uint64, Shader*> MeshShaders;
 
 			Shader* SelectShaderForMaterialAndMeshData(Graphics::MeshData* meshData, Graphics::Material* material);
