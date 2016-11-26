@@ -31,6 +31,7 @@
 #include <SkyBox.h>
 #include <MeshDataRenderer.h>
 #include <ShaderLibrary.h>
+#include <BooleanMaterialProperty.h>
 
 using namespace SupraHot;
 
@@ -209,29 +210,29 @@ void SandBoxApp::Update(float deltaTime)
 
 	if (Controls::GetInstance()->IsKeyDown(GLFW_KEY_W))
 	{
-		FlyCamera->Position += FlyCamera->GetQuaternion().GetForward() * deltaTime;
+		FlyCamera->Position += FlyCamera->GetQuaternion().GetForward().Normalized() * deltaTime * FlyCamera->MoveSpeed;
 	}
 	else if (Controls::GetInstance()->IsKeyDown(GLFW_KEY_S))
 	{
-		FlyCamera->Position += FlyCamera->GetQuaternion().GetBack() * deltaTime;
+		FlyCamera->Position += FlyCamera->GetQuaternion().GetBack().Normalized() * deltaTime * FlyCamera->MoveSpeed;
 	}
 
 	if (Controls::GetInstance()->IsKeyDown(GLFW_KEY_A))
 	{
-		FlyCamera->Position += FlyCamera->GetQuaternion().GetLeft() * deltaTime;
+		FlyCamera->Position += FlyCamera->GetQuaternion().GetLeft().Normalized() * deltaTime * FlyCamera->MoveSpeed;
 	}
 	else if (Controls::GetInstance()->IsKeyDown(GLFW_KEY_D))
 	{
-		FlyCamera->Position += FlyCamera->GetQuaternion().GetRight() * deltaTime;
+		FlyCamera->Position += FlyCamera->GetQuaternion().GetRight().Normalized() * deltaTime * FlyCamera->MoveSpeed;
 	}
 
 	if (Controls::GetInstance()->IsKeyDown(GLFW_KEY_SPACE))
 	{
-		FlyCamera->Position += FlyCamera->GetQuaternion().GetUp() * deltaTime;
+		FlyCamera->Position += FlyCamera->GetQuaternion().GetUp().Normalized() * deltaTime * FlyCamera->MoveSpeed;
 	}
 	else if (Controls::GetInstance()->IsKeyDown(GLFW_KEY_LEFT_SHIFT))
 	{
-		FlyCamera->Position += FlyCamera->GetQuaternion().GetDown() * deltaTime;
+		FlyCamera->Position += FlyCamera->GetQuaternion().GetDown().Normalized() * deltaTime * FlyCamera->MoveSpeed;
 	}
 
 
@@ -255,6 +256,7 @@ void SandBoxApp::Destroy()
 	} Entities.clear();
 
 	App::Destroy();
+
 	Texture->Destroy();
 	DdsCubeTexture->Destroy();
 	FBO->Destroy();

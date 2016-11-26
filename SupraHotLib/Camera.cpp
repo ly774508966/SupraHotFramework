@@ -99,8 +99,8 @@ namespace SupraHot
 
 			if (MouseGrabbed)
 			{
-				Pitch += Controls::GetInstance()->MouseDY * deltaTime;
-				Yaw += Controls::GetInstance()->MouseDX * deltaTime;
+				Pitch += Controls::GetInstance()->MouseDY * deltaTime * MouseSpeed;
+				Yaw += Controls::GetInstance()->MouseDX * deltaTime * MouseSpeed;
 			}
 #endif
 		}

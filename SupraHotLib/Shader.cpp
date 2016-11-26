@@ -242,6 +242,11 @@ namespace SupraHot
 			SetInteger(location, (slot - GL_TEXTURE0));
 		}
 
+		uint32 Shader::GetUniformLocation(std::string name)
+		{
+			return glGetUniformLocation(GetShaderID(), name.c_str());
+		}
+
 		uint32 Shader::GetShaderID()
 		{
 			return ShaderProgrammID;

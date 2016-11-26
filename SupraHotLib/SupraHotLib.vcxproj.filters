@@ -85,6 +85,12 @@
     <Filter Include="Source Files\Utils\Windows">
       <UniqueIdentifier>{12aad5bd-0103-4a1a-aaed-ce120c6d2508}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Graphics\Common\MaterialProperties">
+      <UniqueIdentifier>{85acae06-cdc4-4e49-9c7a-b2748963fb6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\Common\MaterialProperties">
+      <UniqueIdentifier>{8823b2d6-03a7-49ef-8941-4348ddbb3df3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -222,11 +228,20 @@
     <ClInclude Include="ShaderLibrary.h">
       <Filter>Header Files\Graphics\Common</Filter>
     </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialProperty.h">
+      <Filter>Header Files\Graphics\Common</Filter>
+    </ClInclude>
     <ClInclude Include="ShaderCompileOptions.h">
       <Filter>Header Files\Graphics\Common</Filter>
     </ClInclude>
-    <ClInclude Include="Utility.h">
-      <Filter>Header Files\Utils</Filter>
+    <ClInclude Include="BooleanMaterialProperty.h">
+      <Filter>Header Files\Graphics\Common\MaterialProperties</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec3MaterialProperty.h">
+      <Filter>Header Files\Graphics\Common\MaterialProperties</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -350,14 +365,23 @@
     <ClCompile Include="MeshDataRenderer.cpp">
       <Filter>Source Files\Graphics\Common</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderCompileOptions.cpp">
-      <Filter>Source Files\Graphics\Common</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderLibrary.cpp">
       <Filter>Source Files\Graphics\Common</Filter>
     </ClCompile>
     <ClCompile Include="Utility.cpp">
       <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialProperty.cpp">
+      <Filter>Source Files\Graphics\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderCompileOptions.cpp">
+      <Filter>Source Files\Graphics\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="BooleanMaterialProperty.cpp">
+      <Filter>Source Files\Graphics\Common\MaterialProperties</Filter>
+    </ClCompile>
+    <ClCompile Include="Vec3MaterialProperty.cpp">
+      <Filter>Source Files\Graphics\Common\MaterialProperties</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

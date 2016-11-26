@@ -274,6 +274,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="BooleanMaterialProperty.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Controls.h">
@@ -289,6 +290,7 @@
     <ClInclude Include="LuaVM.h" />
     <ClInclude Include="Mat4.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="MaterialProperty.h" />
     <ClInclude Include="MaterialLoader.h" />
     <ClInclude Include="MathConstants.h" />
     <ClInclude Include="Mesh.h" />
@@ -323,6 +325,7 @@
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Vec3.h" />
+    <ClInclude Include="Vec3MaterialProperty.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="WindowAndroid.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -346,6 +349,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="BooleanMaterialProperty.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Controls.cpp">
@@ -360,6 +364,7 @@
     <ClCompile Include="LuaVM.cpp" />
     <ClCompile Include="Mat4.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="MaterialProperty.cpp" />
     <ClCompile Include="MaterialLoader.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshComponent.cpp" />
@@ -388,6 +393,7 @@
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Vec2.cpp" />
     <ClCompile Include="Vec3.cpp" />
+    <ClCompile Include="Vec3MaterialProperty.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="WindowAndroid.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

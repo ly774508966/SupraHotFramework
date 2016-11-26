@@ -31,8 +31,8 @@ namespace SupraHot
 
 			bool MouseGrabbed = false;
 
-			float MouseSpeed = 1.5f;
-			float MoveSpeed = 5.0f;
+			float MouseSpeed = 1.0f;
+			float MoveSpeed = 2.0f;
 
 			float FieldOfView;
 			float ZNear, ZFar;
