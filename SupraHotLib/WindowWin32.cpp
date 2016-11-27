@@ -105,8 +105,9 @@ namespace SupraHot
 			this->WindowTitle = title;
 
 			Setup();
+			
 			GlfwWindow = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
-
+			
 			if (!GlfwWindow)
 			{
 				printf("GLFW Window could not be created! \n");

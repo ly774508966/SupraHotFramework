@@ -11,3 +11,6 @@ SupraHotSandbox/assets/
 x64/
 SupraHotModelConverter/Lib/Debug/assimp-debug.lib
 SupraHotModelConverter/Lib/Release/assimp-release.lib
+SupraHotEditor/obj/Debug/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
+SupraHotEditor/obj/
+ipch/
