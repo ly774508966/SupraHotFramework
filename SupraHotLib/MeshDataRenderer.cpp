@@ -44,6 +44,12 @@ namespace SupraHot
 
 		for (MeshComponent* meshComponent : MeshComponents)
 		{
+
+			if (meshComponent->GetMeshData() == nullptr || meshComponent->GetMaterial() == nullptr)
+			{
+				continue;
+			}
+
 			Graphics::Shader* shader = meshComponent->GetMaterial()->GetShader();
 			Graphics::MeshData* meshData = meshComponent->GetMeshData();
 

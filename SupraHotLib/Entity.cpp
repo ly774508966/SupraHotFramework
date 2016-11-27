@@ -1,7 +1,6 @@
 #include "Entity.h"
 #include "MeshDataRenderer.h"
 #include "MeshComponent.h"
-
 #include <vector>
 #include <algorithm>
 

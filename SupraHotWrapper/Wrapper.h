@@ -2,48 +2,44 @@
 
 namespace SupraHot
 {
-	namespace Graphics
+	template<typename T>
+	public ref class Wrapper
 	{
-		template<typename T>
-		public ref class Wrapper
+	protected:
+		T* Instance;
+	public:
+		Wrapper()
 		{
-		protected:
-			T* Instance;
-		public:
-			Wrapper()
-			{
-				Instance = new T();
-			}
+			Instance = new T();
+		}
 
-			Wrapper(T* instance)
-				: Instance(instance)
-			{
-			}
+		Wrapper(T* instance)
+			: Instance(instance)
+		{
+		}
 
-			virtual ~Wrapper()
+		virtual ~Wrapper()
+		{
+			if (Instance != nullptr)
 			{
-				if (Instance != nullptr)
-				{
-					delete Instance;
-					Instance = nullptr;
-				}
+				delete Instance;
+				Instance = nullptr;
 			}
+		}
 
-			!Wrapper()
+		!Wrapper()
+		{
+			if (Instance != nullptr)
 			{
-				if (Instance != nullptr)
-				{
-					delete Instance;
-					Instance = nullptr;
-				}
+				delete Instance;
+				Instance = nullptr;
 			}
+		}
 
-			T* GetHandle()
-			{
-				return Instance;
-			}
-
-		};
+		T* GetHandle()
+		{
+			return Instance;
+		}
 
 	};
 };

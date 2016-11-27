@@ -159,11 +159,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AppEditor.h" />
+    <ClInclude Include="AppEditorImpl.h" />
+    <ClInclude Include="MeshComponentCLI.h" />
+    <ClInclude Include="EntityCLI.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WindowEditor.h" />
     <ClInclude Include="Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AppEditor.cpp" />
+    <ClCompile Include="AppEditorImpl.cpp" />
+    <ClCompile Include="MeshComponentCLI.cpp" />
+    <ClCompile Include="EntityCLI.cpp" />
     <ClCompile Include="WindowEditor.cpp" />
     <ClCompile Include="Wrapper.cpp" />
   </ItemGroup>

@@ -234,17 +234,28 @@ void SandBoxApp::Update(float deltaTime)
 	{
 		FlyCamera->Position += FlyCamera->GetQuaternion().GetDown().Normalized() * deltaTime * FlyCamera->MoveSpeed;
 	}
-
-
 #endif
+
+	for (uint32 i = 0, l = static_cast<uint32>(Entities.size()); i < l; ++i)
+	{
+		Entities.at(i)->Update(deltaTime);
+	}
 }
 
 void SandBoxApp::LateUpdate(float deltaTime)
 {
+	for (uint32 i = 0, l = static_cast<uint32>(Entities.size()); i < l; ++i)
+	{
+		Entities.at(i)->LateUpdate(deltaTime);
+	}
 }
 
 void SandBoxApp::Tick(float deltaTime)
 {
+	for (uint32 i = 0, l = static_cast<uint32>(Entities.size()); i < l; ++i)
+	{
+		Entities.at(i)->FixedUpdate(deltaTime);
+	}
 }
 
 void SandBoxApp::Destroy()
