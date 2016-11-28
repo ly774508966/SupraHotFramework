@@ -77,15 +77,15 @@ namespace SupraHot
 #endif
 
 #ifdef PLATFORM_ANDROID
-		typedef WindowAndroid window;
+		typedef WindowAndroid Window;
 #endif
 
 #ifdef PLATFORM_MAC
-		typedef WindowMac window;
+		typedef WindowMac Window;
 #endif
 
 #ifdef PLATFORM_EMSCRIPTEN
-		typedef WindowEmscripten window;
+		typedef WindowEmscripten Window;
 #endif
 	}
 };

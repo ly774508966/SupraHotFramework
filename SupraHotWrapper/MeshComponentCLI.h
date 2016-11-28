@@ -1,7 +1,7 @@
 #pragma once
 #include "Wrapper.h"
 #include <MeshComponent.h>
-#if 0
+
 namespace SupraHot
 {
 	namespace CLI
@@ -9,11 +9,9 @@ namespace SupraHot
 		public ref class MeshComponent : Wrapper<SupraHot::MeshComponent>
 		{
 		public:
-			MeshComponent()  override
-			{
-				Instance = new SupraHot::MeshComponent(nullptr, nullptr);
-			};
+			MeshComponent();
+			void SetMeshData();
+			void SetMaterial();
 		};
 	};
 };
-#endif
