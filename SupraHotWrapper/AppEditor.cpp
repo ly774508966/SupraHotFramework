@@ -1,4 +1,5 @@
 #include "AppEditor.h"
+#include <cliext/algorithm>
 
 namespace SupraHot
 {
@@ -55,14 +56,22 @@ namespace SupraHot
 			Window->GetHandle()->Update();
 		}
 
-		void AppEditor::AddEntity(SupraHot::CLI::Entity^ entity)
+		void AppEditor::AddEntity(SupraHot::CLI::EntityCLI^ entity)
 		{
 			Instance->AddEntity(entity->GetHandle());
+			Entities.push_back(entity);
 		}
 
-		void AppEditor::RemoveEntity(SupraHot::CLI::Entity^ entity)
+		void AppEditor::RemoveEntity(SupraHot::CLI::EntityCLI^ entity)
 		{
 			Instance->RemoveEntity(entity->GetHandle());
+			auto index = cliext::remove(Entities.begin(), Entities.end(), entity);
+			Entities.erase(index, Entities.end());
+		}
+
+		cliext::vector<SupraHot::CLI::EntityCLI^> AppEditor::GetEntities()
+		{
+			return Entities;
 		}
 	};
 };

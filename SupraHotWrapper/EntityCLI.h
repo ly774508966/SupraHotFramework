@@ -1,15 +1,17 @@
 #pragma once
 #include "Wrapper.h"
+#include "ComponentCLI.h"
 #include <Entity.h>
 
 namespace SupraHot
 {
 	namespace CLI
 	{
-		public ref class Entity : public Wrapper<SupraHot::Entity>
+		public ref class EntityCLI : public Wrapper<SupraHot::Entity>
 		{
 		public:
-			Entity();
+			EntityCLI();
+			void AddComponent(SupraHot::CLI::ComponentCLI^ component);
 		};
 	};
 };

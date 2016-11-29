@@ -8,17 +8,17 @@ namespace SupraHot
 	{
 		MeshComponent::MeshComponent()
 		{
-			Instance = new SupraHot::MeshComponent(nullptr, nullptr);
-		}
-
-		void MeshComponent::SetMeshData()
-		{
 			
 		}
 
-		void MeshComponent::SetMaterial()
+		void MeshComponent::SetMeshData(MeshData^ meshData)
 		{
-			
+			Instance->SetMeshData(meshData->GetHandle());
+		}
+
+		void MeshComponent::SetMaterial(Material^ material)
+		{
+			Instance->SetMaterial(material->GetHandle());
 		}
 	};
 };

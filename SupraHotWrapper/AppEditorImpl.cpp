@@ -75,7 +75,7 @@ namespace SupraHot
 			for (uint32 i = 0, l = static_cast<uint32>(Entities.size()); i < l; ++i)
 			{
 				Entities.at(i)->Destroy();
-				delete Entities.at(i);
+				
 			} Entities.clear();
 
 			FBO->Destroy();
@@ -92,5 +92,6 @@ namespace SupraHot
 		{
 			Entities.erase(std::remove(Entities.begin(), Entities.end(), entity), Entities.end());
 		}
+
 	};
 };

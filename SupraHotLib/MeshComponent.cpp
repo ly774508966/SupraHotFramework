@@ -59,18 +59,4 @@ namespace SupraHot
 	{
 		return MeshData;
 	}
-
-	MeshComponent::MeshComponent()
-	{
-	}
-
-	void MeshComponent::SetMeshData(Graphics::MeshData* meshData)
-	{
-		MeshData = meshData;
-	}
-
-	void MeshComponent::SetMaterial(Graphics::Material* material)
-	{
-		Material = material;
-	}
 };

@@ -35,15 +35,15 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.assetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importModelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importShaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importMaterialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.entitiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.componentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainSplitContainer = new System.Windows.Forms.SplitContainer();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.importModelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importShaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importMaterialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).BeginInit();
@@ -97,6 +97,7 @@
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
@@ -114,6 +115,27 @@
             this.assetsToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.assetsToolStripMenuItem.Text = "Assets";
             // 
+            // importModelToolStripMenuItem
+            // 
+            this.importModelToolStripMenuItem.Name = "importModelToolStripMenuItem";
+            this.importModelToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.importModelToolStripMenuItem.Text = "Import Model";
+            this.importModelToolStripMenuItem.Click += new System.EventHandler(this.importModelToolStripMenuItem_Click);
+            // 
+            // importShaderToolStripMenuItem
+            // 
+            this.importShaderToolStripMenuItem.Name = "importShaderToolStripMenuItem";
+            this.importShaderToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.importShaderToolStripMenuItem.Text = "Import Shader";
+            this.importShaderToolStripMenuItem.Click += new System.EventHandler(this.importShaderToolStripMenuItem_Click);
+            // 
+            // importMaterialToolStripMenuItem
+            // 
+            this.importMaterialToolStripMenuItem.Name = "importMaterialToolStripMenuItem";
+            this.importMaterialToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.importMaterialToolStripMenuItem.Text = "Import Material";
+            this.importMaterialToolStripMenuItem.Click += new System.EventHandler(this.importMaterialToolStripMenuItem_Click);
+            // 
             // entitiesToolStripMenuItem
             // 
             this.entitiesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -121,6 +143,13 @@
             this.entitiesToolStripMenuItem.Name = "entitiesToolStripMenuItem";
             this.entitiesToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.entitiesToolStripMenuItem.Text = "Entities";
+            // 
+            // createToolStripMenuItem
+            // 
+            this.createToolStripMenuItem.Name = "createToolStripMenuItem";
+            this.createToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.createToolStripMenuItem.Text = "Create Empty";
+            this.createToolStripMenuItem.Click += new System.EventHandler(this.createToolStripMenuItem_Click);
             // 
             // componentsToolStripMenuItem
             // 
@@ -179,37 +208,10 @@
             // 
             this.splitContainer2.Panel2.AccessibleDescription = "EngineView";
             this.splitContainer2.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer2_Panel2_Paint_1);
+            this.splitContainer2.Panel2.Resize += new System.EventHandler(this.splitContainer2_Panel2_Resize);
             this.splitContainer2.Size = new System.Drawing.Size(600, 392);
             this.splitContainer2.SplitterDistance = 200;
             this.splitContainer2.TabIndex = 0;
-            // 
-            // importModelToolStripMenuItem
-            // 
-            this.importModelToolStripMenuItem.Name = "importModelToolStripMenuItem";
-            this.importModelToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.importModelToolStripMenuItem.Text = "Import Model";
-            this.importModelToolStripMenuItem.Click += new System.EventHandler(this.importModelToolStripMenuItem_Click);
-            // 
-            // importShaderToolStripMenuItem
-            // 
-            this.importShaderToolStripMenuItem.Name = "importShaderToolStripMenuItem";
-            this.importShaderToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.importShaderToolStripMenuItem.Text = "Import Shader";
-            this.importShaderToolStripMenuItem.Click += new System.EventHandler(this.importShaderToolStripMenuItem_Click);
-            // 
-            // importMaterialToolStripMenuItem
-            // 
-            this.importMaterialToolStripMenuItem.Name = "importMaterialToolStripMenuItem";
-            this.importMaterialToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.importMaterialToolStripMenuItem.Text = "Import Material";
-            this.importMaterialToolStripMenuItem.Click += new System.EventHandler(this.importMaterialToolStripMenuItem_Click);
-            // 
-            // createToolStripMenuItem
-            // 
-            this.createToolStripMenuItem.Name = "createToolStripMenuItem";
-            this.createToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.createToolStripMenuItem.Text = "Create Empty";
-            this.createToolStripMenuItem.Click += new System.EventHandler(this.createToolStripMenuItem_Click);
             // 
             // openFileDialog
             // 
@@ -225,6 +227,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.mainSplitContainer.Panel1.ResumeLayout(false);

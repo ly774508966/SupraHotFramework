@@ -12,7 +12,7 @@ namespace SupraHot
 
 	class MeshComponent : public Component
 	{	
-	private:
+	protected:
 		Graphics::MeshData* MeshData;
 		Graphics::Material* Material;
 
@@ -31,10 +31,5 @@ namespace SupraHot
 
 		Graphics::Material* GetMaterial();
 		Graphics::MeshData* GetMeshData();
-
-		// Methods for the editor
-		MeshComponent();
-		void SetMeshData(Graphics::MeshData* meshData);
-		void SetMaterial(Graphics::Material* material);
 	};
 };

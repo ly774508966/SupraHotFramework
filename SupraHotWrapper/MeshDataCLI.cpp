@@ -4,7 +4,7 @@ namespace SupraHot
 {
 	namespace CLI
 	{
-		MeshDataCLI::MeshDataCLI()
+		MeshData::MeshData()
 		{
 		}
 	};

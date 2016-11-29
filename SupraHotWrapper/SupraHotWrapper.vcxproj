@@ -161,21 +161,29 @@
   <ItemGroup>
     <ClInclude Include="AppEditor.h" />
     <ClInclude Include="AppEditorImpl.h" />
+    <ClInclude Include="ComponentCLI.h" />
+    <ClInclude Include="MaterialCLI.h" />
     <ClInclude Include="MeshComponentCLI.h" />
     <ClInclude Include="EntityCLI.h" />
+    <ClInclude Include="MeshComponentCLIImpl.h" />
     <ClInclude Include="MeshDataCLI.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WindowEditor.h" />
     <ClInclude Include="Wrapper.h" />
+    <ClInclude Include="WrapperInterface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppEditor.cpp" />
     <ClCompile Include="AppEditorImpl.cpp" />
+    <ClCompile Include="ComponentCLI.cpp" />
+    <ClCompile Include="MaterialCLI.cpp" />
     <ClCompile Include="MeshComponentCLI.cpp" />
     <ClCompile Include="EntityCLI.cpp" />
+    <ClCompile Include="MeshComponentCLIImpl.cpp" />
     <ClCompile Include="MeshDataCLI.cpp" />
     <ClCompile Include="WindowEditor.cpp" />
     <ClCompile Include="Wrapper.cpp" />
+    <ClCompile Include="WrapperInterface.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

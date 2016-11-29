@@ -1,4 +1,5 @@
 #include "WindowEditorWin32.h"
+#include "App.h"
 
 namespace SupraHot
 {
@@ -98,6 +99,11 @@ namespace SupraHot
 
 		void WindowEditorWin32::Resize(uint32 width, uint32 height)
 		{
+			this->Width = width;
+			this->Height = height;
+
+			SHF_PRINTF("Internal window resized to: %d x %d \n", width, height);
+			glViewport(0, 0, width, height);
 		}
 
 		bool WindowEditorWin32::ShouldClose()

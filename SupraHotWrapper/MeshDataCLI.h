@@ -6,10 +6,10 @@ namespace SupraHot
 {
 	namespace CLI
 	{
-		public ref class MeshDataCLI : public Wrapper<Graphics::MeshData>
+		public ref class MeshData : public Wrapper<Graphics::MeshData>
 		{
 		public:
-			MeshDataCLI();
+			MeshData();
 		};
 	};
 };
