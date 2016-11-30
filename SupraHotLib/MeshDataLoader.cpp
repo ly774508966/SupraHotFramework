@@ -101,7 +101,9 @@ namespace SupraHot
 							texture->Load(modelMaterial.AlbedoMapPath);
 						} 
 						
+#if DEVELOPMENT == 1
 						SHF_PRINTF("directory = %s \n", Utils::StringUtil::GetPathFromFilePath(path).c_str());
+#endif
 						material->SetAlbedoMap(texture);
 					}
 

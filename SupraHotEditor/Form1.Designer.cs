@@ -207,7 +207,13 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.AccessibleDescription = "EngineView";
+            this.splitContainer2.Panel2.Scroll += new System.Windows.Forms.ScrollEventHandler(this.splitContainer2_Panel2_Scroll);
             this.splitContainer2.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer2_Panel2_Paint_1);
+            this.splitContainer2.Panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.splitContainer2_Panel2_MouseDown);
+            this.splitContainer2.Panel2.MouseEnter += new System.EventHandler(this.splitContainer2_Panel2_MouseEnter);
+            this.splitContainer2.Panel2.MouseLeave += new System.EventHandler(this.splitContainer2_Panel2_MouseLeave);
+            this.splitContainer2.Panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.splitContainer2_Panel2_MouseMove);
+            this.splitContainer2.Panel2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.splitContainer2_Panel2_MouseUp);
             this.splitContainer2.Panel2.Resize += new System.EventHandler(this.splitContainer2_Panel2_Resize);
             this.splitContainer2.Size = new System.Drawing.Size(600, 392);
             this.splitContainer2.SplitterDistance = 200;

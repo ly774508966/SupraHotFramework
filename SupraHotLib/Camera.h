@@ -38,6 +38,7 @@ namespace SupraHot
 			float ZNear, ZFar;
 			float AspectRatio;
 
+			Camera();
 			Camera(float fov, float zNear, float zFar, float aspectRatio);
 			~Camera();
 

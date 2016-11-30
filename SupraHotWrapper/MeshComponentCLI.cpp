@@ -11,6 +11,11 @@ namespace SupraHot
 			
 		}
 
+		MeshComponent::MeshComponent(MeshData^ meshData, Material^ material)
+		{
+			Instance = new MeshComponentCLIImpl(meshData->GetHandle(), material->GetHandle());
+		}
+
 		void MeshComponent::SetMeshData(MeshData^ meshData)
 		{
 			Instance->SetMeshData(meshData->GetHandle());

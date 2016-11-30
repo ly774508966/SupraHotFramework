@@ -13,7 +13,7 @@ namespace SupraHot
 			result.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
 			result.iPixelType = PFD_TYPE_RGBA;
 			result.cColorBits = 32;
-			result.cDepthBits = 24;
+			result.cDepthBits = 32;
 			result.cStencilBits = 8;
 			result.cAuxBuffers = 0;
 			result.iLayerType = PFD_MAIN_PLANE;
@@ -31,6 +31,8 @@ namespace SupraHot
 
 		void WindowEditorWin32::Setup()
 		{
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_LEQUAL);
 		}
 
 		void WindowEditorWin32::SetHWND(HWND hwnd)
@@ -94,6 +96,8 @@ namespace SupraHot
 			{
 				SHF_PRINTF("Could not initialize GLEW!!\n");
 			}
+
+			Setup();
 
 		}
 

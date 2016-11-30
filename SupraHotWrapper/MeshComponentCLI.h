@@ -13,6 +13,7 @@ namespace SupraHot
 		{
 		public:
 			MeshComponent();
+			MeshComponent(MeshData^ meshData, Material^ material);
 			void SetMeshData(MeshData^ meshData);
 			void SetMaterial(Material^ material);
 			virtual void Registered()

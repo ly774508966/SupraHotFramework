@@ -51,6 +51,12 @@
     <ClInclude Include="WrapperInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MeshLoaderCLI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraCLI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowEditor.cpp">
@@ -84,6 +90,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WrapperInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshLoaderCLI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraCLI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

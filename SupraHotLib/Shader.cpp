@@ -34,7 +34,9 @@ namespace SupraHot
 
 			if (compileOptions.GetDefinitions()->size() > 0)
 			{
-				printf("%s \n", destination.c_str());
+#if DEVELOPMENT == 1
+				SHF_PRINTF("%s \n", destination.c_str());
+#endif
 
 			}
 

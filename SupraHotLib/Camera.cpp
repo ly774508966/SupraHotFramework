@@ -8,6 +8,10 @@ namespace SupraHot
 {
 	namespace Graphics
 	{
+		Camera::Camera() : Camera(0, 0, 0, 0)
+		{
+		}
+
 		Camera::Camera(float fov, float zNear, float zFar, float aspectRatio)
 		{
 			this->FieldOfView = fov;

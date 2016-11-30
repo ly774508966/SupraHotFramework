@@ -73,5 +73,18 @@ namespace SupraHot
 		{
 			return Entities;
 		}
+
+		SupraHot::CLI::CameraCLI^ AppEditor::GetCamera()
+		{
+			
+			if (CameraInstance == nullptr)
+			{
+				CameraInstance = gcnew SupraHot::CLI::CameraCLI();
+				CameraInstance->SetInstance(Instance->GetCamera());
+			}
+
+
+			return CameraInstance;
+		}
 	};
 };

@@ -11,6 +11,7 @@ namespace SupraHot
 		{
 		public:
 			MeshComponentCLIImpl();
+			MeshComponentCLIImpl(Graphics::MeshData* meshData, Graphics::Material* material);
 			void SetMaterial(Graphics::Material* material);
 			void SetMeshData(Graphics::MeshData* meshData);
 		};

@@ -29,6 +29,8 @@ namespace SupraHot
 
 			void AddEntity(Entity* entity);
 			void RemoveEntity(Entity* entity);
+
+			SupraHot::Camera* GetCamera();
 		};
 	};
 };

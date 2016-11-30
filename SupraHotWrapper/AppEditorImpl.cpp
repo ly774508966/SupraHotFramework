@@ -20,7 +20,7 @@ namespace SupraHot
 			FBO = new FrameBufferObject();
 			FBO->Init(width, height);
 
-			FlyCamera = new Camera(50.0f, 0.05f, 100.0f, static_cast<float>(height) / static_cast<float>(height));
+			FlyCamera = new Camera(50.0f, 0.05f, 10000.0f, static_cast<float>(width) / static_cast<float>(height));
 		}
 
 		void AppEditorImpl::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
@@ -33,7 +33,10 @@ namespace SupraHot
 		{
 			FBO->Attach();
 
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_LEQUAL);
 			MeshDataRenderer::GetInstance().Render(FlyCamera);
+			glDisable(GL_DEPTH_TEST);
 
 			FBO->Detach();
 			FBO->SetReadSource(FBO->GetColorRenderTarget());
@@ -48,6 +51,9 @@ namespace SupraHot
 
 		void AppEditorImpl::Update(float deltaTime)
 		{
+			FlyCamera->ResetMatrices();
+			FlyCamera->Update(deltaTime);
+
 			for (uint32 i = 0, l = static_cast<uint32>(Entities.size()); i < l; ++i)
 			{
 				Entities.at(i)->Update(deltaTime);
@@ -93,5 +99,9 @@ namespace SupraHot
 			Entities.erase(std::remove(Entities.begin(), Entities.end(), entity), Entities.end());
 		}
 
+		SupraHot::Camera* AppEditorImpl::GetCamera()
+		{
+			return FlyCamera;
+		}
 	};
 };

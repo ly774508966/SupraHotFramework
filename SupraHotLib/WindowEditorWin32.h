@@ -1,6 +1,7 @@
 #pragma once
 #include "WindowInterface.h"
 #include <Windows.h>
+#include "Platform.h"
 
 namespace SupraHot
 {
