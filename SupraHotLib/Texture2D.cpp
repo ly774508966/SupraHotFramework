@@ -555,7 +555,9 @@ namespace SupraHot
 
 				// todo: check if 32f or 16f.
 
+#if DEVELOPMENT == 1
 				SHF_PRINTF("Mip: %d | [%d x %d] \n", mip, targetWidth, targetHeight);
+#endif
 				glTexImage2D(GL_TEXTURE_2D, mip, InternalFormat, targetWidth, targetHeight, 0, Format, Type, buffer);
 
 				// need to free the memory.

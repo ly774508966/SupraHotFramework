@@ -52,7 +52,18 @@ namespace SupraHotEditor
                 e.AddComponent(c);
 
                 MeshLoaderCLI meshLoader = MeshLoaderCLI.GetIntance();
-                meshLoader.LoadSFHM("Models/Sponza_M.shfm");
+                meshLoader.LoadSFHM("Models/Sponza/Sponza_M.shfm");
+             
+                // Test a thing here
+                FlowLayoutPanel groupBoxFlowLayout = new FlowLayoutPanel();
+                groupBoxFlowLayout.Dock = DockStyle.Fill;
+                mainSplitContainer.Panel2.Controls.Add(groupBoxFlowLayout);
+
+                MaterialPropertyWidget bmpc = new MaterialPropertyWidget(new BooleanMaterialPropertyCLI("Bool value"));
+                groupBoxFlowLayout.Controls.Add(bmpc);
+
+                MaterialPropertyWidget v3mpc = new MaterialPropertyWidget(new Vec3MaterialPropertyCLI("Color"));
+                groupBoxFlowLayout.Controls.Add(v3mpc);
             }
             
         }

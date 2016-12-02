@@ -195,26 +195,27 @@ namespace SupraHot
 				meshData->FaceCount = modelMesh.FaceCount;
 				meshData->VertexCount = modelMesh.VertexCount;
 
-				if (modelMesh.VertexAttributes == SHFModel::VertexBitfield::POSITION)
+				// Changed this from the stupid combos
+				// note: attri & bitfield == bitfield
+				// == bitfield is redundant, since we just wanna know if the bit is > 1 (is set)
+	
+				if ((modelMesh.VertexAttributes & SHFModel::VertexBitfield::POSITION) == SHFModel::VertexBitfield::POSITION)
 				{
 					meshData->HasPositionData = true;
 				}
-				else if (modelMesh.VertexAttributes == SHFModel::VertexBitfield::POSITION_NORMAL)
+				
+				if ((modelMesh.VertexAttributes & SHFModel::VertexBitfield::NORMAL) == SHFModel::VertexBitfield::NORMAL)
 				{
-					meshData->HasPositionData = true;
 					meshData->HasNormalData = true;
 				}
-				else if (modelMesh.VertexAttributes == SHFModel::VertexBitfield::POSITION_NORMAL_UV)
+				
+				if ((modelMesh.VertexAttributes & SHFModel::VertexBitfield::UV) == SHFModel::VertexBitfield::UV)
 				{
-					meshData->HasPositionData = true;
-					meshData->HasNormalData = true;
 					meshData->HasUVData = true;
 				}
-				else if (modelMesh.VertexAttributes == SHFModel::VertexBitfield::POSITION_NORMAL_UV_TANGENT_BITANGENT)
+				
+				if ((modelMesh.VertexAttributes & SHFModel::VertexBitfield::BITANGENT) == SHFModel::VertexBitfield::BITANGENT)
 				{
-					meshData->HasPositionData = true;
-					meshData->HasNormalData = true;
-					meshData->HasUVData = true;
 					meshData->HasBiTangentData = true;
 					meshData->HasTangentData = true;
 				}

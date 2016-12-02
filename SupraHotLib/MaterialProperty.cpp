@@ -23,5 +23,10 @@ namespace SupraHot
 		{
 			return Name;
 		}
+
+		std::string MaterialProperty::GetType()
+		{
+			return Type;
+		}
 	};
 };

@@ -6,6 +6,8 @@ namespace SupraHot
 	{
 		BooleanMaterialProperty::BooleanMaterialProperty(std::string name) : MaterialProperty(name)
 		{
+			Type = "Boolean";
+			Value = false;
 		}
 		
 		BooleanMaterialProperty::~BooleanMaterialProperty()

@@ -72,27 +72,8 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 	// Try loading a lua script and run it.
 	Scripting::LuaVM::GetInstance()->RunFile("Scripts/test.lua");
 	
-#if 0
-	// Try loading shfm
-	Utils::SHFModelFile model = Utils::SHFMBinaryLoader::GetInstance().LoadFromFile("Models/Pistol_Model.shfm");
-	SHF_PRINTF("(R) Header %s \n", model.Header.c_str());
-	SHF_PRINTF("(R) Mesh count : %d \n", model.MeshCount);
-	SHF_PRINTF("(R) Material count : %d \n", model.MaterialCount);
-	SHF_PRINTF("(R) Footer %s \n", model.Footer.c_str());
-
-	for (uint32 i = 0; i < model.MaterialCount; i++)
-	{
-		Utils::SHFModel::Material& material = model.Materials[i];
-		SHF_PRINTF("(R) Material name: %s \n", material.Name.c_str());
-		SHF_PRINTF("(R) Material albedo: %s \n", material.AlbedoMapPath.c_str());
-		SHF_PRINTF("(R) Material normal map: %s \n", material.NormalMapPath.c_str());
-		SHF_PRINTF("(R) Material specular: %s \n", material.SpecularMapPath.c_str());
-		SHF_PRINTF("- - - - - - - - \n");
-	}
-#endif
-
 	{	// Load a test model
-		std::vector<MeshComponent*> meshComponents = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol_Model.shfm");
+		std::vector<MeshComponent*> meshComponents = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol/Pistol_Model.shfm");
 
 		Entity* entity = new Entity();
 
@@ -116,7 +97,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 		);*/
 	}
 
-	std::vector<MeshComponent*> meshComponents = Utils::MeshDataLoader::GetInstance()->Load("Models/Sponza_M.shfm");
+	std::vector<MeshComponent*> meshComponents = Utils::MeshDataLoader::GetInstance()->Load("Models/Sponza/Sponza_M.shfm");
 	for (MeshComponent* meshComponent : meshComponents)
 	{
 		Entity* entity = new Entity();

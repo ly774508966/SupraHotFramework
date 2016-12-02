@@ -35,7 +35,15 @@ namespace SupraHot
 
 			glEnable(GL_DEPTH_TEST);
 			glDepthFunc(GL_LEQUAL);
+			glEnable(GL_BLEND); 
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+			glEnable(GL_CULL_FACE);
+			glFrontFace(GL_CCW);
+			glCullFace(GL_BACK);
+			
 			MeshDataRenderer::GetInstance().Render(FlyCamera);
+			
 			glDisable(GL_DEPTH_TEST);
 
 			FBO->Detach();

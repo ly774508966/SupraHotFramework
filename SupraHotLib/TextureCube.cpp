@@ -144,7 +144,7 @@ namespace SupraHot
 			TextureID = 0;
 
 #if DEVELOPMENT == 1
-			printf("Texture %s destroyed \n", this->Name.c_str());
+			SHF_PRINTF("Texture %s destroyed \n", this->Name.c_str());
 #endif
 		}
 
@@ -183,7 +183,7 @@ namespace SupraHot
 			int err = glGetError();
 			if (err != 0)
 			{
-				printf("error: %d ,failed to create mipmaps for cube_map \n", err);
+				SHF_PRINTF("error: %d ,failed to create mipmaps for cube_map \n", err);
 			}
 #endif
 
@@ -194,7 +194,7 @@ namespace SupraHot
 			err = glGetError();
 			if (err != 0)
 			{
-				printf("Error %d happened while initializing Texture2D \n", err);
+				SHF_PRINTF("Error %d happened while initializing Texture2D \n", err);
 			}
 #endif
 		}
@@ -561,7 +561,9 @@ namespace SupraHot
 						free(swapPixel);
 					}
 
+#if DEVELOPMENT == 1
 					SHF_PRINTF("Face: %d | Mip: %d | [%d x %d] \n", f, mip, targetWidth, targetHeight);
+#endif
 
 					uint32 targetFace = GL_TEXTURE_CUBE_MAP_POSITIVE_X + f;
 					if (flipX)

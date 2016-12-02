@@ -10,6 +10,7 @@ namespace SupraHot
 		{
 		protected:
 			std::string Name;
+			std::string Type = "MaterialProperty";
 			uint32 GLLocation;
 		public:
 			MaterialProperty(std::string name);
@@ -17,6 +18,7 @@ namespace SupraHot
 			virtual void Apply(Shader* shader) = 0;
 			void SetLocation(Shader* shader);
 			std::string GetName();
+			std::string GetType();
 		};
 	};
 };

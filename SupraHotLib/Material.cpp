@@ -240,5 +240,33 @@ namespace SupraHot
 		{
 			return Shader;
 		}
+
+		void Material::AddProperty(MaterialProperty* materialProperty)
+		{
+			MaterialProperties.push_back(materialProperty);
+		}
+
+		MaterialProperty* Material::GetPropertyByName(std::string propertyName)
+		{
+			for (size_t i = 0, l = MaterialProperties.size(); i < l; ++i)
+			{
+				if (MaterialProperties.at(i)->GetName() == propertyName)
+				{
+					return MaterialProperties.at(i);
+				}
+			}
+
+			return nullptr;
+		}
+
+		MaterialProperty* Material::GetPropertyByReference(MaterialProperty* materialProperty)
+		{
+			if (std::find(MaterialProperties.begin(), MaterialProperties.end(), materialProperty) != MaterialProperties.end())
+			{
+				return materialProperty;
+			}
+
+			return nullptr;
+		}
 	};
 };

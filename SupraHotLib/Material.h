@@ -3,6 +3,7 @@
 #include "Vec3.h"
 #include "Texture2D.h"
 #include "Shader.h"
+#include "MaterialProperty.h"
 
 namespace SupraHot
 {
@@ -77,6 +78,18 @@ namespace SupraHot
 			Graphics::Shader* GetShader();
 
 			void Destroy();
+
+
+
+			// - - - - - Dynamic material properties - - - - -
+
+			// This vectors stores ALL the material properties such as : color, roughness, etc.
+			std::vector<MaterialProperty*> MaterialProperties;
+
+			// This should only be called by the engine itself.
+			void AddProperty(MaterialProperty* materialProperty);
+			MaterialProperty* GetPropertyByName(std::string propertyName);
+			MaterialProperty* GetPropertyByReference(MaterialProperty* materialProperty);
 		};
 	};
 };
