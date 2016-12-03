@@ -16,7 +16,11 @@ namespace SupraHot
 
 		void MaterialProperty::SetLocation(Shader* shader)
 		{
-			GLLocation = shader->GetUniformLocation(Name);
+			// TODO: - - - - - -
+			if (GLLocation == 0)
+			{
+				GLLocation = shader->GetUniformLocation(Name);
+			}
 		}
 
 		std::string MaterialProperty::GetName()

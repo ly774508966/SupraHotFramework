@@ -50,6 +50,8 @@ namespace SupraHotEditor
                         {
                             ((BooleanMaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(false);
                         }
+
+                        Form1.UpdateView();
                     }
                 );
             }
@@ -71,6 +73,7 @@ namespace SupraHotEditor
                     delegate(object sender, EventArgs e)
                     {
                         // TODO: Impl. float materialproperty
+                        Form1.UpdateView();
                     }
                 );
             }
@@ -105,6 +108,7 @@ namespace SupraHotEditor
                     {
                        //Vec3CLI result = new Vec3CLI((float)xSpinner.Value, (float)ySpinner.Value, (float)zSpinner.Value);
                        //((Vec3MaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(result);
+                        Form1.UpdateView();
                     }
                 );
 
@@ -113,6 +117,7 @@ namespace SupraHotEditor
                     {
                         //Vec3CLI result = new Vec3CLI((float)xSpinner.Value, (float)ySpinner.Value, (float)zSpinner.Value);
                         //((Vec3MaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(result);
+                        Form1.UpdateView();
                     }
                 );
 
@@ -158,6 +163,7 @@ namespace SupraHotEditor
                     {
                         Vec3CLI result = new Vec3CLI((float)xSpinner.Value, (float)ySpinner.Value, (float)zSpinner.Value);
                         ((Vec3MaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(result);
+                        Form1.UpdateView();
                     }
                 );
 
@@ -166,6 +172,7 @@ namespace SupraHotEditor
                     {
                         Vec3CLI result = new Vec3CLI((float)xSpinner.Value, (float)ySpinner.Value, (float)zSpinner.Value);
                         ((Vec3MaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(result);
+                        Form1.UpdateView();
                     }
                 );
 
@@ -174,6 +181,7 @@ namespace SupraHotEditor
                     {
                         Vec3CLI result = new Vec3CLI((float)xSpinner.Value, (float)ySpinner.Value, (float)zSpinner.Value);
                         ((Vec3MaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(result);
+                        Form1.UpdateView();
                     }
                 );
             }
@@ -226,28 +234,28 @@ namespace SupraHotEditor
                 xSpinner.ValueChanged += new EventHandler(
                     delegate(object sender, EventArgs e)
                     {
-    
+                        Form1.UpdateView();
                     }
                 );
 
                 ySpinner.ValueChanged += new EventHandler(
                     delegate(object sender, EventArgs e)
                     {
-                        
+                        Form1.UpdateView();
                     }
                 );
 
                 zSpinner.ValueChanged += new EventHandler(
                     delegate(object sender, EventArgs e)
                     {
-                        
+                        Form1.UpdateView();
                     }
                 );
 
                 wSpinner.ValueChanged += new EventHandler(
                    delegate(object sender, EventArgs e)
                    {
-                       
+                       Form1.UpdateView();
                    }
                );
             }

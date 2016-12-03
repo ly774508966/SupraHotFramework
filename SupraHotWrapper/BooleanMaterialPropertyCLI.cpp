@@ -22,5 +22,10 @@ namespace SupraHot
 			const std::string& name = Instance->GetName();
 			return msclr::interop::marshal_as<System::String^>(name);
 		};
+
+		BooleanMaterialPropertyCLI::BooleanMaterialPropertyCLI(SupraHot::Graphics::BooleanMaterialProperty* bmp)
+		{
+			Instance = bmp;
+		}
 	};
 };

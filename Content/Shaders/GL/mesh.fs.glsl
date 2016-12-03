@@ -19,8 +19,9 @@ out vec4 FragColor;
 	in mat3 TangentToViewMatrix;
 #endif
 
+uniform vec3 Color;
+
 void main() {
-	
 	#if _UV && _AlbedoMap
 		FragColor = texture(AlbedoTexture, UVCoord);
 	#else

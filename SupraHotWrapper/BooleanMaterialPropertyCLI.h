@@ -27,6 +27,7 @@ namespace SupraHot
 			System::String^ GetType() override;
 			System::String^ GetName() override;
 
+			BooleanMaterialPropertyCLI(SupraHot::Graphics::BooleanMaterialProperty*);
 			BooleanMaterialPropertyCLI(System::String^ name);
 			~BooleanMaterialPropertyCLI()
 			{

@@ -1,5 +1,6 @@
 #pragma once
 #include "Wrapper.h"
+#include "MaterialPropertyCommonInterface.h"
 #include <Material.h>
 
 namespace SupraHot
@@ -12,6 +13,8 @@ namespace SupraHot
 			Material();
 			Material(Graphics::Material* instance);
 			System::String^ GetName();
+
+			System::Collections::Generic::List<MaterialPropertyCommonInterface^>^ GetMaterialProperties();
 		};
 	};
 };

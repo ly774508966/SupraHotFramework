@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MeshLoaderCLI.h"
+#include "Vec3MaterialProperty.h"
 #include <msclr\marshal_cppstd.h>
 #include <Entity.h>
 
@@ -37,6 +38,15 @@ namespace SupraHot
 				Entity* entity = new Entity();
 				entity->AddComponent(meshComponent);
 				entity->SetName(meshComponent->GetMeshData()->Name);
+
+				// TODO: the insertion of material properties should be done, when we read the shader.....
+				// material should have one shader pointer, which it uses 
+				// and the material properties should be then build.
+
+				if (meshComponent->GetMaterial()->GetPropertyByName("Color") == nullptr)
+				{
+					meshComponent->GetMaterial()->AddProperty(new SupraHot::Graphics::Vec3MaterialProperty("Color"));
+				}
 
 				SupraHot::CLI::EntityCLI^ entityCLI = gcnew SupraHot::CLI::EntityCLI();
 				entityCLI->ReplaceInstance(entity);

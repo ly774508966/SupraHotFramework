@@ -23,5 +23,10 @@ namespace SupraHot
 			const std::string& name = Instance->GetName();
 			return msclr::interop::marshal_as<System::String^>(name);
 		};
+
+		Vec3MaterialPropertyCLI::Vec3MaterialPropertyCLI(SupraHot::Graphics::Vec3MaterialProperty*  v3mp)
+		{
+			Instance = v3mp;
+		};
 	};
 };

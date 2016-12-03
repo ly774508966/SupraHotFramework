@@ -51,33 +51,27 @@ namespace SupraHotEditor
 
                 MeshLoaderCLI meshLoader = MeshLoaderCLI.GetIntance();
                 List<EntityCLI> entites = meshLoader.LoadSFHM("Models/Sponza/Sponza_M.shfm");
-             
+                        
+                // Get one entity here and insert some material properties
+                MeshComponentCLI mesh = entites[0].GetComponent<MeshComponentCLI>();
+                Material mat = mesh.GetMaterial();
+
                 // Test a thing here
                 FlowLayoutPanel groupBoxFlowLayout = new FlowLayoutPanel();
                 groupBoxFlowLayout.Dock = DockStyle.Fill;
                 mainSplitContainer.Panel2.Controls.Add(groupBoxFlowLayout);
 
-                MaterialPropertyWidget bmpc = new MaterialPropertyWidget(new BooleanMaterialPropertyCLI("Bool value"));
-                groupBoxFlowLayout.Controls.Add(bmpc);
-               
-                MaterialPropertyWidget v3mpc = new MaterialPropertyWidget(new Vec3MaterialPropertyCLI("Color"));
-                groupBoxFlowLayout.Controls.Add(v3mpc);
-
-                var counter = 0;
-                foreach (EntityCLI ent in entites) 
+                List<MaterialPropertyCommonInterface> mpcis = mat.GetMaterialProperties();
+                foreach (MaterialPropertyCommonInterface mpci in mpcis) 
                 {
-                    MeshComponentCLI mesh = ent.GetComponent<MeshComponentCLI>();
-                    Material mat = mesh.GetMaterial();
-                    Console.WriteLine(mat.GetName());
+                    groupBoxFlowLayout.Controls.Add(new MaterialPropertyWidget(mpci));
+                }
 
-                    counter++;
-
-                }              
             }
             
         }
 
-        private void UpdateView() 
+        public static void UpdateView() 
         {
             Random r = new Random();
             SupraHotWindow.SetClearColor(r.Next(0, 100) / 100.0f, r.Next(0, 100) / 100.0f, r.Next(0, 100) / 100.0f, 1.0f);

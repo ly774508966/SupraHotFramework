@@ -42,6 +42,9 @@ namespace SupraHot
 	{
 		// TODO: Do some frustum culling & sorting by materials here.
 
+		Mat4 viewMatrix = *camera->GetViewMatrix();
+		Mat4 projectionMatrix = *camera->GetProjectionMatrix();
+
 		for (MeshComponent* meshComponent : MeshComponents)
 		{
 
@@ -58,9 +61,6 @@ namespace SupraHot
 
 			// Bind uniforms
 			GLuint shaderProgramID = shader->GetShaderID();
-
-			Mat4 viewMatrix = *camera->GetViewMatrix();
-			Mat4 projectionMatrix = *camera->GetProjectionMatrix();
 
 			Mat4 modelMatrix = meshComponent->GetParent()->GetTransform().GetTransformation();
 			Mat4 modelViewMatrix = viewMatrix * modelMatrix;
@@ -128,6 +128,13 @@ namespace SupraHot
 			if (material->GetAlbedoMap() != nullptr)
 			{
 				shader->SetTexture2D(glGetUniformLocation(shaderProgramID, "AlbedoTexture"), material->GetAlbedoMap(), GL_TEXTURE0);
+			}
+
+			// todo: this need a complete overhaul.
+			for (Graphics::MaterialProperty* materialProperty : material->MaterialProperties)
+			{
+				materialProperty->SetLocation(shader);
+				materialProperty->Apply(shader);
 			}
 
 			// Layout

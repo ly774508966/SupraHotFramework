@@ -30,6 +30,7 @@ namespace SupraHot
 			System::String^ GetType() override;
 			System::String^ GetName() override;
 
+			Vec3MaterialPropertyCLI(SupraHot::Graphics::Vec3MaterialProperty*  v3mp);
 			Vec3MaterialPropertyCLI(System::String^ name);
 			~Vec3MaterialPropertyCLI()
 			{
