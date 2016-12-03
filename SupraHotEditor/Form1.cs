@@ -67,7 +67,9 @@ namespace SupraHotEditor
                 foreach (EntityCLI ent in entites) 
                 {
                     MeshComponentCLI mesh = ent.GetComponent<MeshComponentCLI>();
-                    mesh.FixedUpdate(1);
+                    Material mat = mesh.GetMaterial();
+                    Console.WriteLine(mat.GetName());
+
                     counter++;
 
                 }              

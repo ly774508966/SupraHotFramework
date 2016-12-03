@@ -10,6 +10,8 @@ namespace SupraHot
 		{
 		public:
 			Material();
+			Material(Graphics::Material* instance);
+			System::String^ GetName();
 		};
 	};
 };

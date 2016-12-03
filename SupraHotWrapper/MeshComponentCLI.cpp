@@ -18,5 +18,18 @@ namespace SupraHot
 		{
 			Instance = componentCLI->GetHandle();
 		}
+
+		SupraHot::CLI::Material^ MeshComponentCLI::GetMaterial()
+		{
+
+			SupraHot::MeshComponent* meshComponent = static_cast<SupraHot::MeshComponent*>(Instance);
+			SupraHot::Graphics::Material* material = meshComponent->GetMaterial();
+
+			SupraHot::CLI::Material^ mat = gcnew SupraHot::CLI::Material();
+			mat->IsCopy = true;
+			mat->ReplaceInstance(material);
+
+			return mat;
+		}
 	};
 };

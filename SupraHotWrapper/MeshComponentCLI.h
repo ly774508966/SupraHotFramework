@@ -10,13 +10,12 @@ namespace SupraHot
 	{
 		public ref class MeshComponentCLI : SupraHot::CLI::ComponentCLI
 		{
-		private:
-			SupraHot::CLI::MeshData^ meshData;
-			SupraHot::CLI::Material^ material;
 		public:
 			MeshComponentCLI();
 			MeshComponentCLI(SupraHot::CLI::ComponentCLI^ componentCLI);
 			MeshComponentCLI(SupraHot::CLI::MeshData^ meshData, SupraHot::CLI::Material^ material);
+
+			SupraHot::CLI::Material^ GetMaterial();
 		};
 	};
 };

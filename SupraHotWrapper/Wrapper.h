@@ -5,6 +5,8 @@ namespace SupraHot
 	template<typename T>
 	public ref class Wrapper
 	{
+	public:
+		bool IsCopy = false;
 	protected:
 		T* Instance;
 	public:
@@ -19,8 +21,8 @@ namespace SupraHot
 		}
 
 		virtual ~Wrapper()
-		{
-			if (Instance != nullptr)
+		{ 
+			if (Instance != nullptr && !IsCopy)
 			{
 				delete Instance;
 				Instance = nullptr;
@@ -29,7 +31,7 @@ namespace SupraHot
 
 		!Wrapper()
 		{
-			if (Instance != nullptr)
+			if (Instance != nullptr && !IsCopy)
 			{
 				delete Instance;
 				Instance = nullptr;
