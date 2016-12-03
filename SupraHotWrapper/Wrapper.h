@@ -41,5 +41,14 @@ namespace SupraHot
 			return Instance;
 		}
 
+		void ReplaceInstance(T* instance)
+		{
+			if (Instance != nullptr)
+			{
+				delete Instance;
+				Instance = instance;
+			}
+		}
+
 	};
 };

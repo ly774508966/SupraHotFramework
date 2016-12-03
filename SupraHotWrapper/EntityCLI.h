@@ -12,6 +12,10 @@ namespace SupraHot
 		public:
 			EntityCLI();
 			void AddComponent(SupraHot::CLI::ComponentCLI^ component);
+			generic <class T>
+				where T: ComponentCLI, gcnew()
+			T GetComponent();
+			System::String^ GetName();
 		};
 	};
 };

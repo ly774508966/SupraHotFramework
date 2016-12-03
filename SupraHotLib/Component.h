@@ -38,6 +38,11 @@ namespace SupraHot
 		{
 			return Parent;
 		}
+
+		void SetParent(Entity* parent)
+		{
+			this->Parent = parent;
+		}
 	};
 };
 

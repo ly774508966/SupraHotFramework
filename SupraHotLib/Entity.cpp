@@ -10,6 +10,16 @@ namespace SupraHot
 	{
 	}
 
+	void Entity::SetName(std::string name)
+	{
+		Name = name;
+	}
+
+	std::string Entity::GetName()
+	{
+		return Name;
+	}
+
 	Entity::~Entity()
 	{
 	}

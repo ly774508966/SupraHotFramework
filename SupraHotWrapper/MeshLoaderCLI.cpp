@@ -4,6 +4,7 @@
 #include <msclr\marshal_cppstd.h>
 #include <Entity.h>
 
+
 namespace SupraHot
 {
 	namespace CLI
@@ -23,18 +24,27 @@ namespace SupraHot
 			return SingletonInstance;
 		}
 
-		void MeshLoaderCLI::LoadSFHM(System::String^ pathToFile)
+		System::Collections::Generic::List<SupraHot::CLI::EntityCLI^>^ MeshLoaderCLI::LoadSFHM(System::String^ pathToFile)
 		{
 			std::string path = msclr::interop::marshal_as<std::string>(pathToFile);
 			
 			std::vector<SupraHot::MeshComponent*> meshComponents = Instance->Load(path);
 
+			System::Collections::Generic::List<SupraHot::CLI::EntityCLI^>^ cliEntities = gcnew System::Collections::Generic::List<SupraHot::CLI::EntityCLI^>();
+
 			for (SupraHot::MeshComponent* meshComponent : meshComponents)
 			{
 				Entity* entity = new Entity();
 				entity->AddComponent(meshComponent);
+				entity->SetName(meshComponent->GetMeshData()->Name);
+
+				SupraHot::CLI::EntityCLI^ entityCLI = gcnew SupraHot::CLI::EntityCLI();
+				entityCLI->ReplaceInstance(entity);
+				cliEntities->Add(entityCLI);
 				//this->Entities.push_back(entity);
 			}
+
+			return cliEntities;
 		}
 	};
 };

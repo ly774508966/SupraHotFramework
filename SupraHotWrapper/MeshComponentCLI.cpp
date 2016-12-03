@@ -1,29 +1,22 @@
 #include "MeshComponentCLI.h"
-#include <MeshData.h>
-#include <Material.h>
 
 namespace SupraHot
 {
 	namespace CLI
 	{
-		MeshComponent::MeshComponent()
+		MeshComponentCLI::MeshComponentCLI()
 		{
-			
+			Instance = new SupraHot::MeshComponent(nullptr, nullptr);
 		}
 
-		MeshComponent::MeshComponent(MeshData^ meshData, Material^ material)
+		MeshComponentCLI::MeshComponentCLI(SupraHot::CLI::MeshData^ meshData, SupraHot::CLI::Material^ material)
 		{
-			Instance = new MeshComponentCLIImpl(meshData->GetHandle(), material->GetHandle());
+			Instance = new SupraHot::MeshComponent(meshData->GetHandle(), material->GetHandle());
 		}
 
-		void MeshComponent::SetMeshData(MeshData^ meshData)
+		MeshComponentCLI::MeshComponentCLI(SupraHot::CLI::ComponentCLI^ componentCLI)
 		{
-			Instance->SetMeshData(meshData->GetHandle());
-		}
-
-		void MeshComponent::SetMaterial(Material^ material)
-		{
-			Instance->SetMaterial(material->GetHandle());
+			Instance = componentCLI->GetHandle();
 		}
 	};
 };

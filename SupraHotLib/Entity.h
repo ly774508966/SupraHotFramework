@@ -19,10 +19,14 @@ namespace SupraHot
 	private:
 		Transform EntityTransform;
 		std::vector<Component*> Components;
+		std::string Name;
 
 	public:
 		Entity();
 		~Entity();
+
+		void SetName(std::string name);
+		std::string GetName();
 
 		Transform& GetTransform();
 		void SetTransform(const Transform& transform);

@@ -8,6 +8,8 @@ namespace SupraHot
 	{
 		MeshData = meshData;
 		Material = material;
+
+		Component::Identifier = Identifier;
 	}
 
 	MeshComponent::~MeshComponent()

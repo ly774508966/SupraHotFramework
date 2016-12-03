@@ -203,6 +203,7 @@
             // splitContainer2.Panel1
             // 
             this.splitContainer2.Panel1.AccessibleDescription = "Hierarchy";
+            this.splitContainer2.Panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer2_Panel1_Paint);
             // 
             // splitContainer2.Panel2
             // 

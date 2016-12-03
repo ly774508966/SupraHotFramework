@@ -33,13 +33,7 @@
     <ClInclude Include="EntityCLI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MeshComponentCLI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MeshDataCLI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshComponentCLIImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MaterialCLI.h">
@@ -72,6 +66,12 @@
     <ClInclude Include="MaterialPropertyCommonInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WrapperNoDefault.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshComponentCLI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowEditor.cpp">
@@ -89,13 +89,7 @@
     <ClCompile Include="EntityCLI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MeshComponentCLI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MeshDataCLI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MeshComponentCLIImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MaterialCLI.cpp">
@@ -126,6 +120,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MaterialPropertyCommonInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WrapperNoDefault.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshComponentCLI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

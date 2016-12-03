@@ -19,7 +19,7 @@ namespace SupraHotEditor
         {
             this.MaterialPropertyCommonInterface = materialPropertyCommonInterface;
             this.Type = materialPropertyCommonInterface.GetType();
-            this.Text = materialPropertyCommonInterface.GetName() + "( " + this.Type + " )";
+            this.Text = materialPropertyCommonInterface.GetName() + " (" + this.Type + ")";
 
             groupBoxFlowLayout = new FlowLayoutPanel();
             groupBoxFlowLayout.Dock = DockStyle.Fill;
@@ -34,6 +34,7 @@ namespace SupraHotEditor
                 RadioButton falseButton = new RadioButton();
                 falseButton.Text = "False";
                 falseButton.Margin = new Padding(0, 0, 0, 0);
+                falseButton.Checked = true;
 
                 groupBoxFlowLayout.Controls.Add(trueButton);
                 groupBoxFlowLayout.Controls.Add(falseButton);
@@ -51,9 +52,212 @@ namespace SupraHotEditor
                         }
                     }
                 );
-            } 
-            else if(Type == "Vec3") {
-                Console.WriteLine("Vec3");
+            }
+            else if (Type == "Float")
+            {
+
+                Label xLabel = new Label();
+                xLabel.Text = "X";
+
+                NumericUpDown xSpinner = new NumericUpDown();
+                xSpinner.DecimalPlaces = 6;
+                xSpinner.Increment = 0.1M;
+
+                groupBoxFlowLayout.Controls.Add(xLabel);
+                groupBoxFlowLayout.Controls.Add(xSpinner);
+
+                // Add listeners
+                xSpinner.ValueChanged += new EventHandler(
+                    delegate(object sender, EventArgs e)
+                    {
+                        // TODO: Impl. float materialproperty
+                    }
+                );
+            }
+            else if (Type == "Vec2")
+            {
+
+                Label xLabel = new Label();
+                xLabel.Text = "X";
+
+                NumericUpDown xSpinner = new NumericUpDown();
+                xSpinner.DecimalPlaces = 6;
+                xSpinner.Increment = 0.1M;
+
+                Label yLabel = new Label();
+                yLabel.Text = "Y";
+
+                NumericUpDown ySpinner = new NumericUpDown();
+                ySpinner.DecimalPlaces = 6;
+                ySpinner.Increment = 0.1M;
+
+                groupBoxFlowLayout.Controls.Add(xLabel);
+                groupBoxFlowLayout.Controls.Add(xSpinner);
+
+                groupBoxFlowLayout.Controls.Add(yLabel);
+                groupBoxFlowLayout.Controls.Add(ySpinner);
+
+                this.Height = 200;
+
+                // Add listeners
+                xSpinner.ValueChanged += new EventHandler(
+                    delegate(object sender, EventArgs e)
+                    {
+                       //Vec3CLI result = new Vec3CLI((float)xSpinner.Value, (float)ySpinner.Value, (float)zSpinner.Value);
+                       //((Vec3MaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(result);
+                    }
+                );
+
+                ySpinner.ValueChanged += new EventHandler(
+                    delegate(object sender, EventArgs e)
+                    {
+                        //Vec3CLI result = new Vec3CLI((float)xSpinner.Value, (float)ySpinner.Value, (float)zSpinner.Value);
+                        //((Vec3MaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(result);
+                    }
+                );
+
+            }
+            else if(Type == "Vec3") 
+            {
+
+                Label xLabel = new Label();
+                xLabel.Text = "X";
+
+                NumericUpDown xSpinner = new NumericUpDown();
+                xSpinner.DecimalPlaces = 6;
+                xSpinner.Increment = 0.1M;
+
+                Label yLabel = new Label();
+                yLabel.Text = "Y";
+
+                NumericUpDown ySpinner = new NumericUpDown();
+                ySpinner.DecimalPlaces = 6;
+                ySpinner.Increment = 0.1M;
+
+                Label zLabel = new Label();
+                zLabel.Text = "Z";
+
+                NumericUpDown zSpinner = new NumericUpDown();
+                zSpinner.DecimalPlaces = 6;
+                zSpinner.Increment = 0.1M;
+
+                groupBoxFlowLayout.Controls.Add(xLabel);
+                groupBoxFlowLayout.Controls.Add(xSpinner);
+
+                groupBoxFlowLayout.Controls.Add(yLabel);
+                groupBoxFlowLayout.Controls.Add(ySpinner);
+
+                groupBoxFlowLayout.Controls.Add(zLabel);
+                groupBoxFlowLayout.Controls.Add(zSpinner);
+
+                this.Height = 200;
+
+                // Add listeners
+                xSpinner.ValueChanged += new EventHandler(
+                    delegate(object sender, EventArgs e)
+                    {
+                        Vec3CLI result = new Vec3CLI((float)xSpinner.Value, (float)ySpinner.Value, (float)zSpinner.Value);
+                        ((Vec3MaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(result);
+                    }
+                );
+
+                ySpinner.ValueChanged += new EventHandler(
+                    delegate(object sender, EventArgs e)
+                    {
+                        Vec3CLI result = new Vec3CLI((float)xSpinner.Value, (float)ySpinner.Value, (float)zSpinner.Value);
+                        ((Vec3MaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(result);
+                    }
+                );
+
+                zSpinner.ValueChanged += new EventHandler(
+                    delegate(object sender, EventArgs e)
+                    {
+                        Vec3CLI result = new Vec3CLI((float)xSpinner.Value, (float)ySpinner.Value, (float)zSpinner.Value);
+                        ((Vec3MaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(result);
+                    }
+                );
+            }
+            else if (Type == "Vec4")
+            {
+
+                Label xLabel = new Label();
+                xLabel.Text = "X";
+
+                NumericUpDown xSpinner = new NumericUpDown();
+                xSpinner.DecimalPlaces = 6;
+                xSpinner.Increment = 0.1M;
+
+                Label yLabel = new Label();
+                yLabel.Text = "Y";
+
+                NumericUpDown ySpinner = new NumericUpDown();
+                ySpinner.DecimalPlaces = 6;
+                ySpinner.Increment = 0.1M;
+
+                Label zLabel = new Label();
+                zLabel.Text = "Z";
+
+                NumericUpDown zSpinner = new NumericUpDown();
+                zSpinner.DecimalPlaces = 6;
+                zSpinner.Increment = 0.1M;
+
+                Label wLabel = new Label();
+                wLabel.Text = "W";
+
+                NumericUpDown wSpinner = new NumericUpDown();
+                wSpinner.DecimalPlaces = 6;
+                wSpinner.Increment = 0.1M;
+
+                groupBoxFlowLayout.Controls.Add(xLabel);
+                groupBoxFlowLayout.Controls.Add(xSpinner);
+
+                groupBoxFlowLayout.Controls.Add(yLabel);
+                groupBoxFlowLayout.Controls.Add(ySpinner);
+
+                groupBoxFlowLayout.Controls.Add(zLabel);
+                groupBoxFlowLayout.Controls.Add(zSpinner);
+
+                groupBoxFlowLayout.Controls.Add(wLabel);
+                groupBoxFlowLayout.Controls.Add(wSpinner);
+
+                this.Height = 250;
+
+                // Add listeners
+                xSpinner.ValueChanged += new EventHandler(
+                    delegate(object sender, EventArgs e)
+                    {
+    
+                    }
+                );
+
+                ySpinner.ValueChanged += new EventHandler(
+                    delegate(object sender, EventArgs e)
+                    {
+                        
+                    }
+                );
+
+                zSpinner.ValueChanged += new EventHandler(
+                    delegate(object sender, EventArgs e)
+                    {
+                        
+                    }
+                );
+
+                wSpinner.ValueChanged += new EventHandler(
+                   delegate(object sender, EventArgs e)
+                   {
+                       
+                   }
+               );
+            }
+            else if (Type == "Texture2D")
+            {
+                // todo:
+            }
+            else if (Type == "TextureCube")
+            { 
+                // todo:
             }
         }
     }

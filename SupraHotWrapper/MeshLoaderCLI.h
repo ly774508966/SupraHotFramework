@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Wrapper.h"
+#include "EntityCLI.h"
 #include <MeshDataLoader.h>
 
 namespace SupraHot
@@ -17,7 +18,7 @@ namespace SupraHot
 		public:
 			static MeshLoaderCLI^ GetIntance();
 
-			void LoadSFHM(System::String^ pathToFile);
+			System::Collections::Generic::List<SupraHot::CLI::EntityCLI^>^ LoadSFHM(System::String^ pathToFile);
 
 			virtual ~MeshLoaderCLI()
 			{

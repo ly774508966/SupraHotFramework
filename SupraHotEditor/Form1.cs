@@ -48,11 +48,9 @@ namespace SupraHotEditor
                 var e = new EntityCLI();
                 Material material = new Material();
                 MeshData meshData = new MeshData();
-                var c = new MeshComponent(meshData, material);
-                e.AddComponent(c);
 
                 MeshLoaderCLI meshLoader = MeshLoaderCLI.GetIntance();
-                meshLoader.LoadSFHM("Models/Sponza/Sponza_M.shfm");
+                List<EntityCLI> entites = meshLoader.LoadSFHM("Models/Sponza/Sponza_M.shfm");
              
                 // Test a thing here
                 FlowLayoutPanel groupBoxFlowLayout = new FlowLayoutPanel();
@@ -61,9 +59,18 @@ namespace SupraHotEditor
 
                 MaterialPropertyWidget bmpc = new MaterialPropertyWidget(new BooleanMaterialPropertyCLI("Bool value"));
                 groupBoxFlowLayout.Controls.Add(bmpc);
-
+               
                 MaterialPropertyWidget v3mpc = new MaterialPropertyWidget(new Vec3MaterialPropertyCLI("Color"));
                 groupBoxFlowLayout.Controls.Add(v3mpc);
+
+                var counter = 0;
+                foreach (EntityCLI ent in entites) 
+                {
+                    MeshComponentCLI mesh = ent.GetComponent<MeshComponentCLI>();
+                    mesh.FixedUpdate(1);
+                    counter++;
+
+                }              
             }
             
         }
@@ -233,6 +240,11 @@ namespace SupraHotEditor
         private void splitContainer2_Panel2_MouseLeave(object sender, EventArgs e)
         {
             this.Focus();
+        }
+
+        private void splitContainer2_Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
 
     }

@@ -104,6 +104,8 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 		entity->GetTransform().SetScale(Vec3(0.02f, 0.02f, 0.02f));
 		entity->AddComponent(meshComponent);
 		this->Entities.push_back(entity);
+
+		entity->SetName(meshComponent->GetMeshData()->Name);
 	}
 
 
