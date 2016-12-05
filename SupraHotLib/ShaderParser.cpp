@@ -165,6 +165,116 @@ namespace SupraHot
 				ShaderDescription shaderDesc = {};
 				shaderDesc.Name = "wurst";*/
 
+
+				std::vector<std::string> vertexShaderContents = Utils::FileReader::GetInstance()->ReadFile(vertexShaderPath);
+				std::vector<std::string> pixelShaderContents = Utils::FileReader::GetInstance()->ReadFile(pixelShaderPath);
+				std::unordered_map<std::string, std::string> uniformNameToUniformTypeMap;
+
+				// Process shader source code.
+				/*
+				
+					// Find Input&Output from VS, FS
+					if (characterAfterKeyword == ' ')
+					{
+						if (keyword == "layout")
+						{
+							printf("LAYOUT KEYWORD: %s \n", currentLine.c_str());
+						} 
+						else
+						{
+							ShaderUIElement* uiElement = new ShaderUIElement();
+							std::vector<std::string> lineParts = StringUtil::Split(currentLine, " ", false);	
+							uiElement->Keyword = lineParts[0];
+							uiElement->Type = lineParts[1];
+							uiElement->Name = lineParts[2].substr(0, lineParts[2].size() - 1);
+							uiElement->Location = "-1";
+							uiElement->LineNumber = currentLineNumber;
+							result.push_back(uiElement);
+						}
+					} 
+				
+				*/
+
+				for (size_t i = 0, l = vertexShaderContents.size(); i < l; ++i)
+				{
+					
+					std::string line = vertexShaderContents.at(i);
+					line = Utils::StringUtil::ltrim(line);
+					
+					// line begins with 'uniform'
+					if (line.find("uniform") == 0) 
+					{
+						
+						std::vector<std::string> splitLine = Utils::StringUtil::Split(line, " ");
+						std::string type = Utils::StringUtil::trim(splitLine[1]);
+						std::string name = Utils::StringUtil::trim(splitLine[2]);
+
+						// remove ';' from the name
+						size_t idx = name.rfind(";");
+						name = name.substr(0, idx);
+						name = Utils::StringUtil::trim(name);
+
+						SHF_PRINTF("Uniform -> [%s]==[%s] \n", type.c_str(), name.c_str());
+
+						// Also in theory we would dynamically inject the needed unifroms like matrices.
+						// we could store them on the shader, just like the material-properties.
+						// they would get pushed onto the shader every frame and for every mesh we render
+						// except for viewmatrix and projection matrix, since it will stay there for eternity,
+						// until we override it.
+
+
+						if (uniformNameToUniformTypeMap[name].length() <= 0)
+						{
+							SHF_PRINTF("Inject our uniform into the map \n");
+							uniformNameToUniformTypeMap[name] = type;
+						}
+
+					}
+
+				}
+
+
+				// create a method for this stuff....
+
+				for (size_t i = 0, l = pixelShaderContents.size(); i < l; ++i)
+				{
+
+					std::string line = pixelShaderContents.at(i);
+					line = Utils::StringUtil::ltrim(line);
+
+					// line begins with 'uniform'
+					if (line.find("uniform") == 0)
+					{
+
+						std::vector<std::string> splitLine = Utils::StringUtil::Split(line, " ");
+						std::string type = Utils::StringUtil::trim(splitLine[1]);
+						std::string name = Utils::StringUtil::trim(splitLine[2]);
+
+						// remove ';' from the name
+						size_t idx = name.rfind(";");
+						name = name.substr(0, idx);
+						name = Utils::StringUtil::trim(name);
+
+						SHF_PRINTF("Uniform -> [%s]==[%s] \n", type.c_str(), name.c_str());
+
+						// Also in theory we would dynamically inject the needed unifroms like matrices.
+						// we could store them on the shader, just like the material-properties.
+						// they would get pushed onto the shader every frame and for every mesh we render
+						// except for viewmatrix and projection matrix, since it will stay there for eternity,
+						// until we override it.
+
+
+						if (uniformNameToUniformTypeMap[name].length() <= 0)
+						{
+							SHF_PRINTF("Inject our uniform into the map \n");
+							uniformNameToUniformTypeMap[name] = type;
+						}
+
+					}
+
+				}
+
+
 			}
 
 			// Build dependencies map
