@@ -159,7 +159,9 @@
             // 
             // mainSplitContainer
             // 
+            this.mainSplitContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(7)))), ((int)(((byte)(7)))), ((int)(((byte)(7)))));
             this.mainSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainSplitContainer.ForeColor = System.Drawing.Color.White;
             this.mainSplitContainer.Location = new System.Drawing.Point(0, 24);
             this.mainSplitContainer.Name = "mainSplitContainer";
             // 
@@ -171,6 +173,8 @@
             // mainSplitContainer.Panel2
             // 
             this.mainSplitContainer.Panel2.AccessibleDescription = "Inspector";
+            this.mainSplitContainer.Panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(7)))), ((int)(((byte)(7)))), ((int)(((byte)(7)))));
+            this.mainSplitContainer.Panel2.ForeColor = System.Drawing.Color.White;
             this.mainSplitContainer.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer2_Panel2_Paint);
             this.mainSplitContainer.Size = new System.Drawing.Size(854, 421);
             this.mainSplitContainer.SplitterDistance = 600;
@@ -178,6 +182,7 @@
             // 
             // splitContainer1
             // 
+            this.splitContainer1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(7)))), ((int)(((byte)(7)))), ((int)(((byte)(7)))));
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
@@ -190,12 +195,15 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.AccessibleDescription = "AssetBrowser";
+            this.splitContainer1.Panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(7)))), ((int)(((byte)(7)))), ((int)(((byte)(7)))));
+            this.splitContainer1.Panel2.ForeColor = System.Drawing.Color.White;
             this.splitContainer1.Size = new System.Drawing.Size(600, 421);
             this.splitContainer1.SplitterDistance = 392;
             this.splitContainer1.TabIndex = 0;
             // 
             // splitContainer2
             // 
+            this.splitContainer2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(7)))), ((int)(((byte)(7)))), ((int)(((byte)(7)))));
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
             this.splitContainer2.Name = "splitContainer2";
@@ -203,11 +211,15 @@
             // splitContainer2.Panel1
             // 
             this.splitContainer2.Panel1.AccessibleDescription = "Hierarchy";
+            this.splitContainer2.Panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(7)))), ((int)(((byte)(7)))), ((int)(((byte)(7)))));
+            this.splitContainer2.Panel1.ForeColor = System.Drawing.Color.White;
             this.splitContainer2.Panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer2_Panel1_Paint);
             // 
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.AccessibleDescription = "EngineView";
+            this.splitContainer2.Panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(7)))), ((int)(((byte)(7)))), ((int)(((byte)(7)))));
+            this.splitContainer2.Panel2.ForeColor = System.Drawing.Color.White;
             this.splitContainer2.Panel2.Scroll += new System.Windows.Forms.ScrollEventHandler(this.splitContainer2_Panel2_Scroll);
             this.splitContainer2.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer2_Panel2_Paint_1);
             this.splitContainer2.Panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.splitContainer2_Panel2_MouseDown);

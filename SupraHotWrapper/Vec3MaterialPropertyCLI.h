@@ -12,6 +12,7 @@ namespace SupraHot
 		public ref class Vec3MaterialPropertyCLI : public MaterialPropertyCLIInterface<Vec3CLI^>, public MaterialPropertyCommonInterface
 		{
 		protected:
+			bool IsCopy = false;
 			SupraHot::Graphics::Vec3MaterialProperty* Instance;
 		public:
 
@@ -34,7 +35,7 @@ namespace SupraHot
 			Vec3MaterialPropertyCLI(System::String^ name);
 			~Vec3MaterialPropertyCLI()
 			{
-				if (Instance != nullptr)
+				if (Instance != nullptr && !IsCopy)
 				{
 					delete Instance;
 					Instance = nullptr;
@@ -43,7 +44,7 @@ namespace SupraHot
 
 			!Vec3MaterialPropertyCLI()
 			{
-				if (Instance != nullptr)
+				if (Instance != nullptr  && !IsCopy)
 				{
 					delete Instance;
 					Instance = nullptr;

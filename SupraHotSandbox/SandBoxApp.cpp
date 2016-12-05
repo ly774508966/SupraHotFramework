@@ -32,6 +32,7 @@
 #include <MeshDataRenderer.h>
 #include <ShaderLibrary.h>
 #include <BooleanMaterialProperty.h>
+#include <ShaderParser.h>
 
 using namespace SupraHot;
 
@@ -148,6 +149,9 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 	EnvBox->Init(); 
 	
 	FlyCamera = new Camera(50.0f, 0.05f, 100.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
+
+	Graphics::ShaderParser* parser = Graphics::ShaderParser::GetInstance();
+	parser->Parse("Dev/shaderdescription.json");
 }
 
 void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)

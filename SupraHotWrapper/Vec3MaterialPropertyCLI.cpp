@@ -27,6 +27,7 @@ namespace SupraHot
 		Vec3MaterialPropertyCLI::Vec3MaterialPropertyCLI(SupraHot::Graphics::Vec3MaterialProperty*  v3mp)
 		{
 			Instance = v3mp;
+			IsCopy = true;
 		};
 	};
 };

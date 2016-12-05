@@ -26,6 +26,7 @@ namespace SupraHot
 		BooleanMaterialPropertyCLI::BooleanMaterialPropertyCLI(SupraHot::Graphics::BooleanMaterialProperty* bmp)
 		{
 			Instance = bmp;
+			IsCopy = true;
 		}
 	};
 };

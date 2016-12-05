@@ -305,6 +305,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderCompileOptions.h" />
     <ClInclude Include="ShaderLibrary.h" />
+    <ClInclude Include="ShaderParser.h" />
     <ClInclude Include="SHFMBinaryLoader.h" />
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="stb_image.h" />
@@ -351,6 +352,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Externals\include\json11\json11.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="BooleanMaterialProperty.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -380,6 +382,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderCompileOptions.cpp" />
     <ClCompile Include="ShaderLibrary.cpp" />
+    <ClCompile Include="ShaderParser.cpp" />
     <ClCompile Include="SHFMBinaryLoader.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="stb_image.c" />

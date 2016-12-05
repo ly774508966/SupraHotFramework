@@ -11,6 +11,7 @@ namespace SupraHot
 		public ref class BooleanMaterialPropertyCLI : public MaterialPropertyCLIInterface<bool>, public MaterialPropertyCommonInterface
 		{
 		protected:
+			bool IsCopy = false;
 			SupraHot::Graphics::BooleanMaterialProperty* Instance;
 		public:
 
@@ -31,7 +32,7 @@ namespace SupraHot
 			BooleanMaterialPropertyCLI(System::String^ name);
 			~BooleanMaterialPropertyCLI()
 			{
-				if (Instance != nullptr)
+				if (Instance != nullptr && !IsCopy)
 				{
 					delete Instance;
 					Instance = nullptr;
@@ -40,7 +41,7 @@ namespace SupraHot
 
 			!BooleanMaterialPropertyCLI()
 			{
-				if (Instance != nullptr)
+				if (Instance != nullptr && !IsCopy)
 				{
 					delete Instance;
 					Instance = nullptr;

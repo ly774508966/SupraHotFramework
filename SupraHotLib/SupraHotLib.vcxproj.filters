@@ -91,6 +91,12 @@
     <Filter Include="Header Files\Graphics\Common\MaterialProperties">
       <UniqueIdentifier>{8823b2d6-03a7-49ef-8941-4348ddbb3df3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Graphics\Common\Shader">
+      <UniqueIdentifier>{80fd5459-f74b-4a1b-bbc5-9016d630e585}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Common\Shader">
+      <UniqueIdentifier>{fe1643d9-e981-43e3-bb4e-0682b61741de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -162,9 +168,6 @@
     <ClInclude Include="Renderer.h">
       <Filter>Header Files\Graphics\Common</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Header Files\Graphics\Common</Filter>
-    </ClInclude>
     <ClInclude Include="StringUtil.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
@@ -225,16 +228,10 @@
     <ClInclude Include="MeshDataRenderer.h">
       <Filter>Header Files\Graphics\Common</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderLibrary.h">
-      <Filter>Header Files\Graphics\Common</Filter>
-    </ClInclude>
     <ClInclude Include="Utility.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
     <ClInclude Include="MaterialProperty.h">
-      <Filter>Header Files\Graphics\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderCompileOptions.h">
       <Filter>Header Files\Graphics\Common</Filter>
     </ClInclude>
     <ClInclude Include="BooleanMaterialProperty.h">
@@ -245,6 +242,18 @@
     </ClInclude>
     <ClInclude Include="WindowEditorWin32.h">
       <Filter>Header Files\Graphics\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\Graphics\Common\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderCompileOptions.h">
+      <Filter>Header Files\Graphics\Common\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderLibrary.h">
+      <Filter>Header Files\Graphics\Common\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderParser.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -341,9 +350,6 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Source Files\Graphics\Common</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Source Files\Graphics\Common</Filter>
-    </ClCompile>
     <ClCompile Include="Vertex.cpp">
       <Filter>Source Files\Graphics\Common</Filter>
     </ClCompile>
@@ -368,16 +374,10 @@
     <ClCompile Include="MeshDataRenderer.cpp">
       <Filter>Source Files\Graphics\Common</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderLibrary.cpp">
-      <Filter>Source Files\Graphics\Common</Filter>
-    </ClCompile>
     <ClCompile Include="Utility.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
     <ClCompile Include="MaterialProperty.cpp">
-      <Filter>Source Files\Graphics\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderCompileOptions.cpp">
       <Filter>Source Files\Graphics\Common</Filter>
     </ClCompile>
     <ClCompile Include="BooleanMaterialProperty.cpp">
@@ -388,6 +388,21 @@
     </ClCompile>
     <ClCompile Include="WindowEditorWin32.cpp">
       <Filter>Source Files\Graphics\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\Graphics\Common\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderCompileOptions.cpp">
+      <Filter>Source Files\Graphics\Common\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderLibrary.cpp">
+      <Filter>Source Files\Graphics\Common\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Externals\include\json11\json11.cpp">
+      <Filter>Source Files\Graphics\Common\Shader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

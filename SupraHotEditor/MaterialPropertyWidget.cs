@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing;
 using SupraHot.CLI;
 
 namespace SupraHotEditor
 {
-    class MaterialPropertyWidget : GroupBox
+    class MaterialPropertyWidget : Panel
     {
         private MaterialPropertyCommonInterface MaterialPropertyCommonInterface = null;
         private String Type = "";
@@ -24,6 +25,15 @@ namespace SupraHotEditor
             groupBoxFlowLayout = new FlowLayoutPanel();
             groupBoxFlowLayout.Dock = DockStyle.Fill;
             this.Controls.Add(groupBoxFlowLayout);
+
+            Color lightGrey = Color.FromArgb(40, 40, 40);
+            Color whiteColor = Color.FromArgb(255, 255, 255);
+            this.BackColor = lightGrey;
+            this.ForeColor = whiteColor;
+
+            Label nameLabel = new Label();
+            nameLabel.Text = this.Text;
+            groupBoxFlowLayout.Controls.Add(nameLabel);
 
             if(Type == "Boolean") 
             {
