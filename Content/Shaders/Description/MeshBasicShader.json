@@ -10,7 +10,7 @@
 		"VertexShader" : "../GL/mesh.vs.glsl",
 		"PixelShader" : "../GL/mesh.fs.glsl"	
 	},
-
+ 
 	"Defines" :
 	{
 		"BuildAllUniformDefines" : false,
