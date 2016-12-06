@@ -3,6 +3,7 @@
 #include "Utility.h"
 #include "MeshData.h"
 #include <map>
+#include "ShaderParser.h"
 
 namespace SupraHot
 {
@@ -251,6 +252,36 @@ namespace SupraHot
 				SHF_PRINTF("Created %llu shader permutations \n", MeshShaders.size());
 			}
 
+
+			// Init shader descriptions
+
+			std::string baseDirectoryPath = "Shaders/Description/";
+
+			// use dirent.h here to iterate over all files inside this directory
+			std::vector<std::string> shaderDescriptions = {"MeshBasicShader.json"};
+
+			for (size_t i = 0, l = shaderDescriptions.size(); i < l; ++i)
+			{
+				ShaderParser::ShaderDescription* shaderDescription = ShaderParser::GetInstance()->Parse(baseDirectoryPath + shaderDescriptions[i]);
+				
+				if (shaderDescription != nullptr)
+				{
+					
+					std::string name = shaderDescription->Name;
+					std::string description = shaderDescription->Description;
+
+					std::string vertexShaderPath = shaderDescription->VertexShaderPath;
+					std::string pixelShaderPath = shaderDescription->PixelShaderPath;
+
+					std::unordered_map<std::string, std::vector<std::string>>* definedWhen = &shaderDescription->DefinedWhen;
+					std::unordered_map<std::string, std::vector<std::string>>* dependencies = &shaderDescription->Dependencies;
+					std::unordered_map<std::string, std::string>* uniforms = &shaderDescription->Uniforms;
+
+					SHF_PRINTF("Create Shader permutations for %s \n", name.c_str());
+					SHF_PRINTF("[ %llu Uniforms, %llu DefinedWhen, %llu Dependencies ]\n", uniforms->size(), definedWhen->size(), dependencies->size());
+
+				}
+			}
 		}
 
 		void ShaderLibrary::Destroy()

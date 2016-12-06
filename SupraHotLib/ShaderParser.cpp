@@ -182,7 +182,7 @@ namespace SupraHot
 				typedef std::unordered_map<std::string, std::string>::iterator it_type;
 				for (it_type iterator = uniformNameToUniformTypeMap.begin(); iterator != uniformNameToUniformTypeMap.end(); ++iterator)
 				{
-					definedWhenMap[iterator->first].push_back(iterator->second);
+					definedWhenMap["_" + iterator->first].push_back(iterator->second);
 				}
 			}
 

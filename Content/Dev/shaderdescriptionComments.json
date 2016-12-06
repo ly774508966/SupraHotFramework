@@ -1,0 +1,70 @@
+description : 
+{
+	"name" : "the name",
+	"description" : "a shader."
+},
+
+files: 
+{
+	"vertex" : "relative/path/to/this/file/shader.vertex",
+	"pixel" : "relative/path/to/this/file/shader.pixel"	
+},
+
+// für select shader from material ->......
+defines:
+{
+	"buildAllUniformDefines" : false,
+
+	"definedWhen" : 
+	{
+		"_AlbedoMap" : ["AlbedoTexture"],
+		"_NormalMap" : ["NormalTexture"],
+		"_RoughnessMap" : ["RoughnessTexture"],
+		"_ModifyColor" : ["DiffuseColor", "DiffuseColorBooster"]
+	}
+
+	// wenn die "buildAllUniformDefines"-option auf true steht, dann wird für JEDE uniform variable
+	// ein "definedWhen"-eintrag erstellt und die custom rules gelöscht.
+
+	// bsp: 
+	// hat der shader die uniform vars : "color", "colorintensity", "albedomap"
+	// dann werden folgende definedWhen-Einträge generiert
+
+	//
+	// "_color" : ["color"],
+	// "_colorintensity" : ["colorintensity"],
+	// "_albedomap" : ["albedomap"]
+
+	// diese werden dann je nach materialwert auf true oder false zur laufzeit gesetzt.
+	// 
+
+	// SelectShaderFromMaterialAndMeshData -> diese method ist dafür verantwortlich
+
+},
+
+// hierbei handelt es sich um defines, die von internen variablen oder anderen defines abhängig sind.
+// zum beispiel macht es keinen sinn einen shader zu kompilieren, der eine albedomap als input erwartet
+// aber keine uv-koordinaten besitzt um diese auf ein mesh anzuwenden.
+// genauso macht es keinen sinn einen shader mit einer normalmap zu erstellen, der keine normals, uvs oder tangenten
+// als input besitzt.
+// diese DEPS können nur vom user erstellt werden.
+
+// diese bestimmte permutationen werden NICHT erstellt. hilft bei der speicherplatzreduktion und verhindert compilefehler
+deps : 
+{
+	"_AlbedoMap" : ["_UV"],
+	"_NormalMap" : ["_UV", "_Normals", "_TangentsBiTangents"],
+	"_TangentBiTangent" : ["_UV", "_Normals"],
+	"_RoughnessMap" : ["_UV"],
+	"_MetalnessMap" : ["_UV"],
+	"_SpecularMap" : ["_UV"],
+	"_ComboMap" : ["_UV"]
+}
+
+
+// zusätzlich:
+// beim parsen und erstellen der shader permutationen, bekommt jeder shader noch einen vector mit inputs, 
+// die er vom material erwartet.
+// wird darauf hin ein material mit einem shader gelinkt, so werden dieses input im material als materialproperties erstellt.
+// ..... soll ein material gespeichert werden, so müssen diese werte in eine file geschrieben werden, damit diese dann beim 
+// neuladen der scene wieder eingelesen und angewandt werden können.
