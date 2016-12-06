@@ -1,0 +1,83 @@
+{
+	"Description" : 
+	{
+		"Name" : "the name",
+		"Description" : "a shader."
+	},
+
+	"Files" : 
+	{
+		"VertexShader" : "../GL/mesh.vs.glsl",
+		"PixelShader" : "../GL/mesh.fs.glsl"	
+	},
+ 
+	"Defines" :
+	{
+		"BuildAllUniformDefines" : false,
+
+		"DefinedWhen" : 
+		{
+			"_AlbedoMap" : 
+			[
+				"AlbedoTexture"
+			],
+
+			"_NormalMap" : 
+			[
+				"NormalTexture"
+			],
+
+			"_RoughnessMap" : 
+			[
+				"RoughnessTexture"
+			],
+
+			"_ModifyColor" : 
+			[
+				"DiffuseColor", 
+				"DiffuseColorBooster"
+			]
+		}
+	},
+
+	"Dependencies" : 
+	{
+		"_AlbedoMap" : 
+		[
+			"_UV"
+		],
+
+		"_NormalMap" : 
+		[
+			"_UV", 
+			"_Normals", 
+			"_TangentsBiTangents"
+		],
+
+		"_TangentBiTangent" : 
+		[
+			"_UV", 
+			"_Normals"
+		],
+
+		"_RoughnessMap" : 
+		[
+			"_UV"
+		],
+
+		"_MetalnessMap" : 
+		[	
+			"_UV"
+		],
+
+		"_SpecularMap" : 
+		[
+			"_UV"
+		],
+
+		"_ComboMap" : 
+		[
+			"_UV"
+		]
+	}
+}
