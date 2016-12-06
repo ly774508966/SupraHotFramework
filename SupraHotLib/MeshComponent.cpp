@@ -38,6 +38,24 @@ namespace SupraHot
 		SHF_PRINTF("Triggered destroy()-method on MeshComponent\n");
 		SHF_PRINTF("need to destroy the material and meshdata.\n");
 #endif
+
+		if (MeshData != nullptr)
+		{
+			MeshData->Destroy();
+			delete MeshData;
+			MeshData = nullptr;
+		}
+		
+		if (Material != nullptr)
+		{
+			// todo:
+			// Shared pointer issue.
+			// Multiple MeshComponents use the SAME material instance.
+			// either we could use a shared pointer thingy or just create material instances.
+			Material->Destroy();
+			//delete Material;
+			//Material = nullptr;
+		}
 	}
 
 	void MeshComponent::Update(float deltaTime)

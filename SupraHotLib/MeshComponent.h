@@ -13,8 +13,8 @@ namespace SupraHot
 	class MeshComponent : public Component
 	{	
 	protected:
-		Graphics::MeshData* MeshData;
-		Graphics::Material* Material;
+		Graphics::MeshData* MeshData = nullptr;
+		Graphics::Material* Material = nullptr;
 
 	public:
 		std::string Identifier = "MeshComponent";
