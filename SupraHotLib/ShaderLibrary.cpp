@@ -277,9 +277,68 @@ namespace SupraHot
 					std::unordered_map<std::string, std::vector<std::string>>* dependencies = &shaderDescription->Dependencies;
 					std::unordered_map<std::string, std::string>* uniforms = &shaderDescription->Uniforms;
 
+
+					// Create indexed versions of DefinedWhen
+					std::vector<std::string> indexedDefinedWhen;
+					{
+						typedef std::unordered_map<std::string, std::vector<std::string>>::iterator it_type;
+						for (it_type iterator = definedWhen->begin(); iterator != definedWhen->end(); ++iterator)
+						{
+							indexedDefinedWhen.push_back(iterator->first);
+						}
+					}
+
+					// Add internals to indexedDefines at the end.
+					indexedDefinedWhen.push_back("_Normals");
+					indexedDefinedWhen.push_back("_UV");
+					indexedDefinedWhen.push_back("_TangentsBiTangents");
+
 					SHF_PRINTF("Create Shader permutations for %s \n", name.c_str());
 					SHF_PRINTF("[ %llu Uniforms, %llu DefinedWhen, %llu Dependencies ]\n", uniforms->size(), definedWhen->size(), dependencies->size());
 
+					// Prepare boolean combinations for 'DefinedWhen'-Values
+					uint32 definedWhenCount = static_cast<uint32>(indexedDefinedWhen.size());
+					for (uint32 u = 0, ul = static_cast<uint32>(pow(2, definedWhenCount)); u < ul; ++u)
+					{
+						bool compileShader = true;
+						std::vector<bool> definedWhenBooleans = Utils::Utility::GetBoolCombinations(u, definedWhenCount);
+						std::unordered_map<std::string, bool> definedWhenOptions;
+
+						for (uint32 definedIdx = 0; definedIdx < definedWhenBooleans.size(); definedIdx++)
+						{
+							std::string defineName = indexedDefinedWhen[definedIdx];
+							definedWhenOptions[defineName] = definedWhenBooleans[definedIdx];
+
+							// Check dependencies
+							// if we don't meet the dependencies for this current define, we need to break
+				
+							if (dependencies->find(defineName) != dependencies->end())
+							{
+								std::vector<std::string>& deps = dependencies->at(defineName);
+
+								for (uint32 depIdx = 0; depIdx < deps.size(); ++depIdx)
+								{
+									// if the required dependency is not true, we bail out
+									if (!definedWhenOptions[deps[depIdx]])
+									{
+										compileShader = false;
+										break;
+									}
+								}
+							}
+						}
+
+						if (compileShader)
+						{
+							// Create ShaderCompileOptions
+
+							// Inject them into the source code
+
+							// Compile shader
+
+							// Create somesort of bitfield based on the properties.
+						}
+					}
 				}
 			}
 		}
