@@ -176,16 +176,19 @@ namespace SupraHot
 			}
 #endif
 
-			// Fill the definedWhenMap with all those uniforms, if buildAllUniforms is set to true
+			// Fill the definedWhenMap with all those uniforms,  if buildAllUniforms is set to true 
 			if (buildAllUniformDefines)
 			{
 				typedef std::unordered_map<std::string, std::string>::iterator it_type;
 				for (it_type iterator = uniformNameToUniformTypeMap.begin(); iterator != uniformNameToUniformTypeMap.end(); ++iterator)
 				{
-					definedWhenMap["_" + iterator->first].push_back(iterator->second);
+					if (definedWhenMap["_" + iterator->first].size() <= 0)
+					{
+						definedWhenMap["_" + iterator->first].push_back(iterator->second);
+					}
 				}
 			}
-
+			
 			// Build dependencies map
 			std::unordered_map<std::string, std::vector<std::string>> dependenciesMap;
 			if (json["Dependencies"].is_object())

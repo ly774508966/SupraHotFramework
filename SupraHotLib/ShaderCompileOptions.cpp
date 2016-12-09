@@ -47,6 +47,15 @@ namespace SupraHot
 			Definitions.clear();
 		}
 
+		void ShaderCompileOptions::Print()
+		{
+			for (size_t i = 0, l = Definitions.size(); i < l; ++i)
+			{
+				DefineOption& option = Definitions.at(i);
+				SHF_PRINTF("Define: %s -> [%s] \n", option.Name.c_str(), option.ValueString.c_str());
+			}
+		}
+
 		std::vector<ShaderCompileOptions::DefineOption>* ShaderCompileOptions::GetDefinitions()
 		{
 			return &Definitions;

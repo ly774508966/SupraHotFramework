@@ -41,6 +41,7 @@ namespace SupraHot
 			void Define(std::string variableName, Math::Vec3 value);
 
 			void Reset();
+			void Print();
 			std::vector<DefineOption>* GetDefinitions();
 		};
 	};

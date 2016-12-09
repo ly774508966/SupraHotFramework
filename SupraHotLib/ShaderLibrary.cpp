@@ -253,7 +253,9 @@ namespace SupraHot
 			}
 
 
+			// - - - - - - - - - - - - - - - - 
 			// Init shader descriptions
+			// - - - - - - - - - - - - - - - - 
 
 			std::string baseDirectoryPath = "Shaders/Description/";
 
@@ -297,39 +299,64 @@ namespace SupraHot
 					SHF_PRINTF("[ %llu Uniforms, %llu DefinedWhen, %llu Dependencies ]\n", uniforms->size(), definedWhen->size(), dependencies->size());
 
 					// Prepare boolean combinations for 'DefinedWhen'-Values
+
 					uint32 definedWhenCount = static_cast<uint32>(indexedDefinedWhen.size());
 					for (uint32 u = 0, ul = static_cast<uint32>(pow(2, definedWhenCount)); u < ul; ++u)
 					{
 						bool compileShader = true;
 						std::vector<bool> definedWhenBooleans = Utils::Utility::GetBoolCombinations(u, definedWhenCount);
 						std::unordered_map<std::string, bool> definedWhenOptions;
+						ShaderCompileOptions compileOptions;
 
-						for (uint32 definedIdx = 0; definedIdx < definedWhenBooleans.size(); definedIdx++)
+						// Build up map first.
+						for (uint32 definedIdx = 0; definedIdx < definedWhenBooleans.size(); ++definedIdx)
 						{
 							std::string defineName = indexedDefinedWhen[definedIdx];
 							definedWhenOptions[defineName] = definedWhenBooleans[definedIdx];
+						}
 
-							// Check dependencies
-							// if we don't meet the dependencies for this current define, we need to break
-				
-							if (dependencies->find(defineName) != dependencies->end())
+						// Check dependencies
+						// if we don't meet the dependencies for this current define, we need to break
+						typedef std::unordered_map<std::string, bool>::iterator it_type;
+						for (it_type iterator = definedWhenOptions.begin(); iterator != definedWhenOptions.end(); ++iterator)
+						{
+							std::string defineName = iterator->first;
+							compileOptions.Define(iterator->first, iterator->second);
+
+							if (iterator->second) // check for deps only if the the define is set to true.....
 							{
-								std::vector<std::string>& deps = dependencies->at(defineName);
-
-								for (uint32 depIdx = 0; depIdx < deps.size(); ++depIdx)
+								if (dependencies->find(defineName) != dependencies->end())
 								{
-									// if the required dependency is not true, we bail out
-									if (!definedWhenOptions[deps[depIdx]])
+									std::vector<std::string>& deps = dependencies->at(defineName);
+
+									for (uint32 depIdx = 0; depIdx < deps.size(); ++depIdx)
 									{
-										compileShader = false;
-										break;
+										if (definedWhenOptions.find(deps[depIdx]) != definedWhenOptions.end()
+											&& definedWhenOptions[deps[depIdx]] == false
+											)
+										{
+											compileShader = false;
+											break;
+										}
 									}
 								}
 							}
+
+							if (!compileShader)
+							{
+								break;
+							}
+							
 						}
+
 
 						if (compileShader)
 						{
+							// Create MaterialProperties from Uniforms.
+							// shaderDescription->Uniforms;
+
+							//compileOptions.Print();
+
 							// Create ShaderCompileOptions
 
 							// Inject them into the source code
@@ -338,6 +365,7 @@ namespace SupraHot
 
 							// Create somesort of bitfield based on the properties.
 						}
+
 					}
 				}
 			}
