@@ -304,7 +304,9 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderCompileOptions.h" />
+    <ClInclude Include="ShaderDescription.h" />
     <ClInclude Include="ShaderLibrary.h" />
+    <ClInclude Include="ShaderMaterial.h" />
     <ClInclude Include="ShaderParser.h" />
     <ClInclude Include="SHFMBinaryLoader.h" />
     <ClInclude Include="SkyBox.h" />
@@ -381,7 +383,9 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderCompileOptions.cpp" />
+    <ClCompile Include="ShaderDescription.cpp" />
     <ClCompile Include="ShaderLibrary.cpp" />
+    <ClCompile Include="ShaderMaterial.cpp" />
     <ClCompile Include="ShaderParser.cpp" />
     <ClCompile Include="SHFMBinaryLoader.cpp" />
     <ClCompile Include="SkyBox.cpp" />

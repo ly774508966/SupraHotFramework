@@ -50,7 +50,8 @@ namespace SupraHotEditor
                 MeshData meshData = new MeshData();
 
                 MeshLoaderCLI meshLoader = MeshLoaderCLI.GetIntance();
-                List<EntityCLI> entites = meshLoader.LoadSFHM("Models/Sponza/Sponza_M.shfm");
+                //List<EntityCLI> entites = meshLoader.LoadSFHM("Models/Sponza/Sponza_M.shfm");
+                List<EntityCLI> entites = meshLoader.LoadSFHM("Models/Pistol/Pistol_Model.shfm");
                         
                 // Get one entity here and insert some material properties
                 MeshComponentCLI mesh = entites[0].GetComponent<MeshComponentCLI>();

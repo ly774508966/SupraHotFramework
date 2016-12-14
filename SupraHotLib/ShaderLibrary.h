@@ -6,10 +6,13 @@
 
 namespace SupraHot
 {
+
 	namespace Graphics
 	{
+		class ShaderMaterial;
 		class Material;
 		class MeshData;
+		class ShaderDescription;
 
 		class ShaderLibrary
 		{
@@ -52,6 +55,11 @@ namespace SupraHot
 
 
 			static ShaderLibrary* GetInstance();
+			const std::unordered_map<std::string, ShaderDescription*>& GetShaderDescriptions();
+			ShaderDescription* GetShaderDescription(Shader* shader);
+			std::unordered_map<uint64, Shader*>* GetShaders(ShaderDescription* shaderDescription);
+
+
 			~ShaderLibrary();
 
 			Shader* Skybox[uint32(SkyboxShader::Count)] = {};
@@ -60,10 +68,16 @@ namespace SupraHot
 
 			Shader* SelectShaderForMaterialAndMeshData(Graphics::MeshData* meshData, Graphics::Material* material);
 
+			Shader* SelectShaderForShaderMaterialAndMeshData(Graphics::MeshData* meshData, Graphics::ShaderMaterial* material);
+
 			void Initialize();
 			void Destroy();
 
 		private:
+			std::unordered_map<std::string, ShaderDescription*> ShaderDescriptions;
+
+			// Maps a shader name (could be an uuid in the future) to another map of uint to shader
+			std::unordered_map<std::string, std::unordered_map<uint64, Shader*>> Shaders;
 			ShaderLibrary();
 		};
 	};

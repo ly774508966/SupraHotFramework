@@ -5,6 +5,7 @@
 #include "FileSystem.h"
 #include <filesystem>
 #include "StringUtil.h"
+#include "ShaderDescription.h"
 
 namespace SupraHot
 {
@@ -54,7 +55,7 @@ namespace SupraHot
 			}
 		}
 
-		ShaderParser::ShaderDescription* ShaderParser::Parse(std::string pathToShaderDefinitionFile)
+		ShaderDescription* ShaderParser::Parse(std::string pathToShaderDefinitionFile)
 		{
 			std::vector<std::string> fileContent = SupraHot::Utils::FileReader::GetInstance()->ReadFile(pathToShaderDefinitionFile);
 			std::string jsonFile = "";
@@ -221,12 +222,14 @@ namespace SupraHot
 			}
 
 
-			ShaderParser::ShaderDescription* description = new ShaderParser::ShaderDescription();
+			ShaderDescription* description = new ShaderDescription();
 			description->Name = shaderName;
 			description->Description = shaderDescription;
 			description->Dependencies = dependenciesMap;
 			description->DefinedWhen = definedWhenMap;
 			description->Uniforms = uniformNameToUniformTypeMap;
+			description->VertexShaderPath = vertexShaderPath;
+			description->PixelShaderPath = pixelShaderPath;
 			return description;
 		}
 	};

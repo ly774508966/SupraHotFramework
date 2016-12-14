@@ -252,8 +252,14 @@
     <ClInclude Include="ShaderLibrary.h">
       <Filter>Header Files\Graphics\Common\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="ShaderDescription.h">
+      <Filter>Header Files\Graphics\Common\Shader</Filter>
+    </ClInclude>
     <ClInclude Include="ShaderParser.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Graphics\Common\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderMaterial.h">
+      <Filter>Header Files\Graphics\Common\Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -398,10 +404,16 @@
     <ClCompile Include="ShaderLibrary.cpp">
       <Filter>Source Files\Graphics\Common\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderDescription.cpp">
+      <Filter>Source Files\Graphics\Common\Shader</Filter>
+    </ClCompile>
     <ClCompile Include="ShaderParser.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Graphics\Common\Shader</Filter>
     </ClCompile>
     <ClCompile Include="..\Externals\include\json11\json11.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderMaterial.cpp">
       <Filter>Source Files\Graphics\Common\Shader</Filter>
     </ClCompile>
   </ItemGroup>

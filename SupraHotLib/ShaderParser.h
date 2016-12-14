@@ -6,25 +6,10 @@ namespace SupraHot
 {
 	namespace Graphics
 	{
+		class ShaderDescription;
+
 		class ShaderParser
 		{
-		public:
-			class ShaderDescription 
-			{
-			public:
-				std::string Name = "";
-				std::string Description = "";
-				std::string VertexShaderPath = "";
-				std::string PixelShaderPath = "";
-				std::unordered_map<std::string, std::vector<std::string>> DefinedWhen = {};
-				std::unordered_map<std::string, std::vector<std::string>> Dependencies = {};
-				std::unordered_map<std::string, std::string> Uniforms = {};
-				
-				ShaderDescription(){};
-				~ShaderDescription(){};
-			};
-
-
 		private:
 			ShaderParser();
 

@@ -48,6 +48,7 @@ namespace SupraHot
 		
 		if (Material != nullptr)
 		{
+			SHF_PRINTF("Material != nullptr\n Shared pointer issue\n");
 			// todo:
 			// Shared pointer issue.
 			// Multiple MeshComponents use the SAME material instance.

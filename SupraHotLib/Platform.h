@@ -1,6 +1,6 @@
 #pragma once
 
-#define DEVELOPMENT 0
+#define DEVELOPMENT 1
 
 #include <string>
 #include <cmath>
