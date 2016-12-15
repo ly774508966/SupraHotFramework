@@ -55,9 +55,10 @@ namespace SupraHot
 
 
 			static ShaderLibrary* GetInstance();
-			const std::unordered_map<std::string, ShaderDescription*>& GetShaderDescriptions();
+			std::unordered_map<std::string, ShaderDescription*>* GetShaderDescriptions();
 			ShaderDescription* GetShaderDescription(Shader* shader);
 			std::unordered_map<uint64, Shader*>* GetShaders(ShaderDescription* shaderDescription);
+			std::unordered_map<uint64, Shader*>* GetShaders(std::string baseShaderName);
 
 
 			~ShaderLibrary();
@@ -79,6 +80,8 @@ namespace SupraHot
 			// Maps a shader name (could be an uuid in the future) to another map of uint to shader
 			std::unordered_map<std::string, std::unordered_map<uint64, Shader*>> Shaders;
 			ShaderLibrary();
+
+			bool ResolveDefinedWhen(std::string defineEntry, ShaderDescription* description, uint64 shaderIndex, std::vector<std::string>* alreadyProcessedProperties);
 		};
 	};
 };

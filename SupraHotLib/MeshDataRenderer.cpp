@@ -54,6 +54,12 @@ namespace SupraHot
 			}
 
 			Graphics::Shader* shader = meshComponent->GetMaterial()->GetShader();
+			
+			if (shader == nullptr)
+			{
+				continue;
+			}
+
 			Graphics::MeshData* meshData = meshComponent->GetMeshData();
 
 			// Bind shader
@@ -122,20 +128,9 @@ namespace SupraHot
 				offset += meshData->VertexCount * 3 * sizeof(float);
 			}
 
-			// Set textures
+			//meshComponent->GetMaterial()->Update();
 
-			Graphics::Material* material = meshComponent->GetMaterial();
-			if (material->GetAlbedoMap() != nullptr)
-			{
-				shader->SetTexture2D(glGetUniformLocation(shaderProgramID, "AlbedoTexture"), material->GetAlbedoMap(), GL_TEXTURE0);
-			}
-
-			// todo: this need a complete overhaul.
-			for (Graphics::MaterialProperty* materialProperty : material->MaterialProperties)
-			{
-				materialProperty->SetLocation(shader);
-				materialProperty->Apply(shader);
-			}
+			meshComponent->GetMaterial()->Apply();
 
 			// Layout
 			// Vertex attributes are stored sequential & not interleaved

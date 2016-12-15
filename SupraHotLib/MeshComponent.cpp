@@ -4,7 +4,7 @@
 
 namespace SupraHot
 {
-	MeshComponent::MeshComponent(Graphics::MeshData* meshData, Graphics::Material* material)
+	MeshComponent::MeshComponent(Graphics::MeshData* meshData, Graphics::ShaderMaterial* material)
 	{
 		MeshData = meshData;
 		Material = material;
@@ -48,14 +48,9 @@ namespace SupraHot
 		
 		if (Material != nullptr)
 		{
-			SHF_PRINTF("Material != nullptr\n Shared pointer issue\n");
-			// todo:
-			// Shared pointer issue.
-			// Multiple MeshComponents use the SAME material instance.
-			// either we could use a shared pointer thingy or just create material instances.
 			Material->Destroy();
-			//delete Material;
-			//Material = nullptr;
+			delete Material;
+			Material = nullptr;
 		}
 	}
 
@@ -71,7 +66,7 @@ namespace SupraHot
 	{
 	}
 
-	Graphics::Material* MeshComponent::GetMaterial()
+	Graphics::ShaderMaterial* MeshComponent::GetMaterial()
 	{
 		return Material;
 	}

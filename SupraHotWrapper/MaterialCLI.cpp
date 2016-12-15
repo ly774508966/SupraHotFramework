@@ -12,7 +12,7 @@ namespace SupraHot
 			
 		}
 
-		Material::Material(Graphics::Material* instance)
+		Material::Material(Graphics::ShaderMaterial* instance)
 		{
 			Instance = instance;
 		}
@@ -27,11 +27,12 @@ namespace SupraHot
 		{
 			System::Collections::Generic::List<MaterialPropertyCommonInterface^>^ mpcis = gcnew System::Collections::Generic::List<MaterialPropertyCommonInterface^>();
 
-			 
+			std::vector<SupraHot::Graphics::MaterialProperty*>* materialProperties = Instance->GetMaterialProperties();
 
-			for (SupraHot::Graphics::MaterialProperty* materialProperty : Instance->MaterialProperties)
+			for (size_t i = 0, l = materialProperties->size(); i < l; ++i)
 			{
-				
+				SupraHot::Graphics::MaterialProperty* materialProperty = materialProperties->at(i);
+
 				if (materialProperty->GetType() == "Boolean")
 				{
 					mpcis->Add(

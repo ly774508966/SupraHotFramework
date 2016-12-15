@@ -11,7 +11,7 @@ namespace SupraHot
 		protected:
 			std::string Name;
 			std::string Type = "MaterialProperty";
-			uint32 GLLocation;
+			uint32 GLLocation = 0;
 		public:
 			MaterialProperty(std::string name);
 			virtual ~MaterialProperty() = 0;

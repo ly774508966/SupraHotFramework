@@ -81,19 +81,32 @@ namespace SupraHot
 			// generate shader index
 			uint64 shaderIndex = 0;
 			std::vector<MaterialProperty*>* materialProperties = material->GetMaterialProperties();
-			
+			std::vector<std::string> alreadyProcessedProperties;
+
 			for (size_t i = 0, l = materialProperties->size(); i < l; ++i)
 			{
 				MaterialProperty* materialProperty = materialProperties->at(i);
-
 				std::string name = materialProperty->GetName();
 
-				uint64 propertyBitfieldIndex = description->BitShiftedIndices[name];
-				shaderIndex |= propertyBitfieldIndex;
+				// Check if there is a define for this property in the BitField
+				// Note: Add "_" in front of the name, since properties can not have the same name as defines!
+				auto it = description->BitShiftedIndices.find("_" + name);
+
+				// We found something. 
+				// Define this property by it self.
+				if (it != description->BitShiftedIndices.end())
+				{
+					uint64 propertyBitfieldIndex = description->BitShiftedIndices["_" + name];
+					shaderIndex |= propertyBitfieldIndex;
+
+					SHF_PRINTF("%s defined %s \n", name.c_str(), ("_" + name).c_str());
+				}
+
+				alreadyProcessedProperties.push_back(name);
 			}
 
 			// these values are atm hardcoded
-			// todo: store these somewhere globally available, 
+			// TODO: store these somewhere globally available, 
 			// so that we can change them at one convinient place in the future
 
 			if (meshData->HasNormalData)
@@ -117,7 +130,82 @@ namespace SupraHot
 				shaderIndex |= propertyBitfieldIndex;
 			}
 
+
+			// Now resolve definedWhen & dependencies
+
+			{
+				// Now check the definedWhen-Map
+				// For this we need to use the property's real name and loop through the dependencies maps
+				typedef std::unordered_map<std::string, std::vector<std::string>>::iterator DefinedWhenIterator;
+				for (DefinedWhenIterator defIt = description->DefinedWhen.begin(); defIt != description->DefinedWhen.end(); ++defIt)
+				{
+					// Check if this define has dependencies on another definedWhen-attribute & if we can meet them
+					std::string defineName = defIt->first;
+					std::vector<std::string>* defineArray = &(defIt->second);
+					bool isDefined = true;
+
+					for (size_t i = 0, l = defineArray->size(); i < l; ++i)
+					{
+						std::string defineEntry = defineArray->at(i);
+						isDefined = ResolveDefinedWhen(defineEntry, description, shaderIndex, &alreadyProcessedProperties);
+					}
+
+					if (isDefined)
+					{
+						SHF_PRINTF("Defined %s \n", defineName.c_str());
+
+						// Check for deps.
+
+						uint64 propertyBitfieldIndex = description->BitShiftedIndices[defineName];
+						shaderIndex |= propertyBitfieldIndex;
+					}
+				}
+			}
+
+
 			return shadersMap->at(shaderIndex);
+		}
+
+		bool ShaderLibrary::ResolveDefinedWhen(std::string defineEntry, ShaderDescription* description, uint64 shaderIndex, std::vector<std::string>* alreadyProcessedProperties)
+		{
+			// if entry begins with "_", we need to check for defines
+			if (defineEntry.find("_") == 0)
+			{
+				// check for deps. 
+				// Dependency is already met
+				uint64 bitFieldIndex = description->BitShiftedIndices[defineEntry];
+				if ((shaderIndex & bitFieldIndex) == bitFieldIndex)
+				{
+					return true;
+				}
+				else
+				{
+					
+					std::vector<std::string>* defindedWhen = &(description->DefinedWhen[defineEntry]);
+
+					bool isDefined = false;
+
+					for (size_t i = 0, l = defindedWhen->size(); i < l; ++i)
+					{
+						isDefined = ResolveDefinedWhen(defindedWhen->at(i), description, shaderIndex, alreadyProcessedProperties);
+					}
+
+					return isDefined;
+				}
+			}
+			else
+			{
+				// in this case we are dealing with just an uniform (aka. material property)
+				// Check if it is already present.
+				if (std::find(alreadyProcessedProperties->begin(), alreadyProcessedProperties->end(), defineEntry) != alreadyProcessedProperties->end())
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
 		}
 
 		void ShaderLibrary::Initialize()
@@ -309,12 +397,13 @@ namespace SupraHot
 			std::string baseDirectoryPath = "Shaders/Description/";
 
 			// use dirent.h here to iterate over all files inside this directory
-			std::vector<std::string> shaderDescriptions = {"MeshBasicShader.json"};
+			std::vector<std::string> shaderDescriptions = { "MeshDefaultShader.json", "MeshBasicShader.json" };
 
 			for (size_t i = 0, l = shaderDescriptions.size(); i < l; ++i)
 			{
 				ShaderDescription* shaderDescription = ShaderParser::GetInstance()->Parse(baseDirectoryPath + shaderDescriptions[i]);
-				
+				uint64 shaderCounter = 0;
+
 				if (shaderDescription != nullptr)
 				{
 					
@@ -361,7 +450,9 @@ namespace SupraHot
 
 					// Prepare boolean combinations for 'DefinedWhen'-Values
 					uint32 definedWhenCount = static_cast<uint32>(indexedDefinedWhen.size());
-					for (uint32 u = 0, ul = static_cast<uint32>(pow(2, definedWhenCount)); u < ul; ++u)
+
+					// TODO: u starts at 1, since we don't care about shaders, which have nothing defined!
+					for (uint32 u = 1, ul = static_cast<uint32>(pow(2, definedWhenCount)); u < ul; ++u)
 					{
 						bool compileShader = true;
 						std::vector<bool> definedWhenBooleans = Utils::Utility::GetBoolCombinations(u, definedWhenCount);
@@ -434,9 +525,14 @@ namespace SupraHot
 
 							// Store the shader inside the Shaders-Map
 							(Shaders[shaderDescription->Name])[shaderIndex] = shader;
+
+							shaderCounter++;
 						}
 					}
 				}
+
+				SHF_PRINTF("Created %llu permutations for %s \n", shaderCounter, shaderDescription->Name.c_str());
+
 			}
 		}
 
@@ -504,9 +600,9 @@ namespace SupraHot
 			return instance;
 		}
 
-		const std::unordered_map<std::string, ShaderDescription*>& ShaderLibrary::GetShaderDescriptions()
+		std::unordered_map<std::string, ShaderDescription*>* ShaderLibrary::GetShaderDescriptions()
 		{
-			return ShaderDescriptions;
+			return &ShaderDescriptions;
 		}
 
 		ShaderDescription* ShaderLibrary::GetShaderDescription(Shader* shader)
@@ -522,6 +618,11 @@ namespace SupraHot
 		std::unordered_map<uint64, Shader*>* ShaderLibrary::GetShaders(ShaderDescription* shaderDescription)
 		{
 			return &Shaders[shaderDescription->Name];
+		}
+
+		std::unordered_map<uint64, Shader*>* ShaderLibrary::GetShaders(std::string baseShaderName)
+		{
+			return &Shaders[baseShaderName];
 		}
 	};
 };

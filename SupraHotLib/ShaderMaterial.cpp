@@ -1,15 +1,38 @@
 #include "ShaderMaterial.h"
 #include "ShaderLibrary.h"
 #include "ShaderDescription.h"
+#include "Vec3MaterialProperty.h"
 
 namespace SupraHot
 {
 	namespace Graphics
 	{
-		
+		ShaderMaterial::ShaderMaterial()
+		{
+			this->Name = "NO MATERIAL";
+		}
+
 		ShaderMaterial::ShaderMaterial(ShaderDescription* shaderDescription)
 		{
 			this->Description = shaderDescription;
+			this->Name = shaderDescription->Name + " Material";
+
+
+			// todo: this is just for testing. these parameters should be only generated in the editor!
+			typedef std::unordered_map<std::string, std::string>::iterator it;
+			for (it iterator = shaderDescription->Uniforms.begin(); iterator != shaderDescription->Uniforms.end(); ++iterator)
+			{
+				std::string name = iterator->first;
+				std::string type = iterator->second;
+
+				// todo: need to do an "isInternal" check...
+
+				if (type == "vec3")
+				{
+					AddMaterialProperty(new Vec3MaterialProperty(name));
+				}
+
+			}
 		}
 
 		ShaderMaterial::~ShaderMaterial()
@@ -61,18 +84,27 @@ namespace SupraHot
 			return &MaterialProperties;
 		}
 
+		Shader* ShaderMaterial::GetShader()
+		{
+			return ShaderPermutation;
+		}
+
 		void ShaderMaterial::Update()
 		{
 			if (this->ShaderPermutation != nullptr)
 			{
+				this->ShaderPermutation->Attach();
 				for (MaterialProperty* materialProperty : MaterialProperties)
 				{
 					materialProperty->SetLocation(this->ShaderPermutation);
 				}
+				
+				// Note: if we want to use this inside the mesh renderer, this line should be removed
+				this->ShaderPermutation->Detach();
 			}
 		}
 
-		void ShaderMaterial::Attach()
+		void ShaderMaterial::Apply()
 		{
 			if (this->ShaderPermutation != nullptr)
 			{
@@ -83,9 +115,21 @@ namespace SupraHot
 			}
 		}
 
+		void ShaderMaterial::Destroy()
+		{
+			SHF_PRINTF("Todo: ShaderMaterial::Destroy() \n");
+			// shader descriptions get deleted by shaderlibrary!
+		}
+
 		void ShaderMaterial::SelectShaderPermutation()
 		{
 			
+		}
+
+		void ShaderMaterial::SetShaderPermutation(Shader* shader)
+		{
+			this->ShaderPermutation = shader;
+			Update();
 		}
 	};
 };

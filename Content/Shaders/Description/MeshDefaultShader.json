@@ -1,0 +1,42 @@
+{
+	"Description" : 
+	{
+		"Name" : "MeshDefaultShader",
+		"Description" : "Used when creating new MeshComponents"
+	},
+
+	"Files" : 
+	{
+		"VertexShader" : "../GL/mesh.vs.glsl",
+		"PixelShader" : "../GL/mesh_default.fs.glsl"	
+	},
+ 
+	"Defines" :
+	{
+		"BuildAllUniformDefines" : false,
+
+		"DefinedWhen" : 
+		{
+			"_TestColor" : 
+			[
+				"Color"
+			],
+
+			"_NormalModifier" : 
+			[
+				"NormalMod",
+				"_Normals",
+				"_TestColor"
+			]
+		}
+	},
+
+	"Dependencies" : 
+	{
+		"_TangentBiTangent" : 
+		[
+			"_UV", 
+			"_Normals"
+		]
+	}
+}

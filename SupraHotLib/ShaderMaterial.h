@@ -16,6 +16,10 @@ namespace SupraHot
 			ShaderDescription* Description;
 			std::vector<MaterialProperty*> MaterialProperties;
 		public:
+			std::string Name;
+
+			// Todo: remove this default construcotr & do some clever stuff in the CLI version
+			ShaderMaterial();
 			ShaderMaterial(ShaderDescription* shaderDescription);
 			~ShaderMaterial();
 
@@ -24,12 +28,16 @@ namespace SupraHot
 			MaterialProperty* GetMaterialPropertyByName(std::string materialPropertyName);
 			ShaderDescription* GetShaderDescription();
 			std::vector<MaterialProperty*>* GetMaterialProperties();
+			Shader* GetShader();
 
 			void Update();
-			void Attach();
+			void Apply();
+			void Destroy();
 			
-			// todo: rework thsi bit
+			// todo: Rework this bit.
+			// We need the mesh data in order to select a shader from the shaderlib....
 			void SelectShaderPermutation();
+			void SetShaderPermutation(Shader* shader);
 		};
 	};
 };

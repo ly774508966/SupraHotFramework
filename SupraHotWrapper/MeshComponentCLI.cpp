@@ -23,7 +23,7 @@ namespace SupraHot
 		{
 
 			SupraHot::MeshComponent* meshComponent = static_cast<SupraHot::MeshComponent*>(Instance);
-			SupraHot::Graphics::Material* material = meshComponent->GetMaterial();
+			SupraHot::Graphics::ShaderMaterial* material = meshComponent->GetMaterial();
 
 			SupraHot::CLI::Material^ mat = gcnew SupraHot::CLI::Material();
 			mat->IsCopy = true;

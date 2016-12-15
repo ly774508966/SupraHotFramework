@@ -1,11 +1,7 @@
 #include "MeshDataLoader.h"
 #include <unordered_map>
 #include "Material.h"
-#include "FileReader.h"
 #include "StringUtil.h"
-#include "MaterialLoader.h"
-#include "Face.h"
-#include "Vertex.h"
 #include "Platform.h"
 #include "FileSystem.h"
 #include "SHFMBinaryLoader.h"
@@ -40,9 +36,11 @@ namespace SupraHot
 			for (size_t m = 0, l = meshLoadData->Meshes.size(); m < l; ++m)
 			{
 				MeshData* meshData = meshLoadData->Meshes[m];
-				Material* material = meshLoadData->MaterialsMap[meshLoadData->MaterialIDs[m]];
-				material->SetShader(ShaderLibrary::GetInstance()->SelectShaderForMaterialAndMeshData(meshData, material));
-				meshComponents.push_back(new MeshComponent(meshData, material));
+				ShaderDescription* shaderDescription = ShaderLibrary::GetInstance()->GetShaderDescriptions()->at("MeshDefaultShader");
+				ShaderMaterial* shaderMaterial = new ShaderMaterial(shaderDescription);
+				Shader* shader = ShaderLibrary::GetInstance()->SelectShaderForShaderMaterialAndMeshData(meshData, shaderMaterial);
+				shaderMaterial->SetShaderPermutation(shader);
+				meshComponents.push_back(new MeshComponent(meshData, shaderMaterial));
 			}
 
 			delete meshLoadData;
@@ -222,7 +220,7 @@ namespace SupraHot
 				glBindVertexArray(meshData->VAOHandle);
 
 				// Determine index type and size
-				bool indices16Bit = true;
+				bool indices16Bit;
 				std::vector<uint16> Indices16BitVector;
 
 				if (modelMesh.IndexCount <= 0xffff)
