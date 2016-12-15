@@ -7,8 +7,17 @@
 
 	"Files" : 
 	{
-		"VertexShader" : "../GL/mesh.vs.glsl",
-		"PixelShader" : "../GL/mesh_default.fs.glsl"	
+		"GL" : 
+		{
+			"VertexShader" : "../GL/mesh.vs.glsl",
+			"PixelShader" : "../GL/mesh_default.fs.glsl"
+		},
+
+		"GLES3" : 
+		{
+			"VertexShader" : "Shaders/GLES3/mesh.vs.glsl",
+			"PixelShader" : "Shaders/GLES3/mesh_default.fs.glsl"
+		}	
 	},
  
 	"Defines" :
@@ -17,23 +26,13 @@
 
 		"DefinedWhen" : 
 		{
-			"_TestColor" : 
-			[
-				"Color"
-			],
-
-			"_NormalModifier" : 
-			[
-				"NormalMod",
-				"_Normals",
-				"_TestColor"
-			]
+			
 		}
 	},
 
 	"Dependencies" : 
 	{
-		"_TangentBiTangent" : 
+		"_TangentsBiTangents" : 
 		[
 			"_UV", 
 			"_Normals"

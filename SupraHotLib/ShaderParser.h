@@ -1,6 +1,7 @@
 #pragma once
 #include "Platform.h"
 #include <unordered_map>
+#include <vector>
 
 namespace SupraHot
 {

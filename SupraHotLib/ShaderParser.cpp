@@ -3,7 +3,6 @@
 #include "FileReader.h"
 #include <unordered_map>
 #include "FileSystem.h"
-#include <filesystem>
 #include "StringUtil.h"
 #include "ShaderDescription.h"
 
@@ -57,7 +56,12 @@ namespace SupraHot
 
 		ShaderDescription* ShaderParser::Parse(std::string pathToShaderDefinitionFile)
 		{
+			SHF_PRINTF("pathToShaderDefinitionFile = %s \n", pathToShaderDefinitionFile.c_str());
+
 			std::vector<std::string> fileContent = SupraHot::Utils::FileReader::GetInstance()->ReadFile(pathToShaderDefinitionFile);
+
+			SHF_PRINTF("fileContent size = %llu \n", fileContent.size());
+
 			std::string jsonFile = "";
 			for (std::string s : fileContent)
 			{
@@ -74,8 +78,13 @@ namespace SupraHot
 			std::string shaderName = json["Description"]["Name"].string_value();
 			std::string shaderDescription = json["Description"]["Description"].string_value();
 
-			std::string vertexShaderPath = json["Files"]["VertexShader"].string_value();
-			std::string pixelShaderPath = json["Files"]["PixelShader"].string_value();
+			std::string vertexShaderPath = json["Files"]["GL"]["VertexShader"].string_value();
+			std::string pixelShaderPath = json["Files"]["GL"]["PixelShader"].string_value();
+
+#ifdef PLATFORM_ANDROID
+			vertexShaderPath = json["Files"]["GLES3"]["VertexShader"].string_value();
+			pixelShaderPath = json["Files"]["GLES3"]["PixelShader"].string_value();
+#endif
 
 			bool vertexShaderExists = false;
 			bool pixelShaderExists = false;

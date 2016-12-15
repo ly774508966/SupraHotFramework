@@ -1,6 +1,7 @@
 #pragma once
 
-#define DEVELOPMENT 0
+#define DEVELOPMENT 1
+#define SHADERCOMPOSITION_OUTPUT 1
 
 #include <string>
 #include <cmath>

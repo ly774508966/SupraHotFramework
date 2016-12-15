@@ -86,16 +86,6 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 		entity->AddComponent(meshComponent);
 		
 		this->Entities.push_back(entity);
-
-		// Remove Albedomap & reselect a valid shader for the mesh component
-		/*meshComponent->GetMaterial()->GetAlbedoMap()->Destroy();
-		meshComponent->GetMaterial()->SetAlbedoMap(nullptr);
-
-		meshComponent->GetMaterial()->SetShader(
-			ShaderLibrary::GetInstance()->SelectShaderForMaterialAndMeshData(
-				meshComponent->GetMeshData(), meshComponent->GetMaterial()
-			)
-		);*/
 	}
 
 	std::vector<MeshComponent*> meshComponents = Utils::MeshDataLoader::GetInstance()->Load("Models/Sponza/Sponza_M.shfm");
@@ -108,9 +98,6 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 
 		entity->SetName(meshComponent->GetMeshData()->Name);
 	}
-
-
-	//SHF_PRINTF("MeshDataVector.size = %llu \n", MeshDataVector.size());
 
 	// Try to load a 2d .dds file
 	Texture2D* ddsTexture = new Texture2D("DDS Test");
@@ -134,7 +121,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 	DdsCubeTexture->SetWrapS(GL_CLAMP_TO_EDGE);
 	DdsCubeTexture->SetWrapT(GL_CLAMP_TO_EDGE);
 	DdsCubeTexture->SetWrapR(GL_CLAMP_TO_EDGE);
-	DdsCubeTexture->LoadDDS("Textures/MonValley_G_DirtRoad_3k/Specular.dds", true, true);
+	DdsCubeTexture->LoadDDS("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds", true, true);
 
 	Texture2D* sphereMap = new Texture2D("sphere map");
 	sphereMap->SetWrapS(GL_CLAMP_TO_EDGE);

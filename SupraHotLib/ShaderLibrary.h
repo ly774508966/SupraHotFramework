@@ -33,42 +33,17 @@ namespace SupraHot
 				Count
 			};
 
-			// For the G-Buffer
-			enum class MeshVertexShader
-			{
-				// Position is always required. duh.
-				Normal			 = BITSHIFT(0),
-				UV				 = BITSHIFT(1),
-				TangentBiTangent = BITSHIFT(2)
-			};
-
-			// For the G-Buffer
-			enum class MeshPixelShader
-			{
-				AlbedoMap		= BITSHIFT(3),
-				NormalMap		= BITSHIFT(4),
-				RoughnessMap	= BITSHIFT(5),
-				MetalnessMap	= BITSHIFT(6),
-				SpecularMap		= BITSHIFT(7),
-				ComboMap		= BITSHIFT(8)
-			};
-
-
 			static ShaderLibrary* GetInstance();
 			std::unordered_map<std::string, ShaderDescription*>* GetShaderDescriptions();
 			ShaderDescription* GetShaderDescription(Shader* shader);
 			std::unordered_map<uint64, Shader*>* GetShaders(ShaderDescription* shaderDescription);
 			std::unordered_map<uint64, Shader*>* GetShaders(std::string baseShaderName);
 
-
 			~ShaderLibrary();
 
 			Shader* Skybox[uint32(SkyboxShader::Count)] = {};
 			Shader* ScreenSpace[uint32(ScreenSpace::Count)] = {};
-			std::unordered_map<uint64, Shader*> MeshShaders;
-
-			Shader* SelectShaderForMaterialAndMeshData(Graphics::MeshData* meshData, Graphics::Material* material);
-
+			
 			Shader* SelectShaderForShaderMaterialAndMeshData(Graphics::MeshData* meshData, Graphics::ShaderMaterial* material);
 
 			void Initialize();
@@ -82,6 +57,7 @@ namespace SupraHot
 			ShaderLibrary();
 
 			bool ResolveDefinedWhen(std::string defineEntry, ShaderDescription* description, uint64 shaderIndex, std::vector<std::string>* alreadyProcessedProperties);
+			bool ResolveDependencies(std::string defineName, ShaderDescription* description, uint64 shaderIndex, std::vector<std::string>* alreadyProcessedProperties);
 		};
 	};
 };

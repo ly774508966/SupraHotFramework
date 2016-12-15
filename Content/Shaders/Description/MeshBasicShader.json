@@ -7,8 +7,17 @@
 
 	"Files" : 
 	{
-		"VertexShader" : "../GL/mesh.vs.glsl",
-		"PixelShader" : "../GL/mesh.fs.glsl"	
+		"GL" : 
+		{
+			"VertexShader" : "../GL/mesh.vs.glsl",
+			"PixelShader" : "../GL/mesh.fs.glsl"
+		},
+
+		"GLES3" : 
+		{
+			"VertexShader" : "Shaders/GLES3/mesh.vs.glsl",
+			"PixelShader" : "Shaders/GLES3/mesh.fs.glsl"
+		}	
 	},
  
 	"Defines" :
@@ -26,12 +35,7 @@
 			[
 				"NormalTexture"
 			],
-
-			"_RoughnessMap" : 
-			[
-				"RoughnessTexture"
-			],
-
+			
 			"_ModifyColor" : 
 			[
 				"DiffuseColor", 
@@ -58,26 +62,6 @@
 		[
 			"_UV", 
 			"_Normals"
-		],
-
-		"_RoughnessMap" : 
-		[
-			"_UV"
-		],
-
-		"_MetalnessMap" : 
-		[	
-			"_UV"
-		],
-
-		"_SpecularMap" : 
-		[
-			"_UV"
-		],
-
-		"_ComboMap" : 
-		[
-			"_UV"
 		]
 	}
 }

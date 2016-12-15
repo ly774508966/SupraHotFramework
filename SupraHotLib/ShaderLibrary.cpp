@@ -18,60 +18,6 @@ namespace SupraHot
 		{
 		}
 
-		Shader* ShaderLibrary::SelectShaderForMaterialAndMeshData(Graphics::MeshData* meshData, Graphics::Material* material)
-		{
-			uint64 shaderIndex = 0;
-
-			if (meshData->HasNormalData) 
-			{
-				shaderIndex |= uint64(MeshVertexShader::Normal);
-			}
-
-			if (meshData->HasUVData)
-			{
-				shaderIndex |= uint64(MeshVertexShader::UV);
-			}
-
-			if (meshData->HasTangentData || meshData->HasBiTangentData)
-			{
-				shaderIndex |= uint64(MeshVertexShader::TangentBiTangent);
-			}
-
-			if (material->GetAlbedoMap() != nullptr)
-			{
-				shaderIndex |= uint64(MeshPixelShader::AlbedoMap);
-			}
-
-			if (material->GetNormalMap() != nullptr)
-			{
-				shaderIndex |= uint64(MeshPixelShader::NormalMap);
-			}
-
-			if (material->GetRoughnessMap() != nullptr)
-			{
-				shaderIndex |= uint64(MeshPixelShader::RoughnessMap);
-			}
-
-			if (material->GetMetalnessMap() != nullptr)
-			{
-				shaderIndex |= uint64(MeshPixelShader::MetalnessMap);
-			}
-
-			if (material->GetSpecularMap() != nullptr)
-			{
-				shaderIndex |= uint64(MeshPixelShader::SpecularMap);
-			}
-
-			if (material->GetComboMap() != nullptr)
-			{
-				shaderIndex |= uint64(MeshPixelShader::ComboMap);
-			}
-#if DEVELOPMENT == 1
-			SHF_PRINTF("Selected %s for Mesh : %s \n", MeshShaders[shaderIndex]->GetName().c_str(), meshData->Name.c_str());
-#endif
-			return MeshShaders[shaderIndex];
-		}
-
 		Shader* ShaderLibrary::SelectShaderForShaderMaterialAndMeshData(Graphics::MeshData* meshData, Graphics::ShaderMaterial* material)
 		{
 			// first get description
@@ -103,6 +49,7 @@ namespace SupraHot
 				}
 
 				alreadyProcessedProperties.push_back(name);
+				printf("%s <- \n", name.c_str());
 			}
 
 			// these values are atm hardcoded
@@ -135,77 +82,144 @@ namespace SupraHot
 
 			{
 				// Now check the definedWhen-Map
-				// For this we need to use the property's real name and loop through the dependencies maps
+				// For this we need to use the property's real name and loop through the definedWhen map
 				typedef std::unordered_map<std::string, std::vector<std::string>>::iterator DefinedWhenIterator;
 				for (DefinedWhenIterator defIt = description->DefinedWhen.begin(); defIt != description->DefinedWhen.end(); ++defIt)
 				{
 					// Check if this define has dependencies on another definedWhen-attribute & if we can meet them
 					std::string defineName = defIt->first;
 					std::vector<std::string>* defineArray = &(defIt->second);
+
 					bool isDefined = true;
 
-					for (size_t i = 0, l = defineArray->size(); i < l; ++i)
+		/*			for (size_t i = 0, l = defineArray->size(); i < l; ++i)
 					{
 						std::string defineEntry = defineArray->at(i);
-						isDefined = ResolveDefinedWhen(defineEntry, description, shaderIndex, &alreadyProcessedProperties);
+						if (!ResolveDefinedWhen(defineEntry, description, shaderIndex, &alreadyProcessedProperties))
+						{
+							isDefined = false;
+							break;
+						}
+					}*/
+
+					if (isDefined)
+					{
+						isDefined = ResolveDependencies(defineName, description, shaderIndex, &alreadyProcessedProperties);
 					}
 
 					if (isDefined)
 					{
-						SHF_PRINTF("Defined %s \n", defineName.c_str());
-
-						// Check for deps.
-
+						SHF_PRINTF("Defined %s \n------\n\n", defineName.c_str());
 						uint64 propertyBitfieldIndex = description->BitShiftedIndices[defineName];
 						shaderIndex |= propertyBitfieldIndex;
 					}
+					else
+					{
+						SHF_PRINTF("NOT Defined %s \n------\n\n", defineName.c_str());
+					}
+
 				}
 			}
 
-
+			printf("shaderIndex = %llu \n", shaderIndex);
 			return shadersMap->at(shaderIndex);
 		}
 
 		bool ShaderLibrary::ResolveDefinedWhen(std::string defineEntry, ShaderDescription* description, uint64 shaderIndex, std::vector<std::string>* alreadyProcessedProperties)
 		{
-			// if entry begins with "_", we need to check for defines
-			if (defineEntry.find("_") == 0)
+			// in this case we are dealing with just an uniform (aka. material property)
+			// Check if it is already present.
+			if (std::find(alreadyProcessedProperties->begin(), alreadyProcessedProperties->end(), defineEntry) != alreadyProcessedProperties->end())
 			{
-				// check for deps. 
-				// Dependency is already met
-				uint64 bitFieldIndex = description->BitShiftedIndices[defineEntry];
-				if ((shaderIndex & bitFieldIndex) == bitFieldIndex)
-				{
-					return true;
-				}
-				else
-				{
-					
-					std::vector<std::string>* defindedWhen = &(description->DefinedWhen[defineEntry]);
-
-					bool isDefined = false;
-
-					for (size_t i = 0, l = defindedWhen->size(); i < l; ++i)
-					{
-						isDefined = ResolveDefinedWhen(defindedWhen->at(i), description, shaderIndex, alreadyProcessedProperties);
-					}
-
-					return isDefined;
-				}
+				return true;
 			}
 			else
 			{
-				// in this case we are dealing with just an uniform (aka. material property)
-				// Check if it is already present.
-				if (std::find(alreadyProcessedProperties->begin(), alreadyProcessedProperties->end(), defineEntry) != alreadyProcessedProperties->end())
+				return false;
+			}
+		}
+
+		bool ShaderLibrary::ResolveDependencies(std::string defineName, ShaderDescription* description, uint64 shaderIndex, std::vector<std::string>* alreadyProcessedProperties)
+		{
+#if SHADERCOMPOSITION_OUTPUT == 1
+			SHF_PRINTF("Resolve Dependencies for %s \n", defineName.c_str());
+#endif
+
+			// check for deps. 
+			// Dependency is already met
+			if (description->BitShiftedIndices.find(defineName) != description->BitShiftedIndices.end())
+			{
+				uint64 bitFieldIndex = description->BitShiftedIndices[defineName];
+				if ((shaderIndex & bitFieldIndex) == bitFieldIndex)
 				{
+#if SHADERCOMPOSITION_OUTPUT == 1
+					SHF_PRINTF("(shaderIndex & bitFieldIndex) == bitFieldIndex \n");
+#endif
 					return true;
 				}
-				else
-				{
-					return false;
-				}
 			}
+
+			// Loop through dependencies & check if they are defined
+			if (description->Dependencies.find(defineName) != description->Dependencies.end())
+			{
+#if SHADERCOMPOSITION_OUTPUT == 1
+				SHF_PRINTF(" -> \n");
+#endif
+				std::vector<std::string>* dependencies = &(description->Dependencies.at(defineName));
+
+				for (size_t di = 0, dl = dependencies->size(); di < dl; ++di)
+				{
+					std::string dependencyName = dependencies->at(di);
+
+					// hint: no need to check defines here, since we are going through it recursivley
+					// check if it is defined fist
+	
+					if (!ResolveDependencies(dependencyName, description, shaderIndex, alreadyProcessedProperties))
+					{
+						return false;
+					} 
+				}
+				
+				return true;
+			} 
+
+			// Check if it is defined
+			if (description->DefinedWhen.find(defineName) != description->DefinedWhen.end())
+			{
+				std::vector<std::string>* defineArray = &(description->DefinedWhen.at(defineName));
+
+				for (size_t i = 0, l = defineArray->size(); i < l; ++i)
+				{
+					std::string defineEntry = defineArray->at(i);
+#if SHADERCOMPOSITION_OUTPUT == 1
+					SHF_PRINTF("checking if %s can be defined \n", defineEntry.c_str());
+#endif
+					if (!ResolveDefinedWhen(defineEntry, description, shaderIndex, alreadyProcessedProperties))
+					{
+#if SHADERCOMPOSITION_OUTPUT == 1
+						SHF_PRINTF("No. \n");
+						SHF_PRINTF("%s could not be defined \n", defineName.c_str());
+#endif
+						return false;
+					}
+					else
+					{
+#if SHADERCOMPOSITION_OUTPUT == 1
+						SHF_PRINTF("Yes. \n");
+#endif
+					}
+				}
+
+#if SHADERCOMPOSITION_OUTPUT == 1
+				SHF_PRINTF("%s could be defined \n", defineName.c_str());
+#endif
+				return true;
+			}
+			
+#if SHADERCOMPOSITION_OUTPUT == 1
+			SHF_PRINTF("%s has no dependencies! \n", defineName.c_str());
+#endif
+			return true;
 		}
 
 		void ShaderLibrary::Initialize()
@@ -245,151 +259,7 @@ namespace SupraHot
 				ScreenSpace[uint32(ScreenSpace::RenderToScreen)] = fboShader;
 
 			}
-
-			{
-				ShaderCompileOptions opts;
-
-				uint32 shaderInputVertexAttribs = 3;
-				uint32 shaderInputTextures = 6;
-				
-				for (uint32 v = 0, vl = static_cast<uint32>(pow(2, shaderInputVertexAttribs)); v < vl; v++)
-				{
-					
-					std::vector<bool> vertexAttribBools = Utils::Utility::GetBoolCombinations(v, shaderInputVertexAttribs);
-
-					bool hasNormals = vertexAttribBools[0];
-					bool hasUV = vertexAttribBools[1];
-					bool hasTangentBiTangent = vertexAttribBools[2];
-
-					// if we have tangents but no normals, we can skip this shader
-					if (hasTangentBiTangent && !hasNormals)
-					{
-						continue;
-					}
-	
-					for (uint32 t = 0, tl = static_cast<uint32>(pow(2, shaderInputTextures)); t < tl; t++)
-					{
-						bool compileShader = true;
-
-						opts.Define("_Normals", hasNormals);
-						opts.Define("_UV", hasUV);
-						opts.Define("_TangentsBiTangents", hasTangentBiTangent);
-
-						std::vector<bool> textureBools = Utils::Utility::GetBoolCombinations(t, shaderInputTextures);
-
-						bool hasAlbedoMap = textureBools[0];
-						bool hasNormalMap = textureBools[1];
-						bool hasRoughnessMap = textureBools[2];
-						bool hasMetalnessMap = textureBools[3];
-						bool hasSpecularMap = textureBools[4];
-						bool hasComboMap = textureBools[5];
-
-						opts.Define("_AlbedoMap", hasAlbedoMap);
-						opts.Define("_NormalMap", hasNormalMap);
-						opts.Define("_RoughnessMap", hasRoughnessMap);
-						opts.Define("_MetalnessMap", hasMetalnessMap);
-						opts.Define("_SpecularMap", hasSpecularMap);
-						opts.Define("_ComboMap", hasComboMap);
-
-						// if we run into problems, we can comment this section out and load ALL possible permutations
-						// an then just skip the ones, which aren't compiling. LUL.
-
-						if (hasNormalMap && !hasNormals) // NormalMap set to true && Normals set to false
-						{
-							compileShader = false;
-						}
-						else if (hasNormalMap && !hasTangentBiTangent) // NormalMap set to true && Tangents set to false
-						{
-							compileShader = false;
-						}
-
-						if (!hasUV) // no UV's
-						{
-							if (hasAlbedoMap || hasNormalMap || hasRoughnessMap
-								|| hasMetalnessMap || hasSpecularMap || hasComboMap)
-							{
-								compileShader = false;
-							}
-
-						}
-
-						if (compileShader)
-						{
-							//Generate shader index
-							std::string shaderName = "";
-
-							uint64 shaderIndex = 0;
-							if (hasNormals)
-							{
-								shaderIndex |= uint64(MeshVertexShader::Normal);
-								shaderName += "Nrml | ";
-							}
-
-							if (hasUV)
-							{
-								shaderIndex |= uint64(MeshVertexShader::UV);
-								shaderName += "UV | ";
-							}
-
-							if (hasTangentBiTangent)
-							{
-								shaderIndex |= uint64(MeshVertexShader::TangentBiTangent);
-								shaderName += "TanBiTan | ";
-							}
-
-							if (hasAlbedoMap)
-							{
-								shaderIndex |= uint64(MeshPixelShader::AlbedoMap);
-								shaderName += "Albedo | ";
-							}
-
-							if (hasNormalMap)
-							{
-								shaderIndex |= uint64(MeshPixelShader::NormalMap);
-								shaderName += "NrmlM | ";
-							}
-
-							if (hasRoughnessMap)
-							{
-								shaderIndex |= uint64(MeshPixelShader::RoughnessMap);
-								shaderName += "Rgh | ";
-							}
-
-							if (hasMetalnessMap)
-							{
-								shaderIndex |= uint64(MeshPixelShader::MetalnessMap);
-								shaderName += "Mtl | ";
-							}
-
-							if (hasSpecularMap)
-							{
-								shaderIndex |= uint64(MeshPixelShader::SpecularMap);
-								shaderName += "Spec | ";
-							}
-
-							if (hasComboMap)
-							{
-								shaderIndex |= uint64(MeshPixelShader::ComboMap);
-								shaderName += "Cmb | ";
-							}
-
-							// Load shader with compile options.
-							Shader* shader = new Shader();
-							shader->SetName("Mesh: #" + std::to_string(shaderIndex) + " (" + shaderName + ")");
-							shader->LoadShaderFromFile(Shader::VERTEX_SHADER, directoryPath + "mesh.vs.glsl", opts);
-							shader->LoadShaderFromFile(Shader::PIXEL_SHADER, directoryPath + "mesh.fs.glsl", opts);
-							shader->CompileShader();
-							MeshShaders[shaderIndex] = shader;
-						}
-
-						opts.Reset();
-					}
-				}
-
-				SHF_PRINTF("Created %llu shader permutations \n", MeshShaders.size());
-			}
-
-
+			
 			// - - - - - - - - - - - - - - - - 
 			// Init shader descriptions
 			// - - - - - - - - - - - - - - - - 
@@ -531,8 +401,7 @@ namespace SupraHot
 					}
 				}
 
-				SHF_PRINTF("Created %llu permutations for %s \n", shaderCounter, shaderDescription->Name.c_str());
-
+				SHF_PRINTF("Created %llu permutations for %s\n\n", shaderCounter, shaderDescription->Name.c_str());
 			}
 		}
 
@@ -553,15 +422,6 @@ namespace SupraHot
 				Shader* shader = ScreenSpace[i];
 				if (shader != nullptr)
 				{
-					shader->Destroy();
-					delete shader;
-				}
-			}
-
-			{
-				typedef std::unordered_map<uint64, Shader*>::iterator it_type;
-				for (it_type iterator = MeshShaders.begin(); iterator != MeshShaders.end(); ++iterator) {
-					Shader* shader = iterator->second;
 					shader->Destroy();
 					delete shader;
 				}
