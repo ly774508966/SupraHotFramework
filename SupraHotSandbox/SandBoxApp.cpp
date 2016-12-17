@@ -169,8 +169,6 @@ void SandBoxApp::Render()
 
 void SandBoxApp::Update(float deltaTime)
 {
-	deltaTime = 0.016f;
-
 	window->SetClearColor(0.7f, 0.3f, 0.7f, 1.0f);
 
 	FlyCamera->ResetMatrices();
@@ -211,6 +209,8 @@ void SandBoxApp::Update(float deltaTime)
 	{
 		Entities.at(i)->Update(deltaTime);
 	}
+
+	//CalculateFPS(2.0);
 }
 
 void SandBoxApp::LateUpdate(float deltaTime)

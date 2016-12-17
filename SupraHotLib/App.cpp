@@ -68,7 +68,7 @@ namespace SupraHot
 	// lifecycle.
 	void App::Run()
 	{
-		while (true && !window->ShouldClose())
+		while (!window->ShouldClose())
 		{
 			ProgressApp();
 		}
@@ -80,13 +80,40 @@ namespace SupraHot
 		glViewport(0, 0, window->GetWidth(), window->GetHeight());
 
 		window->Clear();
+
+		Timer.Update();
+		float deltaTime = Timer.DeltaSecondsF();
+		float elapsed = Timer.ElapsedSecondsF();
 		
-		Update(0.0f);
-		LateUpdate(0.0f);
-		Tick(0.0f);
+		//while (ProcessedTime < UpdateTick)
+		{
+			Update(deltaTime);
+			LateUpdate(deltaTime);
 
-		Render();
+		//	ProcessedTime += deltaTime;
+			//printf("PT %f && < %d \n", ProcessedTime, (ProcessedTime < UpdateTick));
+		} 
+		//ProcessedTime = 0;
+		
+		{
+			// should Probally measure the amount of rendering time.
+			Render();
+			window->Update();
+			FPS++;
+		}
+		
+		if (elapsed - Time > 1.0f)
+		{
+			Time += 1.0f;
+			Tick(deltaTime);
+			
+			SHF_PRINTF("fps: %d \n", FPS);
+			FPS = 0;
+		}
+	}
 
-		window->Update();
+	void App::Loaded()
+	{
+		Timer.Update();
 	}
 };

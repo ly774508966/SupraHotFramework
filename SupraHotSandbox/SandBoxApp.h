@@ -3,6 +3,7 @@
 #include <FrameBufferObject.h>
 #include <SkyBox.h>
 #include <Entity.h>
+#include <Timer.h>
 
 class SandBoxApp : public SupraHot::App
 {

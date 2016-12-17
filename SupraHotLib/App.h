@@ -1,5 +1,6 @@
 #pragma once
 #include "Platform.h"
+#include "Timer.h"
 
 namespace SupraHot
 {
@@ -7,8 +8,14 @@ namespace SupraHot
 
 	class App
 	{
+	
 	protected:
 		Window* window;
+		Timer Timer;
+		float Time = 0.0f;
+		float UpdateTick = 1.0f / 60.0f;
+		float ProcessedTime = 0.0f;
+		uint32 FPS = 0;
 
 	public:
 		App();
@@ -24,6 +31,7 @@ namespace SupraHot
 
 		void Run();
 		void ProgressApp();
+		void Loaded();
 		static App* GetMainApp();
 	};
 };

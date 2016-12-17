@@ -33,6 +33,17 @@ namespace SupraHot
 				Count
 			};
 
+			// This BRDF-Types dictate how the given material should be rendererd
+			// and through which post-processing passses it needs to go.
+			enum class BRDFTypes
+			{
+				None	= 0x0,
+				GGX		= BITSHIFT(0),
+				Skin	= BITSHIFT(1),
+				Cloth	= BITSHIFT(2),
+				Hair	= BITSHIFT(3)
+			};
+
 			static ShaderLibrary* GetInstance();
 			std::unordered_map<std::string, ShaderDescription*>* GetShaderDescriptions();
 			ShaderDescription* GetShaderDescription(Shader* shader);

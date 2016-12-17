@@ -1,5 +1,6 @@
 #pragma once
 #include "MaterialProperty.h"
+#include <string>
 
 namespace SupraHot
 {

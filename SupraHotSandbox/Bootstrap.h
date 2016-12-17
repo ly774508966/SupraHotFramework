@@ -14,8 +14,8 @@ namespace SupraHot
 	namespace Bootstrap
 	{
 		typedef SandBoxApp MAIN_APP;
-		const uint32 WindowWith = 640;
-		const uint32 WindowHeight = 640;
+		const uint32 WindowWith = 1280;
+		const uint32 WindowHeight = 720;
 		const std::string WindowTitle = "Supra Hot Sandbox App";
 	};
 };

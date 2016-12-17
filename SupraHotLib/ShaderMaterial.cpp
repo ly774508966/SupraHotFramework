@@ -2,6 +2,10 @@
 #include "ShaderLibrary.h"
 #include "ShaderDescription.h"
 #include "Vec3MaterialProperty.h"
+#include "BooleanMaterialProperty.h"
+#include "Vec2MaterialProperty.h"
+#include "Vec4MaterialProperty.h"
+#include "FloatMaterialProperty.h"
 
 namespace SupraHot
 {
@@ -26,10 +30,33 @@ namespace SupraHot
 				std::string type = iterator->second;
 
 				// todo: need to do an "isInternal" check...
-
-				if (type == "vec3")
+				if (type == "float")
+				{
+					AddMaterialProperty(new FloatMaterialProperty(name));
+				}
+				else if (type == "bool")
+				{
+					AddMaterialProperty(new BooleanMaterialProperty(name));
+				}
+				else if (type == "vec2")
+				{
+					AddMaterialProperty(new Vec2MaterialProperty(name));
+				}
+				else if (type == "vec3")
 				{
 					AddMaterialProperty(new Vec3MaterialProperty(name));
+				}
+				else if (type == "vec4")
+				{
+					AddMaterialProperty(new Vec4MaterialProperty(name));
+				}
+				else if (type == "texture2D")
+				{
+
+				}
+				else if (type == "textureCube")
+				{
+
 				}
 
 			}

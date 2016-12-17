@@ -217,6 +217,11 @@ namespace SupraHot
 			glUniform4f(location, v.x, v.y, v.z, w);
 		}
 
+		void Shader::SetVec4(int location, const Vec4& v)
+		{
+			glUniform4f(location, v.x, v.y, v.z, v.w);
+		}
+
 		void Shader::SetMat3(int location, const Mat4& mat)
 		{
 			float mat3[3][3];

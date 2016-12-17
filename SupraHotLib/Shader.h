@@ -3,6 +3,7 @@
 #include "ShaderCompileOptions.h"
 #include "Vec2.h"
 #include "Vec3.h"
+#include "Vec4.h"
 #include "Mat4.h"
 
 namespace SupraHot
@@ -57,6 +58,7 @@ namespace SupraHot
 			void SetVec2(int location, const Vec2& v);
 			void SetVec3(int location, const Vec3& v);
 			void SetVec4(int location, const Vec3& v, float w);
+			void SetVec4(int location, const Vec4& v);
 			void SetMat3(int location, const Mat4& m);
 			void SetMat4(int location, const Mat4& m);
 			void SetTexture2D(int location, Texture2D* texture2d, int slot);

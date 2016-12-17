@@ -213,6 +213,8 @@
       <SDLCheck>true</SDLCheck>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -285,6 +287,7 @@
     <ClInclude Include="Face.h" />
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="FileSystem.h" />
+    <ClInclude Include="FloatMaterialProperty.h" />
     <ClInclude Include="FrameBufferObject.h" />
     <ClInclude Include="FullScreenQuad.h" />
     <ClInclude Include="LuaVM.h" />
@@ -324,11 +327,15 @@
     </ClInclude>
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureCube.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Vec2.h" />
+    <ClInclude Include="Vec2MaterialProperty.h" />
     <ClInclude Include="Vec3.h" />
     <ClInclude Include="Vec3MaterialProperty.h" />
+    <ClInclude Include="Vec4.h" />
+    <ClInclude Include="Vec4MaterialProperty.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="WindowAndroid.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -366,6 +373,7 @@
     <ClCompile Include="Face.cpp" />
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="FileSystem.cpp" />
+    <ClCompile Include="FloatMaterialProperty.cpp" />
     <ClCompile Include="FrameBufferObject.cpp" />
     <ClCompile Include="FullScreenQuad.cpp" />
     <ClCompile Include="LuaVM.cpp" />
@@ -399,11 +407,15 @@
     <ClCompile Include="SubscriberComponent.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureCube.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Vec2.cpp" />
+    <ClCompile Include="Vec2MaterialProperty.cpp" />
     <ClCompile Include="Vec3.cpp" />
     <ClCompile Include="Vec3MaterialProperty.cpp" />
+    <ClCompile Include="Vec4.cpp" />
+    <ClCompile Include="Vec4MaterialProperty.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="WindowAndroid.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
