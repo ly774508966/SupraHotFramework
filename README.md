@@ -15,6 +15,8 @@ Otherwise it won't find the library on app start
 + 32 bpp bgr -> (RGBA8)
 
 ## Compressed dds files won't be supported
+But then even use .dds??
++ cube maps.
 
 # Supported platforms
 ## Windows
