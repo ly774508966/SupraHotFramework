@@ -11,6 +11,7 @@ namespace SupraHot
 
 		Vec3MaterialProperty::~Vec3MaterialProperty()
 		{
+
 		}
 
 		void Vec3MaterialProperty::Apply(Shader* shader)

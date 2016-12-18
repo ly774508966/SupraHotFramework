@@ -19,6 +19,8 @@
 			"PixelShader" : "Shaders/GLES3/mesh_default.fs.glsl"
 		}	
 	},
+
+	"BRDF" : "None",
  
 	"Defines" :
 	{

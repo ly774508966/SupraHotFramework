@@ -35,13 +35,14 @@ namespace SupraHot
 
 			// This BRDF-Types dictate how the given material should be rendererd
 			// and through which post-processing passses it needs to go.
-			enum class BRDFTypes
+			enum class BRDFType
 			{
 				None	= 0x0,
 				GGX		= BITSHIFT(0),
 				Skin	= BITSHIFT(1),
 				Cloth	= BITSHIFT(2),
-				Hair	= BITSHIFT(3)
+				Hair	= BITSHIFT(3),
+				Eye		= BITSHIFT(4)
 			};
 
 			static ShaderLibrary* GetInstance();

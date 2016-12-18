@@ -1,38 +1,30 @@
-#include <FileSystem.h>
-#include <iostream>
-
 #include "Platform.h"
+#include <FileSystem.h>
 #include "SandBoxApp.h"
-#include "Shader.h"
 #include "MeshComponent.h"
 
 #ifdef PLATFORM_ANDROID
-#include "WindowAndroid.h"
-#include <android/asset_manager.h>
-#include <android/asset_manager_jni.h>
+	#include "WindowAndroid.h"
+	#include <android/asset_manager.h>
+	#include <android/asset_manager_jni.h>
 #endif
 
 #ifdef PLATFORM_WINDOWS
-#include "WindowWin32.h"
-#include "stdafx.h"
-#include <tchar.h>
-#include <Controls.h>
+	#include "WindowWin32.h"
+	#include <Controls.h>
 #endif
 
 #ifdef PLATFORM_EMSCRIPTEN
-#include "WindowEmscripten.h"
+	#include "WindowEmscripten.h"
 #endif
 
 #include <MeshDataLoader.h>
 #include <LuaVM.h>
-#include <SHFMBinaryLoader.h>
-#include "Platform.h"
 #include <TextureCube.h>
 #include <SkyBox.h>
 #include <MeshDataRenderer.h>
 #include <ShaderLibrary.h>
-#include <BooleanMaterialProperty.h>
-#include <ShaderParser.h>
+
 
 using namespace SupraHot;
 

@@ -72,6 +72,21 @@
     <ClInclude Include="MeshComponentCLI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Vec2CLI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec4CLI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec2MaterialPropertyCLI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec4MaterialPropertyCLI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FloatMaterialPropertyCLI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowEditor.cpp">
@@ -126,6 +141,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MeshComponentCLI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vec2CLI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vec4CLI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vec2MaterialPropertyCLI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vec4MaterialPropertyCLI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FloatMaterialPropertyCLI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

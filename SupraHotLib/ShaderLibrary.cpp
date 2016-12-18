@@ -49,8 +49,10 @@ namespace SupraHot
 				}
 
 				alreadyProcessedProperties.push_back(name);
-				printf("%s <- \n", name.c_str());
+				SHF_PRINTF("%s <- \n", name.c_str());
 			}
+
+			SHF_PRINTF("BRDF Type: %d \n", static_cast<uint32>(description->BRDFType));
 
 			// these values are atm hardcoded
 			// TODO: store these somewhere globally available, 
@@ -88,19 +90,8 @@ namespace SupraHot
 				{
 					// Check if this define has dependencies on another definedWhen-attribute & if we can meet them
 					std::string defineName = defIt->first;
-					std::vector<std::string>* defineArray = &(defIt->second);
 
 					bool isDefined = true;
-
-		/*			for (size_t i = 0, l = defineArray->size(); i < l; ++i)
-					{
-						std::string defineEntry = defineArray->at(i);
-						if (!ResolveDefinedWhen(defineEntry, description, shaderIndex, &alreadyProcessedProperties))
-						{
-							isDefined = false;
-							break;
-						}
-					}*/
 
 					if (isDefined)
 					{

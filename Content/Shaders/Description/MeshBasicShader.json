@@ -19,6 +19,8 @@
 			"PixelShader" : "Shaders/GLES3/mesh.fs.glsl"
 		}	
 	},
+
+	"BRDF" : "GGX",
  
 	"Defines" :
 	{

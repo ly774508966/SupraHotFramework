@@ -1,6 +1,9 @@
 #include "MaterialCLI.h"
 #include "BooleanMaterialPropertyCLI.h"
+#include "FloatMaterialPropertyCLI.h"
+#include "Vec2MaterialPropertyCLI.h"
 #include "Vec3MaterialPropertyCLI.h"
+#include "Vec4MaterialPropertyCLI.h"
 #include <msclr\marshal_cppstd.h>
 
 namespace SupraHot
@@ -33,12 +36,32 @@ namespace SupraHot
 			{
 				SupraHot::Graphics::MaterialProperty* materialProperty = materialProperties->at(i);
 
+				SHF_PRINTF("Material type => %s \n", materialProperty->GetType().c_str());
+
 				if (materialProperty->GetType() == "Boolean")
 				{
 					mpcis->Add(
 						gcnew SupraHot::CLI::BooleanMaterialPropertyCLI
 						(
 							static_cast<SupraHot::Graphics::BooleanMaterialProperty*>(materialProperty)
+						)
+					);
+				}
+				else if (materialProperty->GetType() == "Float")
+				{
+					mpcis->Add(
+						gcnew SupraHot::CLI::FloatMaterialPropertyCLI
+						(
+						static_cast<SupraHot::Graphics::FloatMaterialProperty*>(materialProperty)
+						)
+						);
+				}
+				else if (materialProperty->GetType() == "Vec2")
+				{
+					mpcis->Add(
+						gcnew SupraHot::CLI::Vec2MaterialPropertyCLI
+						(
+							static_cast<SupraHot::Graphics::Vec2MaterialProperty*>(materialProperty)
 						)
 					);
 				}
@@ -51,7 +74,22 @@ namespace SupraHot
 						)
 					);
 				}
+				else if (materialProperty->GetType() == "Vec4")
+				{
+					mpcis->Add(
+						gcnew SupraHot::CLI::Vec4MaterialPropertyCLI
+						(
+							static_cast<SupraHot::Graphics::Vec4MaterialProperty*>(materialProperty)
+						)
+					);
+				}
 
+
+
+				// #4 Create MaterialPropertiesLIB for Texture2D & TextureCube
+				// #5 Craete MaterialPRopertiesCLI for "" & ""
+				// #6 Create CLI structs for Texture2d & texturecube
+				// #7 wire them up here, and in the lib, + C# FrontEnd.
 
 			}
 

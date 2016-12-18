@@ -18,12 +18,7 @@ out vec4 FragColor;
 uniform vec3 Color;
 uniform vec3 DirLight;
 uniform mat4 ViewMatrix;
-
-uniform bool TestBool;
-uniform float TestValue;
-uniform vec2 TestVec2;
-uniform vec3 TestVec3;
-uniform vec4 TestVec4;
+uniform float ColorAlpha;
 
 void main() {
 	#if _Normals

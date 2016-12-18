@@ -6,6 +6,7 @@ namespace SupraHot
 	{
 		Vec4MaterialProperty::Vec4MaterialProperty(std::string name) : MaterialProperty(name)
 		{
+			Type = "Vec4";
 		}
 
 		Vec4MaterialProperty::~Vec4MaterialProperty()

@@ -2,7 +2,6 @@
 #include "FileReader.h"
 #include "Texture2D.h"
 #include "TextureCube.h"
-#include <iostream>
 
 namespace SupraHot
 {

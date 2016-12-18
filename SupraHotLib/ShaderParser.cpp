@@ -78,6 +78,34 @@ namespace SupraHot
 			std::string shaderName = json["Description"]["Name"].string_value();
 			std::string shaderDescription = json["Description"]["Description"].string_value();
 
+			std::string brdfType = json["BRDF"].string_value();
+			ShaderLibrary::BRDFType brdf = ShaderLibrary::BRDFType::None;
+
+			if (brdfType.length() > 0)
+			{
+				if (brdfType.find("GGX") != -1)
+				{
+					brdf = ShaderLibrary::BRDFType::GGX;
+				}
+				else if (brdfType.find("Skin") != -1)
+				{
+					brdf = ShaderLibrary::BRDFType::Skin;
+				}
+				else if (brdfType.find("Cloth") != -1)
+				{
+					brdf = ShaderLibrary::BRDFType::Cloth;
+				}
+				else if (brdfType.find("Hair") != -1)
+				{
+					brdf = ShaderLibrary::BRDFType::Hair;
+				}
+				else if (brdfType.find("Eye") != -1)
+				{
+					brdf = ShaderLibrary::BRDFType::Eye;
+				}
+			}
+
+
 			std::string vertexShaderPath = json["Files"]["GL"]["VertexShader"].string_value();
 			std::string pixelShaderPath = json["Files"]["GL"]["PixelShader"].string_value();
 
@@ -234,6 +262,7 @@ namespace SupraHot
 			ShaderDescription* description = new ShaderDescription();
 			description->Name = shaderName;
 			description->Description = shaderDescription;
+			description->BRDFType = brdf;
 			description->Dependencies = dependenciesMap;
 			description->DefinedWhen = definedWhenMap;
 			description->Uniforms = uniformNameToUniformTypeMap;
