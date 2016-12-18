@@ -6,6 +6,8 @@
 #include "Vec2MaterialProperty.h"
 #include "Vec4MaterialProperty.h"
 #include "FloatMaterialProperty.h"
+#include "Texture2DMaterialProperty.h"
+#include "TextureCubeMaterialProperty.h"
 
 namespace SupraHot
 {
@@ -50,13 +52,15 @@ namespace SupraHot
 				{
 					AddMaterialProperty(new Vec4MaterialProperty(name));
 				}
-				else if (type == "texture2D")
+				else if (type == "sampler2D")
 				{
-
+					// this actually maps "sampler2D" to "Texture2D"
+					AddMaterialProperty(new Texture2DMaterialProperty(name));
 				}
-				else if (type == "textureCube")
+				else if (type == "samplerCube")
 				{
-
+					// this actually maps "samplerCube" to "TextureCube"
+					AddMaterialProperty(new TextureCubeMaterialProperty(name));
 				}
 
 			}

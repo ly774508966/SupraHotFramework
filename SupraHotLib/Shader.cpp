@@ -59,6 +59,7 @@ namespace SupraHot
 		void Shader::Attach()
 		{
 			glUseProgram(ShaderProgrammID);
+			LastUsedTextureSlot = 0;
 		}
 
 		void Shader::Detach()

@@ -4,6 +4,8 @@
 #include "Vec2MaterialPropertyCLI.h"
 #include "Vec3MaterialPropertyCLI.h"
 #include "Vec4MaterialPropertyCLI.h"
+#include "Texture2DMaterialPropertyCLI.h"
+#include "TextureCubeMaterialPropertyCLI.h"
 #include <msclr\marshal_cppstd.h>
 
 namespace SupraHot
@@ -82,14 +84,25 @@ namespace SupraHot
 							static_cast<SupraHot::Graphics::Vec4MaterialProperty*>(materialProperty)
 						)
 					);
+				} 
+				else if (materialProperty->GetType() == "Texture2D")
+				{
+					mpcis->Add(
+						gcnew SupraHot::CLI::Texture2DMaterialPropertyCLI
+						(
+							static_cast<SupraHot::Graphics::Texture2DMaterialProperty*>(materialProperty)
+						)
+					);
 				}
-
-
-
-				// #4 Create MaterialPropertiesLIB for Texture2D & TextureCube
-				// #5 Craete MaterialPRopertiesCLI for "" & ""
-				// #6 Create CLI structs for Texture2d & texturecube
-				// #7 wire them up here, and in the lib, + C# FrontEnd.
+				else if (materialProperty->GetType() == "TextureCube")
+				{
+					mpcis->Add(
+						gcnew SupraHot::CLI::TextureCubeMaterialPropertyCLI
+						(
+							static_cast<SupraHot::Graphics::TextureCubeMaterialProperty*>(materialProperty)
+						)
+					);
+				}
 
 			}
 

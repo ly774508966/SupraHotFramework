@@ -326,7 +326,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="Texture2DMaterialProperty.h" />
+    <ClInclude Include="TextureCache.h" />
     <ClInclude Include="TextureCube.h" />
+    <ClInclude Include="TextureCubeMaterialProperty.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Utility.h" />
@@ -406,7 +409,10 @@
     <ClCompile Include="Subscriber.cpp" />
     <ClCompile Include="SubscriberComponent.cpp" />
     <ClCompile Include="Texture2D.cpp" />
+    <ClCompile Include="Texture2DMaterialProperty.cpp" />
+    <ClCompile Include="TextureCache.cpp" />
     <ClCompile Include="TextureCube.cpp" />
+    <ClCompile Include="TextureCubeMaterialProperty.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utility.cpp" />

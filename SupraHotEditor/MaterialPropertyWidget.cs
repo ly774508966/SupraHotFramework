@@ -21,6 +21,7 @@ namespace SupraHotEditor
             this.MaterialPropertyCommonInterface = materialPropertyCommonInterface;
             this.Type = materialPropertyCommonInterface.GetType();
             this.Text = materialPropertyCommonInterface.GetName() + " (" + this.Type + ")";
+            this.Width = 130;
 
             groupBoxFlowLayout = new FlowLayoutPanel();
             groupBoxFlowLayout.Dock = DockStyle.Fill;
@@ -287,13 +288,57 @@ namespace SupraHotEditor
                    }
                );
             }
-            else if (Type == "Texture2D")
+            else if (Type == "Texture2D") 
             {
-                // todo:
+                Label pathLabel = new Label();
+                pathLabel.Text = "Path:";
+
+                Label thePath = new Label();
+                thePath.Text = ((Texture2DMaterialPropertyCLI)this.MaterialPropertyCommonInterface).GetValue();
+
+                Button loadImageButton = new Button();
+                loadImageButton.Text = "Load";
+
+                loadImageButton.Click += new EventHandler(
+                    delegate(object sender, EventArgs e)
+                    {
+
+                        Console.WriteLine("Button clicked. Open Dialog and let user select image.");
+
+                        Form1.UpdateView();
+                    }
+                );
+
+                groupBoxFlowLayout.Controls.Add(pathLabel);
+                groupBoxFlowLayout.Controls.Add(thePath);
+
+                groupBoxFlowLayout.Controls.Add(loadImageButton);
             }
             else if (Type == "TextureCube")
-            { 
-                // todo:
+            {
+                Label pathLabel = new Label();
+                pathLabel.Text = "Path:";
+
+                Label thePath = new Label();
+                thePath.Text = ((TextureCubeMaterialPropertyCLI)this.MaterialPropertyCommonInterface).GetValue();
+
+                Button loadImageButton = new Button();
+                loadImageButton.Text = "Load";
+
+                loadImageButton.Click += new EventHandler(
+                    delegate(object sender, EventArgs e)
+                    {
+
+                        Console.WriteLine("Button clicked. Open Dialog and let user select image.");
+
+                        Form1.UpdateView();
+                    }
+                );
+
+                groupBoxFlowLayout.Controls.Add(pathLabel);
+                groupBoxFlowLayout.Controls.Add(thePath);
+
+                groupBoxFlowLayout.Controls.Add(loadImageButton);
             }
         }
     }

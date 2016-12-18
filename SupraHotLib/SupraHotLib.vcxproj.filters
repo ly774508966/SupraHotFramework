@@ -276,6 +276,15 @@
     <ClInclude Include="Timer.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="TextureCache.h">
+      <Filter>Header Files\Graphics\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2DMaterialProperty.h">
+      <Filter>Header Files\Graphics\Common\MaterialProperties</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureCubeMaterialProperty.h">
+      <Filter>Header Files\Graphics\Common\MaterialProperties</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -445,6 +454,15 @@
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureCache.cpp">
+      <Filter>Source Files\Graphics\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture2DMaterialProperty.cpp">
+      <Filter>Source Files\Graphics\Common\MaterialProperties</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureCubeMaterialProperty.cpp">
+      <Filter>Source Files\Graphics\Common\MaterialProperties</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

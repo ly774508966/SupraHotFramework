@@ -15,16 +15,20 @@ out vec4 FragColor;
 	in mat3 TangentToViewMatrix;
 #endif
 
+// Exposed to the front end
 uniform vec3 Color;
 uniform vec3 DirLight;
+uniform vec3 LightColor;
+
+// Not exposed inside the editor
 uniform mat4 ViewMatrix;
-uniform float ColorAlpha;
 
 void main() {
 	#if _Normals
 		//vec3 dirVS = (ViewMatrix * vec4(DirLight, 0)).xyz;
 		//float nDotL = clamp(dot(NormalVS, normalize(dirVS)), 0, 1);
-		//FragColor = vec4(Color * nDotL, 1.0);
+		//FragColor = vec4(Color * nDotL * LightColor, 1.0);
+		
 		FragColor = vec4(NormalVS, 1);
 	#elif
 		FragColor = vec4(VertexPositionVS, 1);

@@ -87,6 +87,12 @@
     <ClInclude Include="FloatMaterialPropertyCLI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Texture2DMaterialPropertyCLI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureCubeMaterialPropertyCLI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowEditor.cpp">
@@ -156,6 +162,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FloatMaterialPropertyCLI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture2DMaterialPropertyCLI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureCubeMaterialPropertyCLI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -29,8 +29,9 @@ namespace SupraHot
 
 		protected:
 			std::string Name;
-
+			
 		public:
+			int LastUsedTextureSlot = 0;
 
 			// Shader enum
 			enum ShaderType 
@@ -62,7 +63,7 @@ namespace SupraHot
 			void SetMat3(int location, const Mat4& m);
 			void SetMat4(int location, const Mat4& m);
 			void SetTexture2D(int location, Texture2D* texture2d, int slot);
-			void SetTextureCube(int location, TextureCube* texture2d, int slot);
+			void SetTextureCube(int location, TextureCube* textureCube, int slot);
 			uint32 GetUniformLocation(std::string name);
 
 			// GL specific
