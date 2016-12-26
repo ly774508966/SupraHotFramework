@@ -18,6 +18,7 @@ namespace SupraHotEditor
             Application.SetCompatibleTextRenderingDefault(false);
 
             var form = new Form1();
+            form.Text = "Supra Hot Framework";
             Application.Run(form);
         }
     }

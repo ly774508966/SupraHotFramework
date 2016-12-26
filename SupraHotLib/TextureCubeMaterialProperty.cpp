@@ -31,22 +31,27 @@ namespace SupraHot
 
 			if (Value != pathToTexture)
 			{
-				if (TextureCache::GetInstance()->IsCachedTexture2D(pathToTexture))
+				if (TextureCache::GetInstance()->IsCachedTextureCube(Value))
 				{
-					if (TextureCache::GetInstance()->IsCachedTextureCube(Value))
-					{
-						TextureCache::GetInstance()->FreeAndDeleteTexture(Texture);
-						Texture = nullptr;
-					}
-					else
-					{
-						Texture->Destroy();
-						delete Texture;
-						Texture = nullptr;
-					}
+					//TextureCache::GetInstance()->FreeAndDeleteTexture(Texture);
+					Texture = nullptr;
+				}
+				else
+				{
+					Texture->Destroy();
+					delete Texture;
+					Texture = nullptr;
+				}
 
-					Texture = TextureCache::GetInstance()->GetCachedTextureCube(pathToTexture);
+
+				if (TextureCache::GetInstance()->IsCachedTextureCube(pathToTexture))
+				{
+					//Texture = TextureCache::GetInstance()->GetCachedTextureCube(pathToTexture);
 					Value = pathToTexture;
+				} 
+				else
+				{
+					// todo: Check if file exist and load texture
 				}
 			}
 

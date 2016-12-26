@@ -90,41 +90,62 @@ namespace SupraHot
 
 			if (meshData->HasPositionData)
 			{
-				uint32 vertexPositionAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexPosition");
-				glEnableVertexAttribArray(vertexPositionAttrib);
-				glVertexAttribPointer(vertexPositionAttrib, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+				// TODO: make the location attribs "static" to a shader permutation.
+				int vertexPositionAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexPosition");
+				if (vertexPositionAttrib > -1)
+				{
+					glEnableVertexAttribArray(vertexPositionAttrib);
+					glVertexAttribPointer(vertexPositionAttrib, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+				}
+
 				offset += meshData->VertexCount * 3 * sizeof(float);
 			}
-
+			
 			if (meshData->HasNormalData)
 			{
-				uint32 vertexNormalAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexNormal");
-				glEnableVertexAttribArray(vertexNormalAttrib);
-				glVertexAttribPointer(vertexNormalAttrib, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(offset));
+				int vertexNormalAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexNormal");
+				if (vertexNormalAttrib > -1)
+				{
+					glEnableVertexAttribArray(vertexNormalAttrib);
+					glVertexAttribPointer(vertexNormalAttrib, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(offset));
+				}
+
 				offset += meshData->VertexCount * 3 * sizeof(float);
 			}
 
 			if (meshData->HasUVData)
 			{
-				uint32 vertexUVAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexUV");
-				glEnableVertexAttribArray(vertexUVAttrib);
-				glVertexAttribPointer(vertexUVAttrib, 2, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(offset));
+				int vertexUVAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexUV");
+				if (vertexUVAttrib > -1)
+				{
+					glEnableVertexAttribArray(vertexUVAttrib);
+					glVertexAttribPointer(vertexUVAttrib, 2, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(offset));
+				}
+
 				offset += meshData->VertexCount * 2 * sizeof(float);
 			}
 
 			if (meshData->HasTangentData)
 			{
-				uint32 vertexTangentAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexTangent");
-				glEnableVertexAttribArray(vertexTangentAttrib);
-				glVertexAttribPointer(vertexTangentAttrib, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(offset));
+				int vertexTangentAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexTangent");
+				if (vertexTangentAttrib > -1)
+				{
+					glEnableVertexAttribArray(vertexTangentAttrib);
+					glVertexAttribPointer(vertexTangentAttrib, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(offset));
+				}
+
 				offset += meshData->VertexCount * 3 * sizeof(float);
 			}
 
 			if (meshData->HasBiTangentData)
 			{
-				uint32 vertexBiTangentAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexBiTangent");
-				glEnableVertexAttribArray(vertexBiTangentAttrib);
-				glVertexAttribPointer(vertexBiTangentAttrib, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(offset));
+				int vertexBiTangentAttrib = glGetAttribLocation(shader->GetShaderID(), "VertexBiTangent");
+				if (vertexBiTangentAttrib > -1)
+				{
+					glEnableVertexAttribArray(vertexBiTangentAttrib);
+					glVertexAttribPointer(vertexBiTangentAttrib, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(offset));
+				}
+
 				offset += meshData->VertexCount * 3 * sizeof(float);
 			}
 

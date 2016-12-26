@@ -13,26 +13,28 @@ namespace SupraHot
 		private:
 			TextureCache();
 			
-			std::unordered_map<std::string, Texture2D*> Texture2Ds;
-			std::unordered_map<std::string, TextureCube*> TextureCubes;
+			std::unordered_map<std::string, Texture2DPtr> Texture2Ds;
+			std::unordered_map<std::string, TextureCubePtr> TextureCubes;
 
-				public:
-				~TextureCache();
+			public:
+			~TextureCache();
+
 			static TextureCache* GetInstance();
 			bool IsCachedTexture2D(std::string pathToTexture);
 			bool IsCachedTextureCube(std::string pathToTexture);
 			
-			Texture2D* GetCachedTexture2D(std::string pathToTexture);
-			TextureCube* GetCachedTextureCube(std::string pathToTexture);
+			Texture2DPtr GetCachedTexture2D(std::string pathToTexture);
+			TextureCubePtr GetCachedTextureCube(std::string pathToTexture);
 
-			void CacheTexture(Texture2D* texture2d);
-			void CacheTexture(TextureCube* textureCube);
+			void CacheTexture(Texture2DPtr texture2d);
+			void CacheTexture(TextureCubePtr textureCube);
 
-			void FreeTexture(Texture2D* texture2d);
-			void FreeTexture(TextureCube* textureCube);
+			void FreeTexture(Texture2DPtr& texture2d);
+			void FreeTexture(TextureCubePtr& textureCube);
 
-			void FreeAndDeleteTexture(Texture2D* texture2d);
-			void FreeAndDeleteTexture(TextureCube* textureCube);
+			Texture2DPtr WrapTexture(Texture2D* texture2D);
+			TextureCubePtr WrapTexture(TextureCube* textureCube);
+
 		};
 	};
 };

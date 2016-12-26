@@ -1,5 +1,6 @@
 #pragma once
 #include "Platform.h"
+#include <memory>
 
 namespace SupraHot
 {
@@ -8,7 +9,7 @@ namespace SupraHot
 		class Texture2D
 		{
 		private:
-			uint32 TextureID;
+			uint32 TextureID = 0;
 			std::string Path;
 			std::string Name;
 			uint32 Width, Height;
@@ -53,5 +54,8 @@ namespace SupraHot
 
 			void Destroy();
 		};
+
+		typedef std::shared_ptr<Texture2D> Texture2DPtr;
+
 	};
 };

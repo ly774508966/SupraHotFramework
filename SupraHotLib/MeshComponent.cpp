@@ -19,7 +19,7 @@ namespace SupraHot
 	void MeshComponent::Registered()
 	{
 #if DEVELOPMENT == 1
-		SHF_PRINTF("Registered MeshComponent\nAdded to MeshDataRenderer\n");
+		//SHF_PRINTF("Registered MeshComponent\nAdded to MeshDataRenderer\n");
 #endif
 		MeshDataRenderer::GetInstance().AddMeshComponent(this);
 	}
@@ -27,7 +27,7 @@ namespace SupraHot
 	void MeshComponent::Removed()
 	{
 #if DEVELOPMENT == 1
-		SHF_PRINTF("Removed MeshComponent\nRemoved from MeshDataRenderer\n");
+		//SHF_PRINTF("Removed MeshComponent\nRemoved from MeshDataRenderer\n");
 #endif
 		MeshDataRenderer::GetInstance().RemoveMeshComponent(this);
 	}
@@ -35,8 +35,8 @@ namespace SupraHot
 	void MeshComponent::Destroy()
 	{
 #if DEVELOPMENT == 1
-		SHF_PRINTF("Triggered destroy()-method on MeshComponent\n");
-		SHF_PRINTF("need to destroy the material and meshdata.\n");
+		//SHF_PRINTF("Triggered destroy()-method on MeshComponent\n");
+		//SHF_PRINTF("need to destroy the material and meshdata.\n");
 #endif
 
 		if (MeshData != nullptr)

@@ -28,60 +28,63 @@ namespace SupraHot
 			return instance;
 		}
 
-		Texture2D* TextureCache::GetCachedTexture2D(std::string pathToTexture)
+		Texture2DPtr TextureCache::GetCachedTexture2D(std::string pathToTexture)
 		{
 			return Texture2Ds[pathToTexture];
 		}
 
-		TextureCube* TextureCache::GetCachedTextureCube(std::string pathToTexture)
+		TextureCubePtr TextureCache::GetCachedTextureCube(std::string pathToTexture)
 		{
 			return TextureCubes[pathToTexture];
 		}
 
-		void TextureCache::CacheTexture(Texture2D* texture2d)
+		void TextureCache::CacheTexture(Texture2DPtr texture2d)
 		{
-			if (texture2d != nullptr && Texture2Ds.find(texture2d->GetPath()) == Texture2Ds.end())
+			if (texture2d.get() != nullptr && Texture2Ds.find(texture2d->GetPath()) == Texture2Ds.end())
 			{
 				Texture2Ds[texture2d->GetPath()] = texture2d;
 			}
 		}
 
-		void TextureCache::CacheTexture(TextureCube* textureCube)
+		void TextureCache::CacheTexture(TextureCubePtr textureCube)
 		{
-			if (textureCube != nullptr && TextureCubes.find(textureCube->GetPath()) == TextureCubes.end())
+			if (textureCube.get() != nullptr && TextureCubes.find(textureCube->GetPath()) == TextureCubes.end())
 			{
 				TextureCubes[textureCube->GetPath()] = textureCube;
 			}
 		}
 
-		void TextureCache::FreeTexture(Texture2D* texture2d)
+		void TextureCache::FreeTexture(Texture2DPtr& texture2d)
 		{
-			if (texture2d != nullptr)
+
+			SHF_PRINTF("(FreeTexture) Texture count = [%d] \n", texture2d.use_count());
+
+			if (texture2d.get() != nullptr && texture2d.use_count() <= 2 && Texture2Ds.find(texture2d->GetPath()) != Texture2Ds.end())
 			{
-				Texture2Ds[texture2d->GetPath()] = nullptr;
+				Texture2Ds.erase(Texture2Ds.find(texture2d->GetPath()));
+			}
+
+		}
+
+		void TextureCache::FreeTexture(TextureCubePtr& textureCube)
+		{
+
+			SHF_PRINTF("(FreeTexture) Texture count = [%d] \n", textureCube.use_count());
+
+			if (textureCube.get() != nullptr && textureCube.use_count() <= 2 && TextureCubes.find(textureCube->GetPath()) != TextureCubes.end())
+			{
+				TextureCubes.erase(TextureCubes.find(textureCube->GetPath()));
 			}
 		}
 
-		void TextureCache::FreeTexture(TextureCube* textureCube)
+		Texture2DPtr TextureCache::WrapTexture(Texture2D* texture2D)
 		{
-			if (textureCube != nullptr)
-			{
-				TextureCubes[textureCube->GetPath()] = nullptr;
-			}
+			return Texture2DPtr(texture2D);
 		}
 
-		void TextureCache::FreeAndDeleteTexture(Texture2D* texture2d)
+		TextureCubePtr TextureCache::WrapTexture(TextureCube* textureCube)
 		{
-			FreeTexture(texture2d);
-			texture2d->Destroy();
-			delete texture2d;
-		}
-
-		void TextureCache::FreeAndDeleteTexture(TextureCube* textureCube)
-		{
-			FreeTexture(textureCube);
-			textureCube->Destroy();
-			delete textureCube;
+			return TextureCubePtr(textureCube);
 		}
 	};
 };

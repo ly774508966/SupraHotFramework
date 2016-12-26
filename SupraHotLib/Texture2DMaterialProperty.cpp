@@ -1,6 +1,7 @@
 #include "Texture2DMaterialProperty.h"
 #include "TextureCache.h"
 #include <cassert>
+#include "FileSystem.h"
 
 namespace SupraHot
 {
@@ -20,7 +21,7 @@ namespace SupraHot
 			return Value;
 		}
 
-		Texture2D* Texture2DMaterialProperty::GetTexture()
+		Texture2DPtr Texture2DMaterialProperty::GetTexture()
 		{
 			return Texture;
 		}
@@ -29,40 +30,51 @@ namespace SupraHot
 		{
 			// todo: check cached
 
+			// this fails.
 			if (Value != pathToTexture)
 			{
+
+				// Check if current texture is cached or not.
+
+				if (Texture.get() != nullptr && !TextureCache::GetInstance()->IsCachedTexture2D(Value))
+				{
+					// FreeTexture() checks, if the texture is not being used anywhere else or not
+					TextureCache::GetInstance()->FreeTexture(Texture);
+				}
+
+
+				// Check if the texture we want to use next is already cached
 				if (TextureCache::GetInstance()->IsCachedTexture2D(pathToTexture))
 				{
-					// This is very important.
-					// Todo: Check references to this current texture!
-					// We could try to solve this with 
-					// #1 Reference counted smart pointers,
-					// or #2 just use the TextureCache, to count references made to this texture.
-					// To ensure, that #2 works, we must inject the TextureCache inside the "Load" function of
-					// the Texture2D- & TextureCube-Classes. So that every loaded Texture gets run through it.
-					// 
-					// The two approaches can be combined together.
-					// Also we could create a "Texture"-Loader class, which will only return smartpointer<texture2d>.
-					// This way the user can never create (new Texture2D) by himself.
-
-
-					// Since Textures will be only assigned with the editor, or only through a texture2dmaterialproperty,
-					// we can do the reference counting inside the texture cache.
-
-					if (TextureCache::GetInstance()->IsCachedTexture2D(Value))
-					{
-						TextureCache::GetInstance()->FreeAndDeleteTexture(Texture);
-						Texture = nullptr;
-					}
-					else
-					{
-						Texture->Destroy();
-						delete Texture;
-						Texture = nullptr;
-					}
-
 					Texture = TextureCache::GetInstance()->GetCachedTexture2D(pathToTexture);
 					Value = pathToTexture;
+				}
+				else
+				{
+		
+					// dirty hack
+					std::string rootPath = Utils::FileSystem::GetInstance()->GetRootPath();
+					Utils::FileSystem::GetInstance()->SetRootPath("");
+
+					if (Utils::FileSystem::GetInstance()->FileExists("", pathToTexture))
+					{
+						Texture2D* rawTexture = new Texture2D(pathToTexture);
+						rawTexture->Load(pathToTexture);
+						SHF_PRINTF("Texture @ %s loaded \n", rawTexture->GetPath().c_str());
+
+						Texture2DPtr newTexture(rawTexture);
+
+						TextureCache::GetInstance()->CacheTexture(newTexture);
+
+						Texture = newTexture;
+					} 
+					else
+					{
+						SHF_PRINTF("Could not load texture, because the given file path could not be resolved \n");
+					}
+
+					Utils::FileSystem::GetInstance()->SetRootPath(rootPath);
+
 				}
 			}
 
@@ -71,13 +83,15 @@ namespace SupraHot
 		void Texture2DMaterialProperty::Apply(Shader* shader)
 		{
 			// shader->SetTexture2D(GLLocation, Texture, GL_TEXTURE0); 
-			if (Texture != nullptr)
+			Texture2D* texture = Texture.get();
+			if (texture != nullptr)
 			{
 #if DEVELOPMENT == 1
-				assert(shader->LastUsedTextureSlot < GL_TEXTURE31);
+				static uint32 MAX_TEXTURES = static_cast<uint32>(GL_TEXTURE31);
+				assert(shader->LastUsedTextureSlot < MAX_TEXTURES);
 #endif
 
-				shader->SetTexture2D(GLLocation, Texture, shader->LastUsedTextureSlot);
+				shader->SetTexture2D(GLLocation, texture, GL_TEXTURE0);
 				shader->LastUsedTextureSlot = shader->LastUsedTextureSlot + 1;
 			}
 		}

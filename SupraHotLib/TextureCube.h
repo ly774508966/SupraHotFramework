@@ -1,5 +1,7 @@
 #pragma once
 #include "Platform.h"
+#include <memory>
+
 namespace SupraHot
 {
 	namespace Graphics
@@ -7,7 +9,7 @@ namespace SupraHot
 		class TextureCube
 		{
 		private:
-			uint32 TextureID;
+			uint32 TextureID = 0;
 			std::string Path;
 			std::string Name;
 			uint32 Width, Height;
@@ -53,6 +55,9 @@ namespace SupraHot
 			void LoadDDS(std::string path, bool checkIsCube, bool flipX);
 			void Load(std::string left, std::string right, std::string top, std::string bottom, std::string front, std::string back);
 		};
+
+		typedef std::shared_ptr<TextureCube> TextureCubePtr;
+
 	}
 }
 

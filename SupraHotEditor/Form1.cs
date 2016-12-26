@@ -74,8 +74,6 @@ namespace SupraHotEditor
 
         public static void UpdateView() 
         {
-            Random r = new Random();
-            SupraHotWindow.SetClearColor(r.Next(0, 100) / 100.0f, r.Next(0, 100) / 100.0f, r.Next(0, 100) / 100.0f, 1.0f);
             appEdit.ProgressApp();
         }
 

@@ -15,11 +15,11 @@ namespace SupraHot
 		class MeshData
 		{
 		public:
-			uint32 VAOHandle;
-			uint32 FaceCount;
-			uint32 VertexCount;
-			uint32 IndexBufferHandle;
-			uint32 VertexBufferHandle;
+			uint32 VAOHandle = 0;
+			uint32 FaceCount = 0;
+			uint32 VertexCount = 0;
+			uint32 IndexBufferHandle = 0;
+			uint32 VertexBufferHandle = 0;
 			
 			Vec3 Origin;
 			std::string Name;

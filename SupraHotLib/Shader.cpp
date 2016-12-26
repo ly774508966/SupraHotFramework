@@ -36,7 +36,6 @@ namespace SupraHot
 #if DEVELOPMENT == 1
 				SHF_PRINTF("%s \n", destination.c_str());
 #endif
-
 			}
 
 			for (size_t i = 1, l = fileContent.size(); i < l; ++i)
@@ -129,21 +128,35 @@ namespace SupraHot
 
 			glAttachShader(ShaderProgrammID, shaderC);
 
+#if DEVELOPMENT == 1
+			Options = compileOptions;
+			ShaderSource = shaderSource;
+#endif
+
 			return true;
 		}
 
 		bool Shader::CompileShader()
 		{
+			int err = glGetError();
+			if (err != 0)
+			{
+#if DEVELOPMENT == 1
+				SHF_PRINTF("Error %d happened BEFORE creating the shaderProgramm \n", err);
+#endif
+				return false;
+			}
+
 			/* link to shader program */
 			glLinkProgram(ShaderProgrammID);
 			glUseProgram(ShaderProgrammID);
 
 			/* check errors */
-			int err = glGetError();
 			if (err != 0)
 			{
 #if DEVELOPMENT == 1
 				SHF_PRINTF("Error %d happened while creating the shaderProgramm \n", err);
+				Print();
 #endif
 				return false;
 			}
@@ -255,6 +268,14 @@ namespace SupraHot
 		{
 			return glGetUniformLocation(GetShaderID(), name.c_str());
 		}
+
+#if DEVELOPMENT == 1
+		void Shader::Print()
+		{
+			Options.Print();
+			SHF_PRINTF("ShaderSourceCode: \n%s\n", ShaderSource.c_str());
+		}
+#endif
 
 		uint32 Shader::GetShaderID()
 		{

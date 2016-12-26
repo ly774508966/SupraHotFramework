@@ -28,12 +28,21 @@
 
 		"DefinedWhen" : 
 		{
-			
+			"_DiffuseTexture" : 
+			[
+				"DiffuseTexture"
+			]
 		}
 	},
 
 	"Dependencies" : 
 	{
+		"_DiffuseTexture" : 
+		[
+			"_UV",
+			"_Normals"
+		],
+		
 		"_TangentsBiTangents" : 
 		[
 			"_UV", 

@@ -294,16 +294,32 @@ namespace SupraHotEditor
                 pathLabel.Text = "Path:";
 
                 Label thePath = new Label();
-                thePath.Text = ((Texture2DMaterialPropertyCLI)this.MaterialPropertyCommonInterface).GetValue();
+             //   thePath.Text = ((Texture2DMaterialPropertyCLI)this.MaterialPropertyCommonInterface).GetValue();
 
                 Button loadImageButton = new Button();
                 loadImageButton.Text = "Load";
+
+                OpenFileDialog openFileDialog = new OpenFileDialog();
 
                 loadImageButton.Click += new EventHandler(
                     delegate(object sender, EventArgs e)
                     {
 
                         Console.WriteLine("Button clicked. Open Dialog and let user select image.");
+
+                        openFileDialog.Filter = "Image|*.dds; *.png";
+
+                        if (openFileDialog.ShowDialog() == DialogResult.OK)
+                        {
+                            String fileName = openFileDialog.SafeFileName;
+                            String filePath = openFileDialog.FileName;
+                            
+                            Console.WriteLine("Filename {0} at {1}", fileName, filePath);
+
+                            ((Texture2DMaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(filePath);
+
+                            Console.WriteLine("After loading texture 2d");
+                        }
 
                         Form1.UpdateView();
                     }

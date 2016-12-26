@@ -44,6 +44,8 @@ namespace SupraHot
 
 		void AppEditor::ProgressApp()
 		{
+			Window->GetHandle()->SetClearColor(0.3f, 0.3f, 0.3f, 0);
+
 			glViewport(0, 0, Window->GetHandle()->GetWidth(), Window->GetHandle()->GetHeight());
 
 			Window->GetHandle()->Clear();

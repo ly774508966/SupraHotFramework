@@ -24,6 +24,7 @@
 #include <SkyBox.h>
 #include <MeshDataRenderer.h>
 #include <ShaderLibrary.h>
+#include <TextureCache.h>
 
 
 using namespace SupraHot;
@@ -117,7 +118,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 	ddsTexture->SetWrapS(GL_CLAMP_TO_EDGE);
 	ddsTexture->SetWrapT(GL_CLAMP_TO_EDGE);
 	ddsTexture->Load("Textures/test/lion_128f.dds");
-	ddsTexture->Destroy();
+	//ddsTexture->Destroy();
 	delete ddsTexture;
 	
 	TextureCube* textureCube = new TextureCube("CubeTexture Test");
@@ -127,7 +128,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 	textureCube->Load("Textures/Bridge2/px.png", "Textures/Bridge2/nx.png",
 					  "Textures/Bridge2/py.png", "Textures/Bridge2/ny.png",
 					  "Textures/Bridge2/pz.png", "Textures/Bridge2/nz.png");
-	textureCube->Destroy();
+	//textureCube->Destroy();
 	delete textureCube;
 
 	DdsCubeTexture = new TextureCube("DDS Cube map");
@@ -140,7 +141,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 	sphereMap->SetWrapS(GL_CLAMP_TO_EDGE);
 	sphereMap->SetWrapT(GL_CLAMP_TO_EDGE);
 	sphereMap->Load("Textures/MonValley_G_DirtRoad_3k/Static.dds");
-	sphereMap->Destroy();
+	//sphereMap->Destroy();
 	delete sphereMap;
 
 	EnvBox = new SkyBox(); 
@@ -149,6 +150,46 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 	EnvBox->Init(); 
 	
 	FlyCamera = new Camera(50.0f, 0.05f, 100.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
+	
+	
+	{	// Test smart pointer
+		Texture2D* testTex2d = new Texture2D("testTex2d 0");
+		testTex2d->SetWrapS(GL_CLAMP_TO_EDGE);
+		testTex2d->SetWrapT(GL_CLAMP_TO_EDGE);
+		testTex2d->Load("Textures/MonValley_G_DirtRoad_3k/Static.dds");
+
+		Texture2D* testTex2d1 = new Texture2D("testTex2d 1");
+		testTex2d1->SetWrapS(GL_CLAMP_TO_EDGE);
+		testTex2d1->SetWrapT(GL_CLAMP_TO_EDGE);
+		testTex2d1->Load("Textures/MonValley_G_DirtRoad_3k/Static.dds");
+		
+		Texture2DPtr ptr(testTex2d);
+
+		SHF_PRINTF("ptr count = %d. \n", ptr.use_count());
+
+		SHF_PRINTF("Assign new texture to pointer. \n");
+
+		ptr = Texture2DPtr(testTex2d1);
+
+		SHF_PRINTF("ptr count = %d. \n", ptr.use_count());
+	}
+
+	// Test texture cache
+	{
+		SHF_PRINTF("-------------- \n");
+		SHF_PRINTF("Test texture cache \n");
+		Texture2D* rawTexture = new Texture2D("RAW Texture2D");
+		rawTexture->Load("Textures/Bridge2/px.png");
+
+		Texture2DPtr smartTexture(rawTexture);
+
+		TextureCache::GetInstance()->CacheTexture(smartTexture);
+		TextureCache::GetInstance()->FreeTexture(smartTexture);
+
+		// delete rawTexture;
+
+		SHF_PRINTF("-------------- \n");
+	}
 }
 
 void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)

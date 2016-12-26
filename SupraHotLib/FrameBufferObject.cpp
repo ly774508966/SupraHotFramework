@@ -152,7 +152,7 @@ namespace SupraHot
 			glBindFramebuffer(GL_FRAMEBUFFER, FramebufferID);
 			AttachRenderTargets();
 
-			glClearColor(0, 0, 0, 1);
+			glClearColor(ClearColor.x, ClearColor.y, ClearColor.z, 1);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		}
 
@@ -250,6 +250,13 @@ namespace SupraHot
 		uint32 FrameBufferObject::GetHeight()
 		{
 			return Height;
+		}
+
+		void FrameBufferObject::SetClearColor(float r, float g, float b)
+		{
+			ClearColor.x = r;
+			ClearColor.y = g;
+			ClearColor.z = b;
 		}
 	};
 };

@@ -32,6 +32,11 @@ namespace SupraHot
 		return MainApp;
 	}
 
+	uint32 App::GetFPS()
+	{
+		return FPS;
+	}
+
 	void App::Init(uint32 width, uint32 height, std::string title)
 	{
 		MainApp = this;
@@ -107,7 +112,7 @@ namespace SupraHot
 			Time += 1.0f;
 			Tick(deltaTime);
 			
-			SHF_PRINTF("fps: %d \n", FPS);
+			// SHF_PRINTF("fps: %d \n", FPS);
 			FPS = 0;
 		}
 	}

@@ -6,6 +6,10 @@
 #include "ShaderParser.h"
 #include "ShaderMaterial.h"
 
+#if DEVELOPMENT == 1
+	#include <cassert>
+#endif
+
 namespace SupraHot
 {
 	namespace Graphics
@@ -112,7 +116,7 @@ namespace SupraHot
 				}
 			}
 
-			printf("shaderIndex = %llu \n", shaderIndex);
+			SHF_PRINTF("shaderIndex = %llu \n", shaderIndex);
 			return shadersMap->at(shaderIndex);
 		}
 
@@ -255,6 +259,11 @@ namespace SupraHot
 			// Init shader descriptions
 			// - - - - - - - - - - - - - - - - 
 
+#if DEVELOPMENT == 1
+			ShaderCompileOptions lastCompileOptions;
+			Shader* lastShader = nullptr;
+#endif
+
 			std::string baseDirectoryPath = "Shaders/Description/";
 
 			// use dirent.h here to iterate over all files inside this directory
@@ -382,7 +391,30 @@ namespace SupraHot
 							shader->SetName(shaderDescription->Name + " [" + std::to_string(shaderIndex) + "]");
 							shader->LoadShaderFromFile(Shader::VERTEX_SHADER, vertexShaderPath, compileOptions);
 							shader->LoadShaderFromFile(Shader::PIXEL_SHADER, pixelShaderPath, compileOptions);
-							shader->CompileShader();
+							bool didCompile = shader->CompileShader();
+
+							if (!didCompile)
+							{
+								// Print current Compile options and last!
+								SHF_PRINTF("- - - - DID NOT COMPILED - - - - - \n");
+								/*
+								SHF_PRINTF("- - - - Last Options - - - - - \n");
+								lastCompileOptions.Print();
+								if (lastShader != nullptr)
+								{
+									lastShader->Print();
+								}*/
+
+								SHF_PRINTF("- - - - Current Options - - - - - \n");
+								compileOptions.Print();
+								shader->Print();
+								SHF_PRINTF("- - - - - - - - - ");
+								assert(0 == 1);
+								while (true){};
+							}
+
+							lastCompileOptions = compileOptions;
+							lastShader = shader;
 
 							// Store the shader inside the Shaders-Map
 							(Shaders[shaderDescription->Name])[shaderIndex] = shader;

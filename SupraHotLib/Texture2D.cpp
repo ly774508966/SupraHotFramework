@@ -45,6 +45,9 @@ namespace SupraHot
 
 		Texture2D::~Texture2D()
 		{
+			// TODO: We are not allowed to derefence TexPointers!!!
+			SHF_PRINTF("Triggered destructor of texture 2d \n");
+			Destroy();
 		}
 
 		void Texture2D::Load(std::string path)
@@ -210,8 +213,11 @@ namespace SupraHot
 
 		void Texture2D::Destroy()
 		{
-			glDeleteTextures(1, &TextureID);
-			TextureID = 0;
+			if (TextureID != 0)
+			{
+				glDeleteTextures(1, &TextureID);
+				TextureID = 0;
+			}
 
 #if DEVELOPMENT == 1
 			SHF_PRINTF("Texture %s destroyed \n", this->Name.c_str());
@@ -220,6 +226,17 @@ namespace SupraHot
 
 		void Texture2D::LoadWithSTBImage(FILE* f)
 		{
+
+#if DEVELOPMENT == 1 
+			{
+				int err = glGetError();
+				if (err != 0)
+				{
+					SHF_PRINTF("Error %d happened BEFORE loading Texture 2D (%s) \n", err, Path.c_str());
+				}
+			}
+#endif
+
 			/* load texture with stb_image */
 			int width, height, n;
 			unsigned char * data = stbi_load_from_file(f, &width, &height, &n, 0);
@@ -231,7 +248,7 @@ namespace SupraHot
 			if (!data)
 			{
 #if DEVELOPMENT == 1
-				SHF_PRINTF("Error, while loading texture (%s): %s\n", Path.c_str(), stbi_failure_reason());
+				SHF_PRINTF("Error, while loading texture STBI (%s): %s\n", Path.c_str(), stbi_failure_reason());
 #endif
 				glDeleteTextures(1, &TextureID);
 			}
@@ -255,16 +272,28 @@ namespace SupraHot
 				/* bind texture to buffer */
 				glTexImage2D(GL_TEXTURE_2D, 0, InternalFormat, width, height, 0, Format, Type, &data[0]);
 
+#if DEVELOPMENT == 1 
+				{
+					int err = glGetError();
+					if (err != 0)
+					{
+						SHF_PRINTF("Error %d happened after loading Texture 2D (%s) \n", err, Path.c_str());
+					}
+				}
+#endif
+
 				/* generate mipmaps */
 				glGenerateMipmap(static_cast<GLenum>(GL_TEXTURE_2D));
 
 #if DEVELOPMENT == 1 
-				SHF_PRINTF("Generating mip maps.... \n");
-
-				int err = glGetError();
-				if (err != 0)
 				{
-					SHF_PRINTF("Error %d happened while loading Texture 2D (%s) \n", err, Path.c_str());
+					SHF_PRINTF("Generating mip maps.... \n");
+
+					int err = glGetError();
+					if (err != 0)
+					{
+						SHF_PRINTF("Error %d happened after Generating mip maps. Texture 2D (%s) \n", err, Path.c_str());
+					}
 				}
 #endif
 

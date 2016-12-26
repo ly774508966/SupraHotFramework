@@ -23,6 +23,7 @@ namespace SupraHot
 		public:
 			static FileSystem* GetInstance();
 			void SetRootPath(std::string rootPath);
+			std::string GetRootPath();
 			bool FileExists(std::string directory, std::string fileName);
 			FILE* GetFile(std::string directory, std::string fileName, std::string mode);
 			~FileSystem();

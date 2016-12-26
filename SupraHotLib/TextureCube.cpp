@@ -46,6 +46,9 @@ namespace SupraHot
 
 		TextureCube::~TextureCube()
 		{
+			//Todo: We are not allowed to derefence tex pointers!
+			SHF_PRINTF("Triggered destructor of TextureCube \n");
+			Destroy();
 		}
 
 		void TextureCube::SetName(std::string name)
@@ -140,8 +143,11 @@ namespace SupraHot
 
 		void TextureCube::Destroy()
 		{
-			glDeleteTextures(1, &TextureID);
-			TextureID = 0;
+			if (TextureID != 0)
+			{
+				glDeleteTextures(1, &TextureID);
+				TextureID = 0;
+			}
 
 #if DEVELOPMENT == 1
 			SHF_PRINTF("Texture %s destroyed \n", this->Name.c_str());

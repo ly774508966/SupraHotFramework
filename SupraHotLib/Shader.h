@@ -24,6 +24,11 @@ namespace SupraHot
 
 			uint32 ShaderProgrammID = 0;
 
+#if DEVELOPMENT == 1
+			ShaderCompileOptions Options;
+			std::string ShaderSource;
+#endif
+
 			static void CheckError(uint32 shaderID, std::string type, std::string path);
 			static void LoadShaderInternal(std::string path, std::string &destination, ShaderCompileOptions& compileOptions);
 
@@ -31,7 +36,7 @@ namespace SupraHot
 			std::string Name;
 			
 		public:
-			int LastUsedTextureSlot = 0;
+			uint32 LastUsedTextureSlot = 0;
 
 			// Shader enum
 			enum ShaderType 
@@ -65,6 +70,10 @@ namespace SupraHot
 			void SetTexture2D(int location, Texture2D* texture2d, int slot);
 			void SetTextureCube(int location, TextureCube* textureCube, int slot);
 			uint32 GetUniformLocation(std::string name);
+
+#if DEVELOPMENT == 1
+			void Print();
+#endif
 
 			// GL specific
 			uint32 GetShaderID();

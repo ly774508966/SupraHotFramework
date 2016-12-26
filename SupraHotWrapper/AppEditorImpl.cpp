@@ -21,6 +21,9 @@ namespace SupraHot
 			FBO->Init(width, height);
 
 			FlyCamera = new Camera(50.0f, 0.05f, 10000.0f, static_cast<float>(width) / static_cast<float>(height));
+
+			SHF_PRINTF("AppEditorImpl:: FBO->SetClearColor \n");
+			FBO->SetClearColor(0.8f, 0.8f, 0.8f);
 		}
 
 		void AppEditorImpl::Resize(SupraHot::uint32 width, SupraHot::uint32 height)

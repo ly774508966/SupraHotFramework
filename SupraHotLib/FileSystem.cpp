@@ -51,6 +51,11 @@ namespace SupraHot
 			this->RootPath = rootPath;
 		}
 
+		std::string FileSystem::GetRootPath()
+		{
+			return RootPath;
+		}
+
 		bool FileSystem::FileExists(std::string directory, std::string fileName)
 		{
 #ifndef PLATFORM_ANDROID

@@ -23,6 +23,8 @@ namespace SupraHot
 			void InitRenderTargets();
 			void AttachRenderTargets();
 
+			Vec3 ClearColor;
+
 			Texture2D* RenderTarget = nullptr;
 			Texture2D* ReadSource = nullptr;
 
@@ -47,6 +49,8 @@ namespace SupraHot
 
 			uint32 GetWidth();
 			uint32 GetHeight();
+
+			void SetClearColor(float r, float g, float b);
 		};
 	};
 };
