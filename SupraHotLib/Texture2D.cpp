@@ -102,6 +102,15 @@ namespace SupraHot
 
 		void Texture2D::Init(uint32 width, uint32 height)
 		{
+#if DEVELOPMENT == 1
+			{
+				int err = glGetError();
+				if (err != 0)
+				{
+					SHF_PRINTF("Error %d happened BEFORE initializing Texture2D (%s | %s) \n", err, Name.c_str(), Path.c_str());
+				}
+			}
+#endif
 			this->Width = width;
 			this->Height = height;
 
@@ -123,10 +132,12 @@ namespace SupraHot
 			glBindTexture(GL_TEXTURE_2D, 0);
 
 #if DEVELOPMENT == 1
-			int err = glGetError();
-			if (err != 0)
 			{
-				SHF_PRINTF("Error %d happened while initializing Texture2D (%s | %s) \n", err, Name.c_str(), Path.c_str());
+				int err = glGetError();
+				if (err != 0)
+				{
+					SHF_PRINTF("Error %d happened while initializing Texture2D (%s | %s) \n", err, Name.c_str(), Path.c_str());
+				}
 			}
 #endif
 		}

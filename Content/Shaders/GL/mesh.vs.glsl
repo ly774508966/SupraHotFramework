@@ -7,6 +7,7 @@ out vec3 VertexPositionVS;
 	uniform mat3 NormalMatrix;
 	in vec3 VertexNormal;
 	out vec3 NormalVS;
+	out vec3 NormalWS;
 #endif
 
 #if _UV
@@ -29,5 +30,6 @@ void main(){
 
 	#if _Normals
 		NormalVS = normalize(NormalMatrix * VertexNormal);
+		NormalWS = normalize(VertexNormal);
 	#endif
 }

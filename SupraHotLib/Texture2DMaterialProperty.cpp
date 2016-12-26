@@ -91,7 +91,7 @@ namespace SupraHot
 				assert(shader->LastUsedTextureSlot < MAX_TEXTURES);
 #endif
 
-				shader->SetTexture2D(GLLocation, texture, GL_TEXTURE0);
+				shader->SetTexture2D(GLLocation, texture, GL_TEXTURE0 + shader->LastUsedTextureSlot);
 				shader->LastUsedTextureSlot = shader->LastUsedTextureSlot + 1;
 			}
 		}

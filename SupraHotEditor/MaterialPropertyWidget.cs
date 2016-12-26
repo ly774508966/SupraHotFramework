@@ -304,21 +304,13 @@ namespace SupraHotEditor
                 loadImageButton.Click += new EventHandler(
                     delegate(object sender, EventArgs e)
                     {
-
-                        Console.WriteLine("Button clicked. Open Dialog and let user select image.");
-
                         openFileDialog.Filter = "Image|*.dds; *.png";
 
                         if (openFileDialog.ShowDialog() == DialogResult.OK)
                         {
                             String fileName = openFileDialog.SafeFileName;
                             String filePath = openFileDialog.FileName;
-                            
-                            Console.WriteLine("Filename {0} at {1}", fileName, filePath);
-
                             ((Texture2DMaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(filePath);
-
-                            Console.WriteLine("After loading texture 2d");
                         }
 
                         Form1.UpdateView();
@@ -341,11 +333,19 @@ namespace SupraHotEditor
                 Button loadImageButton = new Button();
                 loadImageButton.Text = "Load";
 
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+
                 loadImageButton.Click += new EventHandler(
                     delegate(object sender, EventArgs e)
                     {
+                        openFileDialog.Filter = "Image|*.dds";
 
-                        Console.WriteLine("Button clicked. Open Dialog and let user select image.");
+                        if (openFileDialog.ShowDialog() == DialogResult.OK)
+                        {
+                            String fileName = openFileDialog.SafeFileName;
+                            String filePath = openFileDialog.FileName;
+                            ((TextureCubeMaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(filePath);
+                        }
 
                         Form1.UpdateView();
                     }

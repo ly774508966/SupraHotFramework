@@ -1,6 +1,7 @@
 #pragma once
 #include "Platform.h"
 #include "MaterialProperty.h"
+#include "TextureCube.h"
 
 namespace SupraHot
 {
@@ -9,14 +10,14 @@ namespace SupraHot
 		class TextureCubeMaterialProperty : public MaterialProperty
 		{
 		private:
-			TextureCube* Texture;
+			TextureCubePtr Texture;
 			std::string Value;
 		public:
 			TextureCubeMaterialProperty(std::string name);
 			~TextureCubeMaterialProperty();
 			void SetValue(std::string pathToTexture);
 			std::string GetValue();
-			TextureCube* GetTexture();
+			TextureCubePtr GetTexture();
 			void Apply(Shader* shader) override;
 		};
 	};
