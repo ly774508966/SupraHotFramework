@@ -14,6 +14,7 @@ namespace SupraHot
 			BooleanMaterialProperty(std::string name);
 			~BooleanMaterialProperty();
 			void Apply(Shader* shader) override;
+			void Unbind(Shader* shader) override;
 			void SetValue(bool value);
 			bool GetValue();
 		};

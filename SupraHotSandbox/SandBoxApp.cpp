@@ -3,7 +3,7 @@
 #include "SandBoxApp.h"
 #include "MeshComponent.h"
 
-#ifdef PLATFORM_ANDROID
+#ifdef PLATFORM_ANDROID 
 	#include "WindowAndroid.h"
 	#include <android/asset_manager.h>
 	#include <android/asset_manager_jni.h>
@@ -25,7 +25,8 @@
 #include <MeshDataRenderer.h>
 #include <ShaderLibrary.h>
 #include <TextureCache.h>
-
+#include <TextureCubeMaterialProperty.h>
+#include <Texture2DMaterialProperty.h>
 
 using namespace SupraHot;
 
@@ -65,24 +66,11 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 	FBO->SetReadSource(Texture);	
 	FBO->SetPixelSize(ShaderLibrary::GetInstance()->ScreenSpace[uint32(ShaderLibrary::ScreenSpace::RenderToScreen)]);
 
+	TextureCache::GetInstance()->Init();
+
 	// Try loading a lua script and run it.
 	Scripting::LuaVM::GetInstance()->RunFile("Scripts/test.lua");
 	
-	{	// Load a test model
-		std::vector<MeshComponent*> meshComponents = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol/Pistol_Model.shfm");
-
-		Entity* entity = new Entity();
-
-		entity->GetTransform().SetPosition(Vec3(0, 1.0f, -5.0f));
-		entity->GetTransform().SetScale(Vec3(0.05f, 0.05f, 0.05f));
-		entity->GetTransform().SetLocalRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
-
-		MeshComponent* meshComponent = meshComponents.at(0);
-		entity->AddComponent(meshComponent);
-		
-		this->Entities.push_back(entity);
-	}
-
 	std::vector<MeshComponent*> meshComponents = Utils::MeshDataLoader::GetInstance()->Load(
 #if SPONZA == 1
 		"Models/Sponza/Sponza_M.shfm"
@@ -188,8 +176,44 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 
 		// delete rawTexture;
 
-		SHF_PRINTF("-------------- \n");
+		SHF_PRINTF("-------------- \n"); 
 	}
+
+
+	{	// Load a test model
+		std::vector<MeshComponent*> meshComponents = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol/Pistol_Model.shfm");
+
+		Entity* entity = new Entity();
+
+		entity->GetTransform().SetPosition(Vec3(0, 1.0f, -5.0f));
+		entity->GetTransform().SetScale(Vec3(0.05f, 0.05f, 0.05f));
+		entity->GetTransform().SetLocalRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
+
+		MeshComponent* meshComponent = meshComponents.at(0);
+		entity->AddComponent(meshComponent);
+
+
+		auto envMap = meshComponent->GetMaterial()->GetMaterialPropertyByName("EnvMap");
+		if (envMap != nullptr)
+		{
+			TextureCubeMaterialProperty* mp = reinterpret_cast<TextureCubeMaterialProperty*>(envMap);
+			mp->SetValue("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds");
+		}
+
+		
+		auto albedo = meshComponent->GetMaterial()->GetMaterialPropertyByName("DiffuseTexture");
+		if (albedo != nullptr)
+		{
+			Texture2DMaterialProperty* mp = reinterpret_cast<Texture2DMaterialProperty*>(albedo);
+			mp->SetValue("Models/Pistol/albedo.png");
+		}
+
+		printf("type : %s \n", envMap->GetType().c_str());
+		printf("type : %s \n", albedo->GetType().c_str());
+
+		this->Entities.push_back(entity);
+	}
+
 }
 
 void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)

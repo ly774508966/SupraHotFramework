@@ -2,11 +2,13 @@
 precision highp float;
 
 in vec3 VertexPosition;
+out vec3 VertexPositionVS;
 
 #if _Normals
 	uniform mat3 NormalMatrix;
 	in vec3 VertexNormal;
 	out vec3 NormalVS;
+	out vec3 NormalWS;
 #endif
 
 #if _UV
@@ -16,8 +18,6 @@ in vec3 VertexPosition;
 
 uniform mat4 ModelViewProjectionMatrix;
 uniform mat4 ModelViewMatrix;
-
-out vec3 VertexPositionVS;
 
 void main(){
 	vec4 transformedVertex = ModelViewProjectionMatrix * vec4(VertexPosition, 1);
@@ -31,5 +31,6 @@ void main(){
 
 	#if _Normals
 		NormalVS = normalize(NormalMatrix * VertexNormal);
+		NormalWS = normalize(VertexNormal);
 	#endif
 }

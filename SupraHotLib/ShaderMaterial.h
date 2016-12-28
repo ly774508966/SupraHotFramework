@@ -32,6 +32,7 @@ namespace SupraHot
 
 			void Update();
 			void Apply();
+			void Unbind();
 			void Destroy();
 			
 			// todo: Rework this bit.

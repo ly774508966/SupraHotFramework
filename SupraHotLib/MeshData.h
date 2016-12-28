@@ -32,7 +32,7 @@ namespace SupraHot
 			bool HasTangentData = false;
 			bool HasUVData = false;
 
-			uint32 GlIndexType;
+			uint32 GlIndexType = GL_UNSIGNED_SHORT;
 
 			MeshData();
 			~MeshData();

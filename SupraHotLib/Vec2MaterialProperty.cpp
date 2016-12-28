@@ -18,6 +18,11 @@ namespace SupraHot
 			shader->SetVec2(GLLocation, Value);
 		}
 
+		void Vec2MaterialProperty::Unbind(Shader* shader)
+		{
+
+		}
+
 		void Vec2MaterialProperty::SetValue(const Vec2& value)
 		{
 			Value = value;

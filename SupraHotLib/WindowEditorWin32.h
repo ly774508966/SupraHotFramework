@@ -13,6 +13,10 @@ namespace SupraHot
 			HWND Hwnd;
 			HDC  Hdc;
 			HINSTANCE hInstance;
+
+			// Gets replaced by constructor
+			int glVersionMajor = 0;
+			int glVersionMinor = 0;
 		protected:
 			void Setup() override;
 		public:
@@ -23,6 +27,7 @@ namespace SupraHot
 			void Update() override;
 			void Destroy() override;
 			void Clear() override;
+			void PrintVersion();
 			
 			WindowEditorWin32();
 			~WindowEditorWin32();

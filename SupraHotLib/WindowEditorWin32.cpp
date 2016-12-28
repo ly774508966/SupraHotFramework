@@ -1,5 +1,6 @@
 #include "WindowEditorWin32.h"
 #include "App.h"
+#include <GL/wglew.h>
 
 namespace SupraHot
 {
@@ -97,6 +98,35 @@ namespace SupraHot
 				SHF_PRINTF("Could not initialize GLEW!!\n");
 			}
 
+
+			// Create a higher version context
+			int OpenGLMajor = 4;
+			int OpenGLMinor = 0;
+
+			int attributes[] = {
+				WGL_CONTEXT_MAJOR_VERSION_ARB, OpenGLMajor,								// Set the MAJOR version of OpenGL to 3  
+				WGL_CONTEXT_MINOR_VERSION_ARB, OpenGLMinor,								// Set the MINOR version of OpenGL to 2  
+				WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,			// Set our OpenGL context to be forward compatible  
+				0
+			};
+
+			if (wglewIsSupported("WGL_ARB_create_context") == 1) { // If the OpenGL 3.x context creation extension is available
+				HGLRC newContext = wglCreateContextAttribsARB(Hdc, NULL, attributes); // Create and OpenGL 3.x context based on the given attributes
+				wglMakeCurrent(NULL, NULL); // Remove the temporary context from being active
+				wglDeleteContext(hrc); // Delete the temporary OpenGL 2.1 context
+				wglMakeCurrent(Hdc, newContext); // Make our OpenGL 3.0 context current
+			}
+			else {
+				printf("Could not create the OpenGL 4.0 Context. \n");
+			}
+
+			int glVersion[2] = { -1, -1 }; // Set some default values for the version
+			glGetIntegerv(GL_MAJOR_VERSION, &glVersion[0]); // Get back the OpenGL MAJOR version we are using
+			glGetIntegerv(GL_MINOR_VERSION, &glVersion[1]); // Get back the OpenGL MAJOR version we are using
+
+			glVersionMajor = glVersion[0];
+			glVersionMinor = glVersion[1];
+
 			Setup();
 
 		}
@@ -129,6 +159,11 @@ namespace SupraHot
 		{
 			glClearColor(ClearColorR, ClearColorG, ClearColorB, ClearColorA);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		}
+
+		void WindowEditorWin32::PrintVersion()
+		{
+			std::cout << "Using OpenGL: " << glVersionMajor << "." << glVersionMinor << std::endl; // Output which version of OpenGL we are using
 		}
 	};
 };

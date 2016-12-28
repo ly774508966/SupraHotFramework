@@ -8,6 +8,16 @@ namespace SupraHot
 		{
 		}
 
+		Texture2DPtr* TextureCache::GetDefaultTexture2D()
+		{
+			return &DefaultTexture2D;
+		}
+
+		TextureCubePtr* TextureCache::GetDefaultTextureCube()
+		{
+			return &DefaultTextureCube;
+		}
+
 		TextureCache::~TextureCache()
 		{
 		}
@@ -85,6 +95,30 @@ namespace SupraHot
 		TextureCubePtr TextureCache::WrapTexture(TextureCube* textureCube)
 		{
 			return TextureCubePtr(textureCube);
+		}
+
+		void TextureCache::Init()
+		{
+				{
+					Texture2D* rawTexture = new Texture2D("Default2D");
+					rawTexture->Load("Textures/Default/Default.png");
+					DefaultTexture2D = Texture2DPtr(rawTexture);
+				}
+
+				{
+					TextureCube* rawTexture = new TextureCube("DefaultCube");
+
+					rawTexture->Load(
+						"Textures/Default/Default.png", 
+						"Textures/Default/Default.png",
+						"Textures/Default/Default.png",
+						"Textures/Default/Default.png",
+						"Textures/Default/Default.png",
+						"Textures/Default/Default.png"
+					);
+
+					DefaultTextureCube = TextureCubePtr(rawTexture);
+				}
 		}
 	};
 };

@@ -46,7 +46,7 @@ namespace SupraHot
 		Texture2D::~Texture2D()
 		{
 			// TODO: We are not allowed to derefence TexPointers!!!
-			SHF_PRINTF("Triggered destructor of texture 2d \n");
+			SHF_PRINTF("Triggered destructor of %s (Texture2D)\n", Name.c_str());
 			Destroy();
 		}
 

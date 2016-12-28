@@ -2,6 +2,7 @@
 #include <FileSystem.h>
 #include <MeshDataRenderer.h>
 #include <ShaderLibrary.h>
+#include <TextureCache.h>
 #include <algorithm>
 
 namespace SupraHot
@@ -16,6 +17,8 @@ namespace SupraHot
 			Utils::FileSystem::GetInstance()->SetRootPath("../../../../Content/");
 
 			ShaderLibrary::GetInstance()->Initialize();
+
+			TextureCache::GetInstance()->Init();
 
 			FBO = new FrameBufferObject();
 			FBO->Init(width, height);
@@ -40,15 +43,13 @@ namespace SupraHot
 			glDepthFunc(GL_LEQUAL);
 			glEnable(GL_BLEND); 
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+			 
 			glEnable(GL_CULL_FACE);
 			glFrontFace(GL_CCW);
 			glCullFace(GL_BACK);
-
-			glEnable(GL_ALPHA_TEST);
-			
+			 			 
 			MeshDataRenderer::GetInstance().Render(FlyCamera);
-			
+			 
 			glDisable(GL_DEPTH_TEST);
 
 			FBO->Detach();

@@ -148,9 +148,8 @@ namespace SupraHot
 
 				offset += meshData->VertexCount * 3 * sizeof(float);
 			}
-
+			
 			//meshComponent->GetMaterial()->Update();
-
 			meshComponent->GetMaterial()->Apply();
 
 			// Layout
@@ -158,6 +157,8 @@ namespace SupraHot
 			// (vtx.x,vtx.y,vtx.z...... nml.x,nml.y,nml.z......, uv.s,uv.t,uv.s,uv.t.......)
 
 			glDrawElements(GL_TRIANGLES, (meshData->FaceCount * 3), meshData->GlIndexType, nullptr);
+
+			// meshComponent->GetMaterial()->Unbind();
 
 			glBindVertexArray(0);
 

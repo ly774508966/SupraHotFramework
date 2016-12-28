@@ -1,4 +1,5 @@
 #version 300 es
+precision highp float;
 
 in vec3 VertexPositionVS;
 out vec4 FragColor;
@@ -9,6 +10,7 @@ out vec4 FragColor;
 
 #if _Normals
 	in vec3 NormalVS;
+	in vec3 NormalWS;
 #endif
 
 #if _TangentsBiTangents
@@ -24,13 +26,36 @@ uniform vec3 LightColor;
 	uniform sampler2D DiffuseTexture;
 #endif
 
+#if _EnvMap
+	uniform samplerCube EnvMap;
+#endif
+
 // Not exposed inside the editor
 uniform mat4 ViewMatrix;
 
 void main() {
-	//#if _DiffuseTexture
-		//FragColor = texture(DiffuseTexture, UVCoord);
-//	#else
+	#if _DiffuseTexture
+
+		vec3 dirVS = (ViewMatrix * vec4(DirLight, 0.0)).xyz;
+		float nDotL = max(dot(NormalVS, normalize(dirVS)), 0.0);
+
+		vec4 albedoColor = texture(DiffuseTexture, UVCoord);
+		vec3 diffuseColor = albedoColor.rgb;
+
+		#if _EnvMap
+			vec3 r = normalize(NormalWS);
+			vec4 diffuseEnv = texture(EnvMap, r);
+			
+			vec3 p3 = vec3(1.0 / 2.2);
+			diffuseEnv.rgb = pow(diffuseEnv.rgb, p3);
+
+			FragColor = vec4(diffuseColor.rgb * diffuseEnv.rgb + (nDotL * LightColor) , 1.0);
+		#else
+			FragColor = vec4(diffuseColor.rgb * nDotL * LightColor, albedoColor.a);
+		#endif
+
+
+	#else
 		#if _Normals
 			//vec3 dirVS = (ViewMatrix * vec4(DirLight, 0)).xyz;
 			//float nDotL = clamp(dot(NormalVS, normalize(dirVS)), 0, 1);
@@ -40,5 +65,5 @@ void main() {
 		#else
 			FragColor = vec4(VertexPositionVS, 1);
 		#endif
-//	#endif
+	#endif
 }

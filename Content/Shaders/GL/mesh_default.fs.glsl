@@ -36,7 +36,7 @@ void main() {
 	#if _DiffuseTexture
 
 		vec3 dirVS = (ViewMatrix * vec4(DirLight, 0)).xyz;
-		float nDotL = clamp(dot(NormalVS, normalize(dirVS)), 0, 1);
+		float nDotL = max(dot(NormalVS, normalize(dirVS)), 0);
 
 		vec4 albedoColor = texture(DiffuseTexture, UVCoord);
 		vec3 diffuseColor = albedoColor.rgb;

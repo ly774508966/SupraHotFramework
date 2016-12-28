@@ -16,10 +16,18 @@ namespace SupraHot
 			std::unordered_map<std::string, Texture2DPtr> Texture2Ds;
 			std::unordered_map<std::string, TextureCubePtr> TextureCubes;
 
+			Texture2DPtr DefaultTexture2D;
+			TextureCubePtr DefaultTextureCube;
+
 			public:
+
+			Texture2DPtr* GetDefaultTexture2D();
+			TextureCubePtr* GetDefaultTextureCube();
+
 			~TextureCache();
 
 			static TextureCache* GetInstance();
+			void Init();
 			bool IsCachedTexture2D(std::string pathToTexture);
 			bool IsCachedTextureCube(std::string pathToTexture);
 			

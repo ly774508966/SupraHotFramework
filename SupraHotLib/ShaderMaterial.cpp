@@ -95,7 +95,7 @@ namespace SupraHot
 		{
 			for (MaterialProperty* materialProperty : MaterialProperties)
 			{
-				
+
 				if (materialProperty->GetName() == materialPropertyName)
 				{
 					return materialProperty;
@@ -129,7 +129,7 @@ namespace SupraHot
 				{
 					materialProperty->SetLocation(this->ShaderPermutation);
 				}
-				
+
 				// Note: if we want to use this inside the mesh renderer, this line should be removed
 				this->ShaderPermutation->Detach();
 			}
@@ -146,6 +146,17 @@ namespace SupraHot
 			}
 		}
 
+		void ShaderMaterial::Unbind()
+		{
+			if (this->ShaderPermutation != nullptr)
+			{
+				for (MaterialProperty* materialProperty : MaterialProperties)
+				{
+					materialProperty->Unbind(this->ShaderPermutation);
+				}
+			}
+		}
+
 		void ShaderMaterial::Destroy()
 		{
 			SHF_PRINTF("Todo: ShaderMaterial::Destroy() \n");
@@ -154,7 +165,7 @@ namespace SupraHot
 
 		void ShaderMaterial::SelectShaderPermutation()
 		{
-			
+
 		}
 
 		void ShaderMaterial::SetShaderPermutation(Shader* shader)

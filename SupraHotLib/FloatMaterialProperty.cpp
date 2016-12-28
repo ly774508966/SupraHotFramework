@@ -25,6 +25,10 @@ namespace SupraHot
 			Value = value;
 		}
 
+		void FloatMaterialProperty::Unbind(Shader* shader)
+		{
+		}
+
 		float& FloatMaterialProperty::GetValue()
 		{
 			return Value;

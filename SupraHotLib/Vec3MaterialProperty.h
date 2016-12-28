@@ -13,6 +13,7 @@ namespace SupraHot
 			Vec3MaterialProperty(std::string name);
 			~Vec3MaterialProperty();
 			void Apply(Shader* shader) override;
+			void Unbind(Shader* shader) override;
 			void SetValue(const Vec3& value);
 			Vec3& GetValue();
 		};

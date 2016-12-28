@@ -14,6 +14,7 @@ namespace SupraHot
 			~FloatMaterialProperty();
 			void Apply(Shader* shader) override;
 			void SetValue(float value);
+			void Unbind(Shader* shader) override;
 			float& GetValue();
 		};
 	};

@@ -64,6 +64,7 @@ namespace SupraHot
 		void Shader::Detach()
 		{
 			glUseProgram(0);
+			LastUsedTextureSlot = 0;
 		}
 
 		void Shader::Destroy()

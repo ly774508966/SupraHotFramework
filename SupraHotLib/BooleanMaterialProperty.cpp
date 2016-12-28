@@ -19,6 +19,10 @@ namespace SupraHot
 			shader->SetInteger(GLLocation, Value);
 		}
 
+		void BooleanMaterialProperty::Unbind(Shader* shader)
+		{
+		}
+
 		void BooleanMaterialProperty::SetValue(bool value)
 		{
 			Value = value;

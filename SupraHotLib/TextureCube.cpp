@@ -47,7 +47,7 @@ namespace SupraHot
 		TextureCube::~TextureCube()
 		{
 			//Todo: We are not allowed to derefence tex pointers!
-			SHF_PRINTF("Triggered destructor of TextureCube \n");
+			SHF_PRINTF("Triggered destructor of %s (TextureCube)\n", Name.c_str());
 			Destroy();
 		}
 

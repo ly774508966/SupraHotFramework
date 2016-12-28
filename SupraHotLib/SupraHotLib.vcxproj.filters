@@ -437,9 +437,6 @@
     <ClCompile Include="..\Externals\include\json11\json11.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderMaterial.cpp">
-      <Filter>Source Files\Graphics\Common\Shader</Filter>
-    </ClCompile>
     <ClCompile Include="FloatMaterialProperty.cpp">
       <Filter>Source Files\Graphics\Common\MaterialProperties</Filter>
     </ClCompile>
@@ -463,6 +460,9 @@
     </ClCompile>
     <ClCompile Include="TextureCubeMaterialProperty.cpp">
       <Filter>Source Files\Graphics\Common\MaterialProperties</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderMaterial.cpp">
+      <Filter>Source Files\Graphics\Common\Shader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

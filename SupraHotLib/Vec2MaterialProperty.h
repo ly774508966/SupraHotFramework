@@ -14,6 +14,7 @@ namespace SupraHot
 			Vec2MaterialProperty(std::string name);
 			~Vec2MaterialProperty();
 			void Apply(Shader* shader) override;
+			void Unbind(Shader* shader) override;
 			void SetValue(const Vec2& value);
 			Vec2& GetValue();
 		};

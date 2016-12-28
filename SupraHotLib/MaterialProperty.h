@@ -16,6 +16,7 @@ namespace SupraHot
 			MaterialProperty(std::string name);
 			virtual ~MaterialProperty() = 0;
 			virtual void Apply(Shader* shader) = 0;
+			virtual void Unbind(Shader* shader) = 0;
 			void SetLocation(Shader* shader);
 			std::string GetName();
 			std::string GetType();

@@ -52,6 +52,20 @@ namespace SupraHot
 				else
 				{
 
+					if (Utils::FileSystem::GetInstance()->FileExists("", pathToTexture))
+					{
+						TextureCube* rawTexture = new TextureCube(pathToTexture);
+						rawTexture->LoadDDS(pathToTexture, true, true);
+						SHF_PRINTF("TextureCube @ %s loaded \n", rawTexture->GetPath().c_str());
+
+						TextureCubePtr newTexture(rawTexture);
+
+						TextureCache::GetInstance()->CacheTexture(newTexture);
+
+						Texture = newTexture;
+						return;
+					}
+
 					// dirty hack
 					std::string rootPath = Utils::FileSystem::GetInstance()->GetRootPath();
 					Utils::FileSystem::GetInstance()->SetRootPath("");
@@ -67,33 +81,38 @@ namespace SupraHot
 						TextureCache::GetInstance()->CacheTexture(newTexture);
 
 						Texture = newTexture;
-					}
-					else
-					{
-						SHF_PRINTF("Could not load texture, because the given file path could not be resolved \n");
+						Utils::FileSystem::GetInstance()->SetRootPath(rootPath);
+
+						return;
 					}
 
 					Utils::FileSystem::GetInstance()->SetRootPath(rootPath);
-
+						
+					SHF_PRINTF("Could not load texture, because the given file path could not be resolved \n");
 				}
 			}
 
 		}
 
+		void TextureCubeMaterialProperty::Unbind(Shader* shader)
+		{
+		}
+
 		void TextureCubeMaterialProperty::Apply(Shader* shader)
 		{
-			// shader->SetTexture2D(GLLocation, Texture, GL_TEXTURE0); 
 			TextureCube* texture = Texture.get();
-			if (texture != nullptr)
+			if (texture == nullptr)
 			{
-#if DEVELOPMENT == 1
-				static uint32 MAX_TEXTURES = static_cast<uint32>(GL_TEXTURE31);
-				assert(shader->LastUsedTextureSlot < MAX_TEXTURES);
-#endif
+				texture = TextureCache::GetInstance()->GetDefaultTextureCube()->get();
+			} 
 
-				shader->SetTextureCube(GLLocation, texture, GL_TEXTURE0 + shader->LastUsedTextureSlot);
-				shader->LastUsedTextureSlot = shader->LastUsedTextureSlot + 1;
-			}
+#if DEVELOPMENT == 1
+			static uint32 MAX_TEXTURES = static_cast<uint32>(GL_TEXTURE31);
+			assert(shader->LastUsedTextureSlot < MAX_TEXTURES);
+#endif
+			TextureSlot = shader->LastUsedTextureSlot;
+			shader->SetTextureCube(GLLocation, texture, GL_TEXTURE0 + TextureSlot);
+			shader->LastUsedTextureSlot = shader->LastUsedTextureSlot + 1;
 		}
 	};
 };
