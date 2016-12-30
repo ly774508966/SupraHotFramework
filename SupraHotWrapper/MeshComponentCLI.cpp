@@ -31,5 +31,20 @@ namespace SupraHot
 
 			return mat;
 		}
+
+		void MeshComponentCLI::UpdateShaderPermuation()
+		{
+			SupraHot::MeshComponent* meshComponent = static_cast<SupraHot::MeshComponent*>(Instance);
+			meshComponent->UpdateShaderPermution();
+		}
+
+		bool MeshComponentCLI::SetShader(System::String^ shaderName)
+		{
+			// ShaderName is 100% valid at this point, since it is being selected in the gui.
+			std::string shaderNameStd = msclr::interop::marshal_as<std::string>(shaderName);
+			SupraHot::Graphics::ShaderDescription* shaderDescription = SupraHot::Graphics::ShaderLibrary::GetInstance()->GetShaderDescriptions()->at(shaderNameStd);
+			static_cast<SupraHot::MeshComponent*>(Instance)->ChangeShader(shaderDescription);
+			return true;
+		}
 	};
 };

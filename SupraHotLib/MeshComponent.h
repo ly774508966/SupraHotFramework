@@ -32,5 +32,7 @@ namespace SupraHot
 
 		Graphics::ShaderMaterial* GetMaterial();
 		Graphics::MeshData* GetMeshData();
+		void UpdateShaderPermution();
+		void ChangeShader(Graphics::ShaderDescription* shaderDescription);
 	};
 };

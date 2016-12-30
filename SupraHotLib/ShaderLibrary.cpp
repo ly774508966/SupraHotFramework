@@ -37,23 +37,7 @@ namespace SupraHot
 			{
 				MaterialProperty* materialProperty = materialProperties->at(i);
 				std::string name = materialProperty->GetName();
-
-				// Check if there is a define for this property in the BitField
-				// Note: Add "_" in front of the name, since properties can not have the same name as defines!
-				auto it = description->BitShiftedIndices.find("_" + name);
-
-				// We found something. 
-				// Define this property by it self.
-				if (it != description->BitShiftedIndices.end())
-				{
-					uint64 propertyBitfieldIndex = description->BitShiftedIndices["_" + name];
-					shaderIndex |= propertyBitfieldIndex;
-
-					SHF_PRINTF("%s defined %s \n", name.c_str(), ("_" + name).c_str());
-				}
-
 				alreadyProcessedProperties.push_back(name);
-				SHF_PRINTF("%s <- \n", name.c_str());
 			}
 
 			SHF_PRINTF("BRDF Type: %d \n", static_cast<uint32>(description->BRDFType));
@@ -94,8 +78,18 @@ namespace SupraHot
 				{
 					// Check if this define has dependencies on another definedWhen-attribute & if we can meet them
 					std::string defineName = defIt->first;
+					std::vector<std::string>* requiredMaterialProperties = &defIt->second;
 
-					bool isDefined = true;
+					bool isDefined = false;
+
+					// Test if, the definedWhen-Option is ACTIVE (by looping through it's requiredMaterialProperties and testing if all the necessary params are set)
+					for (uint32 i = 0, l = static_cast<uint32>(requiredMaterialProperties->size()); i < l; ++i)
+					{
+						std::string& requiredMaterialProperty = requiredMaterialProperties->at(i);
+
+						// Test if the definedOption (MaterialProperty) is present on this material
+						isDefined = std::find(alreadyProcessedProperties.begin(), alreadyProcessedProperties.end(), requiredMaterialProperty) != alreadyProcessedProperties.end();
+					}
 
 					if (isDefined)
 					{
@@ -117,6 +111,12 @@ namespace SupraHot
 			}
 
 			SHF_PRINTF("shaderIndex = %llu \n", shaderIndex);
+
+			if (shadersMap->find(shaderIndex) == shadersMap->end())
+			{
+				SHF_PRINTF("shader is not valid \n");
+			}
+
 			return shadersMap->at(shaderIndex);
 		}
 
@@ -137,7 +137,7 @@ namespace SupraHot
 		bool ShaderLibrary::ResolveDependencies(std::string defineName, ShaderDescription* description, uint64 shaderIndex, std::vector<std::string>* alreadyProcessedProperties)
 		{
 #if SHADERCOMPOSITION_OUTPUT == 1
-			SHF_PRINTF("Resolve Dependencies for %s \n", defineName.c_str());
+			SHF_PRINTF("Resolve Dependencies for [ %s ] \n", defineName.c_str());
 #endif
 
 			// check for deps. 
@@ -151,6 +151,44 @@ namespace SupraHot
 					SHF_PRINTF("(shaderIndex & bitFieldIndex) == bitFieldIndex \n");
 #endif
 					return true;
+				}
+			}
+
+			// Check here, if it relies on material properties and if so, check if they are set
+			bool hasRequiredProperties = false;
+			if (description->DefinedWhen.find(defineName) != description->DefinedWhen.end())
+			{
+
+				std::vector<std::string>* requiredMaterialProperties = &description->DefinedWhen.at(defineName);
+
+#if SHADERCOMPOSITION_OUTPUT == 1
+				SHF_PRINTF("[ %s ] is a defineOption.\nLets check it's required material properties\n", defineName.c_str());
+#endif
+
+				for (uint32 i = 0, l = static_cast<uint32>(requiredMaterialProperties->size()); i < l; ++i)
+				{
+					std::string& requiredMaterialProperty = requiredMaterialProperties->at(i);
+
+#if SHADERCOMPOSITION_OUTPUT == 1
+					SHF_PRINTF("Check if [ %s ] is set \n", requiredMaterialProperty.c_str());
+#endif
+
+					if (std::find(alreadyProcessedProperties->begin(), alreadyProcessedProperties->end(), requiredMaterialProperty) != alreadyProcessedProperties->end())
+					{
+
+#if SHADERCOMPOSITION_OUTPUT == 1
+						SHF_PRINTF("Yes.\n");
+#endif
+					} 
+					else
+					{
+
+#if SHADERCOMPOSITION_OUTPUT == 1
+						SHF_PRINTF("No.\n");
+#endif
+
+						return false;
+					}
 				}
 			}
 
@@ -177,7 +215,6 @@ namespace SupraHot
 				
 				return true;
 			} 
-
 			// Check if it is defined
 			if (description->DefinedWhen.find(defineName) != description->DefinedWhen.end())
 			{
@@ -187,13 +224,13 @@ namespace SupraHot
 				{
 					std::string defineEntry = defineArray->at(i);
 #if SHADERCOMPOSITION_OUTPUT == 1
-					SHF_PRINTF("checking if %s can be defined \n", defineEntry.c_str());
+					SHF_PRINTF("checking if [ %s ] can be defined \n", defineEntry.c_str());
 #endif
 					if (!ResolveDefinedWhen(defineEntry, description, shaderIndex, alreadyProcessedProperties))
 					{
 #if SHADERCOMPOSITION_OUTPUT == 1
 						SHF_PRINTF("No. \n");
-						SHF_PRINTF("%s could not be defined \n", defineName.c_str());
+						SHF_PRINTF("[ %s ] could not be defined \n", defineName.c_str());
 #endif
 						return false;
 					}
@@ -206,13 +243,13 @@ namespace SupraHot
 				}
 
 #if SHADERCOMPOSITION_OUTPUT == 1
-				SHF_PRINTF("%s could be defined \n", defineName.c_str());
+				SHF_PRINTF("[ %s ] could be defined \n", defineName.c_str());
 #endif
 				return true;
 			}
 			
 #if SHADERCOMPOSITION_OUTPUT == 1
-			SHF_PRINTF("%s has no dependencies! \n", defineName.c_str());
+			SHF_PRINTF("[ %s ] has no dependencies! \n", defineName.c_str());
 #endif
 			return true;
 		}
@@ -267,7 +304,7 @@ namespace SupraHot
 			std::string baseDirectoryPath = "Shaders/Description/";
 
 			// use dirent.h here to iterate over all files inside this directory
-			std::vector<std::string> shaderDescriptions = { "MeshDefaultShader.json", "MeshBasicShader.json" };
+			std::vector<std::string> shaderDescriptions = { "MeshBasicShader.json", "MeshDefaultShader.json" };
 
 			for (size_t i = 0, l = shaderDescriptions.size(); i < l; ++i)
 			{
@@ -418,6 +455,9 @@ namespace SupraHot
 
 							// Store the shader inside the Shaders-Map
 							(Shaders[shaderDescription->Name])[shaderIndex] = shader;
+
+							SHF_PRINTF("Shader index = %llu \n", shaderIndex);
+							SHF_PRINTF("----------\n");
 
 							shaderCounter++;
 						}

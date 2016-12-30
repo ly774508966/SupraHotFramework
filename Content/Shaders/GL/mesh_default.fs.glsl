@@ -50,10 +50,8 @@ void main() {
 
 			FragColor = vec4(diffuseColor.rgb * diffuseEnv.rgb + (nDotL * LightColor) , 1.0);
 		#else
-			FragColor = vec4(diffuseColor.rgb * nDotL * LightColor, albedoColor.a);
+			FragColor = albedoColor;
 		#endif
-
-
 	#else
 		#if _Normals
 			//vec3 dirVS = (ViewMatrix * vec4(DirLight, 0)).xyz;

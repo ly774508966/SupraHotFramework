@@ -16,6 +16,9 @@ namespace SupraHot
 			MeshComponentCLI(SupraHot::CLI::MeshData^ meshData, SupraHot::CLI::Material^ material);
 
 			SupraHot::CLI::Material^ GetMaterial();
+
+			void UpdateShaderPermuation();
+			bool SetShader(System::String^ shaderName);
 		};
 	};
 };

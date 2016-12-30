@@ -75,4 +75,20 @@ namespace SupraHot
 	{
 		return MeshData;
 	}
+
+	void MeshComponent::UpdateShaderPermution()
+	{
+		Graphics::Shader* shader = Graphics::ShaderLibrary::GetInstance()->SelectShaderForShaderMaterialAndMeshData(GetMeshData(), GetMaterial());
+		if (shader != nullptr)
+		{
+			GetMaterial()->SetShaderPermutation(shader);
+		}
+	}
+
+	void MeshComponent::ChangeShader(Graphics::ShaderDescription* shaderDescription)
+	{
+		Material->RemoveAllMaterialProperties();
+		Material->SetShaderDescription(shaderDescription);
+		UpdateShaderPermution();
+	}
 };

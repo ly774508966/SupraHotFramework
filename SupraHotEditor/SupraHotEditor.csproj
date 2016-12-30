@@ -89,6 +89,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComponentView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,7 +101,9 @@
     <Compile Include="MaterialPropertyWidget.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MaterialPropertyWidgetFactory.cs" />
+    <Compile Include="MeshComponentView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

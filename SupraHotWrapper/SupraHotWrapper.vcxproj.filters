@@ -93,6 +93,9 @@
     <ClInclude Include="TextureCubeMaterialPropertyCLI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ShaderLibraryCLI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowEditor.cpp">
@@ -168,6 +171,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TextureCubeMaterialPropertyCLI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderLibraryCLI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

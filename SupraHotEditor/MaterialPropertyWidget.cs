@@ -25,6 +25,7 @@ namespace SupraHotEditor
 
             groupBoxFlowLayout = new FlowLayoutPanel();
             groupBoxFlowLayout.Dock = DockStyle.Fill;
+            groupBoxFlowLayout.FlowDirection = FlowDirection.TopDown;
             this.Controls.Add(groupBoxFlowLayout);
 
             Color lightGrey = Color.FromArgb(40, 40, 40);
@@ -291,7 +292,7 @@ namespace SupraHotEditor
             else if (Type == "Texture2D") 
             {
                 Label pathLabel = new Label();
-                pathLabel.Text = "Path:";
+                pathLabel.Text = "Name: Default";
 
                 Label thePath = new Label();
              //   thePath.Text = ((Texture2DMaterialPropertyCLI)this.MaterialPropertyCommonInterface).GetValue();
@@ -311,6 +312,7 @@ namespace SupraHotEditor
                             String fileName = openFileDialog.SafeFileName;
                             String filePath = openFileDialog.FileName;
                             ((Texture2DMaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(filePath);
+                            pathLabel.Text = "Name:" + fileName;
                         }
 
                         Form1.UpdateView();
@@ -325,7 +327,7 @@ namespace SupraHotEditor
             else if (Type == "TextureCube")
             {
                 Label pathLabel = new Label();
-                pathLabel.Text = "Path:";
+                pathLabel.Text = "Name: Default";
 
                 Label thePath = new Label();
                 thePath.Text = ((TextureCubeMaterialPropertyCLI)this.MaterialPropertyCommonInterface).GetValue();
@@ -345,6 +347,7 @@ namespace SupraHotEditor
                             String fileName = openFileDialog.SafeFileName;
                             String filePath = openFileDialog.FileName;
                             ((TextureCubeMaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(filePath);
+                            pathLabel.Text = "Name:" + fileName;
                         }
 
                         Form1.UpdateView();

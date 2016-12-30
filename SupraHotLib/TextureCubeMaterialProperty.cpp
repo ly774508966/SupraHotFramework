@@ -14,6 +14,7 @@ namespace SupraHot
 
 		TextureCubeMaterialProperty::~TextureCubeMaterialProperty()
 		{
+			TextureCache::GetInstance()->FreeTexture(Texture);
 		}
 
 		std::string TextureCubeMaterialProperty::GetValue()

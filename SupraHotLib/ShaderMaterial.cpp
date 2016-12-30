@@ -8,6 +8,7 @@
 #include "FloatMaterialProperty.h"
 #include "Texture2DMaterialProperty.h"
 #include "TextureCubeMaterialProperty.h"
+#include <algorithm>
 
 namespace SupraHot
 {
@@ -20,50 +21,7 @@ namespace SupraHot
 
 		ShaderMaterial::ShaderMaterial(ShaderDescription* shaderDescription)
 		{
-			this->Description = shaderDescription;
-			this->Name = shaderDescription->Name + " Material";
-
-
-			// todo: this is just for testing. these parameters should be only generated in the editor!
-			typedef std::unordered_map<std::string, std::string>::iterator it;
-			for (it iterator = shaderDescription->Uniforms.begin(); iterator != shaderDescription->Uniforms.end(); ++iterator)
-			{
-				std::string name = iterator->first;
-				std::string type = iterator->second;
-
-				// todo: need to do an "isInternal" check...
-				if (type == "float")
-				{
-					AddMaterialProperty(new FloatMaterialProperty(name));
-				}
-				else if (type == "bool")
-				{
-					AddMaterialProperty(new BooleanMaterialProperty(name));
-				}
-				else if (type == "vec2")
-				{
-					AddMaterialProperty(new Vec2MaterialProperty(name));
-				}
-				else if (type == "vec3")
-				{
-					AddMaterialProperty(new Vec3MaterialProperty(name));
-				}
-				else if (type == "vec4")
-				{
-					AddMaterialProperty(new Vec4MaterialProperty(name));
-				}
-				else if (type == "sampler2D")
-				{
-					// this actually maps "sampler2D" to "Texture2D"
-					AddMaterialProperty(new Texture2DMaterialProperty(name));
-				}
-				else if (type == "samplerCube")
-				{
-					// this actually maps "samplerCube" to "TextureCube"
-					AddMaterialProperty(new TextureCubeMaterialProperty(name));
-				}
-
-			}
+			SetShaderDescription(shaderDescription);
 		}
 
 		ShaderMaterial::~ShaderMaterial()
@@ -73,7 +31,6 @@ namespace SupraHot
 
 		bool ShaderMaterial::AddMaterialProperty(MaterialProperty* materialProperty)
 		{
-
 			// check if the material property is not already present in the vector
 			if (std::find(MaterialProperties.begin(), MaterialProperties.end(), materialProperty) == MaterialProperties.end())
 			{
@@ -87,8 +44,27 @@ namespace SupraHot
 
 		bool ShaderMaterial::RemoveMaterialProperty(MaterialProperty* materialProperty)
 		{
-			SelectShaderPermutation();
+			if (std::find(MaterialProperties.begin(), MaterialProperties.end(), materialProperty) != MaterialProperties.end())
+			{
+				MaterialProperties.erase(std::remove(MaterialProperties.begin(), MaterialProperties.end(), materialProperty), MaterialProperties.end());
+				SelectShaderPermutation();
+				delete materialProperty;
+				return true;
+			}
+
 			return false;
+		}
+
+		bool ShaderMaterial::RemoveAllMaterialProperties()
+		{
+			// Loop through all mps and delete them.
+			for (uint32 i = 0, l = static_cast<uint32>(MaterialProperties.size()); i < l; ++i)
+			{
+				delete MaterialProperties.at(i);
+			}
+
+			MaterialProperties.clear();
+			return true;
 		}
 
 		MaterialProperty* ShaderMaterial::GetMaterialPropertyByName(std::string materialPropertyName)
@@ -172,6 +148,12 @@ namespace SupraHot
 		{
 			this->ShaderPermutation = shader;
 			Update();
+		}
+
+		void ShaderMaterial::SetShaderDescription(ShaderDescription* shaderDescription)
+		{
+			this->Description = shaderDescription;
+			this->Name = shaderDescription->Name + " Material";
 		}
 	};
 };

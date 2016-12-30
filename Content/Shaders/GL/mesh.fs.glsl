@@ -22,10 +22,9 @@ out vec4 FragColor;
 uniform vec3 Color;
 
 void main() {
-	#if _UV && _AlbedoMap
-		FragColor = texture(AlbedoTexture, UVCoord);
+	#if _UV
+		FragColor = vec4(UVCoord.xy, 0.0, 1.0);
 	#else
-
 		#if _Normals
 			FragColor = vec4(NormalVS, 1);
 		#else

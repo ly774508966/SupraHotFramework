@@ -14,6 +14,7 @@ namespace SupraHot
 
 		Texture2DMaterialProperty::~Texture2DMaterialProperty()
 		{
+			TextureCache::GetInstance()->FreeTexture(Texture);
 		}
 
 		std::string Texture2DMaterialProperty::GetValue()

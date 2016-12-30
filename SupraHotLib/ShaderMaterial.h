@@ -25,6 +25,7 @@ namespace SupraHot
 
 			bool AddMaterialProperty(MaterialProperty* materialProperty);
 			bool RemoveMaterialProperty(MaterialProperty* materialProperty);
+			bool RemoveAllMaterialProperties();
 			MaterialProperty* GetMaterialPropertyByName(std::string materialPropertyName);
 			ShaderDescription* GetShaderDescription();
 			std::vector<MaterialProperty*>* GetMaterialProperties();
@@ -39,6 +40,7 @@ namespace SupraHot
 			// We need the mesh data in order to select a shader from the shaderlib....
 			void SelectShaderPermutation();
 			void SetShaderPermutation(Shader* shader);
+			void SetShaderDescription(ShaderDescription* shaderDescription);
 		};
 	};
 };

@@ -55,6 +55,10 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 	window->Init(width, height, title);
 	window->SetClearColor(0.7f, 0.3f, 0.7f, 1.0f);
 
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CCW);
+	glCullFace(GL_BACK);
+
 	// Was excuted before the new window call
 	App::Init(width, height, title);
 
@@ -198,6 +202,13 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 		{
 			TextureCubeMaterialProperty* mp = reinterpret_cast<TextureCubeMaterialProperty*>(envMap);
 			mp->SetValue("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds");
+			printf("type : %s \n", envMap->GetType().c_str());
+		} 
+		else
+		{
+			TextureCubeMaterialProperty* mp = new TextureCubeMaterialProperty("EnvMap");
+			mp->SetValue("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds");
+			meshComponent->GetMaterial()->AddMaterialProperty(mp);
 		}
 
 		
@@ -206,10 +217,22 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 		{
 			Texture2DMaterialProperty* mp = reinterpret_cast<Texture2DMaterialProperty*>(albedo);
 			mp->SetValue("Models/Pistol/albedo.png");
+			printf("type : %s \n", albedo->GetType().c_str());
+		}
+		else
+		{
+			Texture2DMaterialProperty* mp = new Texture2DMaterialProperty("DiffuseTexture");
+			mp->SetValue("Models/Pistol/albedo.png");
+			meshComponent->GetMaterial()->AddMaterialProperty(mp);
 		}
 
-		printf("type : %s \n", envMap->GetType().c_str());
-		printf("type : %s \n", albedo->GetType().c_str());
+		meshComponent->UpdateShaderPermution();
+
+	/*	if (meshComponent->GetMaterial()->GetMaterialPropertyByName("EnvMap"))
+		{
+			meshComponent->GetMaterial()->RemoveMaterialProperty(meshComponent->GetMaterial()->GetMaterialPropertyByName("EnvMap"));
+			meshComponent->UpdateShaderPermution();
+		}*/
 
 		this->Entities.push_back(entity);
 	}
@@ -287,8 +310,6 @@ void SandBoxApp::Update(float deltaTime)
 	{
 		Entities.at(i)->Update(deltaTime);
 	}
-
-	//CalculateFPS(2.0);
 }
 
 void SandBoxApp::LateUpdate(float deltaTime)
@@ -305,6 +326,8 @@ void SandBoxApp::Tick(float deltaTime)
 	{
 		Entities.at(i)->FixedUpdate(deltaTime);
 	}
+
+	// SHF_PRINTF("FPS: %d \n", FPS);
 }
 
 void SandBoxApp::Destroy()

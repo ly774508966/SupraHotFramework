@@ -52,7 +52,6 @@ namespace SupraHot
 			{
 				return Instance;
 			}
-
 		};
 	};
 };

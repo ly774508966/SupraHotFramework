@@ -18,13 +18,20 @@ namespace SupraHotEditor
     {
         public static WindowEditor SupraHotWindow;
         public static AppEditor appEdit;
+        public static Form1 Instance;
 
         public bool MouseRightDown = false;
         public bool MouseMiddleDown = false;
         public Point PreviousPosition;
 
+        public int GetClientRectHeight() 
+        {
+            return ClientRectangle.Height;
+        }
+
         public Form1()
         {
+            Instance = this;
             InitializeComponent();
             this.splitContainer2.Panel2.MouseWheel += splitContainer2_Panel_MouseWheel;
 
@@ -40,33 +47,43 @@ namespace SupraHotEditor
                 appEdit = new AppEditor();
                 appEdit.Init(SupraHotWindow);
 
-                // Test some stuff
-                var entity = new EntityCLI();
-                appEdit.AddEntity(entity);
-                appEdit.RemoveEntity(entity);
 
-                var e = new EntityCLI();
-                Material material = new Material();
-                MeshData meshData = new MeshData();
 
+                // - - - - - - - - - - - - - - - - -
+                // - - - - Properties View - - - - -
+                // - - - - - - - - - - - - - - - - -
+
+                // Load a model 
                 MeshLoaderCLI meshLoader = MeshLoaderCLI.GetIntance();
-                //List<EntityCLI> entites = meshLoader.LoadSFHM("Models/Sponza/Sponza_M.shfm");
                 List<EntityCLI> entites = meshLoader.LoadSFHM("Models/Pistol/Pistol_Model.shfm");
-                        
-                // Get one entity here and insert some material properties
-                MeshComponentCLI mesh = entites[0].GetComponent<MeshComponentCLI>();
-                Material mat = mesh.GetMaterial();
 
-                // Test a thing here
+                // MeshComponentView -> Gets all shader descriptions
+
+                MeshComponentCLI meshComponent = entites[0].GetComponent<MeshComponentCLI>();
+                Material mat = meshComponent.GetMaterial();
+                MeshComponentView meshComponentView = new MeshComponentView(mat, meshComponent);
+
                 FlowLayoutPanel groupBoxFlowLayout = new FlowLayoutPanel();
                 groupBoxFlowLayout.Dock = DockStyle.Fill;
                 mainSplitContainer.Panel2.Controls.Add(groupBoxFlowLayout);
 
-                List<MaterialPropertyCommonInterface> mpcis = mat.GetMaterialProperties();
-                foreach (MaterialPropertyCommonInterface mpci in mpcis) 
-                {
-                    groupBoxFlowLayout.Controls.Add(new MaterialPropertyWidget(mpci));
-                }
+                groupBoxFlowLayout.Controls.Add(meshComponentView);
+
+
+                // Get one entity here and read it's material properties
+
+                /*
+                
+                 MeshComponentCLI mesh = entites[0].GetComponent<MeshComponentCLI>();
+                 Material mat = mesh.GetMaterial();
+                 List<MaterialPropertyCommonInterface> mpcis = mat.GetMaterialProperties();
+                 foreach (MaterialPropertyCommonInterface mpci in mpcis) 
+                 {
+                     groupBoxFlowLayout.Controls.Add(new MaterialPropertyWidget(mpci));
+                 }
+                
+                
+                 */
 
             }
             
