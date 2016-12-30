@@ -10,6 +10,12 @@ namespace SupraHot
 		{
 		}
 
+		EntityCLI::~EntityCLI()
+		{
+			SHF_PRINTF("Deleting Entity [~EntityCLI]\nWe destroy it's components here \n");
+			GetHandle()->RemoveAndDeleteAllComponents();
+		}
+
 		void EntityCLI::AddComponent(SupraHot::CLI::ComponentCLI^ component)
 		{
 			printf("Adding component = %p \n", component);

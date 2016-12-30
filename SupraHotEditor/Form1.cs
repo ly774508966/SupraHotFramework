@@ -24,6 +24,8 @@ namespace SupraHotEditor
         public bool MouseMiddleDown = false;
         public Point PreviousPosition;
 
+        private List<EntityCLI> entites;
+
         public int GetClientRectHeight() 
         {
             return ClientRectangle.Height;
@@ -55,7 +57,7 @@ namespace SupraHotEditor
 
                 // Load a model 
                 MeshLoaderCLI meshLoader = MeshLoaderCLI.GetIntance();
-                List<EntityCLI> entites = meshLoader.LoadSFHM("Models/Pistol/Pistol_Model.shfm");
+                entites = meshLoader.LoadSFHM("Models/Pistol/Pistol_Model.shfm");
 
                 // MeshComponentView -> Gets all shader descriptions
 

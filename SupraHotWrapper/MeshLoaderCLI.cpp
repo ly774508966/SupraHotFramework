@@ -4,7 +4,7 @@
 #include "Vec3MaterialProperty.h"
 #include <msclr\marshal_cppstd.h>
 #include <Entity.h>
-
+#include <EntityManager.h>
 
 namespace SupraHot
 {
@@ -42,7 +42,8 @@ namespace SupraHot
 				SupraHot::CLI::EntityCLI^ entityCLI = gcnew SupraHot::CLI::EntityCLI();
 				entityCLI->ReplaceInstance(entity);
 				cliEntities->Add(entityCLI);
-				//this->Entities.push_back(entity);
+
+				EntityManager::GetInstance()->AddEntity(entity);
 			}
 
 			return cliEntities;

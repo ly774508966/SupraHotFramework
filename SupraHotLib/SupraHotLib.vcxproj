@@ -284,6 +284,7 @@
     </ClInclude>
     <ClInclude Include="DDSUtil.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="EntityManager.h" />
     <ClInclude Include="Face.h" />
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="FileSystem.h" />
@@ -373,6 +374,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="Face.cpp" />
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="FileSystem.cpp" />

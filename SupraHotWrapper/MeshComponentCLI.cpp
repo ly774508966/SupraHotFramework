@@ -9,6 +9,11 @@ namespace SupraHot
 			Instance = new SupraHot::MeshComponent(nullptr, nullptr);
 		}
 
+		MeshComponentCLI::~MeshComponentCLI()
+		{
+			SHF_PRINTF("~MeshComponentCLI \n");
+		}
+
 		MeshComponentCLI::MeshComponentCLI(SupraHot::CLI::MeshData^ meshData, SupraHot::CLI::Material^ material)
 		{
 			Instance = new SupraHot::MeshComponent(meshData->GetHandle(), material->GetHandle());

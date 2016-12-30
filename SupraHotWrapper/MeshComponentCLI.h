@@ -12,6 +12,7 @@ namespace SupraHot
 		{
 		public:
 			MeshComponentCLI();
+			~MeshComponentCLI();
 			MeshComponentCLI(SupraHot::CLI::ComponentCLI^ componentCLI);
 			MeshComponentCLI(SupraHot::CLI::MeshData^ meshData, SupraHot::CLI::Material^ material);
 

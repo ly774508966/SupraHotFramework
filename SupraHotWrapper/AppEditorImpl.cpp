@@ -4,6 +4,7 @@
 #include <ShaderLibrary.h>
 #include <TextureCache.h>
 #include <algorithm>
+#include <EntityManager.h>
 
 namespace SupraHot
 {
@@ -68,35 +69,39 @@ namespace SupraHot
 			FlyCamera->ResetMatrices();
 			FlyCamera->Update(deltaTime);
 
-			for (uint32 i = 0, l = static_cast<uint32>(Entities.size()); i < l; ++i)
+			std::vector<Entity*>* entities = EntityManager::GetInstance()->GetEntities();
+
+			for (uint32 i = 0, l = static_cast<uint32>(entities->size()); i < l; ++i)
 			{
-				Entities.at(i)->Update(deltaTime);
+				entities->at(i)->Update(deltaTime);
 			}
 		}
 
 		void AppEditorImpl::LateUpdate(float deltaTime)
 		{
-			for (uint32 i = 0, l = static_cast<uint32>(Entities.size()); i < l; ++i)
+			std::vector<Entity*>* entities = EntityManager::GetInstance()->GetEntities();
+
+			for (uint32 i = 0, l = static_cast<uint32>(entities->size()); i < l; ++i)
 			{
-				Entities.at(i)->LateUpdate(deltaTime);
+				entities->at(i)->LateUpdate(deltaTime);
 			}
 		}
 
 		void AppEditorImpl::Tick(float deltaTime)
 		{
-			for (uint32 i = 0, l = static_cast<uint32>(Entities.size()); i < l; ++i)
+			std::vector<Entity*>* entities = EntityManager::GetInstance()->GetEntities();
+
+			for (uint32 i = 0, l = static_cast<uint32>(entities->size()); i < l; ++i)
 			{
-				Entities.at(i)->FixedUpdate(deltaTime);
+				entities->at(i)->FixedUpdate(deltaTime);
 			}
 		}
 
 		void AppEditorImpl::Destroy()
 		{
-			for (uint32 i = 0, l = static_cast<uint32>(Entities.size()); i < l; ++i)
-			{
-				Entities.at(i)->Destroy();
-				
-			} Entities.clear();
+			EntityManager::GetInstance()->Destroy();
+
+			TextureCache::GetInstance()->Destroy();
 
 			FBO->Destroy();
 
@@ -105,12 +110,12 @@ namespace SupraHot
 
 		void AppEditorImpl::AddEntity(Entity* entity)
 		{
-			Entities.push_back(entity);
+			EntityManager::GetInstance()->AddEntity(entity);
 		}
 
 		void AppEditorImpl::RemoveEntity(Entity* entity)
 		{
-			Entities.erase(std::remove(Entities.begin(), Entities.end(), entity), Entities.end());
+			EntityManager::GetInstance()->RemoveEntity(entity);
 		}
 
 		SupraHot::Camera* AppEditorImpl::GetCamera()

@@ -285,6 +285,9 @@
     <ClInclude Include="TextureCubeMaterialProperty.h">
       <Filter>Header Files\Graphics\Common\MaterialProperties</Filter>
     </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -463,6 +466,9 @@
     </ClCompile>
     <ClCompile Include="ShaderMaterial.cpp">
       <Filter>Source Files\Graphics\Common\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Source Files\ECS</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

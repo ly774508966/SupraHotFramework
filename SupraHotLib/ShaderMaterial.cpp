@@ -135,7 +135,11 @@ namespace SupraHot
 
 		void ShaderMaterial::Destroy()
 		{
-			SHF_PRINTF("Todo: ShaderMaterial::Destroy() \n");
+			for (MaterialProperty* materialProperty : MaterialProperties)
+			{
+				delete materialProperty;
+			}
+
 			// shader descriptions get deleted by shaderlibrary!
 		}
 

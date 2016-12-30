@@ -27,6 +27,7 @@
 #include <TextureCache.h>
 #include <TextureCubeMaterialProperty.h>
 #include <Texture2DMaterialProperty.h>
+#include <EntityManager.h>
 
 using namespace SupraHot;
 
@@ -100,7 +101,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 #endif
 
 		entity->AddComponent(meshComponent);
-		this->Entities.push_back(entity);
+		EntityManager::GetInstance()->AddEntity(entity);
 
 		entity->SetName(meshComponent->GetMeshData()->Name);
 	}
@@ -234,7 +235,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 			meshComponent->UpdateShaderPermution();
 		}*/
 
-		this->Entities.push_back(entity);
+		EntityManager::GetInstance()->AddEntity(entity);
 	}
 
 }
@@ -306,37 +307,41 @@ void SandBoxApp::Update(float deltaTime)
 	}
 #endif
 
-	for (uint32 i = 0, l = static_cast<uint32>(Entities.size()); i < l; ++i)
+	std::vector<Entity*>* entities = EntityManager::GetInstance()->GetEntities();
+
+	for (uint32 i = 0, l = static_cast<uint32>(entities->size()); i < l; ++i)
 	{
-		Entities.at(i)->Update(deltaTime);
+		entities->at(i)->Update(deltaTime);
 	}
 }
 
 void SandBoxApp::LateUpdate(float deltaTime)
 {
-	for (uint32 i = 0, l = static_cast<uint32>(Entities.size()); i < l; ++i)
+	std::vector<Entity*>* entities = EntityManager::GetInstance()->GetEntities();
+
+	for (uint32 i = 0, l = static_cast<uint32>(entities->size()); i < l; ++i)
 	{
-		Entities.at(i)->LateUpdate(deltaTime);
+		entities->at(i)->LateUpdate(deltaTime);
 	}
 }
 
 void SandBoxApp::Tick(float deltaTime)
 {
-	for (uint32 i = 0, l = static_cast<uint32>(Entities.size()); i < l; ++i)
+	std::vector<Entity*>* entities = EntityManager::GetInstance()->GetEntities();
+
+	for (uint32 i = 0, l = static_cast<uint32>(entities->size()); i < l; ++i)
 	{
-		Entities.at(i)->FixedUpdate(deltaTime);
+		entities->at(i)->FixedUpdate(deltaTime);
 	}
 
-	// SHF_PRINTF("FPS: %d \n", FPS);
+	SHF_PRINTF("FPS: %d \n", FPS);
 }
 
 void SandBoxApp::Destroy()
 {
-	for (uint32 i = 0, l = static_cast<uint32>(Entities.size()); i < l; ++i)
-	{
-		Entities.at(i)->Destroy();
-		delete Entities.at(i);
-	} Entities.clear();
+	EntityManager::GetInstance()->DestroyAndDelete();
+
+	TextureCache::GetInstance()->Destroy();
 
 	App::Destroy();
 

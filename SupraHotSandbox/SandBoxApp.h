@@ -14,9 +14,6 @@ private:
 
 	SupraHot::SkyBox* EnvBox;
 	SupraHot::Camera* FlyCamera;
-
-	std::vector<SupraHot::Entity*> Entities;
-
 public:
 	SandBoxApp();
 	~SandBoxApp();

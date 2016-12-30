@@ -13,7 +13,6 @@ namespace SupraHot
 		{
 		private:
 			SupraHot::FrameBufferObject* FBO;
-			std::vector<Entity*> Entities;
 			SupraHot::Camera* FlyCamera;
 		public:
 			AppEditorImpl();

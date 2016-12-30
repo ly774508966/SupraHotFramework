@@ -15,7 +15,7 @@ namespace SupraHot
 		private:
 			SupraHot::CLI::CameraCLI^ CameraInstance;
 			WindowEditor^ Window;
-			cliext::vector<SupraHot::CLI::EntityCLI^> Entities;
+			// cliext::vector<SupraHot::CLI::EntityCLI^> Entities;
 		public:
 			void Init(WindowEditor^ window);
 			void Resize(uint32 width, uint32 height);
@@ -26,9 +26,9 @@ namespace SupraHot
 			void Destroy();
 			void ProgressApp();
 
-			void AddEntity(SupraHot::CLI::EntityCLI^ entity);
-			void RemoveEntity(SupraHot::CLI::EntityCLI^ entity);
-			cliext::vector<SupraHot::CLI::EntityCLI^> GetEntities();
+			//void AddEntity(SupraHot::CLI::EntityCLI^ entity);
+			//void RemoveEntity(SupraHot::CLI::EntityCLI^ entity);
+			//cliext::vector<SupraHot::CLI::EntityCLI^> GetEntities();
 
 			SupraHot::CLI::CameraCLI^ GetCamera();
 		};

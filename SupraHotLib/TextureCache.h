@@ -28,6 +28,7 @@ namespace SupraHot
 
 			static TextureCache* GetInstance();
 			void Init();
+			void Destroy();
 			bool IsCachedTexture2D(std::string pathToTexture);
 			bool IsCachedTextureCube(std::string pathToTexture);
 			

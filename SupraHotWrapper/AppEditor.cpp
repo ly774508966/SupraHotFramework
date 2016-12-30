@@ -44,7 +44,6 @@ namespace SupraHot
 
 		void AppEditor::ProgressApp()
 		{
-			Window->GetHandle()->PrintVersion();
 			Window->GetHandle()->SetClearColor(0.3f, 0.3f, 0.3f, 0);
 
 			glViewport(0, 0, Window->GetHandle()->GetWidth(), Window->GetHandle()->GetHeight());
@@ -59,7 +58,7 @@ namespace SupraHot
 			Window->GetHandle()->Update();
 		}
 
-		void AppEditor::AddEntity(SupraHot::CLI::EntityCLI^ entity)
+	/*	void AppEditor::AddEntity(SupraHot::CLI::EntityCLI^ entity)
 		{
 			Instance->AddEntity(entity->GetHandle());
 			Entities.push_back(entity);
@@ -75,7 +74,7 @@ namespace SupraHot
 		cliext::vector<SupraHot::CLI::EntityCLI^> AppEditor::GetEntities()
 		{
 			return Entities;
-		}
+		}*/
 
 		SupraHot::CLI::CameraCLI^ AppEditor::GetCamera()
 		{

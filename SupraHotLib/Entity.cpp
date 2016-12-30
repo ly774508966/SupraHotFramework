@@ -22,6 +22,7 @@ namespace SupraHot
 
 	Entity::~Entity()
 	{
+
 	}
 
 	Transform& Entity::GetTransform()
@@ -51,6 +52,18 @@ namespace SupraHot
 	{
 		Components.erase(std::remove(Components.begin(), Components.end(), component), Components.end());
 		component->Remove();
+		delete component;
+	}
+
+	void Entity::RemoveAndDeleteAllComponents()
+	{
+		for (uint32 i = 0, l = static_cast<uint32>(Components.size()); i < l; ++i)
+		{
+			Components.at(i)->Remove();
+			delete Components.at(i);
+		}
+
+		Components.clear();
 	}
 
 	Component* Entity::AddComponent(Component* component)

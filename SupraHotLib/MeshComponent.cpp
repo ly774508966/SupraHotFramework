@@ -14,6 +14,9 @@ namespace SupraHot
 
 	MeshComponent::~MeshComponent()
 	{
+#if DEVELOPMENT == 1
+		//SHF_PRINTF("~MeshComponent \n");
+#endif
 	}
 
 	void MeshComponent::Registered()

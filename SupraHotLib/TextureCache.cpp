@@ -120,5 +120,40 @@ namespace SupraHot
 					DefaultTextureCube = TextureCubePtr(rawTexture);
 				}
 		}
+
+		void TextureCache::Destroy()
+		{
+#if DEVELOPMENT == 1
+			SHF_PRINTF("\n- - - - - - - - - - - - \n");
+			SHF_PRINTF("TextureCache::Destroy \n\n");
+#endif
+
+			DefaultTexture2D.get()->Destroy();
+			DefaultTextureCube.get()->Destroy();
+			
+			{
+				typedef std::unordered_map<std::string, Texture2DPtr>::iterator it_type;
+				for (it_type iterator = Texture2Ds.begin(); iterator != Texture2Ds.end(); ++iterator)
+				{
+					iterator->second.get()->Destroy();
+				}
+
+				Texture2Ds.clear();
+			}
+
+			{
+				typedef std::unordered_map<std::string, TextureCubePtr>::iterator it_type;
+				for (it_type iterator = TextureCubes.begin(); iterator != TextureCubes.end(); ++iterator)
+				{
+					iterator->second.get()->Destroy();
+				}
+
+				TextureCubes.clear();
+			}
+#if DEVELOPMENT == 1
+			SHF_PRINTF("\nTextureCache::Destroy \n");
+			SHF_PRINTF("- - - - - - - - - - - - \n\n");
+#endif
+		}
 	};
 };
