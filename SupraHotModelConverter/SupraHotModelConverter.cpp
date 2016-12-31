@@ -109,7 +109,6 @@ int _tmain(int argc, char* argv[])
 		// Build up mesh
 		mesh.Name = std::string(const_cast<char*>(assimpMesh.mName.C_Str()));
 		mesh.NameLength = static_cast<uint32>(assimpMesh.mName.length);
-		mesh.MaterialID = assimpMesh.mMaterialIndex;
 
 		// Set vertex & index count
 		mesh.VertexCount = assimpMesh.mNumVertices;

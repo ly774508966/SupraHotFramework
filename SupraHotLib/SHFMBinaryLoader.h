@@ -42,8 +42,6 @@ namespace SupraHot
 				uint32 ElementCountBytes = 0;
 				uint32 IndexCountBytes = 0;
 
-				uint32 MaterialID = 0;
-
 				float* Vertices;
 				uint32* Indices;
 			};

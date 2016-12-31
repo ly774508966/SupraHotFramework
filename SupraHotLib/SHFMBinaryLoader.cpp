@@ -83,7 +83,6 @@ namespace SupraHot
 				Read(sizeof(uint32), 1, &mesh.ElementCount, file);
 				Read(sizeof(uint32), 1, &mesh.ElementCountBytes, file);
 				Read(sizeof(uint32), 1, &mesh.IndexCountBytes, file);
-				Read(sizeof(uint32), 1, &mesh.MaterialID, file);
 
 				mesh.Vertices = new float[mesh.ElementCount];
 				Read(sizeof(float), mesh.ElementCount, mesh.Vertices, file);
