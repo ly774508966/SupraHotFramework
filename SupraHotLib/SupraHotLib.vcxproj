@@ -291,9 +291,9 @@
     <ClInclude Include="FloatMaterialProperty.h" />
     <ClInclude Include="FrameBufferObject.h" />
     <ClInclude Include="FullScreenQuad.h" />
+    <ClInclude Include="GenericSerializer.h" />
     <ClInclude Include="LuaVM.h" />
     <ClInclude Include="Mat4.h" />
-    <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialProperty.h" />
     <ClInclude Include="MaterialLoader.h" />
     <ClInclude Include="MathConstants.h" />
@@ -381,9 +381,9 @@
     <ClCompile Include="FloatMaterialProperty.cpp" />
     <ClCompile Include="FrameBufferObject.cpp" />
     <ClCompile Include="FullScreenQuad.cpp" />
+    <ClCompile Include="GenericSerializer.cpp" />
     <ClCompile Include="LuaVM.cpp" />
     <ClCompile Include="Mat4.cpp" />
-    <ClCompile Include="Material.cpp" />
     <ClCompile Include="MaterialProperty.cpp" />
     <ClCompile Include="MaterialLoader.cpp" />
     <ClCompile Include="Mesh.cpp" />

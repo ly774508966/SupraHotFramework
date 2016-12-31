@@ -3,7 +3,6 @@
 #include <vector>
 #include "Vec3.h"
 #include "Vec2.h"
-#include "Material.h"
 #include "Face.h"
 
 namespace SupraHot

@@ -53,47 +53,12 @@ namespace SupraHot
 			uint32* Indices;
 		};
 
-		struct Material
-		{
-			uint32 NameLength = 0;
-			std::string Name;
-
-			uint32 AlbeoMapPathLength = 0;
-			std::string AlbedoMapPath;
-
-			uint32 NormalMapPathLength = 0;
-			std::string NormalMapPath;
-
-			uint32 SpecularMapPathLength = 0;
-			std::string SpecularMapPath;
-
-			uint32 ShininessReflectionMapPathLength = 0;
-			std::string ShininessReflectionMapPath;
-
-			uint32 OpacityMapPathLength = 0;
-			std::string OpacityMapPath;
-
-			uint32 ID = 0;
-			float Ns = 0;				// specular exponent
-			Vec3 Ka;					// ambient
-			Vec3 Kd;					// diffuse
-			Vec3 Ks;					// specular
-			Vec3 Ke;					// emissive
-			float Roughness = 0.0f;     // default roughness
-			float Metalness = 0.0f;     // defaul metalness
-			float F0 = 0.04f;           // Fresnel0 0.0f = base reflectivity
-		};
-
-
 		struct SHFModelFile
 		{
 			std::string Header = "SUPRA";
 
 			uint32 MeshCount;
 			Mesh* Meshes;
-
-			uint32 MaterialCount;
-			Material* Materials;
 
 			std::string Footer = "HOT";
 		};

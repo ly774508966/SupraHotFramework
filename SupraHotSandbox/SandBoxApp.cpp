@@ -75,35 +75,37 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 
 	// Try loading a lua script and run it.
 	Scripting::LuaVM::GetInstance()->RunFile("Scripts/test.lua");
-	
-	std::vector<MeshComponent*> meshComponents = Utils::MeshDataLoader::GetInstance()->Load(
-#if SPONZA == 1
-		"Models/Sponza/Sponza_M.shfm"
-#elif 
-		"Models/ParisApartment/ParisApartment.shfm"
-#endif
-	);
-	for (MeshComponent* meshComponent : meshComponents)
+
 	{
-		Entity* entity = new Entity();
-		entity->GetTransform().SetScale(
-			Vec3(
+		std::vector<MeshComponent*> meshComponents = Utils::MeshDataLoader::GetInstance()->Load(
 #if SPONZA == 1
-			0.02f, 0.02f, 0.02f
+			"Models/Sponza/Sponza_M.shfm"
 #elif 
-			0.05f, 0.05f, 0.05f
+			"Models/ParisApartment/ParisApartment.shfm"
 #endif
-			)
-		);
+			);
+		for (MeshComponent* meshComponent : meshComponents)
+		{
+			Entity* entity = new Entity();
+			entity->GetTransform().SetScale(
+				Vec3(
+#if SPONZA == 1
+				0.02f, 0.02f, 0.02f
+#elif 
+				0.05f, 0.05f, 0.05f
+#endif
+				)
+				);
 
 #if SPONZA == 0
-		entity->GetTransform().SetLocalRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
+			entity->GetTransform().SetLocalRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
 #endif
 
-		entity->AddComponent(meshComponent);
-		EntityManager::GetInstance()->AddEntity(entity);
+			entity->AddComponent(meshComponent);
+			EntityManager::GetInstance()->AddEntity(entity);
 
-		entity->SetName(meshComponent->GetMeshData()->Name);
+			entity->SetName(meshComponent->GetMeshData()->Name);
+		}
 	}
 
 	// Try to load a 2d .dds file

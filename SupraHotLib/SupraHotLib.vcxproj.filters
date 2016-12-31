@@ -135,9 +135,6 @@
     <ClInclude Include="LuaVM.h">
       <Filter>Header Files\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>Header Files\Graphics\Common</Filter>
-    </ClInclude>
     <ClInclude Include="Mat4.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
@@ -288,6 +285,9 @@
     <ClInclude Include="EntityManager.h">
       <Filter>Header Files\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="GenericSerializer.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -376,9 +376,6 @@
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Source Files\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>Source Files\Graphics\Common</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Source Files\Graphics\Common</Filter>
@@ -469,6 +466,9 @@
     </ClCompile>
     <ClCompile Include="EntityManager.cpp">
       <Filter>Source Files\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="GenericSerializer.cpp">
+      <Filter>Source Files\Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

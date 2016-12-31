@@ -94,99 +94,6 @@ int _tmain(int argc, char* argv[])
 
 	const aiScene* scene = importer.ReadFile(s_Name, flags);
 	std::vector<Mesh> loadedMeshes;
-	std::vector<Material> loadedMaterials;
-
-	for (uint32 i = 0, l = scene->mNumMaterials; i < l; i++)
-	{
-		Material material = {};
-		aiMaterial& mat = *scene->mMaterials[i];
-
-		// Build up material
-		aiString diffuseTexPath = {};
-		aiString normalMapPath = {};
-		aiString specularMapPath = {};
-		aiString shininessReflectionMapPath = {};
-		aiString opacityMapPath = {};
-
-		// Diffuse map
-		// Blender -> Texture -> Diffuse -> Color
-		if (mat.GetTexture(aiTextureType_DIFFUSE, 0, &diffuseTexPath) == aiReturn_SUCCESS)
-		{
-			material.AlbedoMapPath = std::string(const_cast<char*>(diffuseTexPath.C_Str()));
-			material.AlbeoMapPathLength = static_cast<uint32>(diffuseTexPath.length);
-		}
-
-		// Normal map
-		// Blender -> Texture -> Geometry -> Normal
-		if (mat.GetTexture(aiTextureType_NORMALS, 0, &normalMapPath) == aiReturn_SUCCESS
-			|| mat.GetTexture(aiTextureType_HEIGHT, 0, &normalMapPath) == aiReturn_SUCCESS)
-		{
-			material.NormalMapPath = std::string(const_cast<char*>(normalMapPath.C_Str()));
-			material.NormalMapPathLength = static_cast<uint32>(normalMapPath.length);
-		}
-
-		// Roughness map
-		// Blender -> Texture -> Specular -> Color
-		if (mat.GetTexture(aiTextureType_SPECULAR, 0, &specularMapPath) == aiReturn_SUCCESS)
-		{
-			material.SpecularMapPath = std::string(const_cast<char*>(specularMapPath.C_Str()));
-			material.SpecularMapPathLength = static_cast<uint32>(specularMapPath.length);
-		}
-
-		// Metalness map
-		// Blender -> Texture -> Shading -> Mirror
-		if (mat.GetTexture(aiTextureType_SHININESS, 0, &shininessReflectionMapPath) == aiReturn_SUCCESS
-			|| mat.GetTexture(aiTextureType_REFLECTION, 0, &shininessReflectionMapPath) == aiReturn_SUCCESS)
-		{
-			material.ShininessReflectionMapPath = std::string(const_cast<char*>(shininessReflectionMapPath.C_Str()));
-			material.ShininessReflectionMapPathLength = static_cast<uint32>(shininessReflectionMapPath.length);
-		}
-
-		// Alpha mask
-		// Blender -> ....?
-		if (mat.GetTexture(aiTextureType_OPACITY, 0, &opacityMapPath) == aiReturn_SUCCESS)
-		{
-			material.OpacityMapPath = std::string(const_cast<char*>(opacityMapPath.C_Str()));
-			material.OpacityMapPathLength = static_cast<uint32>(opacityMapPath.length);
-		}
-
-
-		// Build up material properties such as color, name, etc.
-		aiString materialName = {};
-		mat.Get(AI_MATKEY_NAME, materialName);
-
-		material.Name = std::string(const_cast<char*>(materialName.C_Str()));
-		material.NameLength = static_cast<uint32>(material.Name.length());
-
-		mat.Get(AI_MATKEY_SHININESS, material.Ns);
-
-		// Temp color
-		aiColor3D color;
-
-		mat.Get(AI_MATKEY_COLOR_AMBIENT, color);
-		material.Ka.x = color.r;
-		material.Ka.y = color.g;
-		material.Ka.z = color.b;
-
-		mat.Get(AI_MATKEY_COLOR_DIFFUSE, color);
-		material.Kd.x = color.r;
-		material.Kd.y = color.g;
-		material.Kd.z = color.b;
-
-		mat.Get(AI_MATKEY_COLOR_SPECULAR, color);
-		material.Ks.x = color.r;
-		material.Ks.y = color.g;
-		material.Ks.z = color.b;
-
-		mat.Get(AI_MATKEY_COLOR_EMISSIVE, color);
-		material.Ke.x = color.r;
-		material.Ke.y = color.g;
-		material.Ke.z = color.b;
-
-		material.ID = i;
-
-		loadedMaterials.push_back(material);
-	}
 
 	printf("Processing meshes now.... \n");
 
@@ -321,8 +228,6 @@ int _tmain(int argc, char* argv[])
 	SHFModelFile modelFile;
 	modelFile.MeshCount = scene->mNumMeshes;
 	modelFile.Meshes = loadedMeshes.data();
-	modelFile.MaterialCount = scene->mNumMaterials;
-	modelFile.Materials = loadedMaterials.data();
 
 	Serialization serialization(outputPath);
 	serialization.OpenFile(Serialization::WRITE_BINARY);

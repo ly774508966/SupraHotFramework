@@ -1,0 +1,28 @@
+{
+	"ShaderDescription" : "NameOfTheShaderDescription",
+	
+	"ShaderDescriptionFileName" : "fileNameOfTheDescription",
+
+	"MaterialProperties" : 
+	[
+		{
+			"Name"  : "Color",
+			"Type"  : "Vec3",
+			"Value" : 
+			{
+				"X" : 1.0,
+				"Y" : 2.0,
+				"Z" : 3.0
+			}
+		},
+
+		{
+			"Name"  : "AlbedoMap",
+			"Type"  : "Texture2D",
+			"Value" : 
+			{
+				"Texture" : "pathToTexture"
+			}
+		}
+	]
+}

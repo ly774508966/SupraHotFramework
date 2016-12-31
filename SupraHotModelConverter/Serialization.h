@@ -36,13 +36,11 @@ namespace SupraHot
 		//void Write(uint64 size, uint64 amount, const void* data);
 		template<typename T> void Write(uint64 size, uint64 amount, const T* data);
 		void Write(uint64 size, uint64 amount, Graphics::Mesh* data);
-		void Write(uint64 size, uint64 amount, Graphics::Material* data);
 
 		void ReadFile(Graphics::SHFModelFile& data);
 		//void Read(uint64 size, uint64 amount, void* data);
 		template<typename T> void Read(uint64 size, uint64 amount, T* data);
 		void Read(uint64 size, uint64 amount, Graphics::Mesh* data);
-		void Read(uint64 size, uint64 amount, Graphics::Material* data);
 
 		void CloseFile();
 	};

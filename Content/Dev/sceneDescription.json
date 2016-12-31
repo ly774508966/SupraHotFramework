@@ -1,0 +1,62 @@
+{
+	"Scene" : 
+	{
+		"Name" : "Name of the scene"
+	},
+
+	"Entities" : 
+	[
+		{
+			"Name"  : "Color",
+
+			"Transform" : 
+			{
+				"Position" : 
+				{
+					"X" : 1.0,
+					"Y" : 2.0,
+					"Z" : 3.0
+				},
+
+				"Scale" : 
+				{
+					"X" : 1.0,
+					"Y" : 2.0,
+					"Z" : 3.0
+				},
+
+				"Rotation" : 
+				{
+					"X" : 1.0,
+					"Y" : 2.0,
+					"Z" : 3.0,
+					"W" : 4.0
+				}
+			},
+
+			"Components" : 
+			[
+				{
+					"Type" : "MeshComponent",
+
+					"Value" : 
+					{
+						"MeshData" : "fileName.sfhm",
+						
+						"Material" : "materialFile.materialDescription"
+					}
+				},
+
+				{
+					"Type" : "ScriptComponent",
+
+					"Value" : 
+					{
+						"Script" : "fileName.chai || fileName.lua"
+					}
+				}
+			]
+		}
+	]
+	
+}

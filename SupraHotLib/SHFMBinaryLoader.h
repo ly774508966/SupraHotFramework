@@ -47,37 +47,6 @@ namespace SupraHot
 				float* Vertices;
 				uint32* Indices;
 			};
-
-			struct Material
-			{
-				uint32 NameLength = 0;
-				std::string Name;
-
-				uint32 AlbeoMapPathLength = 0;
-				std::string AlbedoMapPath;
-
-				uint32 NormalMapPathLength = 0;
-				std::string NormalMapPath;
-
-				uint32 SpecularMapPathLength = 0;
-				std::string SpecularMapPath;
-
-				uint32 ShininessReflectionMapPathLength = 0;
-				std::string ShininessReflectionMapPath;
-
-				uint32 OpacityMapPathLength = 0;
-				std::string OpacityMapPath;
-
-				uint32 ID = 0;
-				float Ns = 0;				// specular exponent
-				Vec3 Ka;					// ambient
-				Vec3 Kd;					// diffuse
-				Vec3 Ks;					// specular
-				Vec3 Ke;					// emissive
-				float Roughness = 0.0f;     // default roughness
-				float Metalness = 0.0f;     // defaul metalness
-				float F0 = 0.04f;           // Fresnel0 0.0f = base reflectivity
-			};
 		};
 
 		struct SHFModelFile
@@ -86,9 +55,6 @@ namespace SupraHot
 
 			uint32 MeshCount;
 			SHFModel::Mesh* Meshes;
-
-			uint32 MaterialCount;
-			SHFModel::Material* Materials;
 
 			std::string Footer = "HOT";
 		};
@@ -99,7 +65,6 @@ namespace SupraHot
 			SHFMBinaryLoader();
 			template<typename T> void Read(uint64 size, uint64 amount, T* data, FILE* file);
 			void Read(uint64 size, uint64 amount, SHFModel::Mesh* data, FILE* file);
-			void Read(uint64 size, uint64 amount, SHFModel::Material* data, FILE* file);
 		public:
 			static SHFMBinaryLoader& GetInstance();
 			SHFModelFile LoadFromFile(std::string path);
