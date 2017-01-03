@@ -296,10 +296,7 @@ namespace SupraHot
 			// Init shader descriptions
 			// - - - - - - - - - - - - - - - - 
 
-#if DEVELOPMENT == 1
-			ShaderCompileOptions lastCompileOptions;
-			Shader* lastShader = nullptr;
-#endif
+
 
 			std::string baseDirectoryPath = "Shaders/Description/";
 
@@ -309,162 +306,7 @@ namespace SupraHot
 			for (size_t i = 0, l = shaderDescriptions.size(); i < l; ++i)
 			{
 				ShaderDescription* shaderDescription = ShaderParser::GetInstance()->Parse(baseDirectoryPath + shaderDescriptions[i]);
-				uint64 shaderCounter = 0;
-
-				if (shaderDescription != nullptr)
-				{
-					
-					std::string name = shaderDescription->Name;
-					std::string description = shaderDescription->Description;
-
-					std::string vertexShaderPath = shaderDescription->VertexShaderPath;
-					std::string pixelShaderPath = shaderDescription->PixelShaderPath;
-
-					std::unordered_map<std::string, std::vector<std::string>>* definedWhen = &shaderDescription->DefinedWhen;
-					std::unordered_map<std::string, std::vector<std::string>>* dependencies = &shaderDescription->Dependencies;
-					std::unordered_map<std::string, std::string>* uniforms = &shaderDescription->Uniforms;
-
-					// Create indexed versions of DefinedWhen
-					std::vector<std::string> indexedDefinedWhen;
-					{
-						typedef std::unordered_map<std::string, std::vector<std::string>>::iterator it_type;
-						for (it_type iterator = definedWhen->begin(); iterator != definedWhen->end(); ++iterator)
-						{
-							indexedDefinedWhen.push_back(iterator->first);
-						}
-					}
-
-					// Add internals to indexedDefines at the end.
-					indexedDefinedWhen.push_back("_Normals");
-					indexedDefinedWhen.push_back("_UV");
-					indexedDefinedWhen.push_back("_TangentsBiTangents");
-
-					SHF_PRINTF("Create Shader permutations for %s \n", name.c_str());
-					SHF_PRINTF("[ %llu Uniforms, %llu DefinedWhen, %llu Dependencies ]\n", uniforms->size(), definedWhen->size(), dependencies->size());
-
-					// Create bitfield values for all the define-options
-					// This stays constant for ALL of this shader's permutation.
-					// Todo: We need to store this look up table somewhere
-					for (size_t si = 0, sl = indexedDefinedWhen.size(); si < sl; ++si)
-					{
-						std::string defineOption = indexedDefinedWhen.at(si);
-						uint64 bitShiftedIdx = BITSHIFT(static_cast<uint64>(si));
-						shaderDescription->BitShiftedIndices[defineOption] = bitShiftedIdx;
-					}
-
-					// Save the description for later use, when we need to select a shader-instance based on the material inputs
-					ShaderDescriptions[shaderDescription->Name] = shaderDescription;
-
-					// Prepare boolean combinations for 'DefinedWhen'-Values
-					uint32 definedWhenCount = static_cast<uint32>(indexedDefinedWhen.size());
-
-					// TODO: u starts at 1, since we don't care about shaders, which have nothing defined!
-					for (uint32 u = 1, ul = static_cast<uint32>(pow(2, definedWhenCount)); u < ul; ++u)
-					{
-						bool compileShader = true;
-						std::vector<bool> definedWhenBooleans = Utils::Utility::GetBoolCombinations(u, definedWhenCount);
-						std::unordered_map<std::string, bool> definedWhenOptions;
-						ShaderCompileOptions compileOptions;
-
-						// Build up map first.
-						for (uint32 definedIdx = 0; definedIdx < definedWhenBooleans.size(); ++definedIdx)
-						{
-							std::string defineName = indexedDefinedWhen[definedIdx];
-							definedWhenOptions[defineName] = definedWhenBooleans[definedIdx];
-						}
-
-						// Check dependencies
-						// if we don't meet the dependencies for this current define, we need to break
-						typedef std::unordered_map<std::string, bool>::iterator DefinedWhenIterator;
-						for (DefinedWhenIterator iterator = definedWhenOptions.begin(); iterator != definedWhenOptions.end(); ++iterator)
-						{
-							std::string defineName = iterator->first;
-							compileOptions.Define(iterator->first, iterator->second);
-
-							if (iterator->second) // check for deps only if the the define is set to true.....
-							{
-								if (dependencies->find(defineName) != dependencies->end())
-								{
-									std::vector<std::string>& deps = dependencies->at(defineName);
-
-									for (uint32 depIdx = 0; depIdx < deps.size(); ++depIdx)
-									{
-										if (definedWhenOptions.find(deps[depIdx]) != definedWhenOptions.end()
-											&& definedWhenOptions[deps[depIdx]] == false
-											)
-										{
-											compileShader = false;
-											break;
-										}
-									}
-								}
-							}
-
-							if (!compileShader)
-							{
-								break;
-							}
-							
-						}
-
-						if (compileShader)
-						{
-							// Generate an unique identifer for this permuation of the shader, based on it's defined values
-							uint64 shaderIndex = 0;
-							
-							for (DefinedWhenIterator iterator = definedWhenOptions.begin(); iterator != definedWhenOptions.end(); ++iterator)
-							{	
-								std::string defineName = iterator->first;
-								bool isDefined = iterator->second;
-
-								if (isDefined)
-								{
-									uint64 bitShiftedIndex = shaderDescription->BitShiftedIndices[defineName];
-									shaderIndex |= bitShiftedIndex;
-								}
-							}
-
-							Shader* shader = new Shader();
-							shader->SetName(shaderDescription->Name + " [" + std::to_string(shaderIndex) + "]");
-							shader->LoadShaderFromFile(Shader::VERTEX_SHADER, vertexShaderPath, compileOptions);
-							shader->LoadShaderFromFile(Shader::PIXEL_SHADER, pixelShaderPath, compileOptions);
-							bool didCompile = shader->CompileShader();
-
-							if (!didCompile)
-							{
-								// Print current Compile options and last!
-								SHF_PRINTF("- - - - DID NOT COMPILED - - - - - \n");
-								/*
-								SHF_PRINTF("- - - - Last Options - - - - - \n");
-								lastCompileOptions.Print();
-								if (lastShader != nullptr)
-								{
-									lastShader->Print();
-								}*/
-
-								SHF_PRINTF("- - - - Current Options - - - - - \n");
-								compileOptions.Print();
-								shader->Print();
-								SHF_PRINTF("- - - - - - - - - ");
-								assert(0 == 1);
-								while (true){};
-							}
-
-							lastCompileOptions = compileOptions;
-							lastShader = shader;
-
-							// Store the shader inside the Shaders-Map
-							(Shaders[shaderDescription->Name])[shaderIndex] = shader;
-
-							SHF_PRINTF("Shader index = %llu \n", shaderIndex);
-							SHF_PRINTF("----------\n");
-
-							shaderCounter++;
-						}
-					}
-				}
-
-				SHF_PRINTF("Created %llu permutations for %s\n\n", shaderCounter, shaderDescription->Name.c_str());
+				ProcessShaderDescription(shaderDescription);
 			}
 		}
 
@@ -515,6 +357,169 @@ namespace SupraHot
 					} shaderMapLevel1.clear();
 				}
 			}
+		}
+
+		void ShaderLibrary::ProcessShaderDescription(ShaderDescription* shaderDescription)
+		{
+#if DEVELOPMENT == 1
+			ShaderCompileOptions lastCompileOptions;
+			Shader* lastShader = nullptr;
+#endif
+			uint64 shaderCounter = 0;
+
+			if (shaderDescription != nullptr)
+			{
+				std::string name = shaderDescription->Name;
+				std::string description = shaderDescription->Description;
+
+				std::string vertexShaderPath = shaderDescription->VertexShaderPath;
+				std::string pixelShaderPath = shaderDescription->PixelShaderPath;
+
+				std::unordered_map<std::string, std::vector<std::string>>* definedWhen = &shaderDescription->DefinedWhen;
+				std::unordered_map<std::string, std::vector<std::string>>* dependencies = &shaderDescription->Dependencies;
+				std::unordered_map<std::string, std::string>* uniforms = &shaderDescription->Uniforms;
+
+				// Create indexed versions of DefinedWhen
+				std::vector<std::string> indexedDefinedWhen;
+				{
+					typedef std::unordered_map<std::string, std::vector<std::string>>::iterator it_type;
+					for (it_type iterator = definedWhen->begin(); iterator != definedWhen->end(); ++iterator)
+					{
+						indexedDefinedWhen.push_back(iterator->first);
+					}
+				}
+
+				// Add internals to indexedDefines at the end.
+				indexedDefinedWhen.push_back("_Normals");
+				indexedDefinedWhen.push_back("_UV");
+				indexedDefinedWhen.push_back("_TangentsBiTangents");
+
+				SHF_PRINTF("Create Shader permutations for %s \n", name.c_str());
+				SHF_PRINTF("[ %llu Uniforms, %llu DefinedWhen, %llu Dependencies ]\n", uniforms->size(), definedWhen->size(), dependencies->size());
+
+				// Create bitfield values for all the define-options
+				// This stays constant for ALL of this shader's permutation.
+				// Todo: We need to store this look up table somewhere
+				for (size_t si = 0, sl = indexedDefinedWhen.size(); si < sl; ++si)
+				{
+					std::string defineOption = indexedDefinedWhen.at(si);
+					uint64 bitShiftedIdx = BITSHIFT(static_cast<uint64>(si));
+					shaderDescription->BitShiftedIndices[defineOption] = bitShiftedIdx;
+				}
+
+				// Save the description for later use, when we need to select a shader-instance based on the material inputs
+				ShaderDescriptions[shaderDescription->Name] = shaderDescription;
+
+				// Prepare boolean combinations for 'DefinedWhen'-Values
+				uint32 definedWhenCount = static_cast<uint32>(indexedDefinedWhen.size());
+
+				// TODO: u starts at 1, since we don't care about shaders, which have nothing defined!
+				for (uint32 u = 1, ul = static_cast<uint32>(pow(2, definedWhenCount)); u < ul; ++u)
+				{
+					bool compileShader = true;
+					std::vector<bool> definedWhenBooleans = Utils::Utility::GetBoolCombinations(u, definedWhenCount);
+					std::unordered_map<std::string, bool> definedWhenOptions;
+					ShaderCompileOptions compileOptions;
+
+					// Build up map first.
+					for (uint32 definedIdx = 0; definedIdx < definedWhenBooleans.size(); ++definedIdx)
+					{
+						std::string defineName = indexedDefinedWhen[definedIdx];
+						definedWhenOptions[defineName] = definedWhenBooleans[definedIdx];
+					}
+
+					// Check dependencies
+					// if we don't meet the dependencies for this current define, we need to break
+					typedef std::unordered_map<std::string, bool>::iterator DefinedWhenIterator;
+					for (DefinedWhenIterator iterator = definedWhenOptions.begin(); iterator != definedWhenOptions.end(); ++iterator)
+					{
+						std::string defineName = iterator->first;
+						compileOptions.Define(iterator->first, iterator->second);
+
+						if (iterator->second) // check for deps only if the the define is set to true.....
+						{
+							if (dependencies->find(defineName) != dependencies->end())
+							{
+								std::vector<std::string>& deps = dependencies->at(defineName);
+
+								for (uint32 depIdx = 0; depIdx < deps.size(); ++depIdx)
+								{
+									if (definedWhenOptions.find(deps[depIdx]) != definedWhenOptions.end()
+										&& definedWhenOptions[deps[depIdx]] == false
+										)
+									{
+										compileShader = false;
+										break;
+									}
+								}
+							}
+						}
+
+						if (!compileShader)
+						{
+							break;
+						}
+
+					}
+
+					if (compileShader)
+					{
+						// Generate an unique identifer for this permuation of the shader, based on it's defined values
+						uint64 shaderIndex = 0;
+
+						for (DefinedWhenIterator iterator = definedWhenOptions.begin(); iterator != definedWhenOptions.end(); ++iterator)
+						{
+							std::string defineName = iterator->first;
+							bool isDefined = iterator->second;
+
+							if (isDefined)
+							{
+								uint64 bitShiftedIndex = shaderDescription->BitShiftedIndices[defineName];
+								shaderIndex |= bitShiftedIndex;
+							}
+						}
+
+						Shader* shader = new Shader();
+						shader->SetName(shaderDescription->Name + " [" + std::to_string(shaderIndex) + "]");
+						shader->LoadShaderFromFile(Shader::VERTEX_SHADER, vertexShaderPath, compileOptions);
+						shader->LoadShaderFromFile(Shader::PIXEL_SHADER, pixelShaderPath, compileOptions);
+						bool didCompile = shader->CompileShader();
+
+						if (!didCompile)
+						{
+							// Print current Compile options and last!
+							SHF_PRINTF("- - - - DID NOT COMPILED - - - - - \n");
+							/*
+							SHF_PRINTF("- - - - Last Options - - - - - \n");
+							lastCompileOptions.Print();
+							if (lastShader != nullptr)
+							{
+							lastShader->Print();
+							}*/
+
+							SHF_PRINTF("- - - - Current Options - - - - - \n");
+							compileOptions.Print();
+							shader->Print();
+							SHF_PRINTF("- - - - - - - - - ");
+							assert(0 == 1);
+							while (true){};
+						}
+
+						lastCompileOptions = compileOptions;
+						lastShader = shader;
+
+						// Store the shader inside the Shaders-Map
+						(Shaders[shaderDescription->Name])[shaderIndex] = shader;
+
+						SHF_PRINTF("Shader index = %llu \n", shaderIndex);
+						SHF_PRINTF("----------\n");
+
+						shaderCounter++;
+					}
+				}
+			}
+
+			SHF_PRINTF("Created %llu permutations for %s\n\n", shaderCounter, shaderDescription->Name.c_str());
 		}
 
 		ShaderLibrary* ShaderLibrary::GetInstance()

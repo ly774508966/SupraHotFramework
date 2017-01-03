@@ -1,6 +1,8 @@
 #include "MeshComponent.h"
 #include "MeshData.h"
 #include "MeshDataRenderer.h"
+#include "GenericSerializer.h"
+#include "StringUtil.h"
 
 namespace SupraHot
 {
@@ -90,6 +92,10 @@ namespace SupraHot
 
 	void MeshComponent::ChangeShader(Graphics::ShaderDescription* shaderDescription)
 	{
+		SHF_PRINTF("MeshComponent::ChangeShader\ntodo: trim white space\n");
+		Utils::GenericSerializer serializer("Materials/" + GetMaterial()->Name + ".json");
+		serializer.Serialize(GetMaterial());
+
 		Material->RemoveAllMaterialProperties();
 		Material->SetShaderDescription(shaderDescription);
 		UpdateShaderPermution();

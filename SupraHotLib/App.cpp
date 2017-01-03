@@ -83,6 +83,9 @@ namespace SupraHot
 	{
 		// TODO: Create a proper game loop here
 		glViewport(0, 0, window->GetWidth(), window->GetHeight());
+		
+		glEnable(GL_SCISSOR_TEST);
+		glScissor(0, 0, window->GetWidth(), window->GetHeight());
 
 		window->Clear();
 
@@ -104,6 +107,7 @@ namespace SupraHot
 			// should Probally measure the amount of rendering time.
 			Render();
 			window->Update();
+			glDisable(GL_SCISSOR_TEST);
 			FPS++;
 		}
 		

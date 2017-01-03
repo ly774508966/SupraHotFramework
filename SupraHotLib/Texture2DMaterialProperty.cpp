@@ -37,7 +37,8 @@ namespace SupraHot
 
 				// Check if current texture is cached or not.
 
-				if (Texture.get() != nullptr && !TextureCache::GetInstance()->IsCachedTexture2D(Value))
+				//if (Texture.get() != nullptr && !TextureCache::GetInstance()->IsCachedTexture2D(Value))
+				if (Texture.get() != nullptr)
 				{
 					// FreeTexture() checks, if the texture is not being used anywhere else or not
 					TextureCache::GetInstance()->FreeTexture(Texture);
@@ -64,6 +65,7 @@ namespace SupraHot
 						TextureCache::GetInstance()->CacheTexture(newTexture);
 
 						Texture = newTexture;
+						Value = pathToTexture;
 						return;
 					}
 
@@ -82,6 +84,8 @@ namespace SupraHot
 						TextureCache::GetInstance()->CacheTexture(newTexture);
 
 						Texture = newTexture;
+						Value = pathToTexture;
+
 						Utils::FileSystem::GetInstance()->SetRootPath(rootPath);
 
 						return;

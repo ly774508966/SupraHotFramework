@@ -72,7 +72,7 @@ namespace SupraHot
 			auto json = json11::Json::parse(jsonFile.c_str(), err);
 
 #if DEVELOPMENT == 1
-			SHF_PRINTF("Error: %s \n", err.c_str());
+			SHF_PRINTF("ShaderParser::Parse Error: %s \n", err.c_str());
 #endif
 
 			std::string shaderName = json["Description"]["Name"].string_value();
@@ -261,6 +261,7 @@ namespace SupraHot
 
 			ShaderDescription* description = new ShaderDescription();
 			description->Name = shaderName;
+			description->FileName = Utils::StringUtil::GetFileNameFromPath(pathToShaderDefinitionFile);
 			description->Description = shaderDescription;
 			description->BRDFType = brdf;
 			description->Dependencies = dependenciesMap;

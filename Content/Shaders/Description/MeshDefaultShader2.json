@@ -1,0 +1,62 @@
+{
+	"Description" : 
+	{
+		"Name" : "MeshDefaultShader2",
+		"Description" : "Used when creating new MeshComponents"
+	},
+
+	"Files" : 
+	{
+		"GL" : 
+		{
+			"VertexShader" : "../GL/mesh.vs.glsl",
+			"PixelShader" : "../GL/mesh_default.fs.glsl"
+		},
+
+		"GLES3" : 
+		{
+			"VertexShader" : "Shaders/GLES3/mesh.vs.glsl",
+			"PixelShader" : "Shaders/GLES3/mesh_default.fs.glsl"
+		}	
+	},
+
+	"BRDF" : "None",
+ 
+	"Defines" :
+	{
+		"BuildAllUniformDefines" : false,
+
+		"DefinedWhen" : 
+		{
+			"_EnvMap" : 
+			[
+				"EnvMap"
+			],
+
+			"_DiffuseTexture" : 
+			[
+				"DiffuseTexture"
+			]
+		}
+	},
+
+	"Dependencies" : 
+	{
+		"_DiffuseTexture" : 
+		[
+			"_UV",
+			"_Normals"
+		],
+		
+		"_TangentsBiTangents" : 
+		[
+			"_UV", 
+			"_Normals"
+		],
+
+		"_EnvMap" : 
+		[
+			"_Normals"
+		]
+	}
+}

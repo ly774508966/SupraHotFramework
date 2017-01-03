@@ -114,7 +114,6 @@ namespace SupraHotEditor
 
         private void SelectShader(String selectedShader) 
         {
-            Console.WriteLine("TODO: Acuallty need to really change the shader for this material to {0}", selectedShader);
             Console.WriteLine("Selected Shader: {0}", selectedShader);
 
             List<ShaderUniformCLI> availableMaterialProperties = ShaderLibraryCLI.GetIntance().GetAvailableShaderUniforms(selectedShader);

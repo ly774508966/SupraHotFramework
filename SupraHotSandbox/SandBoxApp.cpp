@@ -1,10 +1,22 @@
 #include "Platform.h"
-#include <FileSystem.h>
 #include "SandBoxApp.h"
-#include "MeshComponent.h"
+
+#include <FileSystem.h>
+#include <MeshComponent.h>
+#include <MeshDataLoader.h>
+#include <LuaVM.h>
+#include <TextureCube.h>
+#include <SkyBox.h>
+#include <MeshDataRenderer.h>
+#include <ShaderLibrary.h>
+#include <TextureCache.h>
+#include <TextureCubeMaterialProperty.h>
+#include <Texture2DMaterialProperty.h>
+#include <EntityManager.h>
+#include <GenericSerializer.h>
 
 #ifdef PLATFORM_ANDROID 
-	#include "WindowAndroid.h"
+	#include <WindowAndroid.h>
 	#include <android/asset_manager.h>
 	#include <android/asset_manager_jni.h>
 #endif
@@ -17,17 +29,7 @@
 #ifdef PLATFORM_EMSCRIPTEN
 	#include "WindowEmscripten.h"
 #endif
-
-#include <MeshDataLoader.h>
-#include <LuaVM.h>
-#include <TextureCube.h>
-#include <SkyBox.h>
-#include <MeshDataRenderer.h>
-#include <ShaderLibrary.h>
-#include <TextureCache.h>
-#include <TextureCubeMaterialProperty.h>
-#include <Texture2DMaterialProperty.h>
-#include <EntityManager.h>
+#include <GenericSerializer.h>
 
 using namespace SupraHot;
 
@@ -80,7 +82,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 		std::vector<MeshComponent*> meshComponents = Utils::MeshDataLoader::GetInstance()->Load(
 #if SPONZA == 1
 			"Models/Sponza/Sponza_M.shfm"
-#elif 
+#else 
 			"Models/ParisApartment/ParisApartment.shfm"
 #endif
 			);
@@ -91,7 +93,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 				Vec3(
 #if SPONZA == 1
 				0.02f, 0.02f, 0.02f
-#elif 
+#else 
 				0.05f, 0.05f, 0.05f
 #endif
 				)
@@ -239,6 +241,18 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 
 		EntityManager::GetInstance()->AddEntity(entity);
 	}
+
+
+	{
+		// Try loading material
+		Utils::GenericSerializer serializer("Dev/Test.json");
+		ShaderMaterial deserializeTest;
+		serializer.Deserialize(deserializeTest);
+
+		SHF_PRINTF("MaterialName : %s \n", deserializeTest.Name.c_str());
+
+	}
+
 
 }
 

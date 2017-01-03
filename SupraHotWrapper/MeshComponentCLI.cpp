@@ -11,7 +11,9 @@ namespace SupraHot
 
 		MeshComponentCLI::~MeshComponentCLI()
 		{
+#if DEVELOPMENT == 1
 			SHF_PRINTF("~MeshComponentCLI \n");
+#endif
 		}
 
 		MeshComponentCLI::MeshComponentCLI(SupraHot::CLI::MeshData^ meshData, SupraHot::CLI::Material^ material)
@@ -49,6 +51,9 @@ namespace SupraHot
 			std::string shaderNameStd = msclr::interop::marshal_as<std::string>(shaderName);
 			SupraHot::Graphics::ShaderDescription* shaderDescription = SupraHot::Graphics::ShaderLibrary::GetInstance()->GetShaderDescriptions()->at(shaderNameStd);
 			static_cast<SupraHot::MeshComponent*>(Instance)->ChangeShader(shaderDescription);
+#if DEVELOPMENT == 1
+			SHF_PRINTF("Shader description file name: %s \n", shaderDescription->FileName.c_str());
+#endif
 			return true;
 		}
 	};
