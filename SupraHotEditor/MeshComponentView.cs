@@ -179,6 +179,7 @@ namespace SupraHotEditor
 
             ActiveMaterialProperties = new List<MaterialPropertyWidget>();
             AvailableMaterialPropertiesComboBox = new ComboBox();
+            AvailableMaterialPropertiesComboBox.Sorted = true;
             AvailableMaterialPropertiesComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             groupBoxFlowLayout.Controls.Add(AvailableMaterialPropertiesComboBox);
 
@@ -216,6 +217,7 @@ namespace SupraHotEditor
         // Gui method.
         private void AddMaterialProperty(String name, String type) 
         {
+            // Add native material property to material
             Console.WriteLine("CLI::AddMaterialProperty {0} {1}", name, type);
             var materialPropertyCLI = this.Material.AddMaterialProperty(name, type);
             this.MeshComponent.UpdateShaderPermuation();
@@ -224,11 +226,25 @@ namespace SupraHotEditor
             {
                 Console.WriteLine("Add Widget!");
                 groupBoxFlowLayout.FlowDirection = FlowDirection.TopDown;
-                MaterialPropertyWidget mpw = new MaterialPropertyWidget(materialPropertyCLI);
+                MaterialPropertyWidget mpw = new MaterialPropertyWidget(materialPropertyCLI, this);
                 groupBoxFlowLayout.Controls.Add(mpw);
                 ActiveMaterialProperties.Add(mpw);
                 Form1.UpdateView();
             }
+        }
+
+        public void RemoveMaterialProperty(String name, MaterialPropertyCommonInterface materialPropertyCommonInterface, MaterialPropertyWidget materialPropertyWidget) 
+        {
+            Console.WriteLine("Remove {0}", name);
+
+            AvailableMaterialPropertiesComboBox.Items.Add(name);
+
+            groupBoxFlowLayout.Controls.Remove(materialPropertyWidget);
+            ActiveMaterialProperties.Remove(materialPropertyWidget);
+            this.Material.RemoveMaterialProperty(name); // This removes it by name!
+
+            this.MeshComponent.UpdateShaderPermuation();
+            Form1.UpdateView();
         }
 
         private bool SwitchNativeShader() 

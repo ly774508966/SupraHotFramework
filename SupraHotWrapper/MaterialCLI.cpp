@@ -181,17 +181,23 @@ namespace SupraHot
 
 		void Material::RemoveMaterialProperty(MaterialPropertyCommonInterface^ materialProperty)
 		{
-			printf("Material::RemoveMaterialProperty NEEDS TO BE IMPLEMENTED \n");
+			SHF_PRINTF("Material::RemoveMaterialProperty NEEDS TO BE IMPLEMENTED \n");
 		}
 
 		void Material::RemoveMaterialProperty(System::String^ materialName)
 		{
-			printf("Material::RemoveMaterialProperty NEEDS TO BE IMPLEMENTED \n");
+			std::string matName = msclr::interop::marshal_as<std::string>(materialName);
+			auto materialProperty = GetHandle()->GetMaterialPropertyByName(matName);
+
+			if (materialProperty != nullptr)
+			{
+				GetHandle()->RemoveMaterialProperty(materialProperty);
+			}
 		}
 
 		void Material::RemoveAllMaterialProperties()
 		{
-			printf("Material::RemoveAllMaterialProperties NEEDS TO BE IMPLEMENTED \n");
+			GetHandle()->RemoveAllMaterialProperties();
 		}
 	};
 };

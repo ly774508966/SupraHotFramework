@@ -1,1 +1,1 @@
-{"MaterialName": "MeshBasicShader Material", "MaterialProperties": [{"Name": "AlbedoTexture", "Type": "Texture2D", "Value": ""}], "ShaderDescription": "MeshBasicShader", "ShaderDescriptionFileName": "MeshBasicShader.json"}
+{"MaterialName": "MeshBasicShader Material", "MaterialProperties": [], "ShaderDescription": "MeshBasicShader", "ShaderDescriptionFileName": "MeshBasicShader.json"}

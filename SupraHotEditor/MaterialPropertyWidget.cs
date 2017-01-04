@@ -15,27 +15,59 @@ namespace SupraHotEditor
         private String Type = "";
         private String Name = "";
         private FlowLayoutPanel groupBoxFlowLayout;
+        private MeshComponentView MeshComponentView;
 
-        public MaterialPropertyWidget(MaterialPropertyCommonInterface materialPropertyCommonInterface) 
+        public MaterialPropertyWidget(MaterialPropertyCommonInterface materialPropertyCommonInterface, MeshComponentView parentMeshComponentView) 
         {
             this.MaterialPropertyCommonInterface = materialPropertyCommonInterface;
+            this.MeshComponentView = parentMeshComponentView;
+
             this.Type = materialPropertyCommonInterface.GetType();
+            this.Name = materialPropertyCommonInterface.GetName();
             this.Text = materialPropertyCommonInterface.GetName() + " (" + this.Type + ")";
             this.Width = 130;
+            this.MinimumSize = new Size(this.Width, 150);
 
             groupBoxFlowLayout = new FlowLayoutPanel();
             groupBoxFlowLayout.Dock = DockStyle.Fill;
-            groupBoxFlowLayout.FlowDirection = FlowDirection.TopDown;
+            groupBoxFlowLayout.FlowDirection = FlowDirection.TopDown;            
+            groupBoxFlowLayout.WrapContents = false;
             this.Controls.Add(groupBoxFlowLayout);
 
-            Color lightGrey = Color.FromArgb(40, 40, 40);
+            Color lightGrey = Color.FromArgb(20, 20, 20);
             Color whiteColor = Color.FromArgb(255, 255, 255);
             this.BackColor = lightGrey;
             this.ForeColor = whiteColor;
 
+            // Remove Button
+            Button removeButton = new Button();
+            removeButton.Text = "X";
+            removeButton.Width = 20;
+            removeButton.Height = 20;
+            removeButton.FlatStyle = FlatStyle.Flat;
+            removeButton.FlatAppearance.BorderSize = 1;
+            removeButton.Dock = DockStyle.Right;
+            removeButton.Click += new EventHandler(
+                    delegate(object sender, EventArgs e)
+                    {
+                        Console.WriteLine("Clicked remove {0} button!", this.Text);
+
+                        // Remove MaterialProperty
+                        // Also, add this MaterialProperty back to it's original List, so that we can add it later, if we want to.
+
+                        this.MeshComponentView.RemoveMaterialProperty(Name, MaterialPropertyCommonInterface, this);
+
+                        Form1.UpdateView();
+                    }
+                );
+            groupBoxFlowLayout.Controls.Add(removeButton);
+
+            // Name
             Label nameLabel = new Label();
             nameLabel.Text = this.Text;
             groupBoxFlowLayout.Controls.Add(nameLabel);
+
+   
 
             if(Type == "Boolean") 
             {
