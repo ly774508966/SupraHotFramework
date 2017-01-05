@@ -25,7 +25,7 @@ namespace SupraHot
 
 			System::Collections::Generic::List<ShaderUniformCLI^>^ GetAvailableShaderUniforms(System::String^ shaderName);
 			System::Collections::Generic::List<System::String^>^ GetAvailableShaderNames();
-
+/*
 			virtual ~ShaderLibraryCLI()
 			{
 				if (Instance != nullptr)
@@ -42,7 +42,7 @@ namespace SupraHot
 					delete Instance;
 					Instance = nullptr;
 				}
-			}
+			}*/
 
 			SupraHot::Graphics::ShaderLibrary* GetHandle()
 			{

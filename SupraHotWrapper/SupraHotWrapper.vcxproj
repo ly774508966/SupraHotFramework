@@ -164,6 +164,7 @@
     <ClInclude Include="BooleanMaterialPropertyCLI.h" />
     <ClInclude Include="CameraCLI.h" />
     <ClInclude Include="ComponentCLI.h" />
+    <ClInclude Include="FileSystemCLI.h" />
     <ClInclude Include="FloatMaterialPropertyCLI.h" />
     <ClInclude Include="MaterialCLI.h" />
     <ClInclude Include="MaterialPropertyCLIInterface.h" />
@@ -193,6 +194,7 @@
     <ClCompile Include="BooleanMaterialPropertyCLI.cpp" />
     <ClCompile Include="CameraCLI.cpp" />
     <ClCompile Include="ComponentCLI.cpp" />
+    <ClCompile Include="FileSystemCLI.cpp" />
     <ClCompile Include="FloatMaterialPropertyCLI.cpp" />
     <ClCompile Include="MaterialCLI.cpp" />
     <ClCompile Include="MaterialPropertyCLIInterface.cpp" />

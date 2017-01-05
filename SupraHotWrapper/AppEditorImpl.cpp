@@ -15,6 +15,7 @@ namespace SupraHot
 
 		void AppEditorImpl::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::string title)
 		{
+			// Applies only, when running from VS
 			Utils::FileSystem::GetInstance()->SetRootPath("../../../../Content/");
 
 			ShaderLibrary::GetInstance()->Initialize();

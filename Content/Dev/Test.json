@@ -1,1 +1,1 @@
-{"MaterialName": "MeshDefaultShader Material", "MaterialProperties": [{"Name": "XYZBool", "Type": "Boolean", "Value": true}], "ShaderDescription": "MeshDefaultShader", "ShaderDescriptionFileName": "MeshDefaultShader.json"}
+{"MaterialName": "MeshDefaultShader Material", "MaterialProperties": [{"Name": "DiffuseTexture", "Type": "Texture2D", "Value": "Textures/Static.dds"}, {"Name": "EnvMap", "Type": "TextureCube", "Value": "Textures/Specular.dds"}], "ShaderDescription": "MeshDefaultShader", "ShaderDescriptionFileName": "MeshDefaultShader.json"}

@@ -27,6 +27,11 @@ namespace SupraHot
 				GetHandle()->SetValue(msclr::interop::marshal_as<std::string>(value));
 			};
 
+			void Reset()
+			{
+				Instance->Reset();
+			};
+
 			System::String^ GetType() override;
 			System::String^ GetName() override;
 

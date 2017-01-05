@@ -21,6 +21,8 @@ namespace SupraHot
 			std::string GetValue();
 			Texture2DPtr GetTexture();
 			void Apply(Shader* shader) override;
+
+			void Reset();
 		};
 	};
 };

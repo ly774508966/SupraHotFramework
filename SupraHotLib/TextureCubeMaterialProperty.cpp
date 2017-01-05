@@ -118,5 +118,15 @@ namespace SupraHot
 			shader->SetTextureCube(GLLocation, texture, GL_TEXTURE0 + TextureSlot);
 			shader->LastUsedTextureSlot = shader->LastUsedTextureSlot + 1;
 		}
+
+		void TextureCubeMaterialProperty::Reset()
+		{
+			SHF_PRINTF("TextureCubeMaterialProperty:: %s triggered reset \n", Value.c_str());
+			Value = "";
+			if (Texture.get() != nullptr)
+			{
+				TextureCache::GetInstance()->FreeTexture(Texture);
+			}
+		}
 	};
 };

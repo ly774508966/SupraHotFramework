@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -343,7 +344,38 @@ namespace SupraHotEditor
                         {
                             String fileName = openFileDialog.SafeFileName;
                             String filePath = openFileDialog.FileName;
-                            ((Texture2DMaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(filePath);
+
+                            // Check if the selected file exists in our content folder.
+                            // If it doesn't we need to copy it over.
+
+                            FileSystemCLI fileSystem = FileSystemCLI.GetIntance();
+                            bool fileExists = fileSystem.FileExists("Textures/" + fileName);
+
+                            if (!fileExists)
+                            {
+                                // TODO: Allow users only to pick files from the asset system.
+                                // By clicking on the load button, we need a dialog pop-up, in which we can select textures.
+
+                                Console.WriteLine("File {0} does not exist! Copying now!\n", fileName);
+                                System.IO.File.Copy(filePath, fileSystem.GetRootPath() + "Textures/" + fileName, true);
+                            }
+                            else 
+                            { 
+                                // Check file sizes
+                                long newFileLength = new System.IO.FileInfo(fileSystem.GetRootPath() + "Textures/" + fileName).Length;
+                                long oldFileLength = new System.IO.FileInfo(filePath).Length;
+
+
+                                if (newFileLength != oldFileLength) 
+                                {
+                                    Console.WriteLine("Selected file different than the one in Assets-folder\nCopy now!\n");
+                                    System.IO.File.Copy(filePath, fileSystem.GetRootPath() + "Textures/" + fileName, true);
+                                    ((Texture2DMaterialPropertyCLI)this.MaterialPropertyCommonInterface).Reset();
+                                }
+
+                            }
+
+                            ((Texture2DMaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue("Textures/" + fileName);
                             pathLabel.Text = "Name:" + fileName;
                         }
 
@@ -378,7 +410,38 @@ namespace SupraHotEditor
                         {
                             String fileName = openFileDialog.SafeFileName;
                             String filePath = openFileDialog.FileName;
-                            ((TextureCubeMaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(filePath);
+
+                            // Check if the selected file exists in our content folder.
+                            // If it doesn't we need to copy it over.
+
+                            FileSystemCLI fileSystem = FileSystemCLI.GetIntance();
+                            bool fileExists = fileSystem.FileExists("Textures/" + fileName);
+
+                            if (!fileExists)
+                            {
+                                // TODO: Allow users only to pick files from the asset system.
+                                // By clicking on the load button, we need a dialog pop-up, in which we can select textures.
+
+                                Console.WriteLine("File {0} does not exist! Copying now!\n", fileName);
+                                System.IO.File.Copy(filePath, fileSystem.GetRootPath() + "Textures/" + fileName, true);
+                            }
+                            else
+                            {
+                                // Check file sizes
+                                long newFileLength = new System.IO.FileInfo(fileSystem.GetRootPath() + "Textures/" + fileName).Length;
+                                long oldFileLength = new System.IO.FileInfo(filePath).Length;
+
+
+                                if (newFileLength != oldFileLength)
+                                {
+                                    Console.WriteLine("Selected file different than the one in Assets-folder\nCopy now!\n");
+                                    System.IO.File.Copy(filePath, fileSystem.GetRootPath() + "Textures/" + fileName, true);
+                                    ((TextureCubeMaterialPropertyCLI)this.MaterialPropertyCommonInterface).Reset();
+                                }
+
+                            }
+
+                            ((TextureCubeMaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue("Textures/" + fileName);
                             pathLabel.Text = "Name:" + fileName;
                         }
 

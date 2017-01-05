@@ -120,5 +120,15 @@ namespace SupraHot
 			shader->SetTexture2D(GLLocation, texture, GL_TEXTURE0 + TextureSlot);
 			shader->LastUsedTextureSlot = shader->LastUsedTextureSlot + 1;
 		}
+
+		void Texture2DMaterialProperty::Reset()
+		{
+			SHF_PRINTF("Texture2DMaterialProperty:: %s triggered reset \n", Value.c_str());
+			Value = "";
+			if (Texture.get() != nullptr)
+			{
+				TextureCache::GetInstance()->FreeTexture(Texture);
+			}
+		}
 	};
 };
