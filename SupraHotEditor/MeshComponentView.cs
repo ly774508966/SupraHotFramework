@@ -99,17 +99,17 @@ namespace SupraHotEditor
             }
 
             shaderNameComboBox.SelectedIndexChanged += new EventHandler(
-                    delegate(object sender, EventArgs e)
-                    {
-                        ComboBox comboBox = (ComboBox)sender;
-                        string selectedShader = (string)comboBox.SelectedItem;
+                delegate(object sender, EventArgs e)
+                {
+                    ComboBox comboBox = (ComboBox)sender;
+                    string selectedShader = (string)comboBox.SelectedItem;
 
-                        if (selectedShader != SelectedShader) 
-                        {
-                            BuildData(selectedShader);
-                        }
+                    if (selectedShader != SelectedShader) 
+                    {
+                        BuildData(selectedShader);
                     }
-                );
+                }
+            );
         }
 
         private void SelectShader(String selectedShader) 

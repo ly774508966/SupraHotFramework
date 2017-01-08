@@ -1,1 +1,1 @@
-{"MaterialName": "MeshDefaultShader Material", "MaterialProperties": [], "ShaderDescription": "MeshDefaultShader", "ShaderDescriptionFileName": "MeshDefaultShader.json"}
+{"MaterialName": "MeshDefaultShader Material", "MaterialProperties": [{"Name": "DiffuseTexture", "Type": "Texture2D", "Value": "Images/test.png"}, {"Name": "EnvMap", "Type": "TextureCube", "Value": "Textures/MonValley_G_DirtRoad_3k/Specular.dds"}], "ShaderDescription": "MeshDefaultShader", "ShaderDescriptionFileName": "MeshDefaultShader.json"}

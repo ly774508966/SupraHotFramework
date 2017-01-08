@@ -89,6 +89,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssetBrowserView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ComponentView.cs">
       <SubType>Component</SubType>
     </Compile>

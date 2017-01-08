@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -49,6 +50,61 @@ namespace SupraHotEditor
                 appEdit = new AppEditor();
                 appEdit.Init(SupraHotWindow);
 
+                // - - - - - - - - - - - - - - - - - -
+                // - - - -  Init Assets View  - - - - 
+                // - - - - - - - - - - - - - - - - - -
+                var assetViewParent = splitContainer3;
+                var assetBrowserViewContainer = assetViewParent.Panel2;
+
+                var assetListViewContainer = assetViewParent.Panel1;
+                Color clr = Color.FromArgb(70, 70, 70);
+                assetListViewContainer.BackColor = clr;
+
+                String[] watchDirectories = new String[] 
+                { 
+                    "Textures",
+                    "Models",
+                    "Materials",
+                    "Shaders",
+                    "Scripts",
+                    "EnvMaps",
+                    "Prefabs"
+                };
+
+                var assetListView = new ListView();
+                assetListView.AutoArrange = true;
+                assetListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                assetListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+                assetListView.Columns.Add("Content", 100, HorizontalAlignment.Left);
+                assetListView.View = View.Details;
+                assetListView.Dock = DockStyle.Fill;
+
+                assetListViewContainer.Controls.Add(assetListView);
+        
+                foreach(String directory in watchDirectories) 
+                {
+                    assetListView.Items.Add(new ListViewItem(directory));
+                }
+
+                // Create custom ListView
+
+                var assetBrowserView = new AssetBrowserView();
+                assetBrowserViewContainer.Controls.Add(assetBrowserView);
+                assetBrowserView.SetDirectory(watchDirectories[0]);
+
+                assetListView.SelectedIndexChanged += new EventHandler(
+                    delegate(object sender, EventArgs e)
+                    {
+                        var listView = (ListView)sender;
+
+                        if (listView.SelectedItems.Count > 0) 
+                        {
+                            Console.WriteLine("AssetListView active item: {0}", listView.SelectedItems[0].Text);
+                            assetBrowserView.SetDirectory(listView.SelectedItems[0].Text);
+                        }
+                    }
+                );
+
 
 
                 // - - - - - - - - - - - - - - - - -
@@ -58,6 +114,9 @@ namespace SupraHotEditor
                 // Load a model 
                 MeshLoaderCLI meshLoader = MeshLoaderCLI.GetIntance();
                 entites = meshLoader.LoadSFHM("Models/Pistol/Pistol_Model.shfm");
+                //entites = meshLoader.LoadSFHM("Models/Sponza/Sponza_M.shfm");
+
+                entites.AddRange(meshLoader.LoadSFHM("Models/Sponza/Sponza_M.shfm"));
 
                 // MeshComponentView -> Gets all shader descriptions
 
@@ -257,6 +316,21 @@ namespace SupraHotEditor
         }
 
         private void splitContainer2_Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void splitContainer1_Panel2_Paint_1(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void splitContainer3_Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void splitContainer3_Panel2_Paint(object sender, PaintEventArgs e)
         {
 
         }

@@ -26,7 +26,7 @@ namespace SupraHot
 
 		ShaderMaterial::~ShaderMaterial()
 		{
-
+			Destroy();
 		}
 
 		bool ShaderMaterial::AddMaterialProperty(MaterialProperty* materialProperty)
@@ -139,7 +139,7 @@ namespace SupraHot
 			{
 				delete materialProperty;
 			}
-
+			MaterialProperties.clear();
 			// shader descriptions get deleted by shaderlibrary!
 		}
 
