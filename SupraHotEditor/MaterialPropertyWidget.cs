@@ -118,6 +118,7 @@ namespace SupraHotEditor
                 NumericUpDown xSpinner = new NumericUpDown();
                 xSpinner.DecimalPlaces = 6;
                 xSpinner.Increment = 0.1M;
+                xSpinner.Maximum = (decimal)10000000000000.0f;
                 xSpinner.Minimum = -xSpinner.Maximum;
 
                 groupBoxFlowLayout.Controls.Add(xLabel);
@@ -143,6 +144,7 @@ namespace SupraHotEditor
                 NumericUpDown xSpinner = new NumericUpDown();
                 xSpinner.DecimalPlaces = 6;
                 xSpinner.Increment = 0.1M;
+                xSpinner.Maximum = (decimal)10000000000000.0f;
                 xSpinner.Minimum = -xSpinner.Maximum;
 
                 Label yLabel = new Label();
@@ -151,6 +153,7 @@ namespace SupraHotEditor
                 NumericUpDown ySpinner = new NumericUpDown();
                 ySpinner.DecimalPlaces = 6;
                 ySpinner.Increment = 0.1M;
+                ySpinner.Maximum = (decimal)10000000000000.0f;
                 ySpinner.Minimum = -ySpinner.Maximum;
 
                 groupBoxFlowLayout.Controls.Add(xLabel);
@@ -194,6 +197,7 @@ namespace SupraHotEditor
                 NumericUpDown xSpinner = new NumericUpDown();
                 xSpinner.DecimalPlaces = 6;
                 xSpinner.Increment = 0.1M;
+                xSpinner.Maximum = (decimal)10000000000000.0f;
                 xSpinner.Minimum = -xSpinner.Maximum;
 
                 Label yLabel = new Label();
@@ -202,6 +206,7 @@ namespace SupraHotEditor
                 NumericUpDown ySpinner = new NumericUpDown();
                 ySpinner.DecimalPlaces = 6;
                 ySpinner.Increment = 0.1M;
+                ySpinner.Maximum = (decimal)10000000000000.0f;
                 ySpinner.Minimum = -ySpinner.Maximum;
 
                 Label zLabel = new Label();
@@ -210,6 +215,7 @@ namespace SupraHotEditor
                 NumericUpDown zSpinner = new NumericUpDown();
                 zSpinner.DecimalPlaces = 6;
                 zSpinner.Increment = 0.1M;
+                zSpinner.Maximum = (decimal)10000000000000.0f;
                 zSpinner.Minimum = -zSpinner.Maximum;
 
                 groupBoxFlowLayout.Controls.Add(xLabel);
@@ -265,6 +271,7 @@ namespace SupraHotEditor
                 NumericUpDown xSpinner = new NumericUpDown();
                 xSpinner.DecimalPlaces = 6;
                 xSpinner.Increment = 0.1M;
+                xSpinner.Maximum = (decimal)10000000000000.0f;
                 xSpinner.Minimum = -xSpinner.Maximum;
 
                 Label yLabel = new Label();
@@ -273,6 +280,7 @@ namespace SupraHotEditor
                 NumericUpDown ySpinner = new NumericUpDown();
                 ySpinner.DecimalPlaces = 6;
                 ySpinner.Increment = 0.1M;
+                ySpinner.Maximum = (decimal)10000000000000.0f;
                 ySpinner.Minimum = -ySpinner.Maximum;
 
                 Label zLabel = new Label();
@@ -281,6 +289,7 @@ namespace SupraHotEditor
                 NumericUpDown zSpinner = new NumericUpDown();
                 zSpinner.DecimalPlaces = 6;
                 zSpinner.Increment = 0.1M;
+                zSpinner.Maximum = (decimal)10000000000000.0f;
                 zSpinner.Minimum = -zSpinner.Maximum;
 
                 Label wLabel = new Label();
@@ -289,6 +298,7 @@ namespace SupraHotEditor
                 NumericUpDown wSpinner = new NumericUpDown();
                 wSpinner.DecimalPlaces = 6;
                 wSpinner.Increment = 0.1M;
+                wSpinner.Maximum = (decimal)10000000000000.0f;
                 wSpinner.Minimum = -wSpinner.Maximum;
 
                 groupBoxFlowLayout.Controls.Add(xLabel);

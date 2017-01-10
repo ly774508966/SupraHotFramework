@@ -6,8 +6,8 @@ namespace SupraHot
 	{
 		Transform::Transform()
 		{
-			Scale = Vec3(1, 1, 1);
-			PreScale = Vec3(1, 1, 1);
+			GlobalScale = Vec3(1, 1, 1);
+			LocalScale = Vec3(1, 1, 1);
 			LocalRotation = Quat4(Vec3(0, 0, 0), 1);
 			GlobalRotation = Quat4(Vec3(0, 0, 0), 1);
 		}
@@ -33,13 +33,13 @@ namespace SupraHot
 			Mat4 globalRotationMatrix;
 			globalRotationMatrix = globalRotationMatrix.ToRotationMatrix(GlobalRotation);
 
-			Mat4 scalingMatrix;
-			scalingMatrix.SetScale(Scale);
+			Mat4 globalScaleMatrix;
+			globalScaleMatrix.SetScale(GlobalScale);
 
-			Mat4 preScaleMatrix;
-			preScaleMatrix.SetScale(PreScale);
+			Mat4 localScaleMatrix;
+			localScaleMatrix.SetScale(LocalScale);
 
-			Transformation = preScaleMatrix * globalRotationMatrix * translationMatrix * localRotationMatrix * scalingMatrix;
+			Transformation = globalScaleMatrix * globalRotationMatrix * translationMatrix * localRotationMatrix * localScaleMatrix;
 			return Transformation;
 		}
 
@@ -58,14 +58,14 @@ namespace SupraHot
 			this->Position = position;
 		}
 
-		void Transform::SetScale(const Vec3 &scale)
+		void Transform::SetGlobalScale(const Vec3 &scale)
 		{
-			this->Scale = scale;
+			this->GlobalScale = scale;
 		}
 
-		void Transform::SetPreScale(const Vec3 &scale)
+		void Transform::SetLocalScale(const Vec3 &scale)
 		{
-			this->PreScale = scale;
+			this->LocalScale = scale;
 		}
 
 		Quat4* Transform::GetLocalRotation()
@@ -83,25 +83,25 @@ namespace SupraHot
 			return &Position;
 		}
 
-		Vec3* Transform::GetScale()
+		Vec3* Transform::GetGlobalScale()
 		{
-			return &Scale;
+			return &GlobalScale;
 		}
 
-		Vec3* Transform::GetPreScale()
+		Vec3* Transform::GetLocalScale()
 		{
-			return &PreScale;
+			return &LocalScale;
 		}
 
 		void Transform::Reset()
 		{
-			Scale.x = 1;
-			Scale.y = 1;
-			Scale.z = 1;
+			GlobalScale.x = 1;
+			GlobalScale.y = 1;
+			GlobalScale.z = 1;
 
-			PreScale.x = 1;
-			PreScale.y = 1;
-			PreScale.z = 1;
+			LocalScale.x = 1;
+			LocalScale.y = 1;
+			LocalScale.z = 1;
 
 			LocalRotation.v.x = 0;
 			LocalRotation.v.y = 0;

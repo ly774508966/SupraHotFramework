@@ -177,6 +177,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Texture2DMaterialPropertyCLI.h" />
     <ClInclude Include="TextureCubeMaterialPropertyCLI.h" />
+    <ClInclude Include="TransformComponentCLI.h" />
     <ClInclude Include="Vec2CLI.h" />
     <ClInclude Include="Vec2MaterialPropertyCLI.h" />
     <ClInclude Include="Vec3CLI.h" />
@@ -206,6 +207,7 @@
     <ClCompile Include="ShaderLibraryCLI.cpp" />
     <ClCompile Include="Texture2DMaterialPropertyCLI.cpp" />
     <ClCompile Include="TextureCubeMaterialPropertyCLI.cpp" />
+    <ClCompile Include="TransformComponentCLI.cpp" />
     <ClCompile Include="Vec2CLI.cpp" />
     <ClCompile Include="Vec2MaterialPropertyCLI.cpp" />
     <ClCompile Include="Vec3CLI.cpp" />

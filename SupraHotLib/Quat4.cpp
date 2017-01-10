@@ -176,5 +176,40 @@ namespace SupraHot
 		{
 			return (*this) * Vec3(-1, 0, 0);
 		}
+
+		Vec3 Quat4::ToEulerAngles()
+		{
+			Vec3 euler;
+
+			float sqw = w * w;
+			float sqx = v.x * v.x;
+			float sqy = v.y * v.y;
+			float sqz = v.z * v.z;
+
+			float unit = sqx + sqy + sqz + sqw;
+			float test = v.x * v.y + v.z * w;
+
+			if (test > 0.499 * unit) 
+			{
+				euler.x = 2.0f * atan2f(v.x, w);
+				euler.y = PI / 2.0f;
+				euler.z = 0.0f;
+				return euler;
+			}
+
+			if (test < -0.499 * unit)
+			{ 
+				euler.x = -2.0f * atan2f(v.x, w);
+				euler.y = -PI / 2.0f;
+				euler.z = 0.0f;
+				return euler;
+			}
+			
+			euler.x = atan2f(2.0f * v.y * w - 2.0f * v.x * v.z, sqx - sqy - sqz + sqw);
+			euler.y = asinf(2.0f * test / unit);
+			euler.z = atan2f(2.0f * v.x * w - 2.0f * v.y * v.z, -sqx + sqy - sqz + sqw);
+
+			return euler;
+		}
 	};
 };

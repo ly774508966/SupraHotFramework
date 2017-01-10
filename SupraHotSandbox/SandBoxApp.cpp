@@ -89,7 +89,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 		for (MeshComponent* meshComponent : meshComponents)
 		{
 			Entity* entity = new Entity();
-			entity->GetTransform().SetScale(
+			entity->GetTransform().SetLocalScale(
 				Vec3(
 #if SPONZA == 1
 				0.02f, 0.02f, 0.02f
@@ -195,7 +195,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 		Entity* entity = new Entity();
 
 		entity->GetTransform().SetPosition(Vec3(0, 1.0f, -5.0f));
-		entity->GetTransform().SetScale(Vec3(0.05f, 0.05f, 0.05f));
+		entity->GetTransform().SetLocalScale(Vec3(0.05f, 0.05f, 0.05f));
 		entity->GetTransform().SetLocalRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
 
 		MeshComponent* meshComponent = meshComponents.at(0);

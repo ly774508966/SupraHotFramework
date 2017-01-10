@@ -24,6 +24,8 @@ namespace SupraHot
 			Quat4 Slerp(const Quat4& r, float t) const;
 			void ToAxisAngle(Vec3& vecAxis, float& flAngle) const;
 
+			Vec3 ToEulerAngles();
+
 			void Normalize();
 			Quat4 Normalized() const;
 

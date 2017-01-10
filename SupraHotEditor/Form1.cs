@@ -140,6 +140,11 @@ namespace SupraHotEditor
 
             ComponentPanel = new FlowLayoutPanel();
             ComponentPanel.Dock = DockStyle.Fill;
+            ComponentPanel.FlowDirection = FlowDirection.TopDown;
+            ComponentPanel.WrapContents = false;
+            ComponentPanel.AutoScroll = true;
+            ComponentPanel.AutoSize = true;
+
             mainSplitContainer.Panel2.Controls.Add(ComponentPanel);
 
             MeshComponentCLI meshComponent = entity.GetComponent<MeshComponentCLI>();
@@ -149,6 +154,9 @@ namespace SupraHotEditor
                 MeshComponentView meshComponentView = new MeshComponentView(mat, meshComponent);
                 ComponentPanel.Controls.Add(meshComponentView);    
             }
+
+            // Transform component
+            ComponentPanel.Controls.Add(new TransformComponentView(new TransformComponentCLI(entity)));
         }
 
         private void CreateEntityHierarchyPanel() 
