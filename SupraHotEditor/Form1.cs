@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using SupraHot;
 using SupraHot.Graphics;
 using SupraHot.CLI;
 
@@ -26,6 +27,9 @@ namespace SupraHotEditor
         public Point PreviousPosition;
 
         private List<EntityCLI> entites;
+
+        private Panel EntityHierarchy;
+        private FlowLayoutPanel ComponentPanel;
 
         public int GetClientRectHeight() 
         {
@@ -49,6 +53,12 @@ namespace SupraHotEditor
 
                 appEdit = new AppEditor();
                 appEdit.Init(SupraHotWindow);
+
+                // - - - - - - - - - - - - - - - - - 
+                // - - - - Entity Hierarchy - - - - -
+                // - - - - - - - - - - - - - - - - - 
+
+                CreateEntityHierarchyPanel();
 
                 // - - - - - - - - - - - - - - - - - -
                 // - - - -  Init Assets View  - - - - 
@@ -111,43 +121,102 @@ namespace SupraHotEditor
                 // - - - - Properties View - - - - -
                 // - - - - - - - - - - - - - - - - -
 
+                // Debug
                 // Load a model 
                 MeshLoaderCLI meshLoader = MeshLoaderCLI.GetIntance();
                 entites = meshLoader.LoadSFHM("Models/Pistol/Pistol_Model.shfm");
-                //entites = meshLoader.LoadSFHM("Models/Sponza/Sponza_M.shfm");
-
-                entites.AddRange(meshLoader.LoadSFHM("Models/Sponza/Sponza_M.shfm"));
-
-                // MeshComponentView -> Gets all shader descriptions
-
-                MeshComponentCLI meshComponent = entites[0].GetComponent<MeshComponentCLI>();
-                Material mat = meshComponent.GetMaterial();
-                MeshComponentView meshComponentView = new MeshComponentView(mat, meshComponent);
-
-                FlowLayoutPanel groupBoxFlowLayout = new FlowLayoutPanel();
-                groupBoxFlowLayout.Dock = DockStyle.Fill;
-                mainSplitContainer.Panel2.Controls.Add(groupBoxFlowLayout);
-
-                groupBoxFlowLayout.Controls.Add(meshComponentView);
-
-
-                // Get one entity here and read it's material properties
-
-                /*
-                
-                 MeshComponentCLI mesh = entites[0].GetComponent<MeshComponentCLI>();
-                 Material mat = mesh.GetMaterial();
-                 List<MaterialPropertyCommonInterface> mpcis = mat.GetMaterialProperties();
-                 foreach (MaterialPropertyCommonInterface mpci in mpcis) 
-                 {
-                     groupBoxFlowLayout.Controls.Add(new MaterialPropertyWidget(mpci));
-                 }
-                
-                
-                 */
-
+                RebuildEntityHierarchy();
+                ShowComponents(entites[0]);
             }
             
+        }
+
+        private void ShowComponents(EntityCLI entity) 
+        {
+            if (ComponentPanel != null) 
+            {
+                mainSplitContainer.Panel2.Controls.Remove(ComponentPanel);
+            }
+
+            ComponentPanel = new FlowLayoutPanel();
+            ComponentPanel.Dock = DockStyle.Fill;
+            mainSplitContainer.Panel2.Controls.Add(ComponentPanel);
+
+            MeshComponentCLI meshComponent = entity.GetComponent<MeshComponentCLI>();
+            if (meshComponent != null) 
+            {
+                Material mat = meshComponent.GetMaterial();
+                MeshComponentView meshComponentView = new MeshComponentView(mat, meshComponent);
+                ComponentPanel.Controls.Add(meshComponentView);    
+            }
+        }
+
+        private void CreateEntityHierarchyPanel() 
+        {
+            if (EntityHierarchy != null)        
+            {
+                splitContainer2.Panel1.Controls.Remove(EntityHierarchy);
+            }
+
+            EntityHierarchy = new Panel();
+            EntityHierarchy.Dock = DockStyle.Fill;
+            Color entityHierarchyBackgroundColor = Color.FromArgb(90, 90, 90);
+            EntityHierarchy.BackColor = entityHierarchyBackgroundColor;
+            splitContainer2.Panel1.Controls.Add(EntityHierarchy);
+        }
+
+        private void LoadModelFile(String pathToModelFile)
+        {
+            MeshLoaderCLI meshLoader = MeshLoaderCLI.GetIntance();
+
+            List<EntityCLI> loaded = meshLoader.LoadSFHM(pathToModelFile);
+            entites.AddRange(loaded);
+            RebuildEntityHierarchy();
+            UpdateView();
+        }
+
+        private void RebuildEntityHierarchy()
+        {
+            Console.WriteLine("Rebuild.");
+            CreateEntityHierarchyPanel();
+            FlowLayoutPanel flowLayout = new FlowLayoutPanel();
+            flowLayout.Dock = DockStyle.Fill;
+            flowLayout.FlowDirection = FlowDirection.TopDown;
+            flowLayout.WrapContents = false;
+            //EntityHierarchy.Controls.Add(flowLayout);
+
+            // Link entities to parent.
+            TreeView treeView = new TreeView();
+            treeView.Dock = DockStyle.Fill;
+
+            TreeNode rootNode = new TreeNode("Scene");
+            treeView.Nodes.Add(rootNode);
+
+            foreach (EntityCLI entity in entites)
+            {
+                TreeNode entityNode = new TreeNode(entity.GetName());
+                rootNode.Nodes.Add(entityNode);
+            }
+
+            EntityHierarchy.Controls.Add(treeView);
+
+            treeView.NodeMouseClick += new TreeNodeMouseClickEventHandler(
+                delegate(object sender, TreeNodeMouseClickEventArgs e)
+                {
+                    if (e.Node != rootNode) 
+                    {
+                        // Cheap hack. We need a hash map for that
+                        foreach(EntityCLI entity in entites) 
+                        {
+                            if (entity.GetName() == e.Node.Text) 
+                            {
+                                ShowComponents(entity);
+                            }
+                        }
+                    }
+                }
+            );
+
         }
 
         public static void UpdateView() 
@@ -205,7 +274,18 @@ namespace SupraHotEditor
             {
                 String fileName = openFileDialog.SafeFileName;
                 String filePath = openFileDialog.FileName;
-                Console.WriteLine("Filename {0} at {1}", fileName, filePath);
+
+                // Check if model is in Content.
+                String pathToFile = FileSystemUtil.IsInContent(filePath);
+                if(pathToFile != null) 
+                {
+                    Console.WriteLine("PathToFile {0}", pathToFile);
+                    LoadModelFile(pathToFile);
+                }
+                else
+                {
+                    Console.WriteLine("{0} is not in the Content/ directory. Please move it there", fileName);
+                }
             }
         }
 
@@ -333,6 +413,16 @@ namespace SupraHotEditor
         private void splitContainer3_Panel2_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void splitContainer2_Panel1_Enter(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void splitContainer2_Panel1_MouseEnter(object sender, EventArgs e)
+        {
+            ((Panel)sender).Focus();
         }
 
     }

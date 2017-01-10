@@ -38,6 +38,10 @@ namespace SupraHotEditor
 
         public MeshComponentView(Material material, MeshComponentCLI meshComponent) 
         {
+            Console.WriteLine("MeshComponentView Constructor for {0}", material.GetName());
+
+            List<MaterialPropertyCommonInterface> copiedMaterialProperties = material.GetMaterialProperties();
+
             this.Material = material;
             this.MeshComponent = meshComponent;
 
@@ -92,10 +96,50 @@ namespace SupraHotEditor
                 shaderNameComboBox.Items.Add(shaderName);
             }
 
-            if(shaderNames.Count > 0) 
+            if(material.GetShaderDescriptionName() != null) 
             {
-                BuildData(shaderNames[0]);
-                shaderNameComboBox.SelectedIndex = 0;
+                for (int i = 0; i < shaderNames.Count; i++ )
+                {
+                    if (shaderNames[i] == material.GetShaderDescriptionName()) 
+                    {
+                       BuildData(shaderNames[i], copiedMaterialProperties.Count <= 0);
+                       shaderNameComboBox.SelectedIndex = i;
+
+
+                       Console.WriteLine("Material properties count after shader build -> {0}", copiedMaterialProperties.Count);
+                       if (copiedMaterialProperties.Count > 0)
+                       {
+                           // todo: also check, if we have set a shader on this material.
+                           // if we did, then load it up
+
+                           // add mps to this view comp.
+
+                           foreach (MaterialPropertyCommonInterface mpci in copiedMaterialProperties)
+                           {
+                               MaterialPropertyWidget mpw = new MaterialPropertyWidget(mpci, this);
+                               groupBoxFlowLayout.Controls.Add(mpw);
+                               ActiveMaterialProperties.Add(mpw);
+                               AvailableMaterialPropertiesComboBox.Items.Remove(mpci.GetName());
+                           }
+
+                           this.MeshComponent.UpdateShaderPermuation();
+                           Form1.UpdateView();
+                       }
+
+                    }
+                    else 
+                    {
+                        // need to load the missing shader.
+                    }
+                }
+            }
+            else 
+            {
+               if(shaderNames.Count > 0) 
+                {
+                    BuildData(shaderNames[0], true);
+                    shaderNameComboBox.SelectedIndex = 0;
+                }
             }
 
             shaderNameComboBox.SelectedIndexChanged += new EventHandler(
@@ -106,7 +150,7 @@ namespace SupraHotEditor
 
                     if (selectedShader != SelectedShader) 
                     {
-                        BuildData(selectedShader);
+                        BuildData(selectedShader, true);
                     }
                 }
             );
@@ -253,15 +297,17 @@ namespace SupraHotEditor
             return this.MeshComponent.SetShader(shaderName);
         }
 
-        private void BuildData(String selectedShader)
+        private void BuildData(String selectedShader, bool switchNativeShader)
         {
             this.SelectedShader = selectedShader;
 
-            if (SwitchNativeShader()) 
+            if (switchNativeShader) 
             {
-                SelectShader(selectedShader);
-                BuildAvailableMaterialPropertiesList();
+                SwitchNativeShader();
             }
+
+            SelectShader(selectedShader);
+            BuildAvailableMaterialPropertiesList();
 
             Form1.UpdateView();
         }

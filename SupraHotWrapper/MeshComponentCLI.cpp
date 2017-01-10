@@ -28,15 +28,18 @@ namespace SupraHot
 
 		SupraHot::CLI::Material^ MeshComponentCLI::GetMaterial()
 		{
+			if (Material == nullptr)
+			{
+				SupraHot::MeshComponent* meshComponent = static_cast<SupraHot::MeshComponent*>(Instance);
+				SupraHot::Graphics::ShaderMaterial* material = meshComponent->GetMaterial();
 
-			SupraHot::MeshComponent* meshComponent = static_cast<SupraHot::MeshComponent*>(Instance);
-			SupraHot::Graphics::ShaderMaterial* material = meshComponent->GetMaterial();
+				Material = gcnew SupraHot::CLI::Material();
+				Material->IsCopy = true;
+				Material->ReplaceInstance(material);
+				Material->CheckExistingMaterialProperties();
+			}
 
-			SupraHot::CLI::Material^ mat = gcnew SupraHot::CLI::Material();
-			mat->IsCopy = true;
-			mat->ReplaceInstance(material);
-
-			return mat;
+			return Material;
 		}
 
 		void MeshComponentCLI::UpdateShaderPermuation()

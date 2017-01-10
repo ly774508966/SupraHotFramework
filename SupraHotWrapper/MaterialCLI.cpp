@@ -110,6 +110,16 @@ namespace SupraHot
 			return mpcis;
 		}
 
+		System::String^ Material::GetShaderDescriptionName()
+		{
+			return msclr::interop::marshal_as<System::String^>(Instance->GetShaderDescription()->Name);
+		}
+
+		void Material::CheckExistingMaterialProperties()
+		{
+			SHF_PRINTF("Todo: Implement Material::CheckExistingMaterialProperties() \n");
+		}
+
 		MaterialPropertyCommonInterface^ Material::AddMaterialProperty(System::String^ name, System::String^ type)
 		{
 			SHF_PRINTF("Material::AddMaterialProperty (%s | %s) \n", msclr::interop::marshal_as<std::string>(name).c_str(), msclr::interop::marshal_as<std::string>(type).c_str());

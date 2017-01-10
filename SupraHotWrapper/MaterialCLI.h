@@ -25,6 +25,9 @@ namespace SupraHot
 			void RemoveMaterialProperty(MaterialPropertyCommonInterface^ materialProperty);
 			void RemoveMaterialProperty(System::String^ materialName);
 			void RemoveAllMaterialProperties();
+
+			System::String^ GetShaderDescriptionName();
+			void CheckExistingMaterialProperties();
 		};
 	};
 };

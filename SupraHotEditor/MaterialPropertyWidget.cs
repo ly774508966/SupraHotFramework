@@ -84,6 +84,15 @@ namespace SupraHotEditor
                 groupBoxFlowLayout.Controls.Add(trueButton);
                 groupBoxFlowLayout.Controls.Add(falseButton);
 
+                if (((BooleanMaterialPropertyCLI)this.MaterialPropertyCommonInterface).GetValue())
+                {
+                    trueButton.Checked = true;
+                }
+                else 
+                {
+                    falseButton.Checked = true;
+                }
+
                 trueButton.CheckedChanged += new EventHandler(
                     delegate (object sender, EventArgs e) {
 
@@ -113,6 +122,8 @@ namespace SupraHotEditor
 
                 groupBoxFlowLayout.Controls.Add(xLabel);
                 groupBoxFlowLayout.Controls.Add(xSpinner);
+
+                xSpinner.Value = (decimal)((FloatMaterialPropertyCLI)this.MaterialPropertyCommonInterface).GetValue();
 
                 // Add listeners
                 xSpinner.ValueChanged += new EventHandler(
@@ -149,6 +160,10 @@ namespace SupraHotEditor
                 groupBoxFlowLayout.Controls.Add(ySpinner);
 
                 this.Height = 200;
+
+                Vec2CLI val = ((Vec2MaterialPropertyCLI)this.MaterialPropertyCommonInterface).GetValue();
+                xSpinner.Value = (decimal)val.x;
+                ySpinner.Value = (decimal)val.y;
 
                 // Add listeners
                 xSpinner.ValueChanged += new EventHandler(
@@ -207,6 +222,11 @@ namespace SupraHotEditor
                 groupBoxFlowLayout.Controls.Add(zSpinner);
 
                 this.Height = 200;
+
+                Vec3CLI val = ((Vec3MaterialPropertyCLI)this.MaterialPropertyCommonInterface).GetValue();
+                xSpinner.Value = (decimal)val.x;
+                ySpinner.Value = (decimal)val.y;
+                zSpinner.Value = (decimal)val.z;
 
                 // Add listeners
                 xSpinner.ValueChanged += new EventHandler(
@@ -285,6 +305,12 @@ namespace SupraHotEditor
 
                 this.Height = 250;
 
+                Vec4CLI val = ((Vec4MaterialPropertyCLI)this.MaterialPropertyCommonInterface).GetValue();
+                xSpinner.Value = (decimal)val.x;
+                ySpinner.Value = (decimal)val.y;
+                zSpinner.Value = (decimal)val.z;
+                wSpinner.Value = (decimal)val.w;
+
                 // Add listeners
                 xSpinner.ValueChanged += new EventHandler(
                     delegate(object sender, EventArgs e)
@@ -327,8 +353,10 @@ namespace SupraHotEditor
                 Label pathLabel = new Label();
                 pathLabel.Text = "Name: Default";
 
-                Label thePath = new Label();
-             //   thePath.Text = ((Texture2DMaterialPropertyCLI)this.MaterialPropertyCommonInterface).GetValue();
+                if (((Texture2DMaterialPropertyCLI)this.MaterialPropertyCommonInterface).GetValue() != "") 
+                {
+                    pathLabel.Text = ((Texture2DMaterialPropertyCLI)this.MaterialPropertyCommonInterface).GetValue();
+                }
 
                 Button loadImageButton = new Button();
                 loadImageButton.Text = "Load";
@@ -366,7 +394,7 @@ namespace SupraHotEditor
                                     if(isInRootSystem) 
                                     {
                                         ((Texture2DMaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(pathToFileInRootSys);
-                                        pathLabel.Text = "Name:" + fileName;
+                                        pathLabel.Text = pathToFileInRootSys;
                                     }
                                     else 
                                     {
@@ -386,7 +414,6 @@ namespace SupraHotEditor
                 );
 
                 groupBoxFlowLayout.Controls.Add(pathLabel);
-                groupBoxFlowLayout.Controls.Add(thePath);
 
                 groupBoxFlowLayout.Controls.Add(loadImageButton);
             }
@@ -395,8 +422,11 @@ namespace SupraHotEditor
                 Label pathLabel = new Label();
                 pathLabel.Text = "Name: Default";
 
-                Label thePath = new Label();
-                thePath.Text = ((TextureCubeMaterialPropertyCLI)this.MaterialPropertyCommonInterface).GetValue();
+
+                if (((TextureCubeMaterialPropertyCLI)this.MaterialPropertyCommonInterface).GetValue() != "")
+                {
+                    pathLabel.Text = ((TextureCubeMaterialPropertyCLI)this.MaterialPropertyCommonInterface).GetValue();
+                }
 
                 Button loadImageButton = new Button();
                 loadImageButton.Text = "Load";
@@ -421,24 +451,20 @@ namespace SupraHotEditor
 
                             filePath = filePath.Replace("\\", "/");
 
-                            //if (filePath.Contains("Content\\Textures\\"))
                             if (filePath.Contains("Content/"))
                             {
-                                //var splittedString = filePath.Split(new[] { "Content\\Textures\\" }, StringSplitOptions.None);
                                 var splittedString = filePath.Split(new[] { "Content/" }, StringSplitOptions.None);
 
                                 if (splittedString.Length > 1)
                                 {
                                     var pathToFileInRootSys = splittedString[1];
 
-                                    //bool isInRootSystem = fileSystem.FileExists("Textures/" + pathToFileInRootSys);
                                     bool isInRootSystem = fileSystem.FileExists(pathToFileInRootSys);
 
                                     if (isInRootSystem)
                                     {
-                                        //((TextureCubeMaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue("Textures/" + pathToFileInRootSys);
                                         ((TextureCubeMaterialPropertyCLI)this.MaterialPropertyCommonInterface).SetValue(pathToFileInRootSys);
-                                        pathLabel.Text = "Name:" + fileName;
+                                        pathLabel.Text = pathToFileInRootSys;
                                     }
                                     else
                                     {
@@ -458,7 +484,6 @@ namespace SupraHotEditor
                 );
 
                 groupBoxFlowLayout.Controls.Add(pathLabel);
-                groupBoxFlowLayout.Controls.Add(thePath);
 
                 groupBoxFlowLayout.Controls.Add(loadImageButton);
             }
