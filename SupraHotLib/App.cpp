@@ -12,6 +12,7 @@
 #include "WindowEmscripten.h"
 #endif
 #include "ShaderLibrary.h"
+#include "EntityManager.h"
 
 namespace SupraHot
 {
@@ -110,6 +111,8 @@ namespace SupraHot
 			glDisable(GL_SCISSOR_TEST);
 			FPS++;
 		}
+
+		//PostRender();
 		
 		if (elapsed - Time > 1.0f)
 		{
@@ -125,4 +128,9 @@ namespace SupraHot
 	{
 		Timer.Update();
 	}
+
+	/*void App::PostRender()
+	{
+		EntityManager::GetInstance()->PostRender();
+	}*/
 };

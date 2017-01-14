@@ -84,6 +84,8 @@ namespace SupraHotEditor
                 ySpinner.Value = (decimal)val.y;
                 zSpinner.Value = (decimal)val.z;
 
+                Console.WriteLine("Init Transform Component view Position to [{0}, {1}, {2}]", val.x, val.y, val.z);
+
                 // Add listeners
                 xSpinner.ValueChanged += new EventHandler(
                     delegate(object sender, EventArgs e)

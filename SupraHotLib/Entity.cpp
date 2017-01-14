@@ -8,6 +8,7 @@ namespace SupraHot
 {
 	Entity::Entity()
 	{
+		
 	}
 
 	void Entity::SetName(std::string name)
@@ -30,11 +31,6 @@ namespace SupraHot
 		return EntityTransform;
 	}
 
-	void Entity::SetTransform(const Transform& transform)
-	{
-		this->EntityTransform = transform;
-	}
-
 	Component* Entity::GetComponent(std::string componentName)
 	{
 		for (size_t i = 0, l = Components.size(); i < l; ++i)
@@ -50,9 +46,12 @@ namespace SupraHot
 
 	void Entity::RemoveComponent(Component* component)
 	{
-		Components.erase(std::remove(Components.begin(), Components.end(), component), Components.end());
-		component->Remove();
-		delete component;
+		if (std::find(Components.begin(), Components.end(), component) != Components.end())
+		{
+			Components.erase(std::remove(Components.begin(), Components.end(), component), Components.end());
+			component->Remove();
+			delete component;
+		}
 	}
 
 	void Entity::RemoveAndDeleteAllComponents()
@@ -61,16 +60,48 @@ namespace SupraHot
 		{
 			Components.at(i)->Remove();
 			delete Components.at(i);
-		}
+		} Components.clear();
 
-		Components.clear();
+		for (uint32 i = 0, l = static_cast<uint32>(Children.size()); i < l; ++i)
+		{
+			Children[i]->RemoveAndDeleteAllComponents();
+		}
 	}
 
 	Component* Entity::AddComponent(Component* component)
 	{
-		Components.push_back(component);
-		component->Register(this);
+		if (std::find(Components.begin(), Components.end(), component) == Components.end())
+		{
+			Components.push_back(component);
+			component->Register(this);			
+		}
+
 		return component;
+	}
+
+	void Entity::AddChild(Entity* child)
+	{
+		if (std::find(Children.begin(), Children.end(), child) == Children.end())
+		{
+			Children.push_back(child);
+			child->GetTransform().SetParent(&GetTransform());
+			child->Parent = this;
+		}
+	}
+
+	void Entity::RemoveChild(Entity* child)
+	{
+		if (std::find(Children.begin(), Children.end(), child) != Children.end())
+		{
+			Children.erase(std::remove(Children.begin(), Children.end(), child), Children.end());
+			child->GetTransform().SetParent(nullptr);
+			child->Parent = nullptr;
+		}
+	}
+
+	std::vector<Entity*>* Entity::GetChildren()
+	{
+		return &Children;
 	}
 
 	void Entity::Update(float deltaTime)
@@ -87,6 +118,11 @@ namespace SupraHot
 		{
 			Components[i]->LateUpdate(deltaTime);
 		}
+
+		for (uint32 i = 0, l = static_cast<uint32>(Children.size()); i < l; ++i)
+		{
+			Children[i]->LateUpdate(deltaTime);
+		}
 	}
 
 	void Entity::FixedUpdate(float deltaTime)
@@ -94,6 +130,11 @@ namespace SupraHot
 		for (uint32 i = 0, l = static_cast<uint32>(Components.size()); i < l; ++i)
 		{
 			Components[i]->FixedUpdate(deltaTime);
+		}
+
+		for (uint32 i = 0, l = static_cast<uint32>(Children.size()); i < l; ++i)
+		{
+			Children[i]->FixedUpdate(deltaTime);
 		}
 	}
 
@@ -104,5 +145,10 @@ namespace SupraHot
 			Components[i]->Destroy();
 			delete Components[i];
 		} Components.clear();
+
+		for (uint32 i = 0, l = static_cast<uint32>(Children.size()); i < l; ++i)
+		{
+			Children[i]->Destroy();
+		}
 	}
 };

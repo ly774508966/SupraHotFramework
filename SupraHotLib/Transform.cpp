@@ -1,4 +1,5 @@
 #include "Transform.h"
+#include "Entity.h"
 
 namespace SupraHot
 {
@@ -8,8 +9,10 @@ namespace SupraHot
 		{
 			GlobalScale = Vec3(1, 1, 1);
 			LocalScale = Vec3(1, 1, 1);
-			LocalRotation = Quat4(Vec3(0, 0, 0), 1);
-			GlobalRotation = Quat4(Vec3(0, 0, 0), 1);
+			LocalRotation = Quat4(Vec3(0, 0, 0), 0);
+			GlobalRotation = Quat4(Vec3(0, 0, 0), 0);
+
+			Parent = nullptr;
 		}
 
 		Transform::~Transform()
@@ -19,53 +22,49 @@ namespace SupraHot
 
 		Mat4 Transform::GetTransformation()
 		{
+			if (HasChanged)
+			{
+				CalculateLocalTransform();
+				Transformation = LocalTransformation;
+				HasChanged = false;
+			}
 
-			Transformation.Identity();
-			LocalRotation.Normalize();
-			GlobalRotation.Normalize();
+			if (Parent != nullptr)
+			{
+				Transformation = Parent->GetTransformation() * LocalTransformation;
+			}
 
-			Mat4 localRotationMatrix;
-			localRotationMatrix = localRotationMatrix.ToRotationMatrix(LocalRotation);
-
-			Mat4 translationMatrix;
-			translationMatrix.SetTranslationVector(Position);
-
-			Mat4 globalRotationMatrix;
-			globalRotationMatrix = globalRotationMatrix.ToRotationMatrix(GlobalRotation);
-
-			Mat4 globalScaleMatrix;
-			globalScaleMatrix.SetScale(GlobalScale);
-
-			Mat4 localScaleMatrix;
-			localScaleMatrix.SetScale(LocalScale);
-
-			Transformation = globalScaleMatrix * globalRotationMatrix * translationMatrix * localRotationMatrix * localScaleMatrix;
 			return Transformation;
 		}
 
 		void Transform::SetLocalRotation(const Quat4 &rotation)
 		{
 			LocalRotation = rotation;
+			HasChanged = true;
 		}
 
 		void Transform::SetGlobalRotation(const Quat4 &rotation)
 		{
 			GlobalRotation = rotation;
+			HasChanged = true;
 		}
 
 		void Transform::SetPosition(const Vec3 &position)
 		{
 			this->Position = position;
+			HasChanged = true;
 		}
 
 		void Transform::SetGlobalScale(const Vec3 &scale)
 		{
 			this->GlobalScale = scale;
+			HasChanged = true;
 		}
 
 		void Transform::SetLocalScale(const Vec3 &scale)
 		{
 			this->LocalScale = scale;
+			HasChanged = true;
 		}
 
 		Quat4* Transform::GetLocalRotation()
@@ -93,6 +92,11 @@ namespace SupraHot
 			return &LocalScale;
 		}
 
+		void Transform::SetParent(Transform* transform)
+		{
+			Parent = transform;
+		}
+
 		void Transform::Reset()
 		{
 			GlobalScale.x = 1;
@@ -116,6 +120,32 @@ namespace SupraHot
 			Position.x = 0;
 			Position.y = 0;
 			Position.z = 0;
+
+			HasChanged = true;
+		}
+
+		void Transform::CalculateLocalTransform()
+		{
+			LocalTransformation.Identity();
+			LocalRotation.Normalize();
+			GlobalRotation.Normalize();
+
+			Mat4 localRotationMatrix;
+			localRotationMatrix = localRotationMatrix.ToRotationMatrix(LocalRotation);
+
+			Mat4 translationMatrix;
+			translationMatrix.SetTranslationVector(Position);
+
+			Mat4 globalRotationMatrix;
+			globalRotationMatrix = globalRotationMatrix.ToRotationMatrix(GlobalRotation);
+
+			Mat4 globalScaleMatrix;
+			globalScaleMatrix.SetScale(GlobalScale);
+
+			Mat4 localScaleMatrix;
+			localScaleMatrix.SetScale(LocalScale);
+
+			LocalTransformation = globalScaleMatrix * globalRotationMatrix * translationMatrix * localRotationMatrix * localScaleMatrix;
 		}
 	};
 };

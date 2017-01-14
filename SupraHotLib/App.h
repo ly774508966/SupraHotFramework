@@ -32,6 +32,7 @@ namespace SupraHot
 		void Run();
 		void ProgressApp();
 		void Loaded();
+		//void PostRender();
 		static App* GetMainApp();
 		uint32 GetFPS();
 	};

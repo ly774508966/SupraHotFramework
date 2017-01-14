@@ -19,6 +19,11 @@ namespace SupraHot
 		std::vector<Entity*>* GetEntities();
 		void Destroy();
 		void DestroyAndDelete();
+
+		void Update(float deltaTime);
+		void LateUpdate(float deltaTime);
+		void FixedUpdate(float deltaTime);
+		//void PostRender();
 	};
 
 };

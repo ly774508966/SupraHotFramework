@@ -18,7 +18,12 @@ namespace SupraHot
 			Vec3 LocalScale;
 
 			Mat4 Transformation;
+			Mat4 LocalTransformation;
+
+			Transform* Parent;
 		public:
+			bool HasChanged = true;
+
 			Transform();
 			~Transform();
 
@@ -35,9 +40,12 @@ namespace SupraHot
 			Vec3* GetGlobalScale();
 			Vec3* GetLocalScale();
 
+			void SetParent(Transform* transform);
 			Mat4 GetTransformation();
 
 			void Reset();
+		private:
+			void CalculateLocalTransform();
 		};
 	};
 };

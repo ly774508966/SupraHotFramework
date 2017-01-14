@@ -67,8 +67,21 @@ namespace SupraHotEditor
 
             // Title
             Label title = new Label();
-            title.Text = "Mesh Component View";
+            title.Text = "Mesh Component";
             groupBoxFlowLayout.Controls.Add(title);
+
+            Label nameOfMesh = new Label();
+            nameOfMesh.Text = meshComponent.GetMeshName();
+            groupBoxFlowLayout.Controls.Add(nameOfMesh);
+
+            Label labelOfModelFile = new Label();
+            labelOfModelFile.Text = meshComponent.GetModelFilePath();
+            groupBoxFlowLayout.Controls.Add(labelOfModelFile);
+
+            Label labelOfModelFileArrayIndex = new Label();
+            labelOfModelFileArrayIndex.Text = "[" + meshComponent.GetModelFileArrayIndex() + "]";
+            groupBoxFlowLayout.Controls.Add(labelOfModelFileArrayIndex);
+
 
             // Drop down for ShaderDescriptions
 

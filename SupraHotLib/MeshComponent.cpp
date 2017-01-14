@@ -6,10 +6,13 @@
 
 namespace SupraHot
 {
-	MeshComponent::MeshComponent(Graphics::MeshData* meshData, Graphics::ShaderMaterial* material)
+	MeshComponent::MeshComponent(Graphics::MeshData* meshData, Graphics::ShaderMaterial* material, 
+								 std::string modelFilePath, uint32 modelFileArrayIndex)
 	{
 		MeshData = meshData;
 		Material = material;
+		ModelFilePath = modelFilePath;
+		ModelFileArrayIndex = modelFileArrayIndex;
 
 		Component::Identifier = Identifier;
 	}
@@ -79,6 +82,16 @@ namespace SupraHot
 	Graphics::MeshData* MeshComponent::GetMeshData()
 	{
 		return MeshData;
+	}
+
+	std::string MeshComponent::GetModelFilePath()
+	{
+		return ModelFilePath;
+	}
+
+	uint32 MeshComponent::GetModelFileArrayIndex()
+	{
+		return ModelFileArrayIndex;
 	}
 
 	void MeshComponent::UpdateShaderPermution()

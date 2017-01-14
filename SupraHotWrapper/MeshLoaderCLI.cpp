@@ -5,6 +5,8 @@
 #include <msclr\marshal_cppstd.h>
 #include <Entity.h>
 #include <EntityManager.h>
+#include <StringUtil.h>
+#include "MeshComponentCLI.h"
 
 namespace SupraHot
 {
@@ -25,28 +27,49 @@ namespace SupraHot
 			return SingletonInstance;
 		}
 
-		System::Collections::Generic::List<SupraHot::CLI::EntityCLI^>^ MeshLoaderCLI::LoadSFHM(System::String^ pathToFile)
+		SupraHot::CLI::EntityCLI^ MeshLoaderCLI::LoadSFHM(System::String^ pathToFile)
 		{
 			std::string path = msclr::interop::marshal_as<std::string>(pathToFile);
 			
 			std::vector<SupraHot::MeshComponent*> meshComponents = Instance->Load(path);
 
-			System::Collections::Generic::List<SupraHot::CLI::EntityCLI^>^ cliEntities = gcnew System::Collections::Generic::List<SupraHot::CLI::EntityCLI^>();
+			std::unordered_map<std::string, uint32> map;
 
-			for (SupraHot::MeshComponent* meshComponent : meshComponents)
+			Entity* parent = new Entity();
+
+			if (meshComponents.size() > 1)
 			{
-				Entity* entity = new Entity();
-				entity->AddComponent(meshComponent);
-				entity->SetName(meshComponent->GetMeshData()->Name);
+				parent->SetName(SupraHot::Utils::StringUtil::GetFileNameFromPath(path));
 
-				SupraHot::CLI::EntityCLI^ entityCLI = gcnew SupraHot::CLI::EntityCLI();
-				entityCLI->ReplaceInstance(entity);
-				cliEntities->Add(entityCLI);
+				for (SupraHot::MeshComponent* meshComponent : meshComponents)
+				{
+					Entity* entity = new Entity();
+					parent->AddChild(entity);
+					entity->AddComponent(meshComponent);
+					
+					if (map.find(meshComponent->GetMeshData()->Name) != map.end())
+					{
+						entity->SetName(meshComponent->GetMeshData()->Name + "(" + std::to_string(map[meshComponent->GetMeshData()->Name]) + ")");
+					}
+					else
+					{
+						entity->SetName(meshComponent->GetMeshData()->Name);
+					}
 
-				EntityManager::GetInstance()->AddEntity(entity);
+					map[meshComponent->GetMeshData()->Name] += 1;
+				}
 			}
+			else if (meshComponents.size() > 0)
+			{
+				parent->AddComponent(meshComponents[0]);
+				parent->SetName(meshComponents[0]->GetMeshData()->Name);
+			}
+			
+			SupraHot::CLI::EntityCLI^ entityCLI = gcnew SupraHot::CLI::EntityCLI();
+			entityCLI->ReplaceInstance(parent);
 
-			return cliEntities;
+			EntityManager::GetInstance()->AddEntity(parent);
+			return entityCLI;
 		}
 	};
 };

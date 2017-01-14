@@ -120,13 +120,16 @@ namespace SupraHotEditor
                 // - - - - - - - - - - - - - - - - -
                 // - - - - Properties View - - - - -
                 // - - - - - - - - - - - - - - - - -
+                entites = new List<EntityCLI>();
 
                 // Debug
                 // Load a model 
                 MeshLoaderCLI meshLoader = MeshLoaderCLI.GetIntance();
-                entites = meshLoader.LoadSFHM("Models/Pistol/Pistol_Model.shfm");
+
+                EntityCLI loadedEntity = meshLoader.LoadSFHM("Models/Pistol/Pistol_Model.shfm");
+                entites.Add(loadedEntity);
+
                 RebuildEntityHierarchy();
-                ShowComponents(entites[0]);
             }
             
         }
@@ -147,6 +150,13 @@ namespace SupraHotEditor
 
             mainSplitContainer.Panel2.Controls.Add(ComponentPanel);
 
+            Label entityName = new Label();
+            entityName.Text = entity.GetName();
+            ComponentPanel.Controls.Add(entityName);
+
+            // Transform component
+            ComponentPanel.Controls.Add(new TransformComponentView(new TransformComponentCLI(entity)));
+
             MeshComponentCLI meshComponent = entity.GetComponent<MeshComponentCLI>();
             if (meshComponent != null) 
             {
@@ -154,9 +164,6 @@ namespace SupraHotEditor
                 MeshComponentView meshComponentView = new MeshComponentView(mat, meshComponent);
                 ComponentPanel.Controls.Add(meshComponentView);    
             }
-
-            // Transform component
-            ComponentPanel.Controls.Add(new TransformComponentView(new TransformComponentCLI(entity)));
         }
 
         private void CreateEntityHierarchyPanel() 
@@ -177,10 +184,44 @@ namespace SupraHotEditor
         {
             MeshLoaderCLI meshLoader = MeshLoaderCLI.GetIntance();
 
-            List<EntityCLI> loaded = meshLoader.LoadSFHM(pathToModelFile);
-            entites.AddRange(loaded);
+            EntityCLI loaded = meshLoader.LoadSFHM(pathToModelFile);
+            entites.Add(loaded);
             RebuildEntityHierarchy();
             UpdateView();
+        }
+
+        private void AddTreeNodesToParent(TreeNode parent, EntityCLI entity) 
+        {
+            List<EntityCLI> children = entity.GetChildren();
+            TreeNode entityNode = new TreeNode(entity.GetName());
+            parent.Nodes.Add(entityNode);
+
+            if(children.Count > 0) 
+            {
+                foreach(EntityCLI child in children) 
+                {
+                    AddTreeNodesToParent(entityNode, child);
+                }
+            }
+        }
+
+        private void TriggerNodeMouseClick(String text, EntityCLI entity) 
+        {
+            // Cheap hack. We need a hash map for that
+            if (entity.GetName() == text)
+            {
+                ShowComponents(entity);
+                return;
+            }
+
+            var children = entity.GetChildren();
+            if (children.Count > 0)
+            {
+                foreach(EntityCLI child in children) 
+                {
+                    TriggerNodeMouseClick(text, child);
+                }
+            }
         }
 
         private void RebuildEntityHierarchy()
@@ -202,8 +243,7 @@ namespace SupraHotEditor
 
             foreach (EntityCLI entity in entites)
             {
-                TreeNode entityNode = new TreeNode(entity.GetName());
-                rootNode.Nodes.Add(entityNode);
+                AddTreeNodesToParent(rootNode, entity);
             }
 
             EntityHierarchy.Controls.Add(treeView);
@@ -213,13 +253,11 @@ namespace SupraHotEditor
                 {
                     if (e.Node != rootNode) 
                     {
-                        // Cheap hack. We need a hash map for that
-                        foreach(EntityCLI entity in entites) 
+                        Console.WriteLine("Index {0}", e.Node.Index);
+
+                        foreach (EntityCLI entity in entites)
                         {
-                            if (entity.GetName() == e.Node.Text) 
-                            {
-                                ShowComponents(entity);
-                            }
+                            TriggerNodeMouseClick(e.Node.Text, entity);
                         }
                     }
                 }

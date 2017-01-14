@@ -21,6 +21,9 @@ namespace SupraHot
 		std::vector<Component*> Components;
 		std::string Name;
 
+		Entity* Parent = nullptr;
+		std::vector<Entity*> Children;
+
 	public:
 		Entity();
 		~Entity();
@@ -29,12 +32,15 @@ namespace SupraHot
 		std::string GetName();
 
 		Transform& GetTransform();
-		void SetTransform(const Transform& transform);
 
 		Component* AddComponent(Component* component);
 		Component* GetComponent(std::string componentName);
 		void RemoveComponent(Component* component);
 		void RemoveAndDeleteAllComponents();
+
+		void AddChild(Entity* child);
+		void RemoveChild(Entity* child);
+		std::vector<Entity*>* GetChildren();
 
 		void Update(float deltaTime);
 		void LateUpdate(float deltaTime);

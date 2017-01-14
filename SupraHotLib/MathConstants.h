@@ -12,11 +12,11 @@ namespace SupraHot
 		static const float ONEFOURTH_PI = 0.25f * PI;
 		static const float ONEOVER_PI = 1.0f / PI;
 		static const float ONEOVER_TWOPI = 1.0f / TWO_PI;
-		static const float ANGLES_TO_RADIANS = PI / 180.0f;
-		static const float RADIANS_TO_DEGREE = 180.0f / PI;
+		static const float DEGREES_TO_RADIANS = PI / 180.0f;
+		static const float RADIANS_TO_DEGREES = 180.0f / PI;
 		static const float ONEOVER_180_PI = ONEOVER_PI * 180.0f;
 
-		#define ToRadians(x) (float)(((x) * ANGLES_TO_RADIANS))
-		#define ToDegrees(x) (float)(((x) * RADIANS_TO_DEGREE))
+		#define ToRadians(x) (float)(((x) * DEGREES_TO_RADIANS))
+		#define ToDegrees(x) (float)(((x) * RADIANS_TO_DEGREES))
 	};
 };

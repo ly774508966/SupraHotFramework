@@ -17,10 +17,13 @@ namespace SupraHot
 		Graphics::MeshData* MeshData = nullptr;
 		Graphics::ShaderMaterial* Material = nullptr;
 
+		std::string ModelFilePath = "";
+		uint32 ModelFileArrayIndex = 0;
+
 	public:
 		std::string Identifier = "MeshComponent";
 	
-		MeshComponent(Graphics::MeshData* meshData, Graphics::ShaderMaterial* material = nullptr);
+		MeshComponent(Graphics::MeshData* meshData, Graphics::ShaderMaterial* material = nullptr, std::string modelFilePath = "", uint32 modelFileArrayIndex = 0);
 		~MeshComponent();
 
 		void Registered() override;
@@ -32,6 +35,10 @@ namespace SupraHot
 
 		Graphics::ShaderMaterial* GetMaterial();
 		Graphics::MeshData* GetMeshData();
+		
+		std::string GetModelFilePath();
+		uint32 GetModelFileArrayIndex();
+
 		void UpdateShaderPermution();
 		void ChangeShader(Graphics::ShaderDescription* shaderDescription);
 	};

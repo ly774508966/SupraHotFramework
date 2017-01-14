@@ -18,7 +18,7 @@ namespace SupraHot
 		public:
 			static MeshLoaderCLI^ GetIntance();
 
-			System::Collections::Generic::List<SupraHot::CLI::EntityCLI^>^ LoadSFHM(System::String^ pathToFile);
+			SupraHot::CLI::EntityCLI^ LoadSFHM(System::String^ pathToFile);
 
 			virtual ~MeshLoaderCLI()
 			{

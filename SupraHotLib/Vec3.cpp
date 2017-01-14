@@ -98,7 +98,7 @@ namespace SupraHot
 
 		void Vec3::print()
 		{
-			printf("[%f %f %f]", x, y, z);
+			SHF_PRINTF("[%f %f %f]\n", x, y, z);
 		}
 
 		float Vec3::lengthSqr() const

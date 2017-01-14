@@ -181,7 +181,7 @@
             this.mainSplitContainer.Panel2.ForeColor = System.Drawing.Color.White;
             this.mainSplitContainer.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer2_Panel2_Paint);
             this.mainSplitContainer.Size = new System.Drawing.Size(854, 421);
-            this.mainSplitContainer.SplitterDistance = 600;
+            this.mainSplitContainer.SplitterDistance = 654;
             this.mainSplitContainer.TabIndex = 1;
             // 
             // splitContainer1
@@ -203,7 +203,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer3);
             this.splitContainer1.Panel2.ForeColor = System.Drawing.Color.White;
             this.splitContainer1.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer1_Panel2_Paint_1);
-            this.splitContainer1.Size = new System.Drawing.Size(600, 421);
+            this.splitContainer1.Size = new System.Drawing.Size(654, 421);
             this.splitContainer1.SplitterDistance = 392;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -236,8 +236,8 @@
             this.splitContainer2.Panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.splitContainer2_Panel2_MouseMove);
             this.splitContainer2.Panel2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.splitContainer2_Panel2_MouseUp);
             this.splitContainer2.Panel2.Resize += new System.EventHandler(this.splitContainer2_Panel2_Resize);
-            this.splitContainer2.Size = new System.Drawing.Size(600, 392);
-            this.splitContainer2.SplitterDistance = 200;
+            this.splitContainer2.Size = new System.Drawing.Size(654, 392);
+            this.splitContainer2.SplitterDistance = 218;
             this.splitContainer2.TabIndex = 0;
             // 
             // splitContainer3
@@ -253,8 +253,8 @@
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer3_Panel2_Paint);
-            this.splitContainer3.Size = new System.Drawing.Size(600, 25);
-            this.splitContainer3.SplitterDistance = 200;
+            this.splitContainer3.Size = new System.Drawing.Size(654, 25);
+            this.splitContainer3.SplitterDistance = 218;
             this.splitContainer3.TabIndex = 0;
             // 
             // openFileDialog
