@@ -13,7 +13,7 @@ namespace SupraHot
 
 			// contructors
 			Quat4();
-			Quat4(const Vec3& n, float a);
+			Quat4(const Vec3& n, float angleInDegrees);
 			~Quat4();
 
 			// methods
@@ -24,7 +24,9 @@ namespace SupraHot
 			Quat4 Slerp(const Quat4& r, float t) const;
 			void ToAxisAngle(Vec3& vecAxis, float& flAngle) const;
 
+			// Euler Angles (zyx ordering)
 			Vec3 ToEulerAngles();
+			void FromEulerAngles(Vec3 eulerAngles);
 
 			void Normalize();
 			Quat4 Normalized() const;

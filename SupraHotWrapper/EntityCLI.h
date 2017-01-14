@@ -17,6 +17,11 @@ namespace SupraHot
 				where T: ComponentCLI, gcnew()
 			T GetComponent();
 			System::String^ GetName();
+			void SetName(System::String^ name);
+
+			void AddChild(EntityCLI^ child);
+			void RemoveChild(EntityCLI^ child);
+			System::Collections::Generic::List<EntityCLI^>^ GetChildren();
 		};
 	};
 };

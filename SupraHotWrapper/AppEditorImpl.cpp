@@ -69,33 +69,17 @@ namespace SupraHot
 		{
 			FlyCamera->ResetMatrices();
 			FlyCamera->Update(deltaTime);
-
-			std::vector<Entity*>* entities = EntityManager::GetInstance()->GetEntities();
-
-			for (uint32 i = 0, l = static_cast<uint32>(entities->size()); i < l; ++i)
-			{
-				entities->at(i)->Update(deltaTime);
-			}
+			EntityManager::GetInstance()->Update(deltaTime);
 		}
 
 		void AppEditorImpl::LateUpdate(float deltaTime)
 		{
-			std::vector<Entity*>* entities = EntityManager::GetInstance()->GetEntities();
-
-			for (uint32 i = 0, l = static_cast<uint32>(entities->size()); i < l; ++i)
-			{
-				entities->at(i)->LateUpdate(deltaTime);
-			}
+			EntityManager::GetInstance()->LateUpdate(deltaTime);
 		}
 
 		void AppEditorImpl::Tick(float deltaTime)
 		{
-			std::vector<Entity*>* entities = EntityManager::GetInstance()->GetEntities();
-
-			for (uint32 i = 0, l = static_cast<uint32>(entities->size()); i < l; ++i)
-			{
-				entities->at(i)->FixedUpdate(deltaTime);
-			}
+			EntityManager::GetInstance()->FixedUpdate(deltaTime);
 		}
 
 		void AppEditorImpl::Destroy()

@@ -39,7 +39,7 @@ namespace SupraHot
 				ShaderMaterial* shaderMaterial = new ShaderMaterial(shaderDescription);
 				Shader* shader = ShaderLibrary::GetInstance()->SelectShaderForShaderMaterialAndMeshData(meshData, shaderMaterial);
 				shaderMaterial->SetShaderPermutation(shader);
-				meshComponents.push_back(new MeshComponent(meshData, shaderMaterial));
+				meshComponents.push_back(new MeshComponent(meshData, shaderMaterial, pathToSHFM, m));
 			}
 
 			delete meshLoadData;

@@ -258,6 +258,45 @@ namespace SupraHot
 				}
 			}
 
+			// Create injected uniforms
+			std::unordered_map<std::string, std::string> injectedUniformsNameToTypeMap;
+			if (json["Inject"].is_array())
+			{
+				auto injectedUniforms = json["Inject"].array_items();
+
+				for (size_t i = 0, l = injectedUniforms.size(); i < l; ++i)
+				{
+					std::string injectName = injectedUniforms.at(i).string_value();
+					std::string injectType = "UNKOWN";
+
+					if (uniformNameToUniformTypeMap.find(injectName) != uniformNameToUniformTypeMap.end())
+					{
+						injectType = uniformNameToUniformTypeMap[injectName];
+
+						injectedUniformsNameToTypeMap[injectName] = injectType;
+					}
+
+#if DEVELOPMENT == 1
+					SHF_PRINTF("Inject -> %s = %s \n", injectName.c_str(), injectType.c_str());
+#endif
+				}
+			}
+
+			// This is experimental
+
+			// description->Inject
+			if (injectedUniformsNameToTypeMap.size() > 0){
+				typedef std::unordered_map<std::string, std::string>::iterator iterator;
+				for (iterator it = injectedUniformsNameToTypeMap.begin(); it != injectedUniformsNameToTypeMap.end(); ++it)
+				{
+					SHF_PRINTF("Removing %s \n", it->first.c_str());
+					if (uniformNameToUniformTypeMap.find(it->first) != uniformNameToUniformTypeMap.end())
+					{
+						uniformNameToUniformTypeMap.erase(it->first);
+						SHF_PRINTF("... OK. \n");
+					}
+				}
+			}
 
 			ShaderDescription* description = new ShaderDescription();
 			description->Name = shaderName;
@@ -267,8 +306,10 @@ namespace SupraHot
 			description->Dependencies = dependenciesMap;
 			description->DefinedWhen = definedWhenMap;
 			description->Uniforms = uniformNameToUniformTypeMap;
+			description->Inject = injectedUniformsNameToTypeMap;
 			description->VertexShaderPath = vertexShaderPath;
 			description->PixelShaderPath = pixelShaderPath;
+
 			return description;
 		}
 	};

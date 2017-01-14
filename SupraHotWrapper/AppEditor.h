@@ -25,6 +25,7 @@ namespace SupraHot
 			void Render();
 			void Destroy();
 			void ProgressApp();
+			//void PostRender();
 
 			//void AddEntity(SupraHot::CLI::EntityCLI^ entity);
 			//void RemoveEntity(SupraHot::CLI::EntityCLI^ entity);

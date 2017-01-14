@@ -177,6 +177,7 @@ namespace SupraHot
 			return (*this) * Vec3(-1, 0, 0);
 		}
 
+		// Euler Angles(zyx ordering)
 		Vec3 Quat4::ToEulerAngles()
 		{
 			Vec3 euler;
@@ -210,6 +211,40 @@ namespace SupraHot
 			euler.z = atan2f(2.0f * v.x * w - 2.0f * v.y * v.z, -sqx + sqy - sqz + sqw);
 
 			return euler;
+		}
+
+		// Euler Angles(zyx ordering)
+		void Quat4::FromEulerAngles(Vec3 eulerAngles)
+		{
+			/*float c1 = cosf(eulerAngles.y);
+			float s1 = sinf(eulerAngles.y);
+			float c2 = cosf(eulerAngles.z);
+			float s2 = sinf(eulerAngles.z);
+			float c3 = cosf(eulerAngles.x);
+			float s3 = sinf(eulerAngles.x);
+			w = sqrtf(1.0f + c1 * c2 + c1*c3 - s1 * s2 * s3 + c2*c3) / 2.0f;
+			float w4 = (4.0f * w);
+			v.x = (c2 * s3 + c1 * s3 + s1 * s2 * c3) / w4;
+			v.y = (s1 * c2 + s1 * c3 + c1 * s2 * s3) / w4;
+			v.z = (-s1 * s3 + c1 * s2 * c3 + s2) / w4;*/
+
+
+			float c1 = cosf(eulerAngles.y / 2.0f);
+			float s1 = sinf(eulerAngles.y / 2.0f);
+
+			float c2 = cosf(eulerAngles.z / 2.0f);
+			float s2 = sinf(eulerAngles.z / 2.0f);
+
+			float c3 = cosf(eulerAngles.x / 2.0f);
+			float s3 = sinf(eulerAngles.x / 2.0f);
+
+			float c1c2 = c1 * c2;
+			float s1s2 = s1 * s2;
+
+			w	= c1c2 * c3 - s1s2 * s3;
+			v.x = c1c2 * s3 + s1s2 * c3;
+			v.y = s1 * c2 * c3 + c1 * s2 * s3;
+			v.z = c1 * s2 * c3 - s1 * c2 * s3;
 		}
 	};
 };

@@ -86,6 +86,10 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 			"Models/ParisApartment/ParisApartment.shfm"
 #endif
 			);
+
+		Entity* sponza = new Entity();
+		sponza->SetName("Sponza Root");
+
 		for (MeshComponent* meshComponent : meshComponents)
 		{
 			Entity* entity = new Entity();
@@ -102,12 +106,17 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 #if SPONZA == 0
 			entity->GetTransform().SetLocalRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
 #endif
-
+			sponza->AddChild(entity);
 			entity->AddComponent(meshComponent);
-			EntityManager::GetInstance()->AddEntity(entity);
-
 			entity->SetName(meshComponent->GetMeshData()->Name);
 		}
+
+		EntityManager::GetInstance()->AddEntity(sponza);
+
+		/*
+		sponza->RemoveAndDeleteAllComponents();
+		EntityManager::GetInstance()->RemoveEntity(sponza);
+		delete sponza;*/
 	}
 
 	// Try to load a 2d .dds file
@@ -254,6 +263,22 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 	}
 
 
+	// EulerAngles -> Quat4
+
+	Vec3 eulerAnglesInput(90.0f * DEGREES_TO_RADIANS, 66.0f * DEGREES_TO_RADIANS, 33.0f * DEGREES_TO_RADIANS);
+
+	printf("input: \n");
+	eulerAnglesInput.print();
+
+	Quat4 q;
+	q.FromEulerAngles(eulerAnglesInput);
+	printf("Q = [%f, %f, %f, %f] \n", q.v.x, q.v.y, q.v.z, q.w);
+	
+	// Test Quat4 -> EulerAngles
+
+	Vec3 eulerAnglesOutput = q.ToEulerAngles() * RADIANS_TO_DEGREES;
+	printf("ouput: \n");
+	eulerAnglesOutput.print();
 }
 
 void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
@@ -285,8 +310,22 @@ void SandBoxApp::Render()
 	);
 }
 
+float angle = 0;
 void SandBoxApp::Update(float deltaTime)
 {
+	Entity* pistol = EntityManager::GetInstance()->GetEntities()->at(1);
+	// pistol->GetTransform().SetLocalRotation(Quat4(Vec3(0, 1, 0), angle) * Quat4(Vec3(1, 0, 0), -90));
+	Quat4 q;
+	q.FromEulerAngles(Vec3(-90.0f * DEGREES_TO_RADIANS, angle * DEGREES_TO_RADIANS, 0.0f));
+	pistol->GetTransform().SetLocalRotation(q);
+	
+	angle++;
+	if (angle > 360)
+	{
+		angle = 0;
+	}
+	
+
 	window->SetClearColor(0.7f, 0.3f, 0.7f, 1.0f);
 
 	FlyCamera->ResetMatrices();
@@ -323,33 +362,17 @@ void SandBoxApp::Update(float deltaTime)
 	}
 #endif
 
-	std::vector<Entity*>* entities = EntityManager::GetInstance()->GetEntities();
-
-	for (uint32 i = 0, l = static_cast<uint32>(entities->size()); i < l; ++i)
-	{
-		entities->at(i)->Update(deltaTime);
-	}
+	EntityManager::GetInstance()->Update(deltaTime);
 }
 
 void SandBoxApp::LateUpdate(float deltaTime)
 {
-	std::vector<Entity*>* entities = EntityManager::GetInstance()->GetEntities();
-
-	for (uint32 i = 0, l = static_cast<uint32>(entities->size()); i < l; ++i)
-	{
-		entities->at(i)->LateUpdate(deltaTime);
-	}
+	EntityManager::GetInstance()->LateUpdate(deltaTime);
 }
 
 void SandBoxApp::Tick(float deltaTime)
 {
-	std::vector<Entity*>* entities = EntityManager::GetInstance()->GetEntities();
-
-	for (uint32 i = 0, l = static_cast<uint32>(entities->size()); i < l; ++i)
-	{
-		entities->at(i)->FixedUpdate(deltaTime);
-	}
-
+	EntityManager::GetInstance()->FixedUpdate(deltaTime);
 	SHF_PRINTF("FPS: %d \n", FPS);
 }
 

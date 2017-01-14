@@ -14,11 +14,15 @@ namespace SupraHot
 			SupraHot::CLI::Material^ Material = nullptr;
 		public:
 			MeshComponentCLI();
-			~MeshComponentCLI();
 			MeshComponentCLI(SupraHot::CLI::ComponentCLI^ componentCLI);
 			MeshComponentCLI(SupraHot::CLI::MeshData^ meshData, SupraHot::CLI::Material^ material);
+			~MeshComponentCLI();
 
 			SupraHot::CLI::Material^ GetMaterial();
+			System::String^ GetMeshName();
+
+			unsigned int GetModelFileArrayIndex();
+			System::String^ GetModelFilePath();
 			
 			void UpdateShaderPermuation();
 			bool SetShader(System::String^ shaderName);

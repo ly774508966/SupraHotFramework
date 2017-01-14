@@ -8,6 +8,7 @@ namespace SupraHot
 	{
 		EntityCLI::EntityCLI()
 		{
+			//Children = gcnew System::Collections::Generic::List<EntityCLI^>();
 		}
 
 		EntityCLI::~EntityCLI()
@@ -18,7 +19,7 @@ namespace SupraHot
 
 		void EntityCLI::AddComponent(SupraHot::CLI::ComponentCLI^ component)
 		{
-			printf("Adding component = %p \n", component);
+			SHF_PRINTF("EntityCLI::AddComponent NOT IMPLEMENTED \n");
 		}
 
 		generic <class T>
@@ -35,10 +36,21 @@ namespace SupraHot
 				getCompString = getCompString.substr(0, typeName.find("CLI"));
 			}
 
+			// First check local list
+			/*for (int i = 0, l = Components.Count; i < l; ++i)
+			{
+				SupraHot::CLI::ComponentCLI^ component = Components[i];
+
+				if (getCompString == (component->GetHandle()->Identifier).c_str())
+				{
+					return static_cast<T>(component);
+				}
+			}*/
+
+
 			SupraHot::Component* component = Instance->GetComponent(getCompString);
 			if (component != nullptr)
 			{
-				//SupraHot::CLI::ComponentCLI^ componentCLI = gcnew SupraHot::CLI::ComponentCLI(component);
 				T converted = gcnew T();
 				converted->ReplaceInstance(component);
 				converted->IsCopy = true;
@@ -52,5 +64,36 @@ namespace SupraHot
 		{
 			return msclr::interop::marshal_as<System::String^>(Instance->GetName());
 		};
+
+		void EntityCLI::SetName(System::String^ name)
+		{
+			Instance->SetName(msclr::interop::marshal_as<std::string>(name));
+		}
+
+		void EntityCLI::AddChild(EntityCLI^ child)
+		{
+			Instance->AddChild(child->Instance);
+		}
+
+		void EntityCLI::RemoveChild(EntityCLI^ child)
+		{
+			Instance->RemoveChild(child->Instance);
+		}
+
+		System::Collections::Generic::List<EntityCLI^>^ EntityCLI::GetChildren()
+		{
+			std::vector<Entity*>* children = Instance->GetChildren();
+			System::Collections::Generic::List<SupraHot::CLI::EntityCLI^>^ childrenCLI = gcnew System::Collections::Generic::List<SupraHot::CLI::EntityCLI^>();
+
+			for (size_t i = 0, l = children->size(); i < l; ++i)
+			{
+				SupraHot::CLI::EntityCLI^ entityCLI = gcnew SupraHot::CLI::EntityCLI();
+				entityCLI->ReplaceInstance(children->at(i));
+				entityCLI->IsCopy = true;
+				childrenCLI->Add(entityCLI);
+			}
+
+			return childrenCLI;
+		}
 	}
 };

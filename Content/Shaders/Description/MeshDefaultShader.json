@@ -21,6 +21,11 @@
 	},
 
 	"BRDF" : "None",
+
+	"Inject" : 
+	[
+		"EnvMap"
+	],
  
 	"Defines" :
 	{

@@ -48,6 +48,21 @@ namespace SupraHot
 			meshComponent->UpdateShaderPermution();
 		}
 
+		System::String^ MeshComponentCLI::GetMeshName()
+		{
+			return msclr::interop::marshal_as<System::String^>(static_cast<SupraHot::MeshComponent*>(Instance)->GetMeshData()->Name);
+		}
+
+		unsigned int MeshComponentCLI::GetModelFileArrayIndex()
+		{
+			return static_cast<SupraHot::MeshComponent*>(Instance)->GetModelFileArrayIndex();
+		}
+
+		System::String^ MeshComponentCLI::GetModelFilePath()
+		{
+			return msclr::interop::marshal_as<System::String^>(static_cast<SupraHot::MeshComponent*>(Instance)->GetModelFilePath());
+		}
+
 		bool MeshComponentCLI::SetShader(System::String^ shaderName)
 		{
 			// ShaderName is 100% valid at this point, since it is being selected in the gui.

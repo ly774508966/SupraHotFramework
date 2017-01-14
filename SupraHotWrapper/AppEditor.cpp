@@ -1,4 +1,5 @@
 #include "AppEditor.h"
+#include <EntityManager.h>
 #include <cliext/algorithm>
 
 namespace SupraHot
@@ -56,24 +57,13 @@ namespace SupraHot
 			Render();
 
 			Window->GetHandle()->Update();
+
+			//PostRender();
 		}
 
-	/*	void AppEditor::AddEntity(SupraHot::CLI::EntityCLI^ entity)
+		/*void AppEditor::PostRender()
 		{
-			Instance->AddEntity(entity->GetHandle());
-			Entities.push_back(entity);
-		}
-
-		void AppEditor::RemoveEntity(SupraHot::CLI::EntityCLI^ entity)
-		{
-			Instance->RemoveEntity(entity->GetHandle());
-			auto index = cliext::remove(Entities.begin(), Entities.end(), entity);
-			Entities.erase(index, Entities.end());
-		}
-
-		cliext::vector<SupraHot::CLI::EntityCLI^> AppEditor::GetEntities()
-		{
-			return Entities;
+			EntityManager::GetInstance()->PostRender();
 		}*/
 
 		SupraHot::CLI::CameraCLI^ AppEditor::GetCamera()

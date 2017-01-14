@@ -163,7 +163,6 @@ namespace SupraHot
 			glBindVertexArray(0);
 
 			shader->Detach();
-
 		}
 
 	}
