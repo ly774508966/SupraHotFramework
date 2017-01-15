@@ -26,7 +26,7 @@ namespace SupraHotEditor
         public bool MouseMiddleDown = false;
         public Point PreviousPosition;
 
-        private List<EntityCLI> entities;
+        private EntityCLI rootEntity;
 
         private Panel EntityHierarchy;
         private FlowLayoutPanel ComponentPanel;
@@ -120,14 +120,17 @@ namespace SupraHotEditor
                 // - - - - - - - - - - - - - - - - -
                 // - - - - Properties View - - - - -
                 // - - - - - - - - - - - - - - - - -
-                entities = new List<EntityCLI>();
+                rootEntity = new EntityCLI();
+                rootEntity.SetName("Scene");
 
                 // Debug
                 // Load a model 
                 MeshLoaderCLI meshLoader = MeshLoaderCLI.GetIntance();
 
                 EntityCLI loadedEntity = meshLoader.LoadSFHM("Models/Pistol/Pistol_Model.shfm");
-                entities.Add(loadedEntity);
+                loadedEntity.IsCopy = true;
+                rootEntity.AddChild(loadedEntity);
+                
 
                 RebuildEntityHierarchy();
             }
@@ -185,7 +188,8 @@ namespace SupraHotEditor
             MeshLoaderCLI meshLoader = MeshLoaderCLI.GetIntance();
 
             EntityCLI loaded = meshLoader.LoadSFHM(pathToModelFile);
-            entities.Add(loaded);
+            loaded.IsCopy = true;
+            rootEntity.AddChild(loaded);
             RebuildEntityHierarchy();
             UpdateView();
         }
@@ -238,10 +242,12 @@ namespace SupraHotEditor
             TreeView treeView = new TreeView();
             treeView.Dock = DockStyle.Fill;
 
-            TreeNode rootNode = new TreeNode("Scene");
+            TreeNode rootNode = new TreeNode(rootEntity.GetName());
             treeView.Nodes.Add(rootNode);
 
-            foreach (EntityCLI entity in entities)
+            List<EntityCLI> children = rootEntity.GetChildren();
+
+            foreach (EntityCLI entity in children)
             {
                 AddTreeNodesToParent(rootNode, entity);
             }
@@ -251,15 +257,8 @@ namespace SupraHotEditor
             treeView.NodeMouseClick += new TreeNodeMouseClickEventHandler(
                 delegate(object sender, TreeNodeMouseClickEventArgs e)
                 {
-                    if (e.Node != rootNode) 
-                    {
-                        Console.WriteLine("Index {0}", e.Node.Index);
-
-                        foreach (EntityCLI entity in entities)
-                        {
-                            TriggerNodeMouseClick(e.Node.Text, entity);
-                        }
-                    }
+                    Console.WriteLine("Index {0}", e.Node.Index);
+                    TriggerNodeMouseClick(e.Node.Text, rootEntity);
                 }
             );
 
@@ -311,7 +310,7 @@ namespace SupraHotEditor
             Console.WriteLine("Create new entity");
 
             GenericSerializerCLI gs = new GenericSerializerCLI("Dev/Wurst.json");
-            gs.Serialize(entities[0]);
+            gs.Serialize(rootEntity);
             // Serialize entites[0]
         }
 

@@ -67,6 +67,7 @@ namespace SupraHot
 			
 			SupraHot::CLI::EntityCLI^ entityCLI = gcnew SupraHot::CLI::EntityCLI();
 			entityCLI->ReplaceInstance(parent);
+			entityCLI->IsCopy = true;
 
 			EntityManager::GetInstance()->AddEntity(parent);
 			return entityCLI;
