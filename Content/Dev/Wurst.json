@@ -1,0 +1,35 @@
+{
+    "Children": [],
+    "Components": [{
+        "Type": "MeshComponent",
+        "Value": {
+            "Material": {
+                "MaterialName": "MeshDefaultShader Material",
+                "MaterialProperties": [],
+                "ShaderDescription": "MeshDefaultShader",
+                "ShaderDescriptionFileName": "MeshDefaultShader.json"
+            },
+            "MeshData": "Models/Pistol/Pistol_Model.shfm",
+            "MeshDataIndex": "0"
+        }
+    }],
+    "Name": "Untitled",
+    "Transform": {
+        "Position": {
+            "X": "0.000000",
+            "Y": "0.000000",
+            "Z": "0.000000"
+        },
+        "Rotation": {
+            "W": "1.000000",
+            "X": "0.000000",
+            "Y": "0.000000",
+            "Z": "0.000000"
+        },
+        "Scale": {
+            "X": "1.000000",
+            "Y": "1.000000",
+            "Z": "1.000000"
+        }
+    }
+}

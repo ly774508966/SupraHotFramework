@@ -26,7 +26,7 @@ namespace SupraHotEditor
         public bool MouseMiddleDown = false;
         public Point PreviousPosition;
 
-        private List<EntityCLI> entites;
+        private List<EntityCLI> entities;
 
         private Panel EntityHierarchy;
         private FlowLayoutPanel ComponentPanel;
@@ -120,14 +120,14 @@ namespace SupraHotEditor
                 // - - - - - - - - - - - - - - - - -
                 // - - - - Properties View - - - - -
                 // - - - - - - - - - - - - - - - - -
-                entites = new List<EntityCLI>();
+                entities = new List<EntityCLI>();
 
                 // Debug
                 // Load a model 
                 MeshLoaderCLI meshLoader = MeshLoaderCLI.GetIntance();
 
                 EntityCLI loadedEntity = meshLoader.LoadSFHM("Models/Pistol/Pistol_Model.shfm");
-                entites.Add(loadedEntity);
+                entities.Add(loadedEntity);
 
                 RebuildEntityHierarchy();
             }
@@ -185,7 +185,7 @@ namespace SupraHotEditor
             MeshLoaderCLI meshLoader = MeshLoaderCLI.GetIntance();
 
             EntityCLI loaded = meshLoader.LoadSFHM(pathToModelFile);
-            entites.Add(loaded);
+            entities.Add(loaded);
             RebuildEntityHierarchy();
             UpdateView();
         }
@@ -241,7 +241,7 @@ namespace SupraHotEditor
             TreeNode rootNode = new TreeNode("Scene");
             treeView.Nodes.Add(rootNode);
 
-            foreach (EntityCLI entity in entites)
+            foreach (EntityCLI entity in entities)
             {
                 AddTreeNodesToParent(rootNode, entity);
             }
@@ -255,7 +255,7 @@ namespace SupraHotEditor
                     {
                         Console.WriteLine("Index {0}", e.Node.Index);
 
-                        foreach (EntityCLI entity in entites)
+                        foreach (EntityCLI entity in entities)
                         {
                             TriggerNodeMouseClick(e.Node.Text, entity);
                         }
@@ -309,6 +309,10 @@ namespace SupraHotEditor
         private void createToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Console.WriteLine("Create new entity");
+
+            GenericSerializerCLI gs = new GenericSerializerCLI("Dev/Wurst.json");
+            gs.Serialize(entities[0]);
+            // Serialize entites[0]
         }
 
         private void importModelToolStripMenuItem_Click(object sender, EventArgs e)

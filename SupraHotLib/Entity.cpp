@@ -44,6 +44,11 @@ namespace SupraHot
 		return nullptr;
 	}
 
+	std::vector<Component*>* Entity::GetComponents()
+	{
+		return &Components;
+	}
+
 	void Entity::RemoveComponent(Component* component)
 	{
 		if (std::find(Components.begin(), Components.end(), component) != Components.end())

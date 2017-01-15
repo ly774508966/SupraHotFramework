@@ -11,6 +11,7 @@
 #include "FileSystem.h"
 #include "FileReader.h"
 #include "ShaderParser.h"
+#include "MeshComponent.h"
 
 namespace SupraHot
 {
@@ -77,55 +78,9 @@ namespace SupraHot
 
 		void GenericSerializer::Serialize(Graphics::ShaderMaterial* shaderMaterial)
 		{
-			std::string materialName = shaderMaterial->Name;
-			std::string shaderDescriptionName = shaderMaterial->GetShaderDescription()->Name;
-			std::string shaderDescriptionFileName = shaderMaterial->GetShaderDescription()->FileName;
-			std::vector<Graphics::MaterialProperty*>* materialProperties = shaderMaterial->GetMaterialProperties();
-
-			json11::Json::array materialPropertiesJsonArray;
-
-			for (size_t i = 0, l = materialProperties->size(); i < l; ++i)
-			{
-				Graphics::MaterialProperty* materialProperty = materialProperties->at(i);
-
-				materialPropertiesJsonArray.push_back(json11::Json::object {
-						{
-							"Name", materialProperty->GetName()
-						},
-						{
-							"Type", materialProperty->GetType()
-						},
-
-						{
-							"Value", GetValueForMaterialProperty(materialProperty)
-						}
-				});
-			}
-
-			json11::Json materialFileJson = json11::Json::object
-			{
-				{
-					"MaterialName", materialName
-				},
-
-				{
-					"ShaderDescription", shaderDescriptionName
-				},
-
-				{ 
-					"ShaderDescriptionFileName", shaderDescriptionFileName
-				},
-
-				{ 
-					"MaterialProperties", materialPropertiesJsonArray
-				}
-			};
-
-		
+			
+			json11::Json materialFileJson = SerializeShaderMaterial(shaderMaterial);
 			std::string JsonString = materialFileJson.dump();
-
-			SHF_PRINTF("Serialize %s\n", shaderMaterial->Name.c_str());
-			SHF_PRINTF("%s\n", JsonString.c_str());
 
 			OpenFile(Utils::WRITE_PLAIN);
 			
@@ -385,10 +340,75 @@ namespace SupraHot
 					}
 				}
 
-
 				shaderMaterial.Name = materialName;
-
 			}
+		}
+
+		void GenericSerializer::Serialize(Entity* entity)
+		{
+			// get entity data
+			std::string name = entity->GetName();
+			Transform transform = entity->GetTransform();
+
+			json11::Json::array componentsArray {};
+			json11::Json::array childrenArray {};
+
+			auto components = entity->GetComponents();
+			for (size_t i = 0, l = components->size(); i < l; ++i)
+			{
+				componentsArray.push_back(SerializeComponent(components->at(i)));
+			}
+
+			auto children = entity->GetChildren();
+			for (size_t i = 0, l = children->size(); i < l; ++i)
+			{
+				Entity* child = children->at(i);
+				childrenArray.push_back(SerializeChild(child));
+			}
+
+			json11::Json entityJSON = json11::Json::object
+			{
+				{
+					"Name", name
+				},
+
+				{
+					"Transform", GetValueForTransform(transform)
+				},
+
+				{
+					"Components", componentsArray
+				},
+
+				{
+					"Children", childrenArray
+				}
+			};
+
+
+			OpenFile(Utils::WRITE_PLAIN);
+
+			if (FileOpened)
+			{
+				std::fputs(entityJSON.dump().c_str(), File);
+			}
+
+			CloseFile();
+		}
+
+		void GenericSerializer::Deserialize(Entity* Entity)
+		{
+
+		}
+
+		void GenericSerializer::Serialize(MeshComponent* meshComponent)
+		{
+
+		}
+
+		void GenericSerializer::Deserialize(MeshComponent& meshComponent)
+		{
+
 		}
 
 		json11::Json GenericSerializer::GetValueForMaterialProperty(Graphics::MaterialProperty* materialProperty)
@@ -442,5 +462,191 @@ namespace SupraHot
 			return obj;
 		}
 
+		json11::Json GenericSerializer::GetValueForTransform(Transform& transform)
+		{
+			json11::Json::object obj{};
+
+			Vec3* position = transform.GetPosition();
+			obj.insert(
+				{ 
+					"Position", json11::Json::object
+					{
+							{
+								"X", std::to_string(position->x)
+							}, 
+							{ 
+								"Y", std::to_string(position->y)
+							}, 
+							{ 
+								"Z", std::to_string(position->z)
+							} 
+					}
+				}
+			);
+			
+			Vec3* localScale = transform.GetLocalScale();
+			obj.insert(
+				{
+					"Scale", json11::Json::object
+					{
+						{
+							"X", std::to_string(localScale->x)
+						},
+						{
+							"Y", std::to_string(localScale->y)
+						},
+						{
+							"Z", std::to_string(localScale->z)
+						}
+					}
+				}
+			);
+
+			Quat4* localRotation = transform.GetLocalRotation();
+			obj.insert(
+				{
+					"Rotation", json11::Json::object
+					{
+						{
+							"X", std::to_string(localRotation->v.x)
+						},
+						{
+							"Y", std::to_string(localRotation->v.y)
+						},
+						{
+							"Z", std::to_string(localRotation->v.z)
+						},
+						{
+							"W", std::to_string(localRotation->w)
+						}
+					}
+				}
+			);
+
+			return obj;
+		}
+
+		json11::Json GenericSerializer::SerializeChild(Entity* entity)
+		{
+			// get entity data
+			std::string name = entity->GetName();
+			Transform transform = entity->GetTransform();
+
+			json11::Json::array componentsArray{};
+			json11::Json::array childrenArray{};
+
+			auto components = entity->GetComponents();
+			for (size_t i = 0, l = components->size(); i < l; ++i)
+			{
+				componentsArray.push_back(SerializeComponent(components->at(i)));
+			}
+
+			auto children = entity->GetChildren();
+			for (size_t i = 0, l = children->size(); i < l; ++i)
+			{
+				Entity* child = children->at(i);
+				childrenArray.push_back(SerializeChild(child));
+			}
+
+			json11::Json entityJSON = json11::Json::object
+			{
+				{
+					"Name", name
+				},
+
+				{
+					"Transform", GetValueForTransform(transform)
+				},
+
+				{
+					"Components", componentsArray
+				},
+
+				{
+					"Children", childrenArray
+				}
+			};
+
+			return entityJSON;
+		}
+
+		json11::Json GenericSerializer::SerializeComponent(Component* component)
+		{
+			json11::Json::object obj{};				
+			obj.insert({ "Type", component->Identifier });
+
+			if (component->Identifier == "MeshComponent")
+			{
+				MeshComponent* meshComponent = reinterpret_cast<MeshComponent*>(component);
+
+				obj.insert(
+				{ 
+					"Value", json11::Json::object 
+					{
+							{
+								"MeshData", meshComponent->GetModelFilePath()
+							}, 
+							{
+								"MeshDataIndex", std::to_string(meshComponent->GetModelFileArrayIndex())
+							},
+							{
+								"Material", SerializeShaderMaterial(meshComponent->GetMaterial())
+							} 
+					}
+				});
+
+			}
+
+			return obj;
+		}
+
+		json11::Json GenericSerializer::SerializeShaderMaterial(Graphics::ShaderMaterial* shaderMaterial)
+		{
+			std::string materialName = shaderMaterial->Name;
+			std::string shaderDescriptionName = shaderMaterial->GetShaderDescription()->Name;
+			std::string shaderDescriptionFileName = shaderMaterial->GetShaderDescription()->FileName;
+			std::vector<Graphics::MaterialProperty*>* materialProperties = shaderMaterial->GetMaterialProperties();
+
+			json11::Json::array materialPropertiesJsonArray;
+
+			for (size_t i = 0, l = materialProperties->size(); i < l; ++i)
+			{
+				Graphics::MaterialProperty* materialProperty = materialProperties->at(i);
+
+				materialPropertiesJsonArray.push_back(json11::Json::object{
+					{
+						"Name", materialProperty->GetName()
+					},
+					{
+						"Type", materialProperty->GetType()
+					},
+
+					{
+						"Value", GetValueForMaterialProperty(materialProperty)
+					}
+				});
+			}
+
+			json11::Json materialFileJson = json11::Json::object
+			{
+				{
+					"MaterialName", materialName
+				},
+
+				{
+					"ShaderDescription", shaderDescriptionName
+				},
+
+				{
+					"ShaderDescriptionFileName", shaderDescriptionFileName
+				},
+
+				{
+					"MaterialProperties", materialPropertiesJsonArray
+				}
+			};
+
+			return materialFileJson;
+		}
 	};
 };

@@ -68,3 +68,17 @@ deps :
 // wird darauf hin ein material mit einem shader gelinkt, so werden dieses input im material als materialproperties erstellt.
 // ..... soll ein material gespeichert werden, so müssen diese werte in eine file geschrieben werden, damit diese dann beim 
 // neuladen der scene wieder eingelesen und angewandt werden können.
+
+
+//  Brdf beschreibt die render pipeline ansich. für z.b. skin shading werden bestimmte post fx benötigt.
+// vllt. können wir später ein weiteres array namense "post-fx" in die description einfügen, die die reihenfolge und die effekte beschreibt, 
+// die nach dem renderern mit diesem shader durchgeführt werden sollen.
+"BRDF" : "None",
+
+
+// Inject beschreibt shader uniforms die durch die engine in den shader "injiziert" werden und nicht durch den benutzer bearbeitet oder manipuliert
+// werden können.
+"Inject" : 
+[
+	"EnvMap"
+],

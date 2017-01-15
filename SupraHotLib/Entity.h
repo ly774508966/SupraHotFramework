@@ -35,6 +35,7 @@ namespace SupraHot
 
 		Component* AddComponent(Component* component);
 		Component* GetComponent(std::string componentName);
+		std::vector<Component*>* GetComponents();
 		void RemoveComponent(Component* component);
 		void RemoveAndDeleteAllComponents();
 

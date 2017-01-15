@@ -166,6 +166,7 @@
     <ClInclude Include="ComponentCLI.h" />
     <ClInclude Include="FileSystemCLI.h" />
     <ClInclude Include="FloatMaterialPropertyCLI.h" />
+    <ClInclude Include="GenericSerializerCLI.h" />
     <ClInclude Include="MaterialCLI.h" />
     <ClInclude Include="MaterialPropertyCLIInterface.h" />
     <ClInclude Include="MaterialPropertyCommonInterface.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="ComponentCLI.cpp" />
     <ClCompile Include="FileSystemCLI.cpp" />
     <ClCompile Include="FloatMaterialPropertyCLI.cpp" />
+    <ClCompile Include="GenericSerializerCLI.cpp" />
     <ClCompile Include="MaterialCLI.cpp" />
     <ClCompile Include="MaterialPropertyCLIInterface.cpp" />
     <ClCompile Include="MaterialPropertyCommonInterface.cpp" />

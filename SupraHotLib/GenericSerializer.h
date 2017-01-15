@@ -1,10 +1,14 @@
 #pragma once
 #include "Platform.h"
+#include "Entity.h"
 #include <json11/json11.hpp>
 
 namespace SupraHot
 {
-	namespace Graphics{
+	class MeshComponent;
+
+	namespace Graphics 
+	{
 		class MaterialProperty;
 		class ShaderMaterial;
 	}
@@ -37,8 +41,18 @@ namespace SupraHot
 			void Serialize(Graphics::ShaderMaterial* shaderMaterial);
 			void Deserialize(Graphics::ShaderMaterial& shaderMaterial);
 
+			void Serialize(Entity* Entity);
+			void Deserialize(Entity* Entity);
+
+			void Serialize(MeshComponent* meshComponent);
+			void Deserialize(MeshComponent& meshComponent);
+
 		private:
 			json11::Json GetValueForMaterialProperty(Graphics::MaterialProperty* materialProperty);
+			json11::Json GetValueForTransform(Transform& transform);
+			json11::Json SerializeChild(Entity* entity);
+			json11::Json SerializeComponent(Component* component);
+			json11::Json SerializeShaderMaterial(Graphics::ShaderMaterial* shaderMaterial);
 
 			void OpenFile(MODE mode);
 			void CloseFile();
