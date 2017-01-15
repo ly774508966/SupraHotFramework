@@ -29,6 +29,7 @@ namespace SupraHot
 #if DEVELOPMENT == 1
 		//SHF_PRINTF("Registered MeshComponent\nAdded to MeshDataRenderer\n");
 #endif
+		Parent->GetTransform().SetGlobalPosition(MeshData->Origin);
 		MeshDataRenderer::GetInstance().AddMeshComponent(this);
 	}
 

@@ -97,6 +97,10 @@ namespace SupraHot
 
 			Write(sizeof(uint32), 1, &mesh.IndexCountBytes);
 
+			Write(sizeof(float), 1, &mesh.CenterPosition.x);
+			Write(sizeof(float), 1, &mesh.CenterPosition.y);
+			Write(sizeof(float), 1, &mesh.CenterPosition.z);
+
 			Write(sizeof(float), mesh.ElementCount, &mesh.Vertices[0]);
 
 			Write(sizeof(uint32), mesh.IndexCount, &mesh.Indices[0]);
@@ -129,6 +133,10 @@ namespace SupraHot
 			Read(sizeof(uint32), 1, &mesh.ElementCount);
 			Read(sizeof(uint32), 1, &mesh.ElementCountBytes);
 			Read(sizeof(uint32), 1, &mesh.IndexCountBytes);
+
+			Read(sizeof(float), 1, &mesh.CenterPosition.x);
+			Read(sizeof(float), 1, &mesh.CenterPosition.y);
+			Read(sizeof(float), 1, &mesh.CenterPosition.z);
 
 			mesh.Vertices = new float[mesh.ElementCount];
 			Read(sizeof(float), mesh.ElementCount, mesh.Vertices);

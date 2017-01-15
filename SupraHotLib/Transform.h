@@ -14,6 +14,8 @@ namespace SupraHot
 			Quat4 GlobalRotation;
 
 			Vec3 Position;
+			Vec3 GlobalPosition;
+
 			Vec3 GlobalScale;
 			Vec3 LocalScale;
 
@@ -30,6 +32,7 @@ namespace SupraHot
 			void SetLocalRotation(const Quat4& rotation);
 			void SetGlobalRotation(const Quat4& rotation);
 			void SetPosition(const Vec3& position);
+			void SetGlobalPosition(const Vec3& position);
 			void SetGlobalScale(const Vec3& scale);
 			void SetLocalScale(const Vec3& scale);
 
@@ -37,6 +40,8 @@ namespace SupraHot
 			Quat4* GetGlobalRotation();
 
 			Vec3* GetPosition();
+			Vec3* GetGlobalPosition();
+			
 			Vec3* GetGlobalScale();
 			Vec3* GetLocalScale();
 

@@ -61,6 +61,7 @@ namespace SupraHot
 				meshData->Name = modelMesh.Name;
 				meshData->FaceCount = modelMesh.FaceCount;
 				meshData->VertexCount = modelMesh.VertexCount;
+				meshData->Origin = modelMesh.CenterPosition;
 
 				// Changed this from the stupid combos
 				// note: attri & bitfield == bitfield

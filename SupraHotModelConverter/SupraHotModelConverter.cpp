@@ -118,6 +118,9 @@ int _tmain(int argc, char* argv[])
 
 		std::vector<float> floatVertexData;
 		std::vector<uint32> uint32IndexData;
+		
+		Vec3 meshCenter;
+		float inverseTotal = 1.0f / mesh.VertexCount;
 
 		// Set vertices and vertex attributes
 		if (assimpMesh.HasPositions())
@@ -128,9 +131,21 @@ int _tmain(int argc, char* argv[])
 			for (uint64 v = 0; v < mesh.VertexCount; ++v)
 			{
 				const aiVector3D& vertex = assimpMesh.mVertices[v];
-				floatVertexData.push_back(vertex.x);
-				floatVertexData.push_back(vertex.y);
-				floatVertexData.push_back(vertex.z);
+				meshCenter.x += vertex.x;
+				meshCenter.y += vertex.y;
+				meshCenter.z += vertex.z;
+			}
+
+			meshCenter.x /= mesh.VertexCount;
+			meshCenter.y /= mesh.VertexCount;
+			meshCenter.z /= mesh.VertexCount;
+
+			for (uint64 v = 0; v < mesh.VertexCount; ++v)
+			{
+				const aiVector3D& vertex = assimpMesh.mVertices[v];
+				floatVertexData.push_back(vertex.x - meshCenter.x);
+				floatVertexData.push_back(vertex.y - meshCenter.y);
+				floatVertexData.push_back(vertex.z - meshCenter.z);
 			}
 		}
 
@@ -212,6 +227,7 @@ int _tmain(int argc, char* argv[])
 		mesh.ElementCount = mesh.VertexCount * mesh.VertexStride;
 		mesh.ElementCountBytes = mesh.ElementCount * sizeof(float);
 		mesh.VertexStrideBytes = mesh.VertexStride * sizeof(float);
+		mesh.CenterPosition = meshCenter;
 
 		meshIDToVertexFloatData.push_back(floatVertexData);
 		meshIDToIndexUint32Data.push_back(uint32IndexData);

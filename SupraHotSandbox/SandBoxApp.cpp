@@ -310,20 +310,18 @@ void SandBoxApp::Render()
 	);
 }
 
-float angle = 0;
 void SandBoxApp::Update(float deltaTime)
 {
-	Entity* pistol = EntityManager::GetInstance()->GetEntities()->at(1);
-	// pistol->GetTransform().SetLocalRotation(Quat4(Vec3(0, 1, 0), angle) * Quat4(Vec3(1, 0, 0), -90));
-	Quat4 q;
-	q.FromEulerAngles(Vec3(-90.0f * DEGREES_TO_RADIANS, angle * DEGREES_TO_RADIANS, 0.0f));
-	pistol->GetTransform().SetLocalRotation(q);
+	//Entity* pistol = EntityManager::GetInstance()->GetEntities()->at(1);
+	//Quat4 q;
+	//q.FromEulerAngles(Vec3(-90.0f * DEGREES_TO_RADIANS, angle * DEGREES_TO_RADIANS, 0.0f));
+	//pistol->GetTransform().SetLocalRotation(q);
 	
-	angle++;
+	/*angle++;
 	if (angle > 360)
 	{
 		angle = 0;
-	}
+	}*/
 	
 
 	window->SetClearColor(0.7f, 0.3f, 0.7f, 1.0f);

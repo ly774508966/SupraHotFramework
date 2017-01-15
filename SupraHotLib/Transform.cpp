@@ -55,6 +55,12 @@ namespace SupraHot
 			HasChanged = true;
 		}
 
+		void Transform::SetGlobalPosition(const Vec3& position)
+		{
+			this->GlobalPosition = position;
+			HasChanged = true;
+		}
+
 		void Transform::SetGlobalScale(const Vec3 &scale)
 		{
 			this->GlobalScale = scale;
@@ -80,6 +86,11 @@ namespace SupraHot
 		Vec3* Transform::GetPosition()
 		{
 			return &Position;
+		}
+
+		Vec3* Transform::GetGlobalPosition()
+		{
+			return &GlobalPosition;
 		}
 
 		Vec3* Transform::GetGlobalScale()
@@ -121,6 +132,10 @@ namespace SupraHot
 			Position.y = 0;
 			Position.z = 0;
 
+			GlobalPosition.x = 0;
+			GlobalPosition.y = 0;
+			GlobalPosition.z = 0;
+
 			HasChanged = true;
 		}
 
@@ -136,6 +151,9 @@ namespace SupraHot
 			Mat4 translationMatrix;
 			translationMatrix.SetTranslationVector(Position);
 
+			Mat4 globalTranslationMatrix;
+			globalTranslationMatrix.SetTranslationVector(GlobalPosition);
+
 			Mat4 globalRotationMatrix;
 			globalRotationMatrix = globalRotationMatrix.ToRotationMatrix(GlobalRotation);
 
@@ -145,7 +163,7 @@ namespace SupraHot
 			Mat4 localScaleMatrix;
 			localScaleMatrix.SetScale(LocalScale);
 
-			LocalTransformation = globalScaleMatrix * globalRotationMatrix * translationMatrix * localRotationMatrix * localScaleMatrix;
+			LocalTransformation = (translationMatrix * localRotationMatrix * localScaleMatrix) * (globalTranslationMatrix * globalRotationMatrix * globalScaleMatrix);
 		}
 	};
 };
