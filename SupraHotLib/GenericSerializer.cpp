@@ -466,19 +466,19 @@ namespace SupraHot
 		{
 			json11::Json::object obj{};
 
-			Vec3* position = transform.GetPosition();
+			Vec3* localPosition = transform.GetLocalPosition();
 			obj.insert(
 				{ 
 					"Position", json11::Json::object
 					{
 							{
-								"X", std::to_string(position->x)
+								"X", std::to_string(localPosition->x)
 							}, 
 							{ 
-								"Y", std::to_string(position->y)
+								"Y", std::to_string(localPosition->y)
 							}, 
 							{ 
-								"Z", std::to_string(position->z)
+								"Z", std::to_string(localPosition->z)
 							} 
 					}
 				}
@@ -487,7 +487,7 @@ namespace SupraHot
 			Vec3* localScale = transform.GetLocalScale();
 			obj.insert(
 				{
-					"Scale", json11::Json::object
+					"LocalScale", json11::Json::object
 					{
 						{
 							"X", std::to_string(localScale->x)
@@ -502,7 +502,25 @@ namespace SupraHot
 				}
 			);
 
-			Quat4* localRotation = transform.GetLocalRotation();
+			Vec3* globalScale = transform.GetGlobalScale();
+			obj.insert(
+			{
+				"GlobalScale", json11::Json::object
+				{
+					{
+						"X", std::to_string(globalScale->x)
+					},
+					{
+						"Y", std::to_string(globalScale->y)
+					},
+					{
+						"Z", std::to_string(globalScale->z)
+					}
+				}
+			}
+			);
+
+			Quat4* localRotation = transform.GetRotation();
 			obj.insert(
 				{
 					"Rotation", json11::Json::object

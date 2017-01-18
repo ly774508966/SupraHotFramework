@@ -7,12 +7,14 @@ namespace SupraHot
 	{
 		Transform::Transform()
 		{
-			GlobalScale = Vec3(1, 1, 1);
 			LocalScale = Vec3(1, 1, 1);
-			LocalRotation = Quat4(Vec3(0, 0, 0), 0);
-			GlobalRotation = Quat4(Vec3(0, 0, 0), 0);
+			GlobalScale = Vec3(1, 1, 1);
+			Rotation = Quat4(Vec3(0, 0, 0), 1);
+			LocalPosition = Vec3(0, 0, 0);
+			GlobalPosition = Vec3(0, 0, 0);
 
 			Parent = nullptr;
+			HasChanged = true;
 		}
 
 		Transform::~Transform()
@@ -21,49 +23,20 @@ namespace SupraHot
 		}
 
 		Mat4 Transform::GetTransformation()
-		{
-			if (HasChanged)
-			{
-				CalculateLocalTransform();
-				Transformation = LocalTransformation;
-				HasChanged = false;
-			}
-
-			if (Parent != nullptr)
-			{
-				Transformation = Parent->GetTransformation() * LocalTransformation;
-			}
-
+		{			
+			UpdateTransform();
 			return Transformation;
 		}
 
-		void Transform::SetLocalRotation(const Quat4 &rotation)
+		void Transform::SetRotation(const Quat4 &rotation)
 		{
-			LocalRotation = rotation;
+			this->Rotation = rotation;
 			HasChanged = true;
 		}
 
-		void Transform::SetGlobalRotation(const Quat4 &rotation)
+		void Transform::SetLocalPosition(const Vec3 &position)
 		{
-			GlobalRotation = rotation;
-			HasChanged = true;
-		}
-
-		void Transform::SetPosition(const Vec3 &position)
-		{
-			this->Position = position;
-			HasChanged = true;
-		}
-
-		void Transform::SetGlobalPosition(const Vec3& position)
-		{
-			this->GlobalPosition = position;
-			HasChanged = true;
-		}
-
-		void Transform::SetGlobalScale(const Vec3 &scale)
-		{
-			this->GlobalScale = scale;
+			this->LocalPosition = position;
 			HasChanged = true;
 		}
 
@@ -73,24 +46,25 @@ namespace SupraHot
 			HasChanged = true;
 		}
 
-		Quat4* Transform::GetLocalRotation()
+		void Transform::SetGlobalScale(const Vec3& scale)
 		{
-			return &LocalRotation;
+			this->GlobalScale = scale;
+			HasChanged = true;
 		}
 
-		Quat4* Transform::GetGlobalRotation()
+		Quat4* Transform::GetRotation()
 		{
-			return &GlobalRotation;
+			return &Rotation;
 		}
 
-		Vec3* Transform::GetPosition()
+		Vec3* Transform::GetLocalPosition()
 		{
-			return &Position;
+			return &LocalPosition;
 		}
 
-		Vec3* Transform::GetGlobalPosition()
+		Vec3* Transform::GetLocalScale()
 		{
-			return &GlobalPosition;
+			return &LocalScale;
 		}
 
 		Vec3* Transform::GetGlobalScale()
@@ -98,9 +72,29 @@ namespace SupraHot
 			return &GlobalScale;
 		}
 
-		Vec3* Transform::GetLocalScale()
+		Vec3 Transform::GetGlobalPosition()
 		{
-			return &LocalScale;
+			UpdateTransform();
+			return GlobalPosition;
+		}
+
+		// Hint: This will override the local position, so that the final transformed position will be
+		// this position.
+		void Transform::SetGlobalPosition(const Vec3& position)
+		{
+			SetLocalPosition(Vec3(0, 0, 0));
+			UpdateTransform();
+
+			if (HasParent())
+			{
+				// Todo: Could also cache the inverse matrices from the UpdateTransform-Method!
+				Mat4 inverseTransformation = Parent->GetTransformation().Inversed();
+				SetLocalPosition(inverseTransformation * LocalTransformation.Inversed() * position);
+			}
+			else
+			{
+				SetLocalPosition(position);
+			}
 		}
 
 		void Transform::SetParent(Transform* transform)
@@ -110,27 +104,22 @@ namespace SupraHot
 
 		void Transform::Reset()
 		{
-			GlobalScale.x = 1;
-			GlobalScale.y = 1;
-			GlobalScale.z = 1;
-
 			LocalScale.x = 1;
 			LocalScale.y = 1;
 			LocalScale.z = 1;
 
-			LocalRotation.v.x = 0;
-			LocalRotation.v.y = 0;
-			LocalRotation.v.z = 0;
-			LocalRotation.w = 1;
+			GlobalScale.x = 1;
+			GlobalScale.y = 1;
+			GlobalScale.z = 1;
 
-			GlobalRotation.v.x = 0;
-			GlobalRotation.v.y = 0;
-			GlobalRotation.v.z = 0;
-			GlobalRotation.w = 1;
+			Rotation.v.x = 0;
+			Rotation.v.y = 0;
+			Rotation.v.z = 0;
+			Rotation.w = 1;
 
-			Position.x = 0;
-			Position.y = 0;
-			Position.z = 0;
+			LocalPosition.x = 0;
+			LocalPosition.y = 0;
+			LocalPosition.z = 0;
 
 			GlobalPosition.x = 0;
 			GlobalPosition.y = 0;
@@ -139,31 +128,63 @@ namespace SupraHot
 			HasChanged = true;
 		}
 
+		bool Transform::HasParent()
+		{
+			return Parent != nullptr;
+		}
+
 		void Transform::CalculateLocalTransform()
 		{
 			LocalTransformation.Identity();
-			LocalRotation.Normalize();
-			GlobalRotation.Normalize();
+			Rotation.Normalize();
 
-			Mat4 localRotationMatrix;
-			localRotationMatrix = localRotationMatrix.ToRotationMatrix(LocalRotation);
+			Mat4 rotationMatrix;
+			rotationMatrix = rotationMatrix.ToRotationMatrix(Rotation);
 
 			Mat4 translationMatrix;
-			translationMatrix.SetTranslationVector(Position);
-
-			Mat4 globalTranslationMatrix;
-			globalTranslationMatrix.SetTranslationVector(GlobalPosition);
-
-			Mat4 globalRotationMatrix;
-			globalRotationMatrix = globalRotationMatrix.ToRotationMatrix(GlobalRotation);
-
-			Mat4 globalScaleMatrix;
-			globalScaleMatrix.SetScale(GlobalScale);
+			translationMatrix.SetTranslationVector(LocalPosition);
 
 			Mat4 localScaleMatrix;
 			localScaleMatrix.SetScale(LocalScale);
 
-			LocalTransformation = (translationMatrix * localRotationMatrix * localScaleMatrix) * (globalTranslationMatrix * globalRotationMatrix * globalScaleMatrix);
+			Mat4 globalScaleMatrix;
+			globalScaleMatrix.SetScale(GlobalScale);
+
+			LocalTransformation = globalScaleMatrix * translationMatrix * rotationMatrix * localScaleMatrix;
+		}
+
+		void Transform::UpdateTransform()
+		{
+			if (HasChanged)
+			{
+				CalculateLocalTransform();
+				Transformation = LocalTransformation;
+				HasChanged = false;
+			}
+
+			// Todo: Need a clever way to determine, if the parent has changed or not.
+			// Maybe we need to run this through the update-loop itself.
+			if (HasParent())
+			{
+				Transformation = Parent->GetTransformation() * LocalTransformation;
+			}
+
+			GlobalPosition = Transformation * Vec3(0, 0, 0);
+		}
+
+		void Transform::Blend(Transform& t, float alpha)
+		{
+			SetLocalPosition(this->LocalPosition.Lerp(*t.GetLocalPosition(), alpha));
+			SetRotation(this->Rotation.Slerp(*t.GetRotation(), alpha));
+			SetLocalScale(this->LocalScale.Lerp(*t.GetLocalScale(), alpha));
+			Rotation.Normalize();
+		}
+
+		Transform Transform::Blended(Transform& t, float alpha)
+		{
+			Transform out = *this;
+			out.Blend(t, alpha);
+			return out;
 		}
 	};
 };

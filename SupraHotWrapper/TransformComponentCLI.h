@@ -17,12 +17,16 @@ namespace SupraHot
 			TransformComponentCLI(EntityCLI^ entityCli);
 
 			void SetRotation(Vec3CLI^ rotation);
-			void SetPosition(Vec3CLI^ position);
+			void SetLocalPosition(Vec3CLI^ position);
 			void SetScale(Vec3CLI^ scale);
+			void SetGlobalScale(Vec3CLI^ scale);
+			void SetGlobalPosition(Vec3CLI^ position);
 
-			Vec3CLI^ GetPosition();
+			Vec3CLI^ GetLocalPosition();
 			Vec3CLI^ GetRotation();
 			Vec3CLI^ GetScale();
+			Vec3CLI^ GetGlobalScale();
+			Vec3CLI^ GetGlobalPosition();
 		};
 
 	};

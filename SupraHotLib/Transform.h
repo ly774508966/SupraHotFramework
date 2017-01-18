@@ -10,47 +10,48 @@ namespace SupraHot
 		class Transform
 		{
 		private:
-			Quat4 LocalRotation;
-			Quat4 GlobalRotation;
-
-			Vec3 Position;
-			Vec3 GlobalPosition;
-
-			Vec3 GlobalScale;
+			Quat4 Rotation;
+			Vec3 LocalPosition;
 			Vec3 LocalScale;
+			Vec3 GlobalScale;
 
 			Mat4 Transformation;
 			Mat4 LocalTransformation;
 
 			Transform* Parent;
+
+			// This var only caches the global pos
+			Vec3 GlobalPosition;
 		public:
 			bool HasChanged = true;
 
 			Transform();
 			~Transform();
 
-			void SetLocalRotation(const Quat4& rotation);
-			void SetGlobalRotation(const Quat4& rotation);
-			void SetPosition(const Vec3& position);
-			void SetGlobalPosition(const Vec3& position);
-			void SetGlobalScale(const Vec3& scale);
+			void SetRotation(const Quat4& rotation);
+			void SetLocalPosition(const Vec3& position);
 			void SetLocalScale(const Vec3& scale);
+			void SetGlobalScale(const Vec3& scale);
 
-			Quat4* GetLocalRotation();
-			Quat4* GetGlobalRotation();
-
-			Vec3* GetPosition();
-			Vec3* GetGlobalPosition();
-			
-			Vec3* GetGlobalScale();
+			Quat4* GetRotation();
+			Vec3* GetLocalPosition();
 			Vec3* GetLocalScale();
+			Vec3* GetGlobalScale();
+
+			Vec3 GetGlobalPosition();
+			void SetGlobalPosition(const Vec3& position);
 
 			void SetParent(Transform* transform);
 			Mat4 GetTransformation();
 
 			void Reset();
+			bool HasParent();
+
+			void Blend(Transform& t, float alpha);
+			Transform Blended(Transform& t, float alpha);
 		private:
 			void CalculateLocalTransform();
+			void UpdateTransform();
 		};
 	};
 };

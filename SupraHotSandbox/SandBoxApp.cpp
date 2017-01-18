@@ -16,18 +16,18 @@
 #include <GenericSerializer.h>
 
 #ifdef PLATFORM_ANDROID 
-	#include <WindowAndroid.h>
-	#include <android/asset_manager.h>
-	#include <android/asset_manager_jni.h>
+#include <WindowAndroid.h>
+#include <android/asset_manager.h>
+#include <android/asset_manager_jni.h>
 #endif
 
 #ifdef PLATFORM_WINDOWS
-	#include "WindowWin32.h"
-	#include <Controls.h>
+#include "WindowWin32.h"
+#include <Controls.h>
 #endif
 
 #ifdef PLATFORM_EMSCRIPTEN
-	#include "WindowEmscripten.h"
+#include "WindowEmscripten.h"
 #endif
 #include <GenericSerializer.h>
 
@@ -43,7 +43,7 @@ SandBoxApp::~SandBoxApp()
 {
 }
 
-void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::string title)
+void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::string title)
 {
 	// First we need to initialize the filesystem
 #ifdef PLATFORM_WINDOWS
@@ -70,7 +70,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 
 	Texture = new Texture2D("SHF Logo");
 	Texture->Load("Images/logo.png");
-	FBO->SetReadSource(Texture);	
+	FBO->SetReadSource(Texture);
 	FBO->SetPixelSize(ShaderLibrary::GetInstance()->ScreenSpace[uint32(ShaderLibrary::ScreenSpace::RenderToScreen)]);
 
 	TextureCache::GetInstance()->Init();
@@ -87,21 +87,12 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 #endif
 			);
 
-		Entity* sponza = new Entity();
+		sponza = new Entity();
 		sponza->SetName("Sponza Root");
 
 		for (MeshComponent* meshComponent : meshComponents)
 		{
 			Entity* entity = new Entity();
-			entity->GetTransform().SetLocalScale(
-				Vec3(
-#if SPONZA == 1
-				0.02f, 0.02f, 0.02f
-#else 
-				0.05f, 0.05f, 0.05f
-#endif
-				)
-				);
 
 #if SPONZA == 0
 			entity->GetTransform().SetLocalRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
@@ -112,11 +103,19 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 		}
 
 		EntityManager::GetInstance()->AddEntity(sponza);
+		sponza->GetTransform().SetLocalScale(Vec3(0.05f, 0.05f, 0.05f));
 
-		/*
-		sponza->RemoveAndDeleteAllComponents();
-		EntityManager::GetInstance()->RemoveEntity(sponza);
-		delete sponza;*/
+	}
+
+	// Test WorldPosition
+	std::vector<Entity*>* children = sponza->GetChildren();
+	for (uint32 i = 0, l = children->size(); i < l; ++i)
+	{
+		Entity* e = children->at(i);
+		printf("-Pos \n");
+		e->GetTransform().GetLocalPosition()->print();
+		printf("WS-Pos \n");
+		e->GetTransform().GetGlobalPosition().print();
 	}
 
 	// Try to load a 2d .dds file
@@ -126,14 +125,14 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 	ddsTexture->Load("Textures/test/lion_128f.dds");
 	//ddsTexture->Destroy();
 	delete ddsTexture;
-	
+
 	TextureCube* textureCube = new TextureCube("CubeTexture Test");
 	textureCube->SetWrapS(GL_CLAMP_TO_EDGE);
 	textureCube->SetWrapT(GL_CLAMP_TO_EDGE);
 	textureCube->SetWrapR(GL_CLAMP_TO_EDGE);
 	textureCube->Load("Textures/Bridge2/px.png", "Textures/Bridge2/nx.png",
-					  "Textures/Bridge2/py.png", "Textures/Bridge2/ny.png",
-					  "Textures/Bridge2/pz.png", "Textures/Bridge2/nz.png");
+		"Textures/Bridge2/py.png", "Textures/Bridge2/ny.png",
+		"Textures/Bridge2/pz.png", "Textures/Bridge2/nz.png");
 	//textureCube->Destroy();
 	delete textureCube;
 
@@ -150,14 +149,14 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 	//sphereMap->Destroy();
 	delete sphereMap;
 
-	EnvBox = new SkyBox(); 
+	EnvBox = new SkyBox();
 	EnvBox->SetEnvironmentMap(DdsCubeTexture);
 	//EnvBox->SetEnvironmentMap(sphereMap);
-	EnvBox->Init(); 
-	
-	FlyCamera = new Camera(50.0f, 0.05f, 100.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
-	
-	
+	EnvBox->Init();
+
+	FlyCamera = new Camera(50.0f, 0.05f, 1000.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
+
+
 	{	// Test smart pointer
 		Texture2D* testTex2d = new Texture2D("testTex2d 0");
 		testTex2d->SetWrapS(GL_CLAMP_TO_EDGE);
@@ -168,7 +167,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 		testTex2d1->SetWrapS(GL_CLAMP_TO_EDGE);
 		testTex2d1->SetWrapT(GL_CLAMP_TO_EDGE);
 		testTex2d1->Load("Textures/MonValley_G_DirtRoad_3k/Static.dds");
-		
+
 		Texture2DPtr ptr(testTex2d);
 
 		SHF_PRINTF("ptr count = %d. \n", ptr.use_count());
@@ -194,7 +193,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 
 		// delete rawTexture;
 
-		SHF_PRINTF("-------------- \n"); 
+		SHF_PRINTF("-------------- \n");
 	}
 
 
@@ -203,13 +202,12 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 
 		Entity* entity = new Entity();
 
-		entity->GetTransform().SetPosition(Vec3(0, 1.0f, -5.0f));
-		entity->GetTransform().SetLocalScale(Vec3(0.05f, 0.05f, 0.05f));
-		entity->GetTransform().SetLocalRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
-
 		MeshComponent* meshComponent = meshComponents.at(0);
 		entity->AddComponent(meshComponent);
 
+		entity->GetTransform().SetLocalPosition(Vec3(0.0f, 0.75f, -7.0f));
+		entity->GetTransform().SetLocalScale(Vec3(0.05f, 0.05f, 0.05f));
+		entity->GetTransform().SetRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
 
 		auto envMap = meshComponent->GetMaterial()->GetMaterialPropertyByName("EnvMap");
 		if (envMap != nullptr)
@@ -217,7 +215,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 			TextureCubeMaterialProperty* mp = reinterpret_cast<TextureCubeMaterialProperty*>(envMap);
 			mp->SetValue("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds");
 			printf("type : %s \n", envMap->GetType().c_str());
-		} 
+		}
 		else
 		{
 			TextureCubeMaterialProperty* mp = new TextureCubeMaterialProperty("EnvMap");
@@ -225,7 +223,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 			meshComponent->GetMaterial()->AddMaterialProperty(mp);
 		}
 
-		
+
 		auto albedo = meshComponent->GetMaterial()->GetMaterialPropertyByName("DiffuseTexture");
 		if (albedo != nullptr)
 		{
@@ -242,10 +240,10 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 
 		meshComponent->UpdateShaderPermution();
 
-	/*	if (meshComponent->GetMaterial()->GetMaterialPropertyByName("EnvMap"))
+		/*	if (meshComponent->GetMaterial()->GetMaterialPropertyByName("EnvMap"))
 		{
-			meshComponent->GetMaterial()->RemoveMaterialProperty(meshComponent->GetMaterial()->GetMaterialPropertyByName("EnvMap"));
-			meshComponent->UpdateShaderPermution();
+		meshComponent->GetMaterial()->RemoveMaterialProperty(meshComponent->GetMaterial()->GetMaterialPropertyByName("EnvMap"));
+		meshComponent->UpdateShaderPermution();
 		}*/
 
 		EntityManager::GetInstance()->AddEntity(entity);
@@ -273,7 +271,7 @@ void SandBoxApp:: Init(SupraHot::uint32 width, SupraHot::uint32 height, std::str
 	Quat4 q;
 	q.FromEulerAngles(eulerAnglesInput);
 	printf("Q = [%f, %f, %f, %f] \n", q.v.x, q.v.y, q.v.z, q.w);
-	
+
 	// Test Quat4 -> EulerAngles
 
 	Vec3 eulerAnglesOutput = q.ToEulerAngles() * RADIANS_TO_DEGREES;
@@ -298,7 +296,7 @@ void SandBoxApp::Render()
 	EnvBox->Render(FlyCamera, ShaderLibrary::GetInstance()->Skybox[uint32(ShaderLibrary::SkyboxShader::CubeMap)]);
 
 	MeshDataRenderer::GetInstance().Render(FlyCamera);
-	
+
 	FBO->Detach();
 	FBO->SetReadSource(FBO->GetColorRenderTarget());
 
@@ -310,25 +308,26 @@ void SandBoxApp::Render()
 	);
 }
 
+float angle = 0.0f;
 void SandBoxApp::Update(float deltaTime)
 {
-	//Entity* pistol = EntityManager::GetInstance()->GetEntities()->at(1);
-	//Quat4 q;
-	//q.FromEulerAngles(Vec3(-90.0f * DEGREES_TO_RADIANS, angle * DEGREES_TO_RADIANS, 0.0f));
-	//pistol->GetTransform().SetLocalRotation(q);
-	
-	/*angle++;
+	Entity* pistol = EntityManager::GetInstance()->GetEntities()->at(1);
+	Quat4 q;
+	q.FromEulerAngles(Vec3(-90.0f * DEGREES_TO_RADIANS, angle * DEGREES_TO_RADIANS, 0.0f));
+	pistol->GetTransform().SetRotation(q);
+
+	angle++;
 	if (angle > 360)
 	{
 		angle = 0;
-	}*/
-	
+	}
+
 
 	window->SetClearColor(0.7f, 0.3f, 0.7f, 1.0f);
 
 	FlyCamera->ResetMatrices();
 	FlyCamera->Update(deltaTime);
-	
+
 #if PLATFORM_WINDOWS
 	Controls::GetInstance()->Update(window);
 

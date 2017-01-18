@@ -14,6 +14,8 @@ private:
 
 	SupraHot::SkyBox* EnvBox;
 	SupraHot::Camera* FlyCamera;
+
+	SupraHot::Entity* sponza;
 public:
 	SandBoxApp();
 	~SandBoxApp();
