@@ -23,6 +23,9 @@ namespace SupraHotEditor
         private NumericUpDown YLocalSpinner;
         private NumericUpDown ZLocalSpinner;
 
+        private bool ShouldUpdateLocalPosition = true;
+        private bool ShouldUpdateGlobalPosition = true;
+
         public TransformComponentView(TransformComponentCLI transformComponentCLI)
         {
             TransformComponent = transformComponentCLI;
@@ -98,9 +101,14 @@ namespace SupraHotEditor
                 xSpinner.ValueChanged += new EventHandler(
                     delegate(object sender, EventArgs e)
                     {
+                        if (!ShouldUpdateGlobalPosition) 
+                        {
+                            return;
+                        }
+
                         Vec3CLI result = new Vec3CLI((float)xSpinner.Value, (float)ySpinner.Value, (float)zSpinner.Value);
                         TransformComponent.SetLocalPosition(result);
-                        UpdateGlobalLocalPosition();
+                        UpdateGlobalPosition();
                         Form1.UpdateView();
                     }
                 );
@@ -108,9 +116,14 @@ namespace SupraHotEditor
                 ySpinner.ValueChanged += new EventHandler(
                     delegate(object sender, EventArgs e)
                     {
+                        if (!ShouldUpdateGlobalPosition)
+                        {
+                            return;
+                        }
+
                         Vec3CLI result = new Vec3CLI((float)xSpinner.Value, (float)ySpinner.Value, (float)zSpinner.Value);
                         TransformComponent.SetLocalPosition(result);
-                        UpdateGlobalLocalPosition();
+                        UpdateGlobalPosition();
                         Form1.UpdateView();
                     }
                 );
@@ -118,9 +131,14 @@ namespace SupraHotEditor
                 zSpinner.ValueChanged += new EventHandler(
                     delegate(object sender, EventArgs e)
                     {
+                        if (!ShouldUpdateGlobalPosition)
+                        {
+                            return;
+                        }
+
                         Vec3CLI result = new Vec3CLI((float)xSpinner.Value, (float)ySpinner.Value, (float)zSpinner.Value);
                         TransformComponent.SetLocalPosition(result);
-                        UpdateGlobalLocalPosition();
+                        UpdateGlobalPosition();
                         Form1.UpdateView();
                     }
                 );
@@ -410,9 +428,14 @@ namespace SupraHotEditor
                 xSpinner.ValueChanged += new EventHandler(
                     delegate(object sender, EventArgs e)
                     {
+                        if (!ShouldUpdateLocalPosition)
+                        {
+                            return;
+                        }
+
                         Vec3CLI result = new Vec3CLI((float)xSpinner.Value, (float)ySpinner.Value, (float)zSpinner.Value);
                         TransformComponent.SetGlobalPosition(result);
-                        UpdateGlobalLocalPosition();
+                        UpdateLocalPosition();
                         Form1.UpdateView();
                     }
                 );
@@ -420,9 +443,14 @@ namespace SupraHotEditor
                 ySpinner.ValueChanged += new EventHandler(
                     delegate(object sender, EventArgs e)
                     {
+                        if (!ShouldUpdateLocalPosition)
+                        {
+                            return;
+                        }
+
                         Vec3CLI result = new Vec3CLI((float)xSpinner.Value, (float)ySpinner.Value, (float)zSpinner.Value);
                         TransformComponent.SetGlobalPosition(result);
-                        UpdateGlobalLocalPosition();
+                        UpdateLocalPosition();
                         Form1.UpdateView();
                     }
                 );
@@ -430,9 +458,14 @@ namespace SupraHotEditor
                 zSpinner.ValueChanged += new EventHandler(
                     delegate(object sender, EventArgs e)
                     {
+                        if (!ShouldUpdateLocalPosition)
+                        {
+                            return;
+                        }
+
                         Vec3CLI result = new Vec3CLI((float)xSpinner.Value, (float)ySpinner.Value, (float)zSpinner.Value);
                         TransformComponent.SetGlobalPosition(result);
-                        UpdateGlobalLocalPosition();
+                        UpdateLocalPosition();
                         Form1.UpdateView();
                     }
                 );
@@ -445,7 +478,8 @@ namespace SupraHotEditor
                         delegate(object sender, EventArgs e)
                         {
                             TransformComponent.SetGlobalPosition(new Vec3CLI(0, 0, 0));
-                            UpdateGlobalLocalPosition();
+                            UpdateGlobalPosition();
+                            UpdateLocalPosition();
                             Form1.UpdateView();
                         }
                     );
@@ -456,20 +490,30 @@ namespace SupraHotEditor
             }
         }
 
-        void UpdateGlobalLocalPosition() 
+        void UpdateGlobalPosition() 
         {
+            ShouldUpdateLocalPosition = false;
+
+            // Update Global Position
             Vec3CLI globalPosition = TransformComponent.GetGlobalPosition();
-            Vec3CLI localPosition = TransformComponent.GetLocalPosition();
+            XGlobalSpinner.Value = (decimal)globalPosition.x;
+            YGlobalSpinner.Value = (decimal)globalPosition.y;
+            ZGlobalSpinner.Value = (decimal)globalPosition.z;
+
+            ShouldUpdateLocalPosition = true;
+        }
+
+        void UpdateLocalPosition() 
+        {
+            ShouldUpdateGlobalPosition = false;
 
             // Update Local Position
+            Vec3CLI localPosition = TransformComponent.GetLocalPosition();
             XLocalSpinner.Value = (decimal)localPosition.x;
             YLocalSpinner.Value = (decimal)localPosition.y;
             ZLocalSpinner.Value = (decimal)localPosition.z;
 
-            // Update Global Position
-            XGlobalSpinner.Value = (decimal)globalPosition.x;
-            YGlobalSpinner.Value = (decimal)globalPosition.y;
-            ZGlobalSpinner.Value = (decimal)globalPosition.z;
+            ShouldUpdateGlobalPosition = true;
         }
     }
 }

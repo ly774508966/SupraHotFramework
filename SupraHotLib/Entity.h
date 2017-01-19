@@ -43,6 +43,9 @@ namespace SupraHot
 		void RemoveChild(Entity* child);
 		std::vector<Entity*>* GetChildren();
 
+		Entity* GetParent();
+		bool HasParent();
+
 		void Update(float deltaTime);
 		void LateUpdate(float deltaTime);
 		void FixedUpdate(float deltaTime);

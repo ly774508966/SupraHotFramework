@@ -31,6 +31,8 @@ namespace SupraHotEditor
         private Panel EntityHierarchy;
         private FlowLayoutPanel ComponentPanel;
 
+        private TreeView treeView;
+
         public int GetClientRectHeight() 
         {
             return ClientRectangle.Height;
@@ -186,9 +188,19 @@ namespace SupraHotEditor
         private void LoadModelFile(String pathToModelFile)
         {
             MeshLoaderCLI meshLoader = MeshLoaderCLI.GetIntance();
-
             EntityCLI loaded = meshLoader.LoadSFHM(pathToModelFile);
             loaded.IsCopy = true;
+
+            var rootChildren = rootEntity.GetChildren();
+            foreach(EntityCLI child in rootChildren) 
+            {
+                if(child.GetName() == loaded.GetName()) 
+                {
+                    loaded.SetName(loaded.GetName() + GetTimestamp(DateTime.Now));
+                    break;
+                }
+            }
+
             rootEntity.AddChild(loaded);
             RebuildEntityHierarchy();
             UpdateView();
@@ -239,8 +251,18 @@ namespace SupraHotEditor
             //EntityHierarchy.Controls.Add(flowLayout);
 
             // Link entities to parent.
-            TreeView treeView = new TreeView();
+            treeView = new TreeView();
+            treeView.AllowDrop = true;
             treeView.Dock = DockStyle.Fill;
+
+            // - - - - - - - - - - - - - - - -
+            // Hook Drag n drop code
+            treeView.ItemDrag += new ItemDragEventHandler(treeView_ItemDrag);
+            treeView.DragEnter += new DragEventHandler(treeView_DragEnter);
+            treeView.DragOver += new DragEventHandler(treeView_DragOver);
+            treeView.DragDrop += new DragEventHandler(treeView_DragDrop);
+            // End Drag n drop
+
 
             TreeNode rootNode = new TreeNode(rootEntity.GetName());
             treeView.Nodes.Add(rootNode);
@@ -258,11 +280,126 @@ namespace SupraHotEditor
                 delegate(object sender, TreeNodeMouseClickEventArgs e)
                 {
                     Console.WriteLine("Index {0}", e.Node.Index);
-                    TriggerNodeMouseClick(e.Node.Text, rootEntity);
+                    // TriggerNodeMouseClick(e.Node.Text, rootEntity);
+
+                    var indexQueueTarget = GetIndexQueue(e.Node, new List<int>());
+                    EntityCLI targetEntity = GetEntityFromSceneGraph(indexQueueTarget, treeView, rootEntity);
+
+                    if(targetEntity != null) 
+                    {
+                        Console.WriteLine("Selected Node {0} \n", targetEntity.GetName());
+                        ShowComponents(targetEntity);
+                    }
                 }
             );
 
         }
+
+
+        private void treeView_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                DoDragDrop(e.Item, DragDropEffects.Move);
+            }
+        }
+
+        private void treeView_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = e.AllowedEffect;
+        }
+
+        private void treeView_DragOver(object sender, DragEventArgs e)
+        {
+            Point targetPoint = treeView.PointToClient(new Point(e.X, e.Y));
+            treeView.SelectedNode = treeView.GetNodeAt(targetPoint);
+        }
+
+        private void treeView_DragDrop(object sender, DragEventArgs e)
+        {
+            Point targetPoint = treeView.PointToClient(new Point(e.X, e.Y));
+            TreeNode targetNode = treeView.GetNodeAt(targetPoint);
+            TreeNode draggedNode = (TreeNode)e.Data.GetData(typeof(TreeNode));
+
+            if (draggedNode == treeView.Nodes[0]) 
+            {
+                return;
+            }
+
+            if (!draggedNode.Equals(targetNode) && !ContainsNode(draggedNode, targetNode))
+            {
+                // If it is a move operation, remove the node from its current 
+                // location and add it to the node at the drop location.
+                if (e.Effect == DragDropEffects.Move)
+                {
+
+                    Console.WriteLine("Parent {0} to {1}", draggedNode.Text, targetNode.Text);
+
+                    var indexQueueTarget = GetIndexQueue(targetNode, new List<int>());
+                    var indexQueueDragged = GetIndexQueue(draggedNode, new List<int>());
+
+                    Console.WriteLine("indexQueueTarget");
+                    Console.WriteLine(String.Join("; ", indexQueueTarget));
+
+                    Console.WriteLine("indexQueueDragged");
+                    Console.WriteLine(String.Join("; ", indexQueueDragged));
+
+                    EntityCLI targetEntity = GetEntityFromSceneGraph(indexQueueTarget, treeView, rootEntity);
+                    EntityCLI draggedEntity = GetEntityFromSceneGraph(indexQueueDragged, treeView, rootEntity);
+
+                    draggedNode.Remove();
+                    targetNode.Nodes.Add(draggedNode);
+
+                    MakeParent(targetEntity, draggedEntity);
+                }
+
+                targetNode.Expand();
+            }
+        }
+
+        private void MakeParent(EntityCLI newParent, EntityCLI futureChild) 
+        {
+            futureChild.DetachFromParent();
+            newParent.AddChild(futureChild);
+            UpdateView();
+        }
+
+        private EntityCLI GetEntityFromSceneGraph(List<int> indexList, TreeView treeView, EntityCLI rootEntity) 
+        {
+
+            if(indexList.Count > 0) 
+            {
+                var children = rootEntity.GetChildren();
+                var currentIndex = indexList[indexList.Count - 1];
+                indexList.RemoveAt(indexList.Count - 1);
+                
+                if (children.Count - 1 >= currentIndex) 
+                {
+                    return GetEntityFromSceneGraph(indexList, treeView, children[currentIndex]);
+                }
+            }
+
+            return rootEntity;
+        }
+
+        private List<int> GetIndexQueue(TreeNode node, List<int> list) 
+        {
+            if (node.Parent != null)
+            {
+                list.Add(node.Index);
+                return GetIndexQueue(node.Parent, list);
+            }
+
+            return list;
+        }
+
+        private bool ContainsNode(TreeNode node1, TreeNode node2)
+        {
+            if (node2.Parent == null) return false;
+            if (node2.Parent.Equals(node1)) return true;
+            return ContainsNode(node1, node2.Parent);
+        }
+
 
         public static void UpdateView() 
         {
@@ -472,6 +609,11 @@ namespace SupraHotEditor
         private void splitContainer2_Panel1_MouseEnter(object sender, EventArgs e)
         {
             ((Panel)sender).Focus();
+        }
+
+        public static String GetTimestamp(DateTime value)
+        {
+            return value.ToString("yyyyMMddHHmmssffff");
         }
 
     }

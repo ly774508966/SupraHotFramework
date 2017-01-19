@@ -109,6 +109,16 @@ namespace SupraHot
 		return &Children;
 	}
 
+	Entity* Entity::GetParent()
+	{
+		return Parent;
+	}
+
+	bool Entity::HasParent()
+	{
+		return Parent != nullptr;
+	}
+
 	void Entity::Update(float deltaTime)
 	{
 		for (uint32 i = 0, l = static_cast<uint32>(Components.size()); i < l; ++i)

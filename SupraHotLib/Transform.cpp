@@ -164,6 +164,8 @@ namespace SupraHot
 
 			// Todo: Need a clever way to determine, if the parent has changed or not.
 			// Maybe we need to run this through the update-loop itself.
+			
+			// If parent has changed, update global position. (Recalculate it)
 			if (HasParent())
 			{
 				Transformation = Parent->GetTransformation() * LocalTransformation;

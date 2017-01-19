@@ -21,6 +21,7 @@ namespace SupraHot
 
 			void AddChild(EntityCLI^ child);
 			void RemoveChild(EntityCLI^ child);
+			void DetachFromParent();
 			System::Collections::Generic::List<EntityCLI^>^ GetChildren();
 		};
 	};

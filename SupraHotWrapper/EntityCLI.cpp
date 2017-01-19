@@ -95,5 +95,18 @@ namespace SupraHot
 
 			return childrenCLI;
 		}
+
+		void EntityCLI::DetachFromParent()
+		{
+			if (Instance->HasParent())
+			{
+				SupraHot::Entity* currentParent = Instance->GetParent();
+				currentParent->RemoveChild(Instance);
+			}
+			else
+			{
+				SHF_PRINTF("Called EntityCLI::DetachFromParent(), but this Entity does not have a parent! \n");
+			}
+		}
 	}
 };
