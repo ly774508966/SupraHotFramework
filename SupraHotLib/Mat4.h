@@ -26,6 +26,9 @@ namespace SupraHot
 			void Transpose();
 			Mat4 Transposed() const;
 
+			void InverseTR();
+			Mat4 InversedTR() const;
+
 			void Inverse();
 			Mat4 Inversed() const;
 

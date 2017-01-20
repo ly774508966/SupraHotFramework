@@ -83,7 +83,7 @@ namespace SupraHot
 
 		void Camera::CreateInverseViewProjectionMatrix()
 		{
-			InverseViewProjectionMatrix = ViewProjectionMatrix.Inversed();
+			InverseViewProjectionMatrix = ViewProjectionMatrix.InversedTR();
 		}
 
 		void Camera::ProcessMouseInput(float deltaTime)

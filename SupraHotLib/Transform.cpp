@@ -89,7 +89,7 @@ namespace SupraHot
 			{
 				// Todo: Could also cache the inverse matrices from the UpdateTransform-Method!
 				Mat4 inverseTransformation = Parent->GetTransformation().Inversed();
-				SetLocalPosition(inverseTransformation * LocalTransformation.Inversed() * position);
+				SetLocalPosition(inverseTransformation * position);
 			}
 			else
 			{
