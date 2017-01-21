@@ -12,6 +12,7 @@ namespace SupraHot
 		{
 		private:
 			SupraHot::CLI::Material^ Material = nullptr;
+			Vec3CLI^ Origin;
 		public:
 			MeshComponentCLI();
 			MeshComponentCLI(SupraHot::CLI::ComponentCLI^ componentCLI);
@@ -26,6 +27,8 @@ namespace SupraHot
 			
 			void UpdateShaderPermuation();
 			bool SetShader(System::String^ shaderName);
+
+			Vec3CLI^ GetMeshDataOrigin();
 		};
 	};
 };

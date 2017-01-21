@@ -29,6 +29,11 @@ namespace SupraHot
 			return msclr::interop::marshal_as<System::String^>(Instance->GetRootPath());
 		}
 
+		void FileSystemCLI::SetRootPath(System::String^ rootPath)
+		{
+			Instance->SetRootPath(msclr::interop::marshal_as<std::string>(rootPath));
+		}
+
 		bool FileSystemCLI::FileExists(System::String^ pathToFile)
 		{
 			std::string pathToFileStd = msclr::interop::marshal_as<std::string>(pathToFile);

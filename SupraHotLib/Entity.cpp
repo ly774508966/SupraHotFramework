@@ -3,6 +3,7 @@
 #include "MeshComponent.h"
 #include <vector>
 #include <algorithm>
+#include "EntityManager.h"
 
 namespace SupraHot
 {
@@ -64,6 +65,7 @@ namespace SupraHot
 		for (uint32 i = 0, l = static_cast<uint32>(Components.size()); i < l; ++i)
 		{
 			Components.at(i)->Remove();
+			Components.at(i)->Destroy();
 			delete Components.at(i);
 		} Components.clear();
 
@@ -155,15 +157,14 @@ namespace SupraHot
 
 	void Entity::Destroy()
 	{
-		for (uint32 i = 0, l = static_cast<uint32>(Components.size()); i < l; ++i)
-		{
-			Components[i]->Destroy();
-			delete Components[i];
-		} Components.clear();
+		RemoveAndDeleteAllComponents();
 
 		for (uint32 i = 0, l = static_cast<uint32>(Children.size()); i < l; ++i)
 		{
 			Children[i]->Destroy();
-		}
+			delete Children[i];
+		} Children.clear();
+
+		EntityManager::GetInstance()->RemoveEntity(this);
 	}
 };

@@ -28,7 +28,7 @@ namespace SupraHot
 			if (file != nullptr)
 			{
 				char buf[2048];
-				while (fgets(buf, 1024, file)) {
+				while (fgets(buf, 2048, file)) {
 					fileContent.push_back(std::string(buf));
 				}
 				std::fclose(file);

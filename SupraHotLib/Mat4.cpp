@@ -138,8 +138,7 @@ namespace SupraHot
 
 		Mat4 Mat4::Inversed() const
 		{
-
-			Mat4 result; 
+			Mat4 result;
 
 			float det;
 
@@ -288,7 +287,7 @@ namespace SupraHot
 			{
 				SHF_PRINTF("No determinant found \n");
 			}
-
+			
 			return result;
 		}
 

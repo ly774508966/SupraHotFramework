@@ -46,16 +46,6 @@ namespace SupraHot
 			return BiNormalHandle;
 		}
 
-		Material* Mesh::GetMaterial()
-		{
-			return this->MeshMaterial;
-		}
-
-		void Mesh::SetMaterial(Material* material)
-		{
-			this->MeshMaterial = material;
-		}
-
 		void Mesh::Destroy()
 		{
 		}

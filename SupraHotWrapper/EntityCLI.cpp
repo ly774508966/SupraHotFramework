@@ -108,5 +108,11 @@ namespace SupraHot
 				SHF_PRINTF("Called EntityCLI::DetachFromParent(), but this Entity does not have a parent! \n");
 			}
 		}
+
+		void EntityCLI::DestroyWithChildren()
+		{
+			IsCopy = false;
+			Instance->Destroy();
+		}
 	}
 };

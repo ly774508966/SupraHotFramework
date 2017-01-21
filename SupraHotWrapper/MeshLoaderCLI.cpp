@@ -69,7 +69,7 @@ namespace SupraHot
 			entityCLI->ReplaceInstance(parent);
 			entityCLI->IsCopy = true;
 
-			EntityManager::GetInstance()->AddEntity(parent);
+			//EntityManager::GetInstance()->AddEntity(parent);
 			return entityCLI;
 		}
 	};

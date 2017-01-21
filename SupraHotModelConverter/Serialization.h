@@ -7,7 +7,6 @@ namespace SupraHot
 {
 	namespace Graphics
 	{
-		struct Material;
 		struct Mesh;
 		struct SHFModelFile;
 	}

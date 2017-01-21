@@ -6,12 +6,10 @@ namespace SupraHot
 	namespace Graphics
 	{
 		class MeshData;
-		class Material;
 
 		class Mesh
 		{
 		private:
-			Material* MeshMaterial;
 			uint32 VertexHandle, UVHandle, NormalHandle, TangentHandle, BiNormalHandle;
 
 			void Load(MeshData* meshData);
@@ -25,9 +23,6 @@ namespace SupraHot
 			const uint32& GetNormalHandle();
 			const uint32& GetTangentHandle();
 			const uint32& GetBiNormalHandle();
-
-			Material* GetMaterial();
-			void SetMaterial(Material* material);
 
 			void Destroy();
 		};

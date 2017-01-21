@@ -14,7 +14,6 @@ namespace SupraHot
 
 	namespace Graphics
 	{
-		class Material;
 		class Camera;
 		class Shader;
 		class MeshData;

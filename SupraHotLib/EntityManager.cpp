@@ -34,7 +34,7 @@ namespace SupraHot
 	void EntityManager::DestroyAndDelete()
 	{
 #if DEVELOPMENT == 1
-		SHF_PRINTF("EntityManager::DestroyAndDelete() \n");
+		SHF_PRINTF("EntityManager::DestroyAndDelete() Size = %llu \n", Entities.size());
 #endif
 		for (Entity* entity : Entities)
 		{

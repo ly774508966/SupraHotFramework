@@ -11,8 +11,6 @@ namespace SupraHot
 		struct MeshLoadData
 		{
 			std::vector<Graphics::MeshData*> Meshes;
-			std::unordered_map<uint32, Graphics::Material*> MaterialsMap;
-			std::vector<uint32> MaterialIDs;
 		};
 
 		using namespace Graphics;
@@ -28,6 +26,8 @@ namespace SupraHot
 			~MeshDataLoader();
 
 			std::vector<MeshComponent*> Load(std::string pathToSHFM);
+			std::vector<MeshData*> LoadRawData(std::string pathToSHFM);
+
 		};
 	};
 };

@@ -24,7 +24,20 @@ namespace SupraHot
 
 			SupraHot::CLI::EntityCLI^ entityCLI = gcnew SupraHot::CLI::EntityCLI();
 			entityCLI->ReplaceInstance(entity);
+			SetIsCopy(entityCLI);
 			return entityCLI;
+		}
+
+		void GenericSerializerCLI::SetIsCopy(EntityCLI^ entity)
+		{
+			entity->IsCopy = true;
+
+			auto children = entity->GetChildren();
+			
+			for (uint32 i = 0, l = children->Count; i < l; ++i)
+			{
+				SetIsCopy(children[i]);
+			}
 		}
 	};
 };

@@ -16,13 +16,11 @@ namespace SupraHot
 
 		void TransformComponentCLI::SetLocalPosition(Vec3CLI^ position)		
 		{
-			SHF_PRINTF("SetLocalPosition to [%f, %f, %f] \n", position->x, position->y, position->z);
 			Entity->GetHandle()->GetTransform().SetLocalPosition(Vec3(position->x, position->y, position->z));
 		}
 
 		void TransformComponentCLI::SetScale(Vec3CLI^ scale)
 		{
-			SHF_PRINTF("SetLocalScale to [%f, %f, %f] \n", scale->x, scale->y, scale->z);
 			Entity->GetHandle()->GetTransform().SetLocalScale(Vec3(scale->x, scale->y, scale->z));
 		}
 

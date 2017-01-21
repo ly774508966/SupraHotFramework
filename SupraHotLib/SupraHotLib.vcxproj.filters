@@ -288,6 +288,9 @@
     <ClInclude Include="GenericSerializer.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="MeshDataCache.h">
+      <Filter>Header Files\Graphics\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -469,6 +472,9 @@
     </ClCompile>
     <ClCompile Include="GenericSerializer.cpp">
       <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshDataCache.cpp">
+      <Filter>Source Files\Graphics\Common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

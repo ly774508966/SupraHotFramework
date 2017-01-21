@@ -38,6 +38,9 @@ namespace SupraHot
 			{
 				return Instance;
 			}
+
+		private:
+			void SetIsCopy(EntityCLI^ entity);
 		};
 	};
 };

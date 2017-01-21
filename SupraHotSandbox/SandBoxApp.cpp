@@ -247,19 +247,17 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 		}*/
 
 		EntityManager::GetInstance()->AddEntity(entity);
+
+		{
+			// Try loading material
+			Utils::GenericSerializer serializer("Dev/Test.json");
+			ShaderMaterial deserializeTest;
+			//serializer.Deserialize(*(meshComponent->GetMaterial()));
+			//meshComponent->UpdateShaderPermution();
+			SHF_PRINTF("MaterialName : %s \n", deserializeTest.Name.c_str());
+			
+		}
 	}
-
-
-	{
-		// Try loading material
-		Utils::GenericSerializer serializer("Dev/Test.json");
-		ShaderMaterial deserializeTest;
-		serializer.Deserialize(deserializeTest);
-
-		SHF_PRINTF("MaterialName : %s \n", deserializeTest.Name.c_str());
-
-	}
-
 
 	// EulerAngles -> Quat4
 

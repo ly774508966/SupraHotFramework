@@ -39,7 +39,7 @@ namespace SupraHot
 			void Deserialize();
 
 			void Serialize(Graphics::ShaderMaterial* shaderMaterial);
-			void Deserialize(Graphics::ShaderMaterial& shaderMaterial);
+			void Deserialize(Graphics::ShaderMaterial* shaderMaterial);
 
 			void Serialize(Entity* Entity);
 			void Deserialize(Entity* Entity);
@@ -53,6 +53,11 @@ namespace SupraHot
 			json11::Json SerializeChild(Entity* entity);
 			json11::Json SerializeComponent(Component* component);
 			json11::Json SerializeShaderMaterial(Graphics::ShaderMaterial* shaderMaterial);
+
+			void DeserializeTransform(json11::Json input, Transform& transformOutput);
+			Component* DeserializeComponent(json11::Json componentDescription);
+			Entity* DeserializeEntity(json11::Json entityDescription);
+			void DeserializeMaterial(json11::Json materialDescription, Graphics::ShaderMaterial* shaderMaterial);
 
 			void OpenFile(MODE mode);
 			void CloseFile();

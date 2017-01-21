@@ -1,8 +1,6 @@
 #include "MeshDataLoader.h"
 #include <unordered_map>
-#include "StringUtil.h"
 #include "Platform.h"
-#include "FileSystem.h"
 #include "SHFMBinaryLoader.h"
 #include "ShaderLibrary.h"
 
@@ -25,6 +23,21 @@ namespace SupraHot
 
 		MeshDataLoader::~MeshDataLoader()
 		{
+		}
+
+		std::vector<MeshData*> MeshDataLoader::LoadRawData(std::string pathToSHFM)
+		{
+			MeshLoadData* meshLoadData = LoadSHFM(pathToSHFM);
+			std::vector<MeshData*> meshDataVector;
+
+			for (size_t m = 0, l = meshLoadData->Meshes.size(); m < l; ++m)
+			{
+				MeshData* meshData = meshLoadData->Meshes[m];
+				meshDataVector.push_back(meshData);
+			}
+
+			delete meshLoadData;
+			return meshDataVector;
 		}
 
 		std::vector<MeshComponent*> MeshDataLoader::Load(std::string pathToSHFM)

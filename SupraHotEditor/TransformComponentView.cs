@@ -470,6 +470,10 @@ namespace SupraHotEditor
                     }
                 );
 
+                XGlobalSpinner = xSpinner;
+                YGlobalSpinner = ySpinner;
+                ZGlobalSpinner = zSpinner;
+
                 Button setGlob = new Button();
                 setGlob.Text = "Reset global";
                 layoutPanel.Controls.Add(setGlob);
@@ -483,11 +487,27 @@ namespace SupraHotEditor
                             Form1.UpdateView();
                         }
                     );
-
-                XGlobalSpinner = xSpinner;
-                YGlobalSpinner = ySpinner;
-                ZGlobalSpinner = zSpinner;
             }
+
+            // Reset to origin
+            Button resetToOrigin = new Button();
+            resetToOrigin.Text = "Reset Origin";
+            layoutPanel.Controls.Add(resetToOrigin);
+
+            resetToOrigin.Click += new EventHandler(
+                    delegate(object sender, EventArgs e)
+                    {
+                        ResetToOrigin();
+                        Form1.UpdateView();
+                    }
+                );
+        }
+
+        void ResetToOrigin() 
+        {
+            TransformComponent.SetLocalPosition(new Vec3CLI(0,0,0));
+            UpdateGlobalPosition();
+            UpdateLocalPosition();
         }
 
         void UpdateGlobalPosition() 

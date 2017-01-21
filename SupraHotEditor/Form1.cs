@@ -33,6 +33,8 @@ namespace SupraHotEditor
 
         private TreeView treeView;
 
+        private String CurrentActiveScenePath;
+
         public int GetClientRectHeight() 
         {
             return ClientRectangle.Height;
@@ -40,6 +42,8 @@ namespace SupraHotEditor
 
         public Form1()
         {
+            this.KeyPreview = true;
+
             Instance = this;
             InitializeComponent();
             this.splitContainer2.Panel2.MouseWheel += splitContainer2_Panel_MouseWheel;
@@ -80,7 +84,8 @@ namespace SupraHotEditor
                     "Shaders",
                     "Scripts",
                     "EnvMaps",
-                    "Prefabs"
+                    "Prefabs",
+                    "Scenes"
                 };
 
                 var assetListView = new ListView();
@@ -125,6 +130,8 @@ namespace SupraHotEditor
                 rootEntity = new EntityCLI();
                 rootEntity.SetName("Scene");
 
+                EntityManagerCLI.GetInstance().AddEntity(rootEntity); 
+
                 // Debug
                 // Load a model 
                 MeshLoaderCLI meshLoader = MeshLoaderCLI.GetIntance();
@@ -132,7 +139,6 @@ namespace SupraHotEditor
                 EntityCLI loadedEntity = meshLoader.LoadSFHM("Models/Pistol/Pistol_Model.shfm");
                 loadedEntity.IsCopy = true;
                 rootEntity.AddChild(loadedEntity);
-                
 
                 RebuildEntityHierarchy();
             }
@@ -445,10 +451,6 @@ namespace SupraHotEditor
         private void createToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Console.WriteLine("Create new entity");
-
-            GenericSerializerCLI gs = new GenericSerializerCLI("Dev/Wurst.json");
-            gs.Serialize(rootEntity);
-            // Serialize entites[0]
         }
 
         private void importModelToolStripMenuItem_Click(object sender, EventArgs e)
@@ -616,5 +618,175 @@ namespace SupraHotEditor
             return value.ToString("yyyyMMddHHmmssffff");
         }
 
+        private void MakeNewScene() 
+        {
+            rootEntity.DestroyWithChildren();
+            EntityManagerCLI.GetInstance().DestroyAndDelete();
+
+            rootEntity = new EntityCLI();
+            rootEntity.SetName("Scene");
+
+            EntityManagerCLI.GetInstance().AddEntity(rootEntity);
+            RebuildEntityHierarchy();
+
+            Form1.UpdateView();
+        }
+
+        private void LoadScene(String pathToSceneFile)
+        {
+            FileSystemCLI fileSystem = FileSystemCLI.GetIntance();
+            String fileSystemRootPath = fileSystem.GetRootPath();
+
+            pathToSceneFile = pathToSceneFile.Replace("\\", "/");
+
+            if (pathToSceneFile.Contains("Content/"))
+            {
+                var splittedString = pathToSceneFile.Split(new[] { "Content/" }, StringSplitOptions.None);
+
+                if (splittedString.Length > 1)
+                {
+                    var pathToFileInRootSys = splittedString[1];
+
+                    bool isInRootSystem = fileSystem.FileExists(pathToFileInRootSys);
+
+                    if (isInRootSystem)
+                    {
+                        Console.WriteLine("pathToFileInRootSys = {0}", pathToFileInRootSys);
+
+                        Console.WriteLine("Load Scene: {0}", pathToFileInRootSys);
+                        CurrentActiveScenePath = pathToSceneFile;
+
+                        rootEntity.DestroyWithChildren();
+                        EntityManagerCLI.GetInstance().DestroyAndDelete();
+
+                        GenericSerializerCLI gs = new GenericSerializerCLI(pathToFileInRootSys);
+                        rootEntity = gs.Deserialize();
+
+                        EntityManagerCLI.GetInstance().AddEntity(rootEntity);
+                        RebuildEntityHierarchy();
+
+                        Form1.UpdateView();
+                    }
+                    else
+                    {
+                        Console.WriteLine("{0} is not in the Content/ directory. Please move it there", pathToFileInRootSys);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show(pathToSceneFile + " is not in the Content/ directory.\nPlease move it there", "File not in assets", MessageBoxButtons.OK);
+                Console.WriteLine("{0} is not in the Content/ directory.\nPlease move it there", pathToSceneFile);
+            }
+        }
+
+        private void SaveScene() 
+        {
+            String rootPath = FileSystemCLI.GetIntance().GetRootPath();
+            FileSystemCLI.GetIntance().SetRootPath("");
+
+            GenericSerializerCLI gs = new GenericSerializerCLI(CurrentActiveScenePath);
+            gs.Serialize(rootEntity);
+
+            FileSystemCLI.GetIntance().SetRootPath(rootPath);
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Create new scene? Unsaved process will be lost!", "Create new scene?", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                // do something
+                // Here we should delete should delete our rootEntity and call -Destroy() on it!
+                MakeNewScene();
+                CurrentActiveScenePath = "";
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                //do nothing
+            }
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openFileDialog.Filter = "Scene|*.scene";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                String fileName = openFileDialog.SafeFileName;
+                String filePath = openFileDialog.FileName;
+
+                // Check if model is in Content.
+                String pathToFile = FileSystemUtil.IsInContent(filePath);
+                if (pathToFile != null)
+                {
+                    Console.WriteLine("PathToFile {0}", pathToFile);
+
+                    DialogResult dialogResult = MessageBox.Show("Load scene? Unsaved process will be lost!", "Load scene?", MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        // do something
+                        // Here we should delete should delete our rootEntity and call -Destroy() on it!
+                        LoadScene(filePath);
+                    }
+                    else if (dialogResult == DialogResult.No)
+                    {
+                        //do nothing
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("{0} is not in the Content/ directory. Please move it there", fileName);
+                }
+            }
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (CurrentActiveScenePath == null || CurrentActiveScenePath == "")
+            {
+                saveAsToolStripMenuItem_Click(sender, e);
+            }
+            else 
+            {
+                SaveScene();
+            }
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "Scene (*.scene)|*.scene";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                String fileName = saveFileDialog1.FileName;
+                fileName = fileName.Replace("\\", "/");
+                CurrentActiveScenePath = fileName;
+                SaveScene();
+            }
+        }
+
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // We can use this for a 'Create Material' - window
+
+            Form testDialog = new Form();
+
+            // Show testDialog as a modal dialog and determine if DialogResult = OK.
+            if (testDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                // Read the contents of testDialog's TextBox.
+                //this.txtResult.Text = testDialog.TextBox1.Text;
+            }
+            else
+            {
+                //this.txtResult.Text = "Cancelled";
+            }
+            testDialog.Dispose();
+        }
     }
 }

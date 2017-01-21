@@ -18,6 +18,7 @@ namespace SupraHot
 
 			static FileSystemCLI^ GetIntance();
 			System::String^ GetRootPath();
+			void SetRootPath(System::String^ rootPath);
 			bool FileExists(System::String^ pathToFile);
 		};
 	};

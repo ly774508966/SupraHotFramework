@@ -19,6 +19,9 @@ namespace SupraHot
 		MeshComponentCLI::MeshComponentCLI(SupraHot::CLI::MeshData^ meshData, SupraHot::CLI::Material^ material)
 		{
 			Instance = new SupraHot::MeshComponent(meshData->GetHandle(), material->GetHandle());
+
+			Vec3 origin = meshData->GetHandle()->Origin;
+			Origin = gcnew Vec3CLI(origin.x, origin.y, origin.z);
 		}
 
 		MeshComponentCLI::MeshComponentCLI(SupraHot::CLI::ComponentCLI^ componentCLI)
@@ -73,6 +76,11 @@ namespace SupraHot
 			SHF_PRINTF("Shader description file name: %s \n", shaderDescription->FileName.c_str());
 #endif
 			return true;
+		}
+
+		Vec3CLI^ MeshComponentCLI::GetMeshDataOrigin()
+		{
+			return Origin;
 		}
 	};
 };

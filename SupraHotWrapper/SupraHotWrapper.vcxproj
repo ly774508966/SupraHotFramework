@@ -164,6 +164,7 @@
     <ClInclude Include="BooleanMaterialPropertyCLI.h" />
     <ClInclude Include="CameraCLI.h" />
     <ClInclude Include="ComponentCLI.h" />
+    <ClInclude Include="EntityManagerCLI.h" />
     <ClInclude Include="FileSystemCLI.h" />
     <ClInclude Include="FloatMaterialPropertyCLI.h" />
     <ClInclude Include="GenericSerializerCLI.h" />
@@ -196,6 +197,7 @@
     <ClCompile Include="BooleanMaterialPropertyCLI.cpp" />
     <ClCompile Include="CameraCLI.cpp" />
     <ClCompile Include="ComponentCLI.cpp" />
+    <ClCompile Include="EntityManagerCLI.cpp" />
     <ClCompile Include="FileSystemCLI.cpp" />
     <ClCompile Include="FloatMaterialPropertyCLI.cpp" />
     <ClCompile Include="GenericSerializerCLI.cpp" />
