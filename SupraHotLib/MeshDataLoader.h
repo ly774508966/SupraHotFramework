@@ -27,7 +27,7 @@ namespace SupraHot
 
 			//std::vector<MeshComponent*> Load(std::string pathToSHFM);
 			std::vector<MeshData*> LoadRawData(std::string pathToSHFM);
-			std::vector<MeshDataPtr>* LoadCached(std::string pathToSHFM);
+			std::vector<MeshDataPtr>* Load(std::string pathToSHFM);
 		};
 	};
 };

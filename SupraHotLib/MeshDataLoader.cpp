@@ -26,7 +26,7 @@ namespace SupraHot
 		{
 		}
 
-		std::vector<MeshDataPtr>* MeshDataLoader::LoadCached(std::string pathToSHFM)
+		std::vector<MeshDataPtr>* MeshDataLoader::Load(std::string pathToSHFM)
 		{
 			if (!MeshDataCache::GetInstance()->IsCached(pathToSHFM))
 			{

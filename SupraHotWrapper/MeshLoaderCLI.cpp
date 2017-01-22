@@ -31,7 +31,7 @@ namespace SupraHot
 		{
 			std::string path = msclr::interop::marshal_as<std::string>(pathToFile);
 			
-			std::vector<SupraHot::Graphics::MeshDataPtr>* cachedMeshes = Instance->LoadCached(path);
+			std::vector<SupraHot::Graphics::MeshDataPtr>* cachedMeshes = Instance->Load(path);
 			std::vector<SupraHot::MeshComponent*> meshComponents;
 
 			for (uint32 m = 0, l = static_cast<uint32>(cachedMeshes->size()); m < l; ++m)

@@ -1,4 +1,5 @@
 #include "MeshDataCache.h"
+#include "MeshDataLoader.h"
 
 namespace SupraHot
 {
@@ -36,14 +37,13 @@ namespace SupraHot
 		void MeshDataCache::Free(std::string meshName, uint32 index, MeshDataPtr& meshDataPtr)
 		{
 #if DEVELOPMENT == 1
-			SHF_PRINTF("MeshDataCache::Free(%s)\n", meshName.c_str());
+			SHF_PRINTF("MeshDataCache::Free(%s, %d)\n", meshName.c_str(), index);
 #endif
 			if (meshDataPtr.get() != nullptr && meshDataPtr.use_count() <= 2 && IsCached(meshName))
 			{
-				// TODO: Freeing code.
-				
-				// TextureCubes.erase(TextureCubes.find(textureCube->GetPath()));
-
+				std::vector<MeshDataPtr>* cachedMesh = &CachedMeshData.at(meshName);
+				cachedMesh->erase(cachedMesh->begin() + index);
+				cachedMesh->insert(cachedMesh->begin() + index, nullptr);
 			}
 		}
 
@@ -60,6 +60,47 @@ namespace SupraHot
 				SHF_PRINTF("GetCachedMeshData(%s) \n", meshName.c_str());
 #endif
 				return &CachedMeshData.at(meshName);
+			}
+
+			return nullptr;
+		}
+
+		MeshDataPtr MeshDataCache::GetCachedMeshData(std::string meshName, uint32 index)
+		{
+			if (CachedMeshData.find(meshName) != CachedMeshData.end())
+			{
+#if DEVELOPMENT == 1
+				SHF_PRINTF("GetCachedMeshData(%s, %d) \n", meshName.c_str(), index);
+#endif
+
+				// Check if MeshData at index is valid
+
+				if (CachedMeshData.at(meshName).at(index) != nullptr)
+				{
+					return CachedMeshData.at(meshName).at(index);
+				}
+				
+				// if not, load the file and cached it.
+
+				std::vector<MeshData*> rawMeshData = Utils::MeshDataLoader::GetInstance()->LoadRawData(meshName);
+				if (rawMeshData.size() <= index)
+				{
+					SHF_PRINTF("Could not find any valid MeshData in %s at index %d \n", meshName.c_str(), index);
+					return nullptr;
+				}
+
+				MeshData* meshData = rawMeshData.at(index);
+				rawMeshData.erase(rawMeshData.begin() + index);
+
+				for (MeshData* mesh : rawMeshData)
+				{
+					mesh->Destroy();
+					delete mesh;
+				} rawMeshData.clear();
+
+				
+				CachedMeshData.at(meshName).erase(CachedMeshData.at(meshName).begin() + index);
+				CachedMeshData.at(meshName).insert(CachedMeshData.at(meshName).begin() + index, MeshDataPtr(meshData));
 			}
 
 			return nullptr;

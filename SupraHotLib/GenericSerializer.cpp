@@ -576,8 +576,8 @@ namespace SupraHot
 
 				// 2. Load mesh data (check mesh cache)
 				
-				auto meshDataVector = MeshDataLoader::GetInstance()->LoadCached(meshDataFilePath);
-				MeshDataPtr meshDataPtr = meshDataVector->at(meshDataIndex);
+				MeshDataLoader::GetInstance()->Load(meshDataFilePath);
+				MeshDataPtr meshDataPtr = MeshDataCache::GetInstance()->GetCachedMeshData(meshDataFilePath, meshDataIndex);
 
 				MeshComponent* meshComponent = new MeshComponent(meshDataPtr, material, meshDataFilePath, meshDataIndex);
 				meshComponent->UpdateShaderPermution();

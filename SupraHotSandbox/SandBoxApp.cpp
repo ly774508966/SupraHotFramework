@@ -59,6 +59,11 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	window->Init(width, height, title);
 	window->SetClearColor(0.7f, 0.3f, 0.7f, 1.0f);
 
+	glfwSwapInterval(0);
+	
+	// Intel: 73 - 83
+	// Nvidia: ~ 450 - 460
+
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
@@ -87,7 +92,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 		path = "Models/ParisApartment/ParisApartment.shfm";
 #endif
 
-		std::vector<MeshDataPtr>* cachedMeshes = Utils::MeshDataLoader::GetInstance()->LoadCached(path);
+		std::vector<MeshDataPtr>* cachedMeshes = Utils::MeshDataLoader::GetInstance()->Load(path);
 
 		sponza = new Entity();
 		sponza->SetName("Sponza Root");
@@ -210,7 +215,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	
 
 	{	// Load a test model
-		std::vector<MeshDataPtr>* cachedMeshes = Utils::MeshDataLoader::GetInstance()->LoadCached("Models/Pistol/Pistol_Model.shfm");
+		std::vector<MeshDataPtr>* cachedMeshes = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol/Pistol_Model.shfm");
 
 		for (uint32 m = 0, l = static_cast<uint32>(cachedMeshes->size()); m < l; ++m)
 		{
