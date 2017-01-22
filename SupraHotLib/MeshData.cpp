@@ -10,6 +10,7 @@ namespace SupraHot
 
 		MeshData::~MeshData()
 		{
+			Destroy();
 		}
 
 		void MeshData::Destroy()
@@ -18,11 +19,18 @@ namespace SupraHot
 			if (HasIndexData)
 			{
 				glDeleteBuffers(1, &IndexBufferHandle);
+				HasIndexData = false;
 			}
 
 			if (HasPositionData || HasNormalData || HasUVData || HasTangentData || HasBiTangentData)
 			{
 				glDeleteBuffers(1, &VertexBufferHandle);
+				
+				HasPositionData = false;
+				HasNormalData = false;
+				HasUVData = false;
+				HasTangentData = false;
+				HasBiTangentData = false;
 			}
 		}
 	};

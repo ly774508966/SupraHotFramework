@@ -5,6 +5,7 @@
 #include <TextureCache.h>
 #include <algorithm>
 #include <EntityManager.h>
+#include <MeshDataCache.h>
 
 namespace SupraHot
 {
@@ -87,6 +88,8 @@ namespace SupraHot
 			EntityManager::GetInstance()->Destroy();
 
 			TextureCache::GetInstance()->Destroy();
+
+			MeshDataCache::GetInstance()->Destroy();
 
 			FBO->Destroy();
 

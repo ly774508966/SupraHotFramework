@@ -4,6 +4,7 @@
 #include "Vec3.h"
 #include "Vec2.h"
 #include "Face.h"
+#include <memory>
 
 namespace SupraHot
 {
@@ -37,6 +38,8 @@ namespace SupraHot
 			~MeshData();
 			void Destroy();
 		};
+
+		typedef std::shared_ptr<MeshData> MeshDataPtr;
 	};
 };
 

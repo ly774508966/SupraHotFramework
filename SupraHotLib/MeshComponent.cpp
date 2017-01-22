@@ -3,10 +3,11 @@
 #include "MeshDataRenderer.h"
 #include "GenericSerializer.h"
 #include "StringUtil.h"
+#include "MeshDataCache.h"
 
 namespace SupraHot
 {
-	MeshComponent::MeshComponent(Graphics::MeshData* meshData, Graphics::ShaderMaterial* material, 
+	MeshComponent::MeshComponent(Graphics::MeshDataPtr meshData, Graphics::ShaderMaterial* material,
 								 std::string modelFilePath, uint32 modelFileArrayIndex)
 	{
 		MeshData = meshData;
@@ -48,11 +49,16 @@ namespace SupraHot
 		//SHF_PRINTF("need to destroy the material and meshdata.\n");
 #endif
 
+		// TODO: Instead of just out right delete the mesh data
+		// we should call the MeshDataCache and ask it to free it
 		if (MeshData != nullptr)
 		{
-			MeshData->Destroy();
-			delete MeshData;
-			MeshData = nullptr;
+			Graphics::MeshDataCache::GetInstance()->Free(ModelFilePath, ModelFileArrayIndex, MeshData);
+			MeshData = Graphics::MeshDataPtr();
+
+			//MeshData->Destroy();
+			//delete MeshData.get();
+			//MeshData = nullptr;			
 		}
 		
 		if (Material != nullptr)
@@ -80,7 +86,7 @@ namespace SupraHot
 		return Material;
 	}
 
-	Graphics::MeshData* MeshComponent::GetMeshData()
+	Graphics::MeshDataPtr MeshComponent::GetMeshData()
 	{
 		return MeshData;
 	}
@@ -97,7 +103,7 @@ namespace SupraHot
 
 	void MeshComponent::UpdateShaderPermution()
 	{
-		Graphics::Shader* shader = Graphics::ShaderLibrary::GetInstance()->SelectShaderForShaderMaterialAndMeshData(GetMeshData(), GetMaterial());
+		Graphics::Shader* shader = Graphics::ShaderLibrary::GetInstance()->SelectShaderForShaderMaterialAndMeshData(GetMeshData().get(), GetMaterial());
 		if (shader != nullptr)
 		{
 			GetMaterial()->SetShaderPermutation(shader);

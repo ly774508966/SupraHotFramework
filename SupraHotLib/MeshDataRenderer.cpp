@@ -48,7 +48,7 @@ namespace SupraHot
 		for (MeshComponent* meshComponent : MeshComponents)
 		{
 
-			if (meshComponent->GetMeshData() == nullptr || meshComponent->GetMaterial() == nullptr)
+			if (meshComponent->GetMeshData().get() == nullptr || meshComponent->GetMaterial() == nullptr)
 			{
 				continue;
 			}
@@ -60,7 +60,7 @@ namespace SupraHot
 				continue;
 			}
 
-			Graphics::MeshData* meshData = meshComponent->GetMeshData();
+			Graphics::MeshData* meshData = meshComponent->GetMeshData().get();
 
 			// Bind shader
 			shader->Attach();
@@ -155,6 +155,7 @@ namespace SupraHot
 			// Layout
 			// Vertex attributes are stored sequential & not interleaved
 			// (vtx.x,vtx.y,vtx.z...... nml.x,nml.y,nml.z......, uv.s,uv.t,uv.s,uv.t.......)
+			// http://stackoverflow.com/questions/16380005/opengl-3-4-glvertexattribpointer-stride-and-offset-miscalculation
 
 			glDrawElements(GL_TRIANGLES, (meshData->FaceCount * 3), meshData->GlIndexType, nullptr);
 

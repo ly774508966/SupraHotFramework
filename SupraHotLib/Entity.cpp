@@ -68,11 +68,6 @@ namespace SupraHot
 			Components.at(i)->Destroy();
 			delete Components.at(i);
 		} Components.clear();
-
-		for (uint32 i = 0, l = static_cast<uint32>(Children.size()); i < l; ++i)
-		{
-			Children[i]->RemoveAndDeleteAllComponents();
-		}
 	}
 
 	Component* Entity::AddComponent(Component* component)

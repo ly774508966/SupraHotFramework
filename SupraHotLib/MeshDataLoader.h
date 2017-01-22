@@ -25,9 +25,9 @@ namespace SupraHot
 			static MeshDataLoader* GetInstance();
 			~MeshDataLoader();
 
-			std::vector<MeshComponent*> Load(std::string pathToSHFM);
+			//std::vector<MeshComponent*> Load(std::string pathToSHFM);
 			std::vector<MeshData*> LoadRawData(std::string pathToSHFM);
-
+			std::vector<MeshDataPtr>* LoadCached(std::string pathToSHFM);
 		};
 	};
 };

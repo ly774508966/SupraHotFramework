@@ -173,6 +173,7 @@
     <ClInclude Include="MaterialPropertyCommonInterface.h" />
     <ClInclude Include="EntityCLI.h" />
     <ClInclude Include="MeshComponentCLI.h" />
+    <ClInclude Include="MeshDataCacheCLI.h" />
     <ClInclude Include="MeshDataCLI.h" />
     <ClInclude Include="MeshLoaderCLI.h" />
     <ClInclude Include="ShaderLibraryCLI.h" />
@@ -206,6 +207,7 @@
     <ClCompile Include="MaterialPropertyCommonInterface.cpp" />
     <ClCompile Include="EntityCLI.cpp" />
     <ClCompile Include="MeshComponentCLI.cpp" />
+    <ClCompile Include="MeshDataCacheCLI.cpp" />
     <ClCompile Include="MeshDataCLI.cpp" />
     <ClCompile Include="MeshLoaderCLI.cpp" />
     <ClCompile Include="ShaderLibraryCLI.cpp" />

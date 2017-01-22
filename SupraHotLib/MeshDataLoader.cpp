@@ -3,6 +3,7 @@
 #include "Platform.h"
 #include "SHFMBinaryLoader.h"
 #include "ShaderLibrary.h"
+#include "MeshDataCache.h"
 
 namespace SupraHot
 {
@@ -25,6 +26,17 @@ namespace SupraHot
 		{
 		}
 
+		std::vector<MeshDataPtr>* MeshDataLoader::LoadCached(std::string pathToSHFM)
+		{
+			if (!MeshDataCache::GetInstance()->IsCached(pathToSHFM))
+			{
+				std::vector<MeshData*> rawMeshData = LoadRawData(pathToSHFM);
+				MeshDataCache::GetInstance()->Cache(pathToSHFM, rawMeshData);
+			}
+
+			return MeshDataCache::GetInstance()->GetCachedMeshData(pathToSHFM);
+		}
+
 		std::vector<MeshData*> MeshDataLoader::LoadRawData(std::string pathToSHFM)
 		{
 			MeshLoadData* meshLoadData = LoadSHFM(pathToSHFM);
@@ -40,7 +52,7 @@ namespace SupraHot
 			return meshDataVector;
 		}
 
-		std::vector<MeshComponent*> MeshDataLoader::Load(std::string pathToSHFM)
+/*		std::vector<MeshComponent*> MeshDataLoader::Load(std::string pathToSHFM)
 		{
 			MeshLoadData* meshLoadData = LoadSHFM(pathToSHFM);
 			std::vector<MeshComponent*> meshComponents;
@@ -57,7 +69,7 @@ namespace SupraHot
 
 			delete meshLoadData;
 			return meshComponents;
-		}
+		}*/
 
 		MeshLoadData* MeshDataLoader::LoadSHFM(std::string path)
 		{

@@ -136,6 +136,8 @@ namespace SupraHot
 			(*this) = Inversed();
 		}
 
+
+		// Source: http://stackoverflow.com/questions/1148309/inverting-a-4x4-matrix
 		Mat4 Mat4::Inversed() const
 		{
 			Mat4 result;

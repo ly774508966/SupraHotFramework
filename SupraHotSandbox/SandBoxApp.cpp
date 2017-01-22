@@ -30,6 +30,7 @@
 #include "WindowEmscripten.h"
 #endif
 #include <GenericSerializer.h>
+#include <MeshDataCache.h>
 
 using namespace SupraHot;
 
@@ -79,19 +80,28 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	Scripting::LuaVM::GetInstance()->RunFile("Scripts/test.lua");
 
 	{
-		std::vector<MeshComponent*> meshComponents = Utils::MeshDataLoader::GetInstance()->Load(
+		std::string path;
 #if SPONZA == 1
-			"Models/Sponza/Sponza_M.shfm"
+		path = "Models/Sponza/Sponza_M.shfm";
 #else 
-			"Models/ParisApartment/ParisApartment.shfm"
+		path = "Models/ParisApartment/ParisApartment.shfm";
 #endif
-			);
+
+		std::vector<MeshDataPtr>* cachedMeshes = Utils::MeshDataLoader::GetInstance()->LoadCached(path);
 
 		sponza = new Entity();
 		sponza->SetName("Sponza Root");
 
-		for (MeshComponent* meshComponent : meshComponents)
+		for (uint32 m = 0, l = static_cast<uint32>(cachedMeshes->size()); m < l; ++m)
 		{
+			MeshDataPtr meshData = cachedMeshes->at(m);
+			ShaderDescription* shaderDescription = ShaderLibrary::GetInstance()->GetShaderDescriptions()->at("MeshDefaultShader");
+			ShaderMaterial* shaderMaterial = new ShaderMaterial(shaderDescription);
+			Shader* shader = ShaderLibrary::GetInstance()->SelectShaderForShaderMaterialAndMeshData(meshData.get(), shaderMaterial);
+			shaderMaterial->SetShaderPermutation(shader);
+			
+			MeshComponent* meshComponent = new MeshComponent(meshData, shaderMaterial, path, m);
+
 			Entity* entity = new Entity();
 
 #if SPONZA == 0
@@ -197,67 +207,83 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	}
 
 
+	
+
 	{	// Load a test model
-		std::vector<MeshComponent*> meshComponents = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol/Pistol_Model.shfm");
+		std::vector<MeshDataPtr>* cachedMeshes = Utils::MeshDataLoader::GetInstance()->LoadCached("Models/Pistol/Pistol_Model.shfm");
 
-		Entity* entity = new Entity();
-
-		MeshComponent* meshComponent = meshComponents.at(0);
-		entity->AddComponent(meshComponent);
-
-		entity->GetTransform().SetLocalPosition(Vec3(0.0f, 0.75f, -7.0f));
-		entity->GetTransform().SetLocalScale(Vec3(0.05f, 0.05f, 0.05f));
-		entity->GetTransform().SetRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
-
-		auto envMap = meshComponent->GetMaterial()->GetMaterialPropertyByName("EnvMap");
-		if (envMap != nullptr)
+		for (uint32 m = 0, l = static_cast<uint32>(cachedMeshes->size()); m < l; ++m)
 		{
-			TextureCubeMaterialProperty* mp = reinterpret_cast<TextureCubeMaterialProperty*>(envMap);
-			mp->SetValue("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds");
-			printf("type : %s \n", envMap->GetType().c_str());
-		}
-		else
-		{
-			TextureCubeMaterialProperty* mp = new TextureCubeMaterialProperty("EnvMap");
-			mp->SetValue("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds");
-			meshComponent->GetMaterial()->AddMaterialProperty(mp);
-		}
+			MeshDataPtr meshData = cachedMeshes->at(m);
+			ShaderDescription* shaderDescription = ShaderLibrary::GetInstance()->GetShaderDescriptions()->at("MeshDefaultShader");
+			ShaderMaterial* shaderMaterial = new ShaderMaterial(shaderDescription);
+			Shader* shader = ShaderLibrary::GetInstance()->SelectShaderForShaderMaterialAndMeshData(meshData.get(), shaderMaterial);
+			shaderMaterial->SetShaderPermutation(shader);
+
+			MeshComponent* meshComponent = new MeshComponent(meshData, shaderMaterial, "Models/Pistol/Pistol_Model.shfm", m);
+
+			Entity* entity = new Entity();
+
+			entity->AddComponent(meshComponent);
+
+			entity->GetTransform().SetLocalPosition(Vec3(0.0f, 0.75f, -7.0f));
+			entity->GetTransform().SetLocalScale(Vec3(0.05f, 0.05f, 0.05f));
+			entity->GetTransform().SetRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
+
+			auto envMap = meshComponent->GetMaterial()->GetMaterialPropertyByName("EnvMap");
+			if (envMap != nullptr)
+			{
+				TextureCubeMaterialProperty* mp = reinterpret_cast<TextureCubeMaterialProperty*>(envMap);
+				mp->SetValue("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds");
+				printf("type : %s \n", envMap->GetType().c_str());
+			}
+			else
+			{
+				TextureCubeMaterialProperty* mp = new TextureCubeMaterialProperty("EnvMap");
+				mp->SetValue("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds");
+				meshComponent->GetMaterial()->AddMaterialProperty(mp);
+			}
 
 
-		auto albedo = meshComponent->GetMaterial()->GetMaterialPropertyByName("DiffuseTexture");
-		if (albedo != nullptr)
-		{
-			Texture2DMaterialProperty* mp = reinterpret_cast<Texture2DMaterialProperty*>(albedo);
-			mp->SetValue("Models/Pistol/albedo.png");
-			printf("type : %s \n", albedo->GetType().c_str());
-		}
-		else
-		{
-			Texture2DMaterialProperty* mp = new Texture2DMaterialProperty("DiffuseTexture");
-			mp->SetValue("Models/Pistol/albedo.png");
-			meshComponent->GetMaterial()->AddMaterialProperty(mp);
-		}
+			auto albedo = meshComponent->GetMaterial()->GetMaterialPropertyByName("DiffuseTexture");
+			if (albedo != nullptr)
+			{
+				Texture2DMaterialProperty* mp = reinterpret_cast<Texture2DMaterialProperty*>(albedo);
+				mp->SetValue("Models/Pistol/albedo.png");
+				printf("type : %s \n", albedo->GetType().c_str());
+			}
+			else
+			{
+				Texture2DMaterialProperty* mp = new Texture2DMaterialProperty("DiffuseTexture");
+				mp->SetValue("Models/Pistol/albedo.png");
+				meshComponent->GetMaterial()->AddMaterialProperty(mp);
+			}
 
-		meshComponent->UpdateShaderPermution();
+			meshComponent->UpdateShaderPermution();
 
-		/*	if (meshComponent->GetMaterial()->GetMaterialPropertyByName("EnvMap"))
-		{
-		meshComponent->GetMaterial()->RemoveMaterialProperty(meshComponent->GetMaterial()->GetMaterialPropertyByName("EnvMap"));
-		meshComponent->UpdateShaderPermution();
-		}*/
+			/*	if (meshComponent->GetMaterial()->GetMaterialPropertyByName("EnvMap"))
+			{
+			meshComponent->GetMaterial()->RemoveMaterialProperty(meshComponent->GetMaterial()->GetMaterialPropertyByName("EnvMap"));
+			meshComponent->UpdateShaderPermution();
+			}*/
 
-		EntityManager::GetInstance()->AddEntity(entity);
+			EntityManager::GetInstance()->AddEntity(entity);
 
-		{
-			// Try loading material
-			Utils::GenericSerializer serializer("Dev/Test.json");
-			ShaderMaterial deserializeTest;
-			//serializer.Deserialize(*(meshComponent->GetMaterial()));
-			//meshComponent->UpdateShaderPermution();
-			SHF_PRINTF("MaterialName : %s \n", deserializeTest.Name.c_str());
-			
+			{
+				// Try loading material
+				Utils::GenericSerializer serializer("Dev/Test.json");
+				ShaderMaterial deserializeTest;
+				//serializer.Deserialize(*(meshComponent->GetMaterial()));
+				//meshComponent->UpdateShaderPermution();
+				SHF_PRINTF("MaterialName : %s \n", deserializeTest.Name.c_str());
+
+			}
 		}
 	}
+
+
+
+
 
 	// EulerAngles -> Quat4
 
@@ -320,7 +346,6 @@ void SandBoxApp::Update(float deltaTime)
 		angle = 0;
 	}
 
-
 	window->SetClearColor(0.7f, 0.3f, 0.7f, 1.0f);
 
 	FlyCamera->ResetMatrices();
@@ -376,6 +401,8 @@ void SandBoxApp::Destroy()
 	EntityManager::GetInstance()->DestroyAndDelete();
 
 	TextureCache::GetInstance()->Destroy();
+
+	MeshDataCache::GetInstance()->Destroy();
 
 	App::Destroy();
 

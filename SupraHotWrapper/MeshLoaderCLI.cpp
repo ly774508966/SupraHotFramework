@@ -31,7 +31,19 @@ namespace SupraHot
 		{
 			std::string path = msclr::interop::marshal_as<std::string>(pathToFile);
 			
-			std::vector<SupraHot::MeshComponent*> meshComponents = Instance->Load(path);
+			std::vector<SupraHot::Graphics::MeshDataPtr>* cachedMeshes = Instance->LoadCached(path);
+			std::vector<SupraHot::MeshComponent*> meshComponents;
+
+			for (uint32 m = 0, l = static_cast<uint32>(cachedMeshes->size()); m < l; ++m)
+			{
+				SupraHot::Graphics::MeshDataPtr meshData = cachedMeshes->at(m);
+				SupraHot::Graphics::ShaderDescription* shaderDescription = SupraHot::Graphics::ShaderLibrary::GetInstance()->GetShaderDescriptions()->at("MeshDefaultShader");
+				SupraHot::Graphics::ShaderMaterial* shaderMaterial = new SupraHot::Graphics::ShaderMaterial(shaderDescription);
+				SupraHot::Graphics::Shader* shader = SupraHot::Graphics::ShaderLibrary::GetInstance()->SelectShaderForShaderMaterialAndMeshData(meshData.get(), shaderMaterial);
+				shaderMaterial->SetShaderPermutation(shader);
+				meshComponents.push_back(new MeshComponent(meshData, shaderMaterial, path, m));
+			}
+
 
 			std::unordered_map<std::string, uint32> map;
 

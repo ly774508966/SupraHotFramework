@@ -24,7 +24,6 @@ namespace SupraHot
 		{
 			this->Parent = nullptr;
 			Removed();
-			Destroy();
 		}
 		
 		virtual void Registered() = 0;

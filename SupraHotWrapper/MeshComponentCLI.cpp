@@ -16,13 +16,13 @@ namespace SupraHot
 #endif
 		}
 
-		MeshComponentCLI::MeshComponentCLI(SupraHot::CLI::MeshData^ meshData, SupraHot::CLI::Material^ material)
+	/*	MeshComponentCLI::MeshComponentCLI(SupraHot::CLI::MeshData^ meshData, SupraHot::CLI::Material^ material)
 		{
 			Instance = new SupraHot::MeshComponent(meshData->GetHandle(), material->GetHandle());
 
 			Vec3 origin = meshData->GetHandle()->Origin;
 			Origin = gcnew Vec3CLI(origin.x, origin.y, origin.z);
-		}
+		}*/
 
 		MeshComponentCLI::MeshComponentCLI(SupraHot::CLI::ComponentCLI^ componentCLI)
 		{

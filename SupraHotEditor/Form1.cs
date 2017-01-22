@@ -620,7 +620,10 @@ namespace SupraHotEditor
 
         private void MakeNewScene() 
         {
+            Console.WriteLine("DestroyWithChildren");
             rootEntity.DestroyWithChildren();
+
+            Console.WriteLine("DestroyAndDelete");
             EntityManagerCLI.GetInstance().DestroyAndDelete();
 
             rootEntity = new EntityCLI();
@@ -628,6 +631,8 @@ namespace SupraHotEditor
 
             EntityManagerCLI.GetInstance().AddEntity(rootEntity);
             RebuildEntityHierarchy();
+
+            MeshDataCacheCLI.ClearCache();
 
             Form1.UpdateView();
         }
@@ -658,6 +663,8 @@ namespace SupraHotEditor
 
                         rootEntity.DestroyWithChildren();
                         EntityManagerCLI.GetInstance().DestroyAndDelete();
+
+                        MeshDataCacheCLI.ClearCache();
 
                         GenericSerializerCLI gs = new GenericSerializerCLI(pathToFileInRootSys);
                         rootEntity = gs.Deserialize();

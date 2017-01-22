@@ -13,6 +13,7 @@
 #include "ShaderParser.h"
 #include "MeshComponent.h"
 #include "MeshDataLoader.h"
+#include "MeshDataCache.h"
 
 namespace SupraHot
 {
@@ -557,7 +558,7 @@ namespace SupraHot
 			if (type == "MeshComponent")
 			{
 				std::string meshDataFilePath = componentDescription["Value"]["MeshData"].string_value();
-				uint32 meshDataIndex = std::stof(componentDescription["Value"]["MeshDataIndex"].string_value());
+				uint32 meshDataIndex = std::stoi(componentDescription["Value"]["MeshDataIndex"].string_value());
 
 				// 1. Load shader material
 				ShaderMaterial* material = new Graphics::ShaderMaterial();
@@ -575,20 +576,11 @@ namespace SupraHot
 
 				// 2. Load mesh data (check mesh cache)
 				
-				// Extreme memory leak here!!!!!!
-				std::vector<Graphics::MeshData*> meshes = MeshDataLoader::GetInstance()->LoadRawData(meshDataFilePath);
+				auto meshDataVector = MeshDataLoader::GetInstance()->LoadCached(meshDataFilePath);
+				MeshDataPtr meshDataPtr = meshDataVector->at(meshDataIndex);
 
-				MeshComponent* meshComponent = new MeshComponent(meshes[meshDataIndex], material, meshDataFilePath, meshDataIndex);
+				MeshComponent* meshComponent = new MeshComponent(meshDataPtr, material, meshDataFilePath, meshDataIndex);
 				meshComponent->UpdateShaderPermution();
-
-				meshes.erase(meshes.begin() + meshDataIndex);
-
-				for (Graphics::MeshData* meshData : meshes)
-				{
-					meshData->Destroy();
-					delete meshData;
-				} meshes.clear();
-
 				return meshComponent;
 			}
 			
