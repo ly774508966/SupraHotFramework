@@ -1,6 +1,7 @@
 #pragma once
 #include <GenericSerializer.h>
 #include "EntityCLI.h"
+#include "MaterialCLI.h"
 
 namespace SupraHot
 {
@@ -15,6 +16,10 @@ namespace SupraHot
 
 			void Serialize(EntityCLI^ entity);
 			EntityCLI^ Deserialize();
+
+			void SerializeEmptyMaterial(System::String^ shaderName, System::String^ materialName);
+			Material^ DeserialzeMaterial();
+			void Serialize(Material^ material);
 
 			virtual ~GenericSerializerCLI()
 			{

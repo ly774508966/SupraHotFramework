@@ -17,7 +17,7 @@ namespace SupraHotEditor
         private Dictionary<String, String> AvailableMaterialProperties;
         private List<MaterialPropertyWidget> ActiveMaterialProperties;
 
-        private ComboBox shaderNameComboBox;
+        private ComboBox ShaderNameComboBox;
         private ComboBox AvailableMaterialPropertiesComboBox;
 
         private Material Material;
@@ -89,9 +89,9 @@ namespace SupraHotEditor
             selectShader.Text = "Selected shader:";
             groupBoxFlowLayout.Controls.Add(selectShader);
 
-            shaderNameComboBox = new ComboBox();
-            groupBoxFlowLayout.Controls.Add(shaderNameComboBox);
-            shaderNameComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            ShaderNameComboBox = new ComboBox();
+            groupBoxFlowLayout.Controls.Add(ShaderNameComboBox);
+            ShaderNameComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
 
 
@@ -106,7 +106,7 @@ namespace SupraHotEditor
             foreach(String shaderName in shaderNames) 
             {
                 // Build drop down for shaders
-                shaderNameComboBox.Items.Add(shaderName);
+                ShaderNameComboBox.Items.Add(shaderName);
             }
 
             if(material.GetShaderDescriptionName() != null) 
@@ -116,7 +116,7 @@ namespace SupraHotEditor
                     if (shaderNames[i] == material.GetShaderDescriptionName()) 
                     {
                        BuildData(shaderNames[i], copiedMaterialProperties.Count <= 0);
-                       shaderNameComboBox.SelectedIndex = i;
+                       ShaderNameComboBox.SelectedIndex = i;
 
 
                        Console.WriteLine("Material properties count after shader build -> {0}", copiedMaterialProperties.Count);
@@ -151,11 +151,11 @@ namespace SupraHotEditor
                if(shaderNames.Count > 0) 
                 {
                     BuildData(shaderNames[0], true);
-                    shaderNameComboBox.SelectedIndex = 0;
+                    ShaderNameComboBox.SelectedIndex = 0;
                 }
             }
 
-            shaderNameComboBox.SelectedIndexChanged += new EventHandler(
+            ShaderNameComboBox.SelectedIndexChanged += new EventHandler(
                 delegate(object sender, EventArgs e)
                 {
                     ComboBox comboBox = (ComboBox)sender;

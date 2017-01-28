@@ -141,6 +141,9 @@ namespace SupraHotEditor
                 rootEntity.AddChild(loadedEntity);
 
                 RebuildEntityHierarchy();
+
+                // Resize viewport
+                appEdit.Resize((uint)splitContainer2.Panel2.Width, (uint)splitContainer2.Panel2.Height);
             }
             
         }
@@ -150,6 +153,13 @@ namespace SupraHotEditor
             if (ComponentPanel != null) 
             {
                 mainSplitContainer.Panel2.Controls.Remove(ComponentPanel);
+
+                foreach (Control c in ComponentPanel.Controls) 
+                {
+                    c.Dispose();
+                }
+
+                ComponentPanel.Dispose();
             }
 
             ComponentPanel = new FlowLayoutPanel();
@@ -634,6 +644,9 @@ namespace SupraHotEditor
 
             MeshDataCacheCLI.ClearCache();
 
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
             Form1.UpdateView();
         }
 
@@ -672,6 +685,8 @@ namespace SupraHotEditor
                         EntityManagerCLI.GetInstance().AddEntity(rootEntity);
                         RebuildEntityHierarchy();
 
+                        gs.Dispose();
+
                         Form1.UpdateView();
                     }
                     else
@@ -694,6 +709,7 @@ namespace SupraHotEditor
 
             GenericSerializerCLI gs = new GenericSerializerCLI(CurrentActiveScenePath);
             gs.Serialize(rootEntity);
+            gs.Dispose();
 
             FileSystemCLI.GetIntance().SetRootPath(rootPath);
         }
@@ -777,23 +793,20 @@ namespace SupraHotEditor
             }
         }
 
+        private void ShowMaterialsEditDialog() 
+        {
+            MaterialEditForm materialEditForm = new MaterialEditForm(FileSystemCLI.GetIntance().GetRootPath() + "Materials");
+            materialEditForm.ShowDialog(this);
+        }
+
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // We can use this for a 'Create Material' - window
+            
+        }
 
-            Form testDialog = new Form();
-
-            // Show testDialog as a modal dialog and determine if DialogResult = OK.
-            if (testDialog.ShowDialog(this) == DialogResult.OK)
-            {
-                // Read the contents of testDialog's TextBox.
-                //this.txtResult.Text = testDialog.TextBox1.Text;
-            }
-            else
-            {
-                //this.txtResult.Text = "Cancelled";
-            }
-            testDialog.Dispose();
+        private void materialsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowMaterialsEditDialog();
         }
     }
 }

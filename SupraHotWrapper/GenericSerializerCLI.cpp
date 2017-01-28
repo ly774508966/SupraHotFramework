@@ -1,5 +1,7 @@
 #include "GenericSerializerCLI.h"
 #include <msclr\marshal_cppstd.h>
+#include <ShaderLibrary.h>
+#include <ShaderMaterial.h>
 
 namespace SupraHot
 {
@@ -28,6 +30,18 @@ namespace SupraHot
 			return entityCLI;
 		}
 
+		Material^ GenericSerializerCLI::DeserialzeMaterial()
+		{
+			SupraHot::Graphics::ShaderMaterial* shaderMaterial = new SupraHot::Graphics::ShaderMaterial();
+			Instance->Deserialize(shaderMaterial);
+			return gcnew Material(shaderMaterial);
+		}
+
+		void GenericSerializerCLI::Serialize(Material^ material)
+		{
+			Instance->Serialize(material->GetHandle());
+		}
+
 		void GenericSerializerCLI::SetIsCopy(EntityCLI^ entity)
 		{
 			entity->IsCopy = true;
@@ -37,6 +51,19 @@ namespace SupraHot
 			for (uint32 i = 0, l = children->Count; i < l; ++i)
 			{
 				SetIsCopy(children[i]);
+			}
+		}
+
+		void GenericSerializerCLI::SerializeEmptyMaterial(System::String^ shaderName, System::String^ materialName)
+		{
+			SupraHot::Graphics::ShaderDescription* shaderDescription = SupraHot::Graphics::ShaderLibrary::GetInstance()->GetShaderDescriptions()->at(msclr::interop::marshal_as<std::string>(shaderName));
+			
+			if (shaderDescription != nullptr)
+			{
+				SupraHot::Graphics::ShaderMaterial* emptyMaterial = new SupraHot::Graphics::ShaderMaterial(shaderDescription);
+				emptyMaterial->Name = msclr::interop::marshal_as<std::string>(materialName);
+				GetHandle()->Serialize(emptyMaterial);
+				delete emptyMaterial;
 			}
 		}
 	};

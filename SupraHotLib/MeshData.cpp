@@ -15,7 +15,10 @@ namespace SupraHot
 
 		void MeshData::Destroy()
 		{
-			
+
+#if DEVELOPMENT == 1
+			SHF_PRINTF("Destroyed MeshData : %s \n", Name.c_str());
+#endif
 			if (HasIndexData)
 			{
 				glDeleteBuffers(1, &IndexBufferHandle);

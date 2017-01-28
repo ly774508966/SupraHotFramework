@@ -1,5 +1,7 @@
 #include "ShaderLibraryCLI.h"
 #include <ShaderDescription.h>
+#include <ShaderParser.h>
+#include <FileSystem.h>
 #include <unordered_map>
 #include <msclr\marshal_cppstd.h>
 
@@ -69,6 +71,33 @@ namespace SupraHot
 			}
 
 			return shaderUniforms;
+		}
+
+		void ShaderLibraryCLI::LoadShaderIfNotAlreadyLoaded(System::String^ shaderFilePath)
+		{
+			std::string shaderfilePathStd = "Shaders/Description/" + msclr::interop::marshal_as<std::string>(shaderFilePath);
+
+			// Open json and read the shader name from the header.
+			// Check if shader exists already
+			if (SupraHot::Utils::FileSystem::GetInstance()->FileExists("", shaderfilePathStd))
+			{
+				SupraHot::Graphics::ShaderDescription* shaderDescription = SupraHot::Graphics::ShaderParser::GetInstance()->Parse(shaderfilePathStd);
+				
+				std::string shaderName = shaderDescription->Name;
+
+				std::unordered_map<std::string, Graphics::ShaderDescription*>* shaderDescriptions = Graphics::ShaderLibrary::GetInstance()->GetShaderDescriptions();
+				if (shaderDescriptions->find(shaderName) == shaderDescriptions->end())
+				{
+					//  Save
+					Graphics::ShaderLibrary::GetInstance()->ProcessShaderDescription(shaderDescription);
+				}
+				else
+				{
+					// Delete description, if we already have the shader loaded 
+					delete shaderDescription;
+				}
+			}
+
 		}
 
 	};
