@@ -856,11 +856,12 @@ namespace SupraHotEditor
                 child.Text = r.Replace(entryName, " ") + " (.py)";
                 parentMenuItem.DropDownItems.Add(child);
 
-
                 child.Click += new EventHandler(
                     delegate(object sender, EventArgs e)
                     {
-                        Console.WriteLine("Execute {0}", child.Text);
+                        String filePath = file.Replace("\\", "/");
+                        Console.WriteLine("Execute script: {0}", child.Text);
+                        IronPythonScriptRunner.GetInstance().RunScript(filePath);
                     }
                 );
             }

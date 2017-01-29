@@ -20,6 +20,13 @@ using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Sample;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Text;
+
+using Microsoft.Scripting;
+using Microsoft.Scripting.Hosting;
+using IronPython.Hosting;
+
+using SupraHot.CLI;
 
 namespace SupraHotEditor
 {
@@ -30,6 +37,13 @@ namespace SupraHotEditor
         private FoldingManager foldingManager;
         private object foldingStrategy;
         private string currentFileName;
+
+        private ScriptRuntime ScriptRuntime;
+        private ScriptEngine ScriptEngine;
+        private ScriptScope ScriptScope;
+        private ScriptOutputStream ScriptOutputStream;
+
+        private System.Windows.Forms.TextBox ConsoleOutput;
 
         public AvalonEditForm()
         {
@@ -44,9 +58,25 @@ namespace SupraHotEditor
             ElementHost host = new ElementHost();
             host.Dock = DockStyle.Fill;
             host.Child = textEditor;
-           
-            panel1.Controls.Add(host);
 
+            // splitContainer1_Panel1_Paint
+            splitContainer1.Panel1.Controls.Add(host);
+            splitContainer1.Dock = DockStyle.Fill;
+
+            ConsoleOutput = new System.Windows.Forms.TextBox();
+            ConsoleOutput.Dock = DockStyle.Fill;
+            ConsoleOutput.AutoSize = true;
+            ConsoleOutput.Multiline = true;
+            ConsoleOutput.ReadOnly = true;
+            ConsoleOutput.ScrollBars = ScrollBars.Vertical;
+
+            System.Drawing.Color lightGrey = System.Drawing.Color.FromArgb(40, 40, 40);
+            System.Drawing.Color whiteColor = System.Drawing.Color.FromArgb(255, 255, 255);
+            ConsoleOutput.BackColor = lightGrey;
+            ConsoleOutput.ForeColor = whiteColor;
+            splitContainer1.Panel2.BackColor = lightGrey;
+            splitContainer1.Panel2.ForeColor = whiteColor;
+            splitContainer1.Panel2.Controls.Add(ConsoleOutput);
 
             textEditor.TextArea.TextEntering += textEditor_TextArea_TextEntering;
             textEditor.TextArea.TextEntered += textEditor_TextArea_TextEntered;
@@ -68,8 +98,9 @@ namespace SupraHotEditor
                     textEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
                 }
             }
-        }
 
+            InitIronPython();
+        }
 
         void textEditor_TextArea_TextEntered(object sender, TextCompositionEventArgs e)
         {
@@ -188,6 +219,63 @@ namespace SupraHotEditor
         private void toolStripButton8_Click(object sender, EventArgs e)
         {
             textEditor.Redo();
+        }
+
+        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void toolStripButton9_Click(object sender, EventArgs e)
+        {
+            // Play. Execute script
+
+            String script = textEditor.Text;
+            var source = ScriptEngine.CreateScriptSourceFromString(script, SourceCodeKind.Statements);
+
+            try
+            {
+                source.Execute(ScriptScope);
+            }
+            catch (Exception ex)
+            {
+                using (var writer = new StreamWriter(ScriptOutputStream))
+                {
+                    writer.WriteLine(
+                        "Oops! There was an exception while running the script:\r\n" +
+                        ex.Message + "\r\n\r\n" + ex.StackTrace);
+                }
+            }
+
+            if (ConsoleOutput.Text.Length > 0) 
+            {
+                ConsoleOutput.SelectionLength = 0;
+                ConsoleOutput.SelectionStart = ConsoleOutput.Text.Length - 1;
+                ConsoleOutput.ScrollToCaret();
+            }
+        }
+
+        private void toolStripButton10_Click(object sender, EventArgs e)
+        {
+            // Clear Console
+            ConsoleOutput.Text = "";
+        }
+
+        private void InitIronPython() 
+        {
+            ScriptEngine = Python.CreateEngine();
+            ScriptScope = ScriptEngine.CreateScope();
+
+            ScriptRuntime = ScriptEngine.Runtime;
+            ScriptRuntime.LoadAssembly(typeof(String).Assembly);
+            ScriptRuntime.LoadAssembly(typeof(Uri).Assembly);
+
+            var paths = ScriptEngine.GetSearchPaths();
+            paths.Add(FileSystemCLI.GetIntance().GetRootPath() + "PythonLibraries");
+            ScriptEngine.SetSearchPaths(paths);
+
+            ScriptOutputStream = new ScriptOutputStream(ConsoleOutput);
+            ScriptEngine.Runtime.IO.SetOutput(ScriptOutputStream, Encoding.GetEncoding(1252));
         }
     }
 }

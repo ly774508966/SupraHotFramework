@@ -1,0 +1,1 @@
+{"MaterialName": "PedroBombardi", "MaterialProperties": [{"Name": "Color", "Type": "Vec3", "Value": {"X": "0.300000", "Y": "0.600000", "Z": "0.900000"}}], "ShaderDescription": "MeshBasicShader", "ShaderDescriptionFileName": "MeshBasicShader.json"}
