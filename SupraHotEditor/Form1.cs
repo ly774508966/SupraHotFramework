@@ -8,10 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Input;
+using System.Windows.Forms.Integration;
 using SupraHot;
 using SupraHot.Graphics;
 using SupraHot.CLI;
+using System.Text.RegularExpressions;
 
 namespace SupraHotEditor
 {
@@ -144,6 +145,9 @@ namespace SupraHotEditor
 
                 // Resize viewport
                 appEdit.Resize((uint)splitContainer2.Panel2.Width, (uint)splitContainer2.Panel2.Height);
+
+
+                LoadScripts(FileSystemCLI.GetIntance().GetRootPath() + "EditorScripts", scriptsToolStripMenuItem);
             }
             
         }
@@ -807,6 +811,60 @@ namespace SupraHotEditor
         private void materialsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowMaterialsEditDialog();
+        }
+
+        private void openAvalonEditToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AvalonEditForm aef = new AvalonEditForm();
+            aef.Show();
+        }
+
+        private void scriptsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void LoadScripts(String parentDirectory, ToolStripMenuItem parentMenuItem) 
+        {
+            String directoyPath = parentDirectory;
+            String[] directories = Directory.GetDirectories(directoyPath);
+
+            foreach (String directory in directories) 
+            {
+                String entryName = directory;
+                entryName = entryName.Replace(parentDirectory, "").Replace("\\", "");
+
+                ToolStripMenuItem child = new ToolStripMenuItem();
+                child.Text = entryName;
+                parentMenuItem.DropDownItems.Add(child);
+                LoadScripts(directory, child);
+            }
+
+            String[] files = Directory.GetFiles(directoyPath);
+
+            foreach (String file in files) 
+            {
+                String entryName = file;
+                entryName = entryName.Replace(parentDirectory, "").Replace("\\", "").Replace(".py", "");
+
+                var r = new Regex(@"
+                (?<=[A-Z])(?=[A-Z][a-z]) |
+                 (?<=[^A-Z])(?=[A-Z]) |
+                 (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
+
+                ToolStripMenuItem child = new ToolStripMenuItem();
+                child.Text = r.Replace(entryName, " ") + " (.py)";
+                parentMenuItem.DropDownItems.Add(child);
+
+
+                child.Click += new EventHandler(
+                    delegate(object sender, EventArgs e)
+                    {
+                        Console.WriteLine("Execute {0}", child.Text);
+                    }
+                );
+            }
+
         }
     }
 }

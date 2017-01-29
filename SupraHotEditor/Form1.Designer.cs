@@ -41,15 +41,18 @@
             this.importModelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importShaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importMaterialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.materialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.entitiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.componentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openAvalonEditToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainSplitContainer = new System.Windows.Forms.SplitContainer();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.materialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).BeginInit();
             this.mainSplitContainer.Panel1.SuspendLayout();
@@ -71,7 +74,9 @@
             this.editToolStripMenuItem,
             this.assetsToolStripMenuItem,
             this.entitiesToolStripMenuItem,
-            this.componentsToolStripMenuItem});
+            this.componentsToolStripMenuItem,
+            this.editorToolStripMenuItem,
+            this.scriptsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(854, 24);
@@ -174,6 +179,14 @@
             this.importMaterialToolStripMenuItem.Text = "Import Material";
             this.importMaterialToolStripMenuItem.Click += new System.EventHandler(this.importMaterialToolStripMenuItem_Click);
             // 
+            // materialsToolStripMenuItem
+            // 
+            this.materialsToolStripMenuItem.Name = "materialsToolStripMenuItem";
+            this.materialsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
+            this.materialsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.materialsToolStripMenuItem.Text = "Materials";
+            this.materialsToolStripMenuItem.Click += new System.EventHandler(this.materialsToolStripMenuItem_Click);
+            // 
             // entitiesToolStripMenuItem
             // 
             this.entitiesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -194,6 +207,21 @@
             this.componentsToolStripMenuItem.Name = "componentsToolStripMenuItem";
             this.componentsToolStripMenuItem.Size = new System.Drawing.Size(88, 20);
             this.componentsToolStripMenuItem.Text = "Components";
+            // 
+            // editorToolStripMenuItem
+            // 
+            this.editorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openAvalonEditToolStripMenuItem});
+            this.editorToolStripMenuItem.Name = "editorToolStripMenuItem";
+            this.editorToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
+            this.editorToolStripMenuItem.Text = "Editor";
+            // 
+            // openAvalonEditToolStripMenuItem
+            // 
+            this.openAvalonEditToolStripMenuItem.Name = "openAvalonEditToolStripMenuItem";
+            this.openAvalonEditToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.openAvalonEditToolStripMenuItem.Text = "Open AvalonEdit";
+            this.openAvalonEditToolStripMenuItem.Click += new System.EventHandler(this.openAvalonEditToolStripMenuItem_Click);
             // 
             // mainSplitContainer
             // 
@@ -295,13 +323,12 @@
             // 
             this.openFileDialog.FileName = "openFileDialog";
             // 
-            // materialsToolStripMenuItem
+            // scriptsToolStripMenuItem
             // 
-            this.materialsToolStripMenuItem.Name = "materialsToolStripMenuItem";
-            this.materialsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
-            this.materialsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.materialsToolStripMenuItem.Text = "Materials";
-            this.materialsToolStripMenuItem.Click += new System.EventHandler(this.materialsToolStripMenuItem_Click);
+            this.scriptsToolStripMenuItem.Name = "scriptsToolStripMenuItem";
+            this.scriptsToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.scriptsToolStripMenuItem.Text = "Scripts";
+            this.scriptsToolStripMenuItem.Click += new System.EventHandler(this.scriptsToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -356,6 +383,9 @@
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem materialsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openAvalonEditToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scriptsToolStripMenuItem;
 
     }
 }
