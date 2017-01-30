@@ -11,8 +11,9 @@ namespace SupraHot
 		class ShaderMaterial
 		{
 		private:
-			Shader* ShaderPermutation;
+			std::string MaterialFilePath;
 
+			Shader* ShaderPermutation;
 			ShaderDescription* Description;
 			std::vector<MaterialProperty*> MaterialProperties;
 		public:
@@ -41,6 +42,9 @@ namespace SupraHot
 			void SelectShaderPermutation();
 			void SetShaderPermutation(Shader* shader);
 			void SetShaderDescription(ShaderDescription* shaderDescription);
+
+			std::string GetMaterialFilePath();
+			void SetMaterialFilePath(std::string filePath);
 		};
 	};
 };

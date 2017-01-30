@@ -454,7 +454,8 @@ namespace SupraHot
 								"MeshDataIndex", std::to_string(meshComponent->GetModelFileArrayIndex())
 							},
 							{
-								"Material", SerializeShaderMaterial(meshComponent->GetMaterial())
+								//"Material", SerializeShaderMaterial(meshComponent->GetMaterial())
+								"Material", meshComponent->GetMaterial()->GetMaterialFilePath()
 							} 
 					}
 				});
@@ -570,8 +571,18 @@ namespace SupraHot
 				{
 					// Check material cache, if we already have the path of this material file loaded!.
 					std::string materialFilePath = componentDescription["Value"]["Material"].string_value();
-					GenericSerializer shaderMaterialDeserializer(materialFilePath);
-					shaderMaterialDeserializer.Deserialize(material);
+
+					if (FileSystem::GetInstance()->FileExists("", materialFilePath))
+					{
+						GenericSerializer shaderMaterialDeserializer(materialFilePath);
+						shaderMaterialDeserializer.Deserialize(material);
+						material->SetMaterialFilePath(materialFilePath);
+					}
+					else
+					{
+						ShaderDescription* shaderDescription = ShaderLibrary::GetInstance()->GetShaderDescriptions()->at("MeshBasicShader");
+						material->SetShaderDescription(shaderDescription);
+					}					
 				}
 
 				// 2. Load mesh data (check mesh cache)

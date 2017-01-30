@@ -27,6 +27,8 @@ namespace SupraHot
 			
 			void UpdateShaderPermuation();
 			bool SetShader(System::String^ shaderName);
+			void SetMaterial(System::String^ shaderName);
+			void SetMaterial(SupraHot::CLI::Material^ material);
 
 			Vec3CLI^ GetMeshDataOrigin();
 		};

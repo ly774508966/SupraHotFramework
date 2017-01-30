@@ -28,6 +28,9 @@ namespace SupraHot
 
 			System::String^ GetShaderDescriptionName();
 			void CheckExistingMaterialProperties();
+
+			void SetMaterialFilePath(System::String^ materialPath);
+			System::String^ GetMaterialFilePath();
 		};
 	};
 };

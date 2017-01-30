@@ -1,0 +1,1 @@
+{"MaterialName": "xXXxx", "MaterialProperties": [{"Name": "DiffuseTexture", "Type": "Texture2D", "Value": "Images/testtex.png"}], "ShaderDescription": "MeshDefaultShader", "ShaderDescriptionFileName": "MeshDefaultShader.json"}

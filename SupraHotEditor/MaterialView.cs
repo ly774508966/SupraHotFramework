@@ -43,6 +43,7 @@ namespace SupraHotEditor
             List<MaterialPropertyCommonInterface> copiedMaterialProperties = ActiveMaterial.GetMaterialProperties();
             SelectedShader = ActiveMaterial.GetShaderDescriptionName();
             Console.WriteLine("Shader name = {0}", ActiveMaterial.GetShaderDescriptionName());
+            Console.WriteLine("COUNT OF MATERIAL PROPERTIES = {0}", copiedMaterialProperties.Count);
             SelectShader(SelectedShader);
 
             // GUI stuff

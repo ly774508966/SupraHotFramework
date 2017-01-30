@@ -78,6 +78,21 @@ namespace SupraHot
 			return true;
 		}
 
+		void MeshComponentCLI::SetMaterial(System::String^ shaderName)
+		{
+			SHF_PRINTF("MeshComponentCLI::SetMaterial(String) NOT IMPLEMENTED YET!!! \n");
+		}
+
+		void MeshComponentCLI::SetMaterial(SupraHot::CLI::Material^ material)
+		{
+			SupraHot::MeshComponent* meshComponent = static_cast<SupraHot::MeshComponent*>(Instance);
+			meshComponent->SetMaterial(material->GetHandle());
+			
+			Material = material;
+			Material->CheckExistingMaterialProperties();
+			Material->IsCopy = true;
+		}
+
 		Vec3CLI^ MeshComponentCLI::GetMeshDataOrigin()
 		{
 			return Origin;

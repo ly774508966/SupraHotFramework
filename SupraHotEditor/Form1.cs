@@ -148,6 +148,9 @@ namespace SupraHotEditor
 
 
                 LoadScripts(FileSystemCLI.GetIntance().GetRootPath() + "EditorScripts", scriptsToolStripMenuItem);
+
+                var autoStartScript = FileSystemCLI.GetIntance().GetRootPath() + "EditorScripts/AutoStart.py";
+                IronPythonScriptRunner.GetInstance().RunScript(autoStartScript);               
             }
             
         }
@@ -185,8 +188,9 @@ namespace SupraHotEditor
             MeshComponentCLI meshComponent = entity.GetComponent<MeshComponentCLI>();
             if (meshComponent != null) 
             {
-                Material mat = meshComponent.GetMaterial();
-                MeshComponentView meshComponentView = new MeshComponentView(mat, meshComponent);
+                //Material mat = meshComponent.GetMaterial();
+                //MeshComponentView meshComponentView = new MeshComponentView(mat, meshComponent);
+                MeshComponentViewSeparated meshComponentView = new MeshComponentViewSeparated(meshComponent);
                 ComponentPanel.Controls.Add(meshComponentView);    
             }
         }
@@ -800,7 +804,8 @@ namespace SupraHotEditor
         private void ShowMaterialsEditDialog() 
         {
             MaterialEditForm materialEditForm = new MaterialEditForm(FileSystemCLI.GetIntance().GetRootPath() + "Materials");
-            materialEditForm.ShowDialog(this);
+            //materialEditForm.ShowDialog(this);
+            materialEditForm.Show();
         }
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)

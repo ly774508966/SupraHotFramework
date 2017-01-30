@@ -179,6 +179,9 @@
     <Compile Include="MaterialView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="MeshComponentView - Copy.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MeshComponentView.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -35,6 +35,8 @@ namespace SupraHot
 
 		Graphics::ShaderMaterial* GetMaterial();
 		Graphics::MeshDataPtr GetMeshData();
+
+		void SetMaterial(Graphics::ShaderMaterial* material);
 		
 		std::string GetModelFilePath();
 		uint32 GetModelFileArrayIndex();

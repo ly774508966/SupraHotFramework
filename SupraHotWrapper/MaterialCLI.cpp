@@ -209,5 +209,15 @@ namespace SupraHot
 		{
 			GetHandle()->RemoveAllMaterialProperties();
 		}
+
+		void Material::SetMaterialFilePath(System::String^ materialPath)
+		{
+			GetHandle()->SetMaterialFilePath(msclr::interop::marshal_as<std::string>(materialPath));
+		}
+
+		System::String^ Material::GetMaterialFilePath()
+		{
+			return msclr::interop::marshal_as<System::String^>(GetHandle()->GetMaterialFilePath());
+		}
 	};
 };

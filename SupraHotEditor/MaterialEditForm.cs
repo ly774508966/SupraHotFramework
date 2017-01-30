@@ -80,7 +80,6 @@ namespace SupraHotEditor
                 );
         }
 
-
         private void AddFiles(String path, ListView parent)
         {
             String[] fileEntries = Directory.GetFiles(path);
@@ -95,8 +94,9 @@ namespace SupraHotEditor
                 MaterialListView.Items.Add(new ListViewItem(stringReplaced));
             }
 
+            /*
+             
             String[] directories = Directory.GetDirectories(path);
-
             foreach (String directory in directories)
             {
                 var stringReplaced = directory.Replace(path + "\\", "");
@@ -105,8 +105,9 @@ namespace SupraHotEditor
                 label.Text = stringReplaced;
                 parent.Controls.Add(label);
             }
+             
+             */
         }
-
 
         private void ShowMaterialProperties(String materialName)
         {

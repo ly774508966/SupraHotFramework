@@ -7,20 +7,16 @@ using System.Windows.Forms;
 using System.Drawing;
 using SupraHot;
 using SupraHot.CLI;
+using System.IO;
 
 namespace SupraHotEditor
 {
-    class MeshComponentView : ComponentView
+    class MeshComponentViewSeparated : ComponentView
     {
         private String SelectedMeshData = "None";
-        private String SelectedShader;
-        private Dictionary<String, String> AvailableMaterialProperties;
-        private List<MaterialPropertyWidget> ActiveMaterialProperties;
+        private String SelectedMaterial;
 
-        private ComboBox ShaderNameComboBox;
-        private ComboBox AvailableMaterialPropertiesComboBox;
-
-        private Material Material;
+        private ComboBox AvailableMaterials;
         private MeshComponentCLI MeshComponent;
 
         // Panel
@@ -36,16 +32,9 @@ namespace SupraHotEditor
             this.Height = clientHeight;
         }
 
-        public MeshComponentView(Material material, MeshComponentCLI meshComponent) 
+        public MeshComponentViewSeparated(MeshComponentCLI meshComponent) 
         {
-            Console.WriteLine("MeshComponentView Constructor for {0}", material.GetName());
-
-            List<MaterialPropertyCommonInterface> copiedMaterialProperties = material.GetMaterialProperties();
-
-            this.Material = material;
-            this.MeshComponent = meshComponent;
-
-            AvailableMaterialProperties = new Dictionary<String, String>();
+            MeshComponent = meshComponent;
 
             this.Text = "Mesh Component View";
             this.Width = 200;
@@ -62,7 +51,6 @@ namespace SupraHotEditor
             groupBoxFlowLayout.WrapContents = false;
             groupBoxFlowLayout.AutoScroll = true;
             groupBoxFlowLayout.AutoSize = true;
-
             this.Controls.Add(groupBoxFlowLayout);
 
             // Title
@@ -83,246 +71,100 @@ namespace SupraHotEditor
             groupBoxFlowLayout.Controls.Add(labelOfModelFileArrayIndex);
 
 
-            // Drop down for ShaderDescriptions
-
-            Label selectShader = new Label();
-            selectShader.Text = "Selected shader:";
-            groupBoxFlowLayout.Controls.Add(selectShader);
-
-            ShaderNameComboBox = new ComboBox();
-            groupBoxFlowLayout.Controls.Add(ShaderNameComboBox);
-            ShaderNameComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-
-
-
-            // - - - - - - - - - -
-            // NEEDED CODE
-            // - - - - - - - - - -
-
-            // Init the Component's view data
-            ShaderLibraryCLI shaderLibrary = ShaderLibraryCLI.GetIntance();
-            var shaderNames = shaderLibrary.GetAvailableShaderNames();
-
-            foreach(String shaderName in shaderNames) 
-            {
-                // Build drop down for shaders
-                ShaderNameComboBox.Items.Add(shaderName);
-            }
-
-            if(material.GetShaderDescriptionName() != null) 
-            {
-                for (int i = 0; i < shaderNames.Count; i++ )
-                {
-                    if (shaderNames[i] == material.GetShaderDescriptionName()) 
-                    {
-                       BuildData(shaderNames[i], copiedMaterialProperties.Count <= 0);
-                       ShaderNameComboBox.SelectedIndex = i;
-
-
-                       Console.WriteLine("Material properties count after shader build -> {0}", copiedMaterialProperties.Count);
-                       if (copiedMaterialProperties.Count > 0)
-                       {
-                           // todo: also check, if we have set a shader on this material.
-                           // if we did, then load it up
-
-                           // add mps to this view comp.
-
-                           foreach (MaterialPropertyCommonInterface mpci in copiedMaterialProperties)
-                           {
-                               MaterialPropertyWidget mpw = new MaterialPropertyWidget(mpci, this);
-                               groupBoxFlowLayout.Controls.Add(mpw);
-                               ActiveMaterialProperties.Add(mpw);
-                               AvailableMaterialPropertiesComboBox.Items.Remove(mpci.GetName());
-                           }
-
-                           this.MeshComponent.UpdateShaderPermuation();
-                           Form1.UpdateView();
-                       }
-
-                    }
-                    else 
-                    {
-                        // need to load the missing shader.
-                    }
-                }
-            }
-            else 
-            {
-               if(shaderNames.Count > 0) 
-                {
-                    BuildData(shaderNames[0], true);
-                    ShaderNameComboBox.SelectedIndex = 0;
-                }
-            }
-
-            ShaderNameComboBox.SelectedIndexChanged += new EventHandler(
-                delegate(object sender, EventArgs e)
-                {
-                    ComboBox comboBox = (ComboBox)sender;
-                    string selectedShader = (string)comboBox.SelectedItem;
-
-                    if (selectedShader != SelectedShader) 
-                    {
-                        BuildData(selectedShader, true);
-                    }
-                }
-            );
+            // Build available Materials
+            BuildMaterialsList();
+            SelectCurrentMaterial();
         }
 
-        private void SelectShader(String selectedShader) 
+        private void ChangeMaterial()
         {
-            Console.WriteLine("Selected Shader: {0}", selectedShader);
+            // Get Materialdescription for SelectedMaterial and load it.
+            // This should be done via a material cache, but for now it is totally fine to load it as it is.
+            // This way we get a single instance of it 
 
-            List<ShaderUniformCLI> availableMaterialProperties = ShaderLibraryCLI.GetIntance().GetAvailableShaderUniforms(selectedShader);
-            AvailableMaterialProperties.Clear();
+            String materialFilePath = "Materials/" + SelectedMaterial + ".json";
 
-            foreach (ShaderUniformCLI su in availableMaterialProperties) 
+            bool fileExists = FileSystemCLI.GetIntance().FileExists(materialFilePath);
+
+            if (fileExists)
             {
-                String name = su.Name;
-                String type = su.Type;
+                Console.WriteLine("Material -> {0}", materialFilePath);
 
-                Console.WriteLine("{0} -> {1}", su.Name, su.Type);
+                // Load material.
+                // Create material view and add it to the materialTable
 
-                // We only want Uniforms from the list below to be available.
-                // We don't care about matrices as of now!
-                // HINT: Here we just save the uniforms from the shaders, except mat3 and mat4.
-                // The actuall "parsing" is done in the MaterialCLI-Class
-                switch(type)
-                {
-                    case "bool":
-                        AvailableMaterialProperties.Add(name, type);
-                        break;
-                    case "float":
-                        AvailableMaterialProperties.Add(name, type);
-                        break;
-                    case "vec2":
-                        AvailableMaterialProperties.Add(name, type);
-                        break;
-                    case "vec3":
-                        AvailableMaterialProperties.Add(name, type);
-                        break;
-                    case "vec4":
-                        AvailableMaterialProperties.Add(name, type);
-                        break;
-                    case "sampler2D":
-                        AvailableMaterialProperties.Add(name, type);
-                        break;
-                    case "samplerCube":
-                        AvailableMaterialProperties.Add(name, type);
-                        break;
-                    default: 
-                        break;
-                }
+                GenericSerializerCLI gs = new GenericSerializerCLI(materialFilePath);
+                var material = gs.DeserialzeMaterial();
+                material.SetMaterialFilePath(materialFilePath);
+                material.IsCopy = true;                
+                gs.Dispose();
+
+                MeshComponent.SetMaterial(material);
+                AddMaterialProperties(material, materialFilePath);
+                Form1.UpdateView();
             }
-
-            this.MeshComponent.UpdateShaderPermuation();
 
         }
 
-        // Gui Method.
-        private void BuildAvailableMaterialPropertiesList() 
+        private void AddMaterialProperties(Material material, String materialFilePath) 
         {
-            if (AvailableMaterialPropertiesComboBox != null) 
-            {
-                groupBoxFlowLayout.Controls.Remove(AvailableMaterialPropertiesComboBox);
+            var MaterialView = new MaterialView(material, materialFilePath);
+            MaterialView.Show();
+        }
 
-                foreach(MaterialPropertyWidget widget in ActiveMaterialProperties) 
+        private void SelectCurrentMaterial() 
+        {
+            String materialName = MeshComponent.GetMaterial().GetName();
+            int count = 0;
+            foreach(String material in AvailableMaterials.Items)
+            {
+                if (materialName == material) 
                 {
-                    groupBoxFlowLayout.Controls.Remove(widget);
+                    AvailableMaterials.SelectedIndex = count;
+                    ChangeMaterial();
                 }
-
-                ActiveMaterialProperties.Clear();
+                count++;
             }
+        }
 
-            ActiveMaterialProperties = new List<MaterialPropertyWidget>();
-            AvailableMaterialPropertiesComboBox = new ComboBox();
-            AvailableMaterialPropertiesComboBox.Sorted = true;
-            AvailableMaterialPropertiesComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            groupBoxFlowLayout.Controls.Add(AvailableMaterialPropertiesComboBox);
+        private void BuildMaterialsList()
+        {
+            AvailableMaterials = new ComboBox();
+            AvailableMaterials.DropDownStyle = ComboBoxStyle.DropDownList;
 
- 
-            AvailableMaterialPropertiesComboBox.Items.Add("Add property");
-            AvailableMaterialPropertiesComboBox.SelectedIndex = 0;
-
-            foreach(KeyValuePair<string, string> materialProperty in AvailableMaterialProperties) 
-            {
-                AvailableMaterialPropertiesComboBox.Items.Add(materialProperty.Key);
-            }
-
-            // Add an EventListener to the ComboBox!
-            AvailableMaterialPropertiesComboBox.SelectedIndexChanged += new EventHandler(
+            AvailableMaterials.SelectedIndexChanged += new EventHandler(
                     delegate(object sender, EventArgs e)
                     {
                         ComboBox comboBox = (ComboBox)sender;
+                        string selectedProperty = (string)comboBox.SelectedItem;
 
-                        if(comboBox.SelectedIndex > 0) 
+                        if (selectedProperty != SelectedMaterial)
                         {
-                            string selectedProperty = (string)comboBox.SelectedItem;
-                            comboBox.SelectedIndex = 0;
-
                             Console.WriteLine("Selected {0}", selectedProperty);
-
-                            // Remove the selected Entry
-                            comboBox.Items.Remove(selectedProperty);
-                            AddMaterialProperty(selectedProperty, AvailableMaterialProperties[selectedProperty]);
+                            SelectedMaterial = selectedProperty;
+                            ChangeMaterial();
                         }
                     }
                 );
 
+
+            groupBoxFlowLayout.Controls.Add(AvailableMaterials);
+            AddFiles(FileSystemCLI.GetIntance().GetRootPath() + "Materials");
         }
 
-        // Gui method.
-        private void AddMaterialProperty(String name, String type) 
+        private void AddFiles(String path)
         {
-            // Add native material property to material
-            Console.WriteLine("CLI::AddMaterialProperty {0} {1}", name, type);
-            var materialPropertyCLI = this.Material.AddMaterialProperty(name, type);
-            this.MeshComponent.UpdateShaderPermuation();
+            String[] fileEntries = Directory.GetFiles(path);
 
-            if (materialPropertyCLI != null) 
+            foreach (String fileName in fileEntries)
             {
-                Console.WriteLine("Add Widget!");
-                groupBoxFlowLayout.FlowDirection = FlowDirection.TopDown;
-                MaterialPropertyWidget mpw = new MaterialPropertyWidget(materialPropertyCLI, this);
-                groupBoxFlowLayout.Controls.Add(mpw);
-                ActiveMaterialProperties.Add(mpw);
-                Form1.UpdateView();
+                var stringReplaced = fileName.Replace(path + "\\", "");
+                int dotIndex = stringReplaced.LastIndexOf(".");
+                stringReplaced = stringReplaced.Substring(0, dotIndex);
+
+                Console.WriteLine("File : {0}", stringReplaced);
+                AvailableMaterials.Items.Add(stringReplaced);
             }
-        }
-
-        public void RemoveMaterialProperty(String name, MaterialPropertyCommonInterface materialPropertyCommonInterface, MaterialPropertyWidget materialPropertyWidget) 
-        {
-            Console.WriteLine("Remove {0}", name);
-
-            AvailableMaterialPropertiesComboBox.Items.Add(name);
-
-            groupBoxFlowLayout.Controls.Remove(materialPropertyWidget);
-            ActiveMaterialProperties.Remove(materialPropertyWidget);
-            this.Material.RemoveMaterialProperty(name); // This removes it by name!
-
-            this.MeshComponent.UpdateShaderPermuation();
-            Form1.UpdateView();
-        }
-
-        private bool SwitchNativeShader() 
-        {
-            String shaderName = this.SelectedShader;
-            return this.MeshComponent.SetShader(shaderName);
-        }
-
-        private void BuildData(String selectedShader, bool switchNativeShader)
-        {
-            this.SelectedShader = selectedShader;
-
-            if (switchNativeShader) 
-            {
-                SwitchNativeShader();
-            }
-
-            SelectShader(selectedShader);
-            BuildAvailableMaterialPropertiesList();
-
-            Form1.UpdateView();
         }
     }
 }

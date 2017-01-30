@@ -159,5 +159,15 @@ namespace SupraHot
 			this->Description = shaderDescription;
 			this->Name = shaderDescription->Name + " Material";
 		}
+
+		std::string ShaderMaterial::GetMaterialFilePath()
+		{
+			return MaterialFilePath;
+		}
+
+		void ShaderMaterial::SetMaterialFilePath(std::string filePath)
+		{
+			MaterialFilePath = filePath;
+		}
 	};
 };

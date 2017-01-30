@@ -91,6 +91,18 @@ namespace SupraHot
 		return MeshData;
 	}
 
+	void MeshComponent::SetMaterial(Graphics::ShaderMaterial* material)
+	{
+		if (Material != nullptr)
+		{
+			Material->Destroy();
+			delete Material;
+		}
+
+		Material = material;
+		UpdateShaderPermution();
+	}
+
 	std::string MeshComponent::GetModelFilePath()
 	{
 		return ModelFilePath;
@@ -112,10 +124,6 @@ namespace SupraHot
 
 	void MeshComponent::ChangeShader(Graphics::ShaderDescription* shaderDescription)
 	{
-		SHF_PRINTF("MeshComponent::ChangeShader\ntodo: trim white space\n");
-		Utils::GenericSerializer serializer("Materials/" + GetMaterial()->Name + ".json");
-		serializer.Serialize(GetMaterial());
-
 		Material->RemoveAllMaterialProperties();
 		Material->SetShaderDescription(shaderDescription);
 		UpdateShaderPermution();
