@@ -25,6 +25,12 @@ namespace SupraHotEditor
             ScriptRuntime.LoadAssembly(typeof(String).Assembly);
             ScriptRuntime.LoadAssembly(typeof(Uri).Assembly);
 
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (var assembly in assemblies)
+            {
+                ScriptRuntime.LoadAssembly(assembly);
+            }
+
             var paths = ScriptEngine.GetSearchPaths();
             paths.Add(FileSystemCLI.GetIntance().GetRootPath() + "PythonLibraries");
             ScriptEngine.SetSearchPaths(paths);

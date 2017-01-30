@@ -18,6 +18,11 @@ using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Sample;
+
+using ICSharpCode.AvalonEdit.Document;
+using ICSharpCode.AvalonEdit.Utils;
+using System.Windows.Documents;
+
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Text;
@@ -104,16 +109,47 @@ namespace SupraHotEditor
 
         void textEditor_TextArea_TextEntered(object sender, TextCompositionEventArgs e)
         {
+
+            // execute script upon this line.
+            DocumentLine line = textEditor.Document.GetLineByOffset(textEditor.CaretOffset);
+            String currentLine = textEditor.Document.GetText(line.Offset, line.Length);
+            var source = ScriptEngine.CreateScriptSourceFromString(currentLine, SourceCodeKind.Statements);
+
+            try
+            {
+                source.Execute(ScriptScope);
+            }
+            catch(Exception exep) {}
+
             if (e.Text == ".")
             {
+                // Get previous word
+                textEditor.CaretOffset -= 1;
+                String lastWord = GetLastWord(textEditor);
+           //     Console.WriteLine("Last Word => {0}", lastWord);
+                textEditor.CaretOffset += 1;
+
                 // open code completion after the user has pressed dot:
                 completionWindow = new CompletionWindow(textEditor.TextArea);
+
                 // provide AvalonEdit with the data:
                 IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
-                data.Add(new MyCompletionData("Item1"));
-                data.Add(new MyCompletionData("Item2"));
-                data.Add(new MyCompletionData("Item3"));
-                data.Add(new MyCompletionData("Another item"));
+                
+                try
+                {
+                    string dirCommand = "dir(" + lastWord + ")";
+                    object value = ScriptScope.Engine.CreateScriptSourceFromString(dirCommand, SourceCodeKind.Expression).Execute(ScriptScope);
+                    foreach (object member in (value as IronPython.Runtime.List))
+                    {
+                        data.Add(new MyCompletionData((string)member));
+                    }
+                }
+                catch (Exception excep)
+                {
+                  //  Console.WriteLine("Exception -> {0}", excep.StackTrace);
+                }
+
+
                 completionWindow.Show();
                 completionWindow.Closed += delegate
                 {
@@ -274,8 +310,31 @@ namespace SupraHotEditor
             paths.Add(FileSystemCLI.GetIntance().GetRootPath() + "PythonLibraries");
             ScriptEngine.SetSearchPaths(paths);
 
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach(var assembly in assemblies) 
+            {
+                ScriptRuntime.LoadAssembly(assembly);
+            }
+
             ScriptOutputStream = new ScriptOutputStream(ConsoleOutput);
             ScriptEngine.Runtime.IO.SetOutput(ScriptOutputStream, Encoding.GetEncoding(1252));
+        }
+
+        private String GetLastWord(TextEditor editor) 
+        {
+            if (editor == null)
+                throw new ArgumentNullException("editor");
+            int endOffset = editor.CaretOffset;
+            int startOffset = FindPrevWordStart(editor.Document, endOffset);
+            if (startOffset < 0)
+                return string.Empty;
+            else
+                return editor.Document.GetText(startOffset, endOffset - startOffset);
+        }
+
+        public int FindPrevWordStart(ITextSource textSource, int offset)
+        {
+            return TextUtilities.GetNextCaretPosition(textSource, offset, LogicalDirection.Backward, CaretPositioningMode.WordStart);
         }
     }
 }
