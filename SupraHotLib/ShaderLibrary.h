@@ -9,7 +9,7 @@ namespace SupraHot
 
 	namespace Graphics
 	{
-		class ShaderMaterial;
+		class MaterialInputs;
 		class MeshData;
 		class ShaderDescription;
 
@@ -55,7 +55,7 @@ namespace SupraHot
 			Shader* Skybox[uint32(SkyboxShader::Count)] = {};
 			Shader* ScreenSpace[uint32(ScreenSpace::Count)] = {};
 			
-			Shader* SelectShaderForShaderMaterialAndMeshData(Graphics::MeshData* meshData, Graphics::ShaderMaterial* material);
+			Shader* SelectShaderForShaderMaterialAndMeshData(Graphics::MeshData* meshData, Graphics::MaterialInputs* material);
 
 			void Initialize();
 			void Destroy();

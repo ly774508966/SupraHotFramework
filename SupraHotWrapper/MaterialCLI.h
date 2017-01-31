@@ -7,17 +7,17 @@
 #include "Vec4MaterialPropertyCLI.h"
 #include "Texture2DMaterialPropertyCLI.h"
 #include "TextureCubeMaterialPropertyCLI.h"
-#include <ShaderMaterial.h>
+#include <MaterialInputs.h>
 
 namespace SupraHot
 {
 	namespace CLI
 	{
-		public ref class Material : public Wrapper<Graphics::ShaderMaterial>
+		public ref class Material : public Wrapper<Graphics::MaterialInputs>
 		{
 		public:
 			Material();
-			Material(Graphics::ShaderMaterial* instance);
+			Material(Graphics::MaterialInputs* instance);
 			System::String^ GetName();
 
 			System::Collections::Generic::List<MaterialPropertyCommonInterface^>^ GetMaterialProperties();

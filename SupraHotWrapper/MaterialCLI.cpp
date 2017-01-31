@@ -17,7 +17,7 @@ namespace SupraHot
 			
 		}
 
-		Material::Material(Graphics::ShaderMaterial* instance)
+		Material::Material(Graphics::MaterialInputs* instance)
 		{
 			Instance = instance;
 		}

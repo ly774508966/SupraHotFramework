@@ -34,7 +34,7 @@ namespace SupraHot
 			if (Material == nullptr)
 			{
 				SupraHot::MeshComponent* meshComponent = static_cast<SupraHot::MeshComponent*>(Instance);
-				SupraHot::Graphics::ShaderMaterial* material = meshComponent->GetMaterial();
+				SupraHot::Graphics::MaterialInputs* material = meshComponent->GetMaterial();
 
 				Material = gcnew SupraHot::CLI::Material();
 				Material->IsCopy = true;

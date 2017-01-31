@@ -255,9 +255,6 @@
     <ClInclude Include="ShaderParser.h">
       <Filter>Header Files\Graphics\Common\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderMaterial.h">
-      <Filter>Header Files\Graphics\Common\Shader</Filter>
-    </ClInclude>
     <ClInclude Include="FloatMaterialProperty.h">
       <Filter>Header Files\Graphics\Common\MaterialProperties</Filter>
     </ClInclude>
@@ -293,6 +290,12 @@
     </ClInclude>
     <ClInclude Include="MaterialCache.h">
       <Filter>Header Files\Graphics\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Header Files\Graphics\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialInputs.h">
+      <Filter>Header Files\Graphics\Common\Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -467,9 +470,6 @@
     <ClCompile Include="TextureCubeMaterialProperty.cpp">
       <Filter>Source Files\Graphics\Common\MaterialProperties</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderMaterial.cpp">
-      <Filter>Source Files\Graphics\Common\Shader</Filter>
-    </ClCompile>
     <ClCompile Include="EntityManager.cpp">
       <Filter>Source Files\ECS</Filter>
     </ClCompile>
@@ -481,6 +481,12 @@
     </ClCompile>
     <ClCompile Include="MaterialCache.cpp">
       <Filter>Source Files\Graphics\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files\Graphics\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialInputs.cpp">
+      <Filter>Source Files\Graphics\Common\Shader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -32,6 +32,7 @@
 #include <GenericSerializer.h>
 #include <MeshDataCache.h>
 #include <MaterialCache.h>
+#include <Material.h>
 
 using namespace SupraHot;
 
@@ -82,7 +83,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	FBO->SetReadSource(Texture);
 	FBO->SetPixelSize(ShaderLibrary::GetInstance()->ScreenSpace[uint32(ShaderLibrary::ScreenSpace::RenderToScreen)]);
 
-	MaterialCache::GetInstance()->Destroy();
+	MaterialCache::GetInstance()->Init();
 
 	TextureCache::GetInstance()->Init();
 
@@ -105,12 +106,10 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 		for (uint32 m = 0, l = static_cast<uint32>(cachedMeshes->size()); m < l; ++m)
 		{
 			MeshDataPtr meshData = cachedMeshes->at(m);
-			ShaderDescription* shaderDescription = ShaderLibrary::GetInstance()->GetShaderDescriptions()->at("MeshDefaultShader");
-			ShaderMaterial* shaderMaterial = new ShaderMaterial(shaderDescription);
-			Shader* shader = ShaderLibrary::GetInstance()->SelectShaderForShaderMaterialAndMeshData(meshData.get(), shaderMaterial);
-			shaderMaterial->SetShaderPermutation(shader);
 			
-			MeshComponent* meshComponent = new MeshComponent(meshData, shaderMaterial, path, m);
+			Material* material = new Material(MaterialCache::GetInstance()->GetMeshDefaultMaterial());
+
+			MeshComponent* meshComponent = new MeshComponent(meshData, material, path, m);			
 
 			Entity* entity = new Entity();
 
@@ -225,12 +224,10 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 		for (uint32 m = 0, l = static_cast<uint32>(cachedMeshes->size()); m < l; ++m)
 		{
 			MeshDataPtr meshData = cachedMeshes->at(m);
-			ShaderDescription* shaderDescription = ShaderLibrary::GetInstance()->GetShaderDescriptions()->at("MeshDefaultShader");
-			ShaderMaterial* shaderMaterial = new ShaderMaterial(shaderDescription);
-			Shader* shader = ShaderLibrary::GetInstance()->SelectShaderForShaderMaterialAndMeshData(meshData.get(), shaderMaterial);
-			shaderMaterial->SetShaderPermutation(shader);
+			
+			Material* material = new Material(MaterialCache::GetInstance()->GetMeshDefaultMaterial());
 
-			MeshComponent* meshComponent = new MeshComponent(meshData, shaderMaterial, "Models/Pistol/Pistol_Model.shfm", m);
+			MeshComponent* meshComponent = new MeshComponent(meshData, material, "Models/Pistol/Pistol_Model.shfm", m);
 
 			Entity* entity = new Entity();
 
@@ -240,7 +237,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 			entity->GetTransform().SetLocalScale(Vec3(0.05f, 0.05f, 0.05f));
 			entity->GetTransform().SetRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
 
-			auto envMap = meshComponent->GetMaterial()->GetMaterialPropertyByName("EnvMap");
+			auto envMap = meshComponent->GetMaterial()->GetMaterialInputs()->GetMaterialPropertyByName("EnvMap");
 			if (envMap != nullptr)
 			{
 				TextureCubeMaterialProperty* mp = reinterpret_cast<TextureCubeMaterialProperty*>(envMap);
@@ -251,11 +248,11 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 			{
 				TextureCubeMaterialProperty* mp = new TextureCubeMaterialProperty("EnvMap");
 				mp->SetValue("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds");
-				meshComponent->GetMaterial()->AddMaterialProperty(mp);
+				meshComponent->GetMaterial()->GetMaterialInputs()->AddMaterialProperty(mp);
 			}
 
 
-			auto albedo = meshComponent->GetMaterial()->GetMaterialPropertyByName("DiffuseTexture");
+			auto albedo = meshComponent->GetMaterial()->GetMaterialInputs()->GetMaterialPropertyByName("DiffuseTexture");
 			if (albedo != nullptr)
 			{
 				Texture2DMaterialProperty* mp = reinterpret_cast<Texture2DMaterialProperty*>(albedo);
@@ -266,7 +263,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 			{
 				Texture2DMaterialProperty* mp = new Texture2DMaterialProperty("DiffuseTexture");
 				mp->SetValue("Models/Pistol/albedo.png");
-				meshComponent->GetMaterial()->AddMaterialProperty(mp);
+				meshComponent->GetMaterial()->GetMaterialInputs()->AddMaterialProperty(mp);
 			}
 
 			meshComponent->UpdateShaderPermution();
@@ -282,7 +279,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 			{
 				// Try loading material
 				Utils::GenericSerializer serializer("Dev/Test.json");
-				ShaderMaterial deserializeTest;
+				MaterialInputs deserializeTest;
 				//serializer.Deserialize(*(meshComponent->GetMaterial()));
 				//meshComponent->UpdateShaderPermution();
 				SHF_PRINTF("MaterialName : %s \n", deserializeTest.Name.c_str());

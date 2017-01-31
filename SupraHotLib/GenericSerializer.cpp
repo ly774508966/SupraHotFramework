@@ -1,5 +1,5 @@
 #include "GenericSerializer.h"
-#include "ShaderMaterial.h"
+#include "MaterialInputs.h"
 #include <json11/json11.hpp>
 #include "BooleanMaterialProperty.h"
 #include "TextureCubeMaterialProperty.h"
@@ -14,6 +14,7 @@
 #include "MeshComponent.h"
 #include "MeshDataLoader.h"
 #include "MeshDataCache.h"
+#include "MaterialCache.h"
 
 namespace SupraHot
 {
@@ -81,7 +82,7 @@ namespace SupraHot
 		{
 		}
 
-		void GenericSerializer::Serialize(Graphics::ShaderMaterial* shaderMaterial)
+		void GenericSerializer::Serialize(Graphics::MaterialInputs* shaderMaterial)
 		{
 			
 			json11::Json materialFileJson = SerializeShaderMaterial(shaderMaterial);
@@ -97,7 +98,7 @@ namespace SupraHot
 			CloseFile();
 		}
 
-		void GenericSerializer::Deserialize(Graphics::ShaderMaterial* shaderMaterial)
+		void GenericSerializer::Deserialize(Graphics::MaterialInputs* shaderMaterial)
 		{
 			// TODO: load from disk
 			OpenFile(READ_PLAIN);
@@ -455,7 +456,7 @@ namespace SupraHot
 							},
 							{
 								//"Material", SerializeShaderMaterial(meshComponent->GetMaterial())
-								"Material", meshComponent->GetMaterial()->GetMaterialFilePath()
+								"Material", meshComponent->GetMaterial()->GetMaterialInputs()->GetMaterialFilePath()
 							} 
 					}
 				});
@@ -465,7 +466,7 @@ namespace SupraHot
 			return obj;
 		}
 
-		json11::Json GenericSerializer::SerializeShaderMaterial(Graphics::ShaderMaterial* shaderMaterial)
+		json11::Json GenericSerializer::SerializeShaderMaterial(Graphics::MaterialInputs* shaderMaterial)
 		{
 			std::string materialName = shaderMaterial->Name;
 			std::string shaderDescriptionName = shaderMaterial->GetShaderDescription()->Name;
@@ -562,35 +563,48 @@ namespace SupraHot
 				uint32 meshDataIndex = std::stoi(componentDescription["Value"]["MeshDataIndex"].string_value());
 
 				// 1. Load shader material
-				ShaderMaterial* material = new Graphics::ShaderMaterial();
+				MaterialInputs* material = new Graphics::MaterialInputs();
+				MaterialInputsPtr materialInputsPtr;
+				
 				if (componentDescription["Value"]["Material"].is_object())
 				{
 					DeserializeMaterial(componentDescription["Value"]["Material"], material);
+					materialInputsPtr = MaterialInputsPtr(material);
 				}
 				else if (componentDescription["Value"]["Material"].is_string())
 				{
 					// Check material cache, if we already have the path of this material file loaded!.
 					std::string materialFilePath = componentDescription["Value"]["Material"].string_value();
 
-					if (FileSystem::GetInstance()->FileExists("", materialFilePath))
-					{
-						GenericSerializer shaderMaterialDeserializer(materialFilePath);
-						shaderMaterialDeserializer.Deserialize(material);
-						material->SetMaterialFilePath(materialFilePath);
+					if (MaterialCache::GetInstance()->IsCached(materialFilePath))
+					{					
+						materialInputsPtr = MaterialCache::GetInstance()->GetCached(materialFilePath);
 					}
 					else
 					{
-						ShaderDescription* shaderDescription = ShaderLibrary::GetInstance()->GetShaderDescriptions()->at("MeshBasicShader");
-						material->SetShaderDescription(shaderDescription);
-					}					
+						if (FileSystem::GetInstance()->FileExists("", materialFilePath))
+						{
+							GenericSerializer shaderMaterialDeserializer(materialFilePath);
+							shaderMaterialDeserializer.Deserialize(material);
+							material->SetMaterialFilePath(materialFilePath);
+
+							materialInputsPtr = MaterialInputsPtr(material);
+							MaterialCache::GetInstance()->Cache(materialInputsPtr);
+						}
+						else
+						{
+							materialInputsPtr = MaterialCache::GetInstance()->GetMeshDefaultMaterial();
+						}
+					}
 				}
 
 				// 2. Load mesh data (check mesh cache)
 				
 				MeshDataLoader::GetInstance()->Load(meshDataFilePath);
 				MeshDataPtr meshDataPtr = MeshDataCache::GetInstance()->GetCachedMeshData(meshDataFilePath, meshDataIndex);
-
-				MeshComponent* meshComponent = new MeshComponent(meshDataPtr, material, meshDataFilePath, meshDataIndex);
+			
+				Material* materialComposition = new Material(materialInputsPtr);
+				MeshComponent* meshComponent = new MeshComponent(meshDataPtr, materialComposition, meshDataFilePath, meshDataIndex);
 				meshComponent->UpdateShaderPermution();
 				return meshComponent;
 			}
@@ -643,7 +657,7 @@ namespace SupraHot
 			return entity;
 		}
 
-		void GenericSerializer::DeserializeMaterial(json11::Json json, Graphics::ShaderMaterial* shaderMaterial)
+		void GenericSerializer::DeserializeMaterial(json11::Json json, Graphics::MaterialInputs* shaderMaterial)
 		{
 
 			std::string materialName = json["MaterialName"].string_value();

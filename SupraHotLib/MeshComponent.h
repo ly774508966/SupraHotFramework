@@ -1,21 +1,21 @@
 #pragma once
 #include "Component.h"
 #include "Platform.h"
-#include "ShaderMaterial.h"
+#include "Material.h"
 #include "MeshData.h"
 
 namespace SupraHot
 {
 	namespace Graphics 
 	{
-		class ShaderMaterial;
+		class MaterialInputs;
 	}
 
 	class MeshComponent : public Component
 	{	
 	protected:
 		Graphics::MeshDataPtr MeshData;
-		Graphics::ShaderMaterial* Material = nullptr;
+		Graphics::Material* Material = nullptr;
 
 		std::string ModelFilePath = "";
 		uint32 ModelFileArrayIndex = 0;
@@ -23,7 +23,7 @@ namespace SupraHot
 	public:
 		std::string Identifier = "MeshComponent";
 	
-		MeshComponent(Graphics::MeshDataPtr meshData, Graphics::ShaderMaterial* material = nullptr, std::string modelFilePath = "", uint32 modelFileArrayIndex = 0);
+		MeshComponent(Graphics::MeshDataPtr meshData, Graphics::Material* material = nullptr, std::string modelFilePath = "", uint32 modelFileArrayIndex = 0);
 		~MeshComponent();
 
 		void Registered() override;
@@ -33,15 +33,14 @@ namespace SupraHot
 		void LateUpdate(float deltaTime) override;
 		void FixedUpdate(float deltaTime) override;
 
-		Graphics::ShaderMaterial* GetMaterial();
+		Graphics::Material* GetMaterial();
 		Graphics::MeshDataPtr GetMeshData();
 
-		void SetMaterial(Graphics::ShaderMaterial* material);
+		void SetMaterial(Graphics::Material* material);
 		
 		std::string GetModelFilePath();
 		uint32 GetModelFileArrayIndex();
 
 		void UpdateShaderPermution();
-		void ChangeShader(Graphics::ShaderDescription* shaderDescription);
 	};
 };

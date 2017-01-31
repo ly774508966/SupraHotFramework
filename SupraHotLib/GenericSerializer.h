@@ -10,7 +10,7 @@ namespace SupraHot
 	namespace Graphics 
 	{
 		class MaterialProperty;
-		class ShaderMaterial;
+		class MaterialInputs;
 	}
 
 	namespace Utils
@@ -38,8 +38,8 @@ namespace SupraHot
 			void Serialize();
 			void Deserialize();
 
-			void Serialize(Graphics::ShaderMaterial* shaderMaterial);
-			void Deserialize(Graphics::ShaderMaterial* shaderMaterial);
+			void Serialize(Graphics::MaterialInputs* shaderMaterial);
+			void Deserialize(Graphics::MaterialInputs* shaderMaterial);
 
 			void Serialize(Entity* Entity);
 			void Deserialize(Entity* Entity);
@@ -52,12 +52,12 @@ namespace SupraHot
 			json11::Json GetValueForTransform(Transform& transform);
 			json11::Json SerializeChild(Entity* entity);
 			json11::Json SerializeComponent(Component* component);
-			json11::Json SerializeShaderMaterial(Graphics::ShaderMaterial* shaderMaterial);
+			json11::Json SerializeShaderMaterial(Graphics::MaterialInputs* shaderMaterial);
 
 			void DeserializeTransform(json11::Json input, Transform& transformOutput);
 			Component* DeserializeComponent(json11::Json componentDescription);
 			Entity* DeserializeEntity(json11::Json entityDescription);
-			void DeserializeMaterial(json11::Json materialDescription, Graphics::ShaderMaterial* shaderMaterial);
+			void DeserializeMaterial(json11::Json materialDescription, Graphics::MaterialInputs* shaderMaterial);
 
 			void OpenFile(MODE mode);
 			void CloseFile();

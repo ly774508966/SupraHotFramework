@@ -1,7 +1,7 @@
 #include "GenericSerializerCLI.h"
 #include <msclr\marshal_cppstd.h>
 #include <ShaderLibrary.h>
-#include <ShaderMaterial.h>
+#include <MaterialInputs.h>
 
 namespace SupraHot
 {
@@ -32,7 +32,7 @@ namespace SupraHot
 
 		Material^ GenericSerializerCLI::DeserialzeMaterial()
 		{
-			SupraHot::Graphics::ShaderMaterial* shaderMaterial = new SupraHot::Graphics::ShaderMaterial();
+			SupraHot::Graphics::MaterialInputs* shaderMaterial = new SupraHot::Graphics::MaterialInputs();
 			Instance->Deserialize(shaderMaterial);
 			return gcnew Material(shaderMaterial);
 		}
@@ -60,7 +60,7 @@ namespace SupraHot
 			
 			if (shaderDescription != nullptr)
 			{
-				SupraHot::Graphics::ShaderMaterial* emptyMaterial = new SupraHot::Graphics::ShaderMaterial(shaderDescription);
+				SupraHot::Graphics::MaterialInputs* emptyMaterial = new SupraHot::Graphics::MaterialInputs(shaderDescription);
 				emptyMaterial->Name = msclr::interop::marshal_as<std::string>(materialName);
 				GetHandle()->Serialize(emptyMaterial);
 				delete emptyMaterial;

@@ -122,6 +122,11 @@ namespace SupraHot
 		{
 			Components[i]->Update(deltaTime);
 		}
+
+		for (uint32 i = 0, l = static_cast<uint32>(Children.size()); i < l; ++i)
+		{
+			Children[i]->Update(deltaTime);
+		}
 	} 
 
 	void Entity::LateUpdate(float deltaTime)

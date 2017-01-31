@@ -61,7 +61,7 @@ namespace SupraHot
 			{
 				MeshData* meshData = meshLoadData->Meshes[m];
 				ShaderDescription* shaderDescription = ShaderLibrary::GetInstance()->GetShaderDescriptions()->at("MeshDefaultShader");
-				ShaderMaterial* shaderMaterial = new ShaderMaterial(shaderDescription);
+				MaterialInputs* shaderMaterial = new MaterialInputs(shaderDescription);
 				Shader* shader = ShaderLibrary::GetInstance()->SelectShaderForShaderMaterialAndMeshData(meshData, shaderMaterial);
 				shaderMaterial->SetShaderPermutation(shader);
 				meshComponents.push_back(new MeshComponent(meshData, shaderMaterial, pathToSHFM, m));

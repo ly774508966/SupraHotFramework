@@ -294,6 +294,7 @@
     <ClInclude Include="GenericSerializer.h" />
     <ClInclude Include="LuaVM.h" />
     <ClInclude Include="Mat4.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialCache.h" />
     <ClInclude Include="MaterialProperty.h" />
     <ClInclude Include="MaterialLoader.h" />
@@ -312,7 +313,7 @@
     <ClInclude Include="ShaderCompileOptions.h" />
     <ClInclude Include="ShaderDescription.h" />
     <ClInclude Include="ShaderLibrary.h" />
-    <ClInclude Include="ShaderMaterial.h" />
+    <ClInclude Include="MaterialInputs.h" />
     <ClInclude Include="ShaderParser.h" />
     <ClInclude Include="SHFMBinaryLoader.h" />
     <ClInclude Include="SkyBox.h" />
@@ -386,6 +387,7 @@
     <ClCompile Include="GenericSerializer.cpp" />
     <ClCompile Include="LuaVM.cpp" />
     <ClCompile Include="Mat4.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="MaterialCache.cpp" />
     <ClCompile Include="MaterialProperty.cpp" />
     <ClCompile Include="MaterialLoader.cpp" />
@@ -402,7 +404,7 @@
     <ClCompile Include="ShaderCompileOptions.cpp" />
     <ClCompile Include="ShaderDescription.cpp" />
     <ClCompile Include="ShaderLibrary.cpp" />
-    <ClCompile Include="ShaderMaterial.cpp" />
+    <ClCompile Include="MaterialInputs.cpp" />
     <ClCompile Include="ShaderParser.cpp" />
     <ClCompile Include="SHFMBinaryLoader.cpp" />
     <ClCompile Include="SkyBox.cpp" />

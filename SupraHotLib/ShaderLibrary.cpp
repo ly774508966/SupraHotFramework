@@ -4,7 +4,7 @@
 #include "Utility.h"
 #include "MeshData.h"
 #include "ShaderParser.h"
-#include "ShaderMaterial.h"
+#include "MaterialInputs.h"
 
 #if DEVELOPMENT == 1
 	#include <cassert>
@@ -22,7 +22,7 @@ namespace SupraHot
 		{
 		}
 
-		Shader* ShaderLibrary::SelectShaderForShaderMaterialAndMeshData(Graphics::MeshData* meshData, Graphics::ShaderMaterial* material)
+		Shader* ShaderLibrary::SelectShaderForShaderMaterialAndMeshData(Graphics::MeshData* meshData, Graphics::MaterialInputs* material)
 		{
 			// first get description
 			ShaderDescription* description = material->GetShaderDescription();

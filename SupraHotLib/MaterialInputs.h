@@ -9,21 +9,20 @@ namespace SupraHot
 {
 	namespace Graphics
 	{
-		class ShaderMaterial
+		class MaterialInputs
 		{
 		private:
 			std::string MaterialFilePath;
-
-			Shader* ShaderPermutation;
 			ShaderDescription* Description;
 			std::vector<MaterialProperty*> MaterialProperties;
+			bool HasChanged = true;
 		public:
 			std::string Name;
 
 			// Todo: remove this default construcotr & do some clever stuff in the CLI version
-			ShaderMaterial();
-			ShaderMaterial(ShaderDescription* shaderDescription);
-			~ShaderMaterial();
+			MaterialInputs();
+			MaterialInputs(ShaderDescription* shaderDescription);
+			~MaterialInputs();
 
 			bool AddMaterialProperty(MaterialProperty* materialProperty);
 			bool RemoveMaterialProperty(MaterialProperty* materialProperty);
@@ -31,23 +30,21 @@ namespace SupraHot
 			MaterialProperty* GetMaterialPropertyByName(std::string materialPropertyName);
 			ShaderDescription* GetShaderDescription();
 			std::vector<MaterialProperty*>* GetMaterialProperties();
-			Shader* GetShader();
 
-			void Update();
-			void Apply();
-			void Unbind();
+			void Update(Shader* shaderPermutation);
+			void Apply(Shader* shaderPermutation);
+			void Unbind(Shader* shaderPermutation);
 			void Destroy();
 			
-			// todo: Rework this bit.
-			// We need the mesh data in order to select a shader from the shaderlib....
-			void SelectShaderPermutation();
-			void SetShaderPermutation(Shader* shader);
 			void SetShaderDescription(ShaderDescription* shaderDescription);
 
 			std::string GetMaterialFilePath();
 			void SetMaterialFilePath(std::string filePath);
+
+			void Updated();
+			bool NeedsUpdate();
 		};
 
-		typedef std::shared_ptr<ShaderMaterial> MaterialPtr;
+		typedef std::shared_ptr<MaterialInputs> MaterialInputsPtr;
 	};
 };

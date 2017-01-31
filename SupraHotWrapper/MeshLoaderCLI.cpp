@@ -38,7 +38,7 @@ namespace SupraHot
 			{
 				SupraHot::Graphics::MeshDataPtr meshData = cachedMeshes->at(m);
 				SupraHot::Graphics::ShaderDescription* shaderDescription = SupraHot::Graphics::ShaderLibrary::GetInstance()->GetShaderDescriptions()->at("MeshDefaultShader");
-				SupraHot::Graphics::ShaderMaterial* shaderMaterial = new SupraHot::Graphics::ShaderMaterial(shaderDescription);
+				SupraHot::Graphics::MaterialInputs* shaderMaterial = new SupraHot::Graphics::MaterialInputs(shaderDescription);
 				SupraHot::Graphics::Shader* shader = SupraHot::Graphics::ShaderLibrary::GetInstance()->SelectShaderForShaderMaterialAndMeshData(meshData.get(), shaderMaterial);
 				shaderMaterial->SetShaderPermutation(shader);
 				meshComponents.push_back(new MeshComponent(meshData, shaderMaterial, path, m));

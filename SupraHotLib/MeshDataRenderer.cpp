@@ -149,8 +149,7 @@ namespace SupraHot
 				offset += meshData->VertexCount * 3 * sizeof(float);
 			}
 			
-			//meshComponent->GetMaterial()->Update();
-			meshComponent->GetMaterial()->Apply();
+			meshComponent->GetMaterial()->GetMaterialInputs()->Apply(shader);
 
 			// Layout
 			// Vertex attributes are stored sequential & not interleaved

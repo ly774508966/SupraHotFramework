@@ -1,6 +1,6 @@
 #pragma once
 #include "Platform.h"
-#include "ShaderMaterial.h"
+#include "MaterialInputs.h"
 #include <unordered_map>
 
 namespace SupraHot
@@ -11,17 +11,23 @@ namespace SupraHot
 		{
 		private:
 			MaterialCache();		
-			std::unordered_map<std::string, MaterialPtr> CachedMaterials;
+			std::unordered_map<std::string, MaterialInputsPtr> CachedMaterials;
+
+			MaterialInputsPtr MeshDefaultMaterial;
+			MaterialInputsPtr MeshBasicMaterial;
 		public:
 			static MaterialCache* GetInstance();
 			~MaterialCache();
 			
 			void Init();
-			void Cache(MaterialPtr material);
-			void Free(MaterialPtr& material);
+			void Cache(MaterialInputsPtr material);
+			void Free(MaterialInputsPtr& material);
 			bool IsCached(std::string materialFilePath);
-			MaterialPtr GetCached(std::string materialFilePath);
+			MaterialInputsPtr GetCached(std::string materialFilePath);
 			void Destroy();
+
+			MaterialInputsPtr& GetMeshDefaultMaterial();
+			MaterialInputsPtr& GetMeshBasicMaterial();
 		};
 	};
 };
