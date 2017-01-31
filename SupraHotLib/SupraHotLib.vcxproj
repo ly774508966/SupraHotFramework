@@ -294,6 +294,7 @@
     <ClInclude Include="GenericSerializer.h" />
     <ClInclude Include="LuaVM.h" />
     <ClInclude Include="Mat4.h" />
+    <ClInclude Include="MaterialCache.h" />
     <ClInclude Include="MaterialProperty.h" />
     <ClInclude Include="MaterialLoader.h" />
     <ClInclude Include="MathConstants.h" />
@@ -385,6 +386,7 @@
     <ClCompile Include="GenericSerializer.cpp" />
     <ClCompile Include="LuaVM.cpp" />
     <ClCompile Include="Mat4.cpp" />
+    <ClCompile Include="MaterialCache.cpp" />
     <ClCompile Include="MaterialProperty.cpp" />
     <ClCompile Include="MaterialLoader.cpp" />
     <ClCompile Include="Mesh.cpp" />

@@ -31,6 +31,7 @@
 #endif
 #include <GenericSerializer.h>
 #include <MeshDataCache.h>
+#include <MaterialCache.h>
 
 using namespace SupraHot;
 
@@ -59,7 +60,9 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	window->Init(width, height, title);
 	window->SetClearColor(0.7f, 0.3f, 0.7f, 1.0f);
 
+#ifdef PLATFORM_WINDOWS
 	glfwSwapInterval(0);
+#endif
 	
 	// Intel: 73 - 83
 	// Nvidia: ~ 450 - 460
@@ -78,6 +81,8 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	Texture->Load("Images/logo.png");
 	FBO->SetReadSource(Texture);
 	FBO->SetPixelSize(ShaderLibrary::GetInstance()->ScreenSpace[uint32(ShaderLibrary::ScreenSpace::RenderToScreen)]);
+
+	MaterialCache::GetInstance()->Destroy();
 
 	TextureCache::GetInstance()->Init();
 
@@ -405,6 +410,8 @@ void SandBoxApp::Destroy()
 {
 	EntityManager::GetInstance()->DestroyAndDelete();
 
+	MaterialCache::GetInstance()->Destroy();
+
 	TextureCache::GetInstance()->Destroy();
 
 	MeshDataCache::GetInstance()->Destroy();
@@ -421,4 +428,6 @@ void SandBoxApp::Destroy()
 	delete FBO;
 	delete window;
 	delete FlyCamera;
+
+	SHF_PRINTF("TODO: EntityManager & Caches should init'd and destroyed inside the App-Interface \n");
 }

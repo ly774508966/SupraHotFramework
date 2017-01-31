@@ -291,6 +291,9 @@
     <ClInclude Include="MeshDataCache.h">
       <Filter>Header Files\Graphics\Common</Filter>
     </ClInclude>
+    <ClInclude Include="MaterialCache.h">
+      <Filter>Header Files\Graphics\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -474,6 +477,9 @@
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
     <ClCompile Include="MeshDataCache.cpp">
+      <Filter>Source Files\Graphics\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialCache.cpp">
       <Filter>Source Files\Graphics\Common</Filter>
     </ClCompile>
   </ItemGroup>

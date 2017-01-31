@@ -3,6 +3,7 @@
 #include "Shader.h"
 #include "MaterialProperty.h"
 #include "ShaderDescription.h"
+#include <memory>
 
 namespace SupraHot
 {
@@ -46,5 +47,7 @@ namespace SupraHot
 			std::string GetMaterialFilePath();
 			void SetMaterialFilePath(std::string filePath);
 		};
+
+		typedef std::shared_ptr<ShaderMaterial> MaterialPtr;
 	};
 };

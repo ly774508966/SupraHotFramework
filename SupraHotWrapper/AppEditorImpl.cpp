@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <EntityManager.h>
 #include <MeshDataCache.h>
+#include <MaterialCache.h>
 
 namespace SupraHot
 {
@@ -86,6 +87,8 @@ namespace SupraHot
 		void AppEditorImpl::Destroy()
 		{
 			EntityManager::GetInstance()->Destroy();
+
+			MaterialCache::GetInstance()->Destroy();
 
 			TextureCache::GetInstance()->Destroy();
 
