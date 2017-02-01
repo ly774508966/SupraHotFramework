@@ -584,12 +584,8 @@ namespace SupraHot
 					{
 						if (FileSystem::GetInstance()->FileExists("", materialFilePath))
 						{
-							GenericSerializer shaderMaterialDeserializer(materialFilePath);
-							shaderMaterialDeserializer.Deserialize(material);
-							material->SetMaterialFilePath(materialFilePath);
-
-							materialInputsPtr = MaterialInputsPtr(material);
-							MaterialCache::GetInstance()->Cache(materialInputsPtr);
+							MaterialCache::GetInstance()->LoadIntoCache(materialFilePath);
+							materialInputsPtr = MaterialCache::GetInstance()->GetCached(materialFilePath);
 						}
 						else
 						{

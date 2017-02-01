@@ -90,17 +90,13 @@ namespace SupraHotEditor
             {
                 Console.WriteLine("Material -> {0}", materialFilePath);
 
-                // Load material.
+                // Load material from
                 // Create material view and add it to the materialTable
 
-                GenericSerializerCLI gs = new GenericSerializerCLI(materialFilePath);
-                var material = gs.DeserialzeMaterial();
-                material.SetMaterialFilePath(materialFilePath);
-                material.IsCopy = true;                
-                gs.Dispose();
-
-                MeshComponent.SetMaterial(material);
+                MeshComponent.SetMaterial(materialFilePath);
+                var material = MeshComponent.GetMaterial();
                 AddMaterialProperties(material, materialFilePath);
+                material.CheckExistingMaterialProperties();
                 Form1.UpdateView();
             }
 
@@ -148,7 +144,7 @@ namespace SupraHotEditor
                 );
 
 
-            groupBoxFlowLayout.Controls.Add(AvailableMaterials);
+            groupBoxFlowLayout.Controls.Add(AvailableMaterials);            
             AddFiles(FileSystemCLI.GetIntance().GetRootPath() + "Materials");
         }
 

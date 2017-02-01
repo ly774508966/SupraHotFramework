@@ -24,6 +24,8 @@ namespace SupraHot
 
 			TextureCache::GetInstance()->Init();
 
+			MaterialCache::GetInstance()->Init();
+
 			FBO = new FrameBufferObject();
 			FBO->Init(width, height);
 

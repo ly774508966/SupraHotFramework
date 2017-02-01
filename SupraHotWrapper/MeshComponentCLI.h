@@ -16,7 +16,6 @@ namespace SupraHot
 		public:
 			MeshComponentCLI();
 			MeshComponentCLI(SupraHot::CLI::ComponentCLI^ componentCLI);
-			//MeshComponentCLI(SupraHot::CLI::MeshData^ meshData, SupraHot::CLI::Material^ material);
 			~MeshComponentCLI();
 
 			SupraHot::CLI::Material^ GetMaterial();
@@ -26,9 +25,7 @@ namespace SupraHot
 			System::String^ GetModelFilePath();
 			
 			void UpdateShaderPermuation();
-			bool SetShader(System::String^ shaderName);
 			void SetMaterial(System::String^ shaderName);
-			void SetMaterial(SupraHot::CLI::Material^ material);
 
 			Vec3CLI^ GetMeshDataOrigin();
 		};

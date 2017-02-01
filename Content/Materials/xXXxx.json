@@ -1,1 +1,1 @@
-{"MaterialName": "xXXxx", "MaterialProperties": [{"Name": "DiffuseTexture", "Type": "Texture2D", "Value": "Images/testtex.png"}], "ShaderDescription": "MeshDefaultShader", "ShaderDescriptionFileName": "MeshDefaultShader.json"}
+{"MaterialName": "xXXxx", "MaterialProperties": [{"Name": "DiffuseTexture", "Type": "Texture2D", "Value": "Images/test.png"}], "ShaderDescription": "MeshDefaultShader", "ShaderDescriptionFileName": "MeshDefaultShader.json"}

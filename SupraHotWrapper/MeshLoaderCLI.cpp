@@ -6,6 +6,7 @@
 #include <Entity.h>
 #include <EntityManager.h>
 #include <StringUtil.h>
+#include <MaterialCache.h>
 #include "MeshComponentCLI.h"
 
 namespace SupraHot
@@ -37,11 +38,8 @@ namespace SupraHot
 			for (uint32 m = 0, l = static_cast<uint32>(cachedMeshes->size()); m < l; ++m)
 			{
 				SupraHot::Graphics::MeshDataPtr meshData = cachedMeshes->at(m);
-				SupraHot::Graphics::ShaderDescription* shaderDescription = SupraHot::Graphics::ShaderLibrary::GetInstance()->GetShaderDescriptions()->at("MeshDefaultShader");
-				SupraHot::Graphics::MaterialInputs* shaderMaterial = new SupraHot::Graphics::MaterialInputs(shaderDescription);
-				SupraHot::Graphics::Shader* shader = SupraHot::Graphics::ShaderLibrary::GetInstance()->SelectShaderForShaderMaterialAndMeshData(meshData.get(), shaderMaterial);
-				shaderMaterial->SetShaderPermutation(shader);
-				meshComponents.push_back(new MeshComponent(meshData, shaderMaterial, path, m));
+				SupraHot::Graphics::Material* material = new SupraHot::Graphics::Material(SupraHot::Graphics::MaterialCache::GetInstance()->GetMeshDefaultMaterial());
+				meshComponents.push_back(new MeshComponent(meshData, material, path, m));
 			}
 
 

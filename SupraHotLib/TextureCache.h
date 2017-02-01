@@ -43,7 +43,6 @@ namespace SupraHot
 
 			Texture2DPtr WrapTexture(Texture2D* texture2D);
 			TextureCubePtr WrapTexture(TextureCube* textureCube);
-
 		};
 	};
 };

@@ -65,8 +65,7 @@ namespace SupraHotEditor
             MaterialListView.View = View.Details;
             TablePanel.Controls.Add(MaterialListView);
             AddFiles(MaterialDirectoryPath, MaterialListView);
-
-
+          
             MaterialListView.SelectedIndexChanged += new EventHandler(
                     delegate(object sender, EventArgs e)
                     {
@@ -115,25 +114,28 @@ namespace SupraHotEditor
 
             bool fileExists = FileSystemCLI.GetIntance().FileExists(materialFilePath);
 
-            if(fileExists)
+            if (fileExists)
             {
                 Console.WriteLine("Material -> {0}", materialFilePath);
 
                 // Load material.
                 // Create material view and add it to the materialTable
 
-                GenericSerializerCLI gs = new GenericSerializerCLI(materialFilePath);
+                // Load material from cache.
 
-                if (ActiveMaterial != null) 
+                if (MaterialCacheCLI.GetIntance().IsCached(materialFilePath))
                 {
-                    ActiveMaterial.Dispose();
+                    //ActiveMaterial.Dispose();
+                    ActiveMaterial = MaterialCacheCLI.GetIntance().GetCached(materialFilePath);
                 }
-                ActiveMaterial = gs.DeserialzeMaterial();
+                else
+                {
+                    MaterialCacheCLI.GetIntance().LoadIntoCache(materialFilePath);
+                    //ActiveMaterial.Dispose();
+                    ActiveMaterial = MaterialCacheCLI.GetIntance().GetCached(materialFilePath);
+                }
 
-                // ActiveMaterial.Dispose();
-                gs.Dispose();
-
-                if (MaterialView != null) 
+                if (MaterialView != null)
                 {
                     MaterialTablePanel.Controls.Remove(MaterialView);
                     MaterialView.Dispose();
@@ -141,6 +143,22 @@ namespace SupraHotEditor
 
                 MaterialView = new MaterialView(ActiveMaterial, materialFilePath);
                 MaterialTablePanel.Controls.Add(MaterialView);
+            }
+            else 
+            {
+                if (MaterialCacheCLI.GetIntance().IsCached(materialName))
+                {
+                    ActiveMaterial = MaterialCacheCLI.GetIntance().GetCached(materialName);
+
+                    if (MaterialView != null)
+                    {
+                        MaterialTablePanel.Controls.Remove(MaterialView);
+                        MaterialView.Dispose();
+                    }
+
+                    MaterialView = new MaterialView(ActiveMaterial, materialName);
+                    MaterialTablePanel.Controls.Add(MaterialView);
+                }
             }
 
         }

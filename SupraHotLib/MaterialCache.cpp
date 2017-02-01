@@ -1,4 +1,5 @@
 #include "MaterialCache.h"
+#include "GenericSerializer.h"
 
 namespace SupraHot
 {
@@ -21,15 +22,25 @@ namespace SupraHot
 		void MaterialCache::Init()
 		{
 				{
-					ShaderDescription* shaderDescription = ShaderLibrary::GetInstance()->GetShaderDescriptions()->at("MeshDefaultShader");
-					MaterialInputs* materialInputs = new MaterialInputs(shaderDescription);
-					MeshDefaultMaterial = MaterialInputsPtr(materialInputs);
+					//ShaderDescription* shaderDescription = ShaderLibrary::GetInstance()->GetShaderDescriptions()->at("MeshDefaultShader");
+					//MaterialInputs* materialInputs = new MaterialInputs(shaderDescription);
+					//MeshDefaultMaterial = MaterialInputsPtr(materialInputs);
+					//MeshDefaultMaterial->SetMaterialFilePath("MeshDefaultMaterial");
+					//MeshDefaultMaterial->Name = "MeshDefaultMaterial";
+					//CachedMaterials["MeshDefaultMaterial"] = MeshDefaultMaterial;
+
+					LoadIntoCache("Materials/MeshDefaultMaterial.json");
+
 				}
 
 				{
-					ShaderDescription* shaderDescription = ShaderLibrary::GetInstance()->GetShaderDescriptions()->at("MeshBasicShader");
-					MaterialInputs* materialInputs = new MaterialInputs(shaderDescription);
-					MeshBasicMaterial = MaterialInputsPtr(materialInputs);
+					// ShaderDescription* shaderDescription = ShaderLibrary::GetInstance()->GetShaderDescriptions()->at("MeshBasicShader");
+					// MaterialInputs* materialInputs = new MaterialInputs(shaderDescription);
+					// MeshBasicMaterial = MaterialInputsPtr(materialInputs);
+					// MeshBasicMaterial->Name = "MeshBasicMaterial";
+					// CachedMaterials["MeshBasicMaterial"] = MeshBasicMaterial;
+
+					LoadIntoCache("Materials/MeshBasicMaterial.json");
 				}
 		}
 
@@ -61,6 +72,19 @@ namespace SupraHot
 			return CachedMaterials[materialFilePath];
 		}
 
+		void MaterialCache::LoadIntoCache(std::string materialFilePath)
+		{
+			MaterialInputs* material = new Graphics::MaterialInputs();
+			MaterialInputsPtr materialInputsPtr;
+
+			Utils::GenericSerializer shaderMaterialDeserializer(materialFilePath);
+			shaderMaterialDeserializer.Deserialize(material);
+			material->SetMaterialFilePath(materialFilePath);
+
+			materialInputsPtr = MaterialInputsPtr(material);
+			Cache(materialInputsPtr);
+		}
+
 		void MaterialCache::Destroy()
 		{
 			typedef std::unordered_map<std::string, MaterialInputsPtr>::iterator it_type;
@@ -71,20 +95,17 @@ namespace SupraHot
 
 			CachedMaterials.clear();
 
-			MeshDefaultMaterial->Destroy();
-			MeshBasicMaterial->Destroy();
-
 			SHF_PRINTF("MaterialCache::Destroy()\n");
 		}
 
 		MaterialInputsPtr& MaterialCache::GetMeshDefaultMaterial()
 		{
-			return MeshDefaultMaterial;
+			return CachedMaterials["Materials/MeshDefaultMaterial.json"];
 		}
 
 		MaterialInputsPtr& MaterialCache::GetMeshBasicMaterial()
 		{
-			return MeshBasicMaterial;
+			return CachedMaterials["Materials/MeshBasicMaterial.json"];
 		}
 	};
 };

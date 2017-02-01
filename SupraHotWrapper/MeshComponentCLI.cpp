@@ -1,4 +1,6 @@
 #include "MeshComponentCLI.h"
+#include <GenericSerializer.h>
+#include <MaterialCache.h>
 
 namespace SupraHot
 {
@@ -34,7 +36,9 @@ namespace SupraHot
 			if (Material == nullptr)
 			{
 				SupraHot::MeshComponent* meshComponent = static_cast<SupraHot::MeshComponent*>(Instance);
-				SupraHot::Graphics::MaterialInputs* material = meshComponent->GetMaterial();
+
+				// WIRED UP HERE
+				SupraHot::Graphics::MaterialInputs* material = meshComponent->GetMaterial()->GetMaterialInputs().get();
 
 				Material = gcnew SupraHot::CLI::Material();
 				Material->IsCopy = true;
@@ -66,31 +70,33 @@ namespace SupraHot
 			return msclr::interop::marshal_as<System::String^>(static_cast<SupraHot::MeshComponent*>(Instance)->GetModelFilePath());
 		}
 
-		bool MeshComponentCLI::SetShader(System::String^ shaderName)
-		{
-			// ShaderName is 100% valid at this point, since it is being selected in the gui.
-			std::string shaderNameStd = msclr::interop::marshal_as<std::string>(shaderName);
-			SupraHot::Graphics::ShaderDescription* shaderDescription = SupraHot::Graphics::ShaderLibrary::GetInstance()->GetShaderDescriptions()->at(shaderNameStd);
-			static_cast<SupraHot::MeshComponent*>(Instance)->ChangeShader(shaderDescription);
-#if DEVELOPMENT == 1
-			SHF_PRINTF("Shader description file name: %s \n", shaderDescription->FileName.c_str());
-#endif
-			return true;
-		}
-
-		void MeshComponentCLI::SetMaterial(System::String^ shaderName)
-		{
-			SHF_PRINTF("MeshComponentCLI::SetMaterial(String) NOT IMPLEMENTED YET!!! \n");
-		}
-
-		void MeshComponentCLI::SetMaterial(SupraHot::CLI::Material^ material)
+		void MeshComponentCLI::SetMaterial(System::String^ materialFilePath)
 		{
 			SupraHot::MeshComponent* meshComponent = static_cast<SupraHot::MeshComponent*>(Instance);
-			meshComponent->SetMaterial(material->GetHandle());
-			
-			Material = material;
-			Material->CheckExistingMaterialProperties();
-			Material->IsCopy = true;
+			std::string materialFilePathStd = msclr::interop::marshal_as<std::string>(materialFilePath);
+
+			if (SupraHot::Graphics::MaterialCache::GetInstance()->IsCached(materialFilePathStd))
+			{
+				auto materialInputsPtr = SupraHot::Graphics::MaterialCache::GetInstance()->GetCached(materialFilePathStd);
+				SupraHot::Graphics::Material* materialComposition = new SupraHot::Graphics::Material(materialInputsPtr);
+				meshComponent->SetMaterial(materialComposition);
+
+				Material = gcnew SupraHot::CLI::Material(materialInputsPtr.get());
+				Material->CheckExistingMaterialProperties();
+				Material->IsCopy = true;
+			}
+			else
+			{
+				SupraHot::Graphics::MaterialCache::GetInstance()->LoadIntoCache(materialFilePathStd);
+				auto materialInputsPtr = SupraHot::Graphics::MaterialCache::GetInstance()->GetCached(materialFilePathStd);
+
+				SupraHot::Graphics::Material* materialComposition = new SupraHot::Graphics::Material(materialInputsPtr);
+				meshComponent->SetMaterial(materialComposition);
+
+				Material = gcnew SupraHot::CLI::Material(materialInputsPtr.get());
+				Material->CheckExistingMaterialProperties();
+				Material->IsCopy = true;
+			}
 		}
 
 		Vec3CLI^ MeshComponentCLI::GetMeshDataOrigin()

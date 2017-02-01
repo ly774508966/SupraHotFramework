@@ -16,10 +16,10 @@ namespace SupraHotEditor
         private String Type = "";
         private String Name = "";
         private FlowLayoutPanel groupBoxFlowLayout;
-        private MeshComponentView MeshComponentView;
+        //private MeshComponentView MeshComponentView;
         private MaterialView MaterialView;
 
-        public MaterialPropertyWidget(MaterialPropertyCommonInterface materialPropertyCommonInterface, MeshComponentView parentMeshComponentView) 
+        /*public MaterialPropertyWidget(MaterialPropertyCommonInterface materialPropertyCommonInterface, MeshComponentView parentMeshComponentView) 
         {
             this.MaterialPropertyCommonInterface = materialPropertyCommonInterface;
             this.MeshComponentView = parentMeshComponentView;
@@ -498,7 +498,7 @@ namespace SupraHotEditor
 
                 groupBoxFlowLayout.Controls.Add(loadImageButton);
             }
-        }
+        }*/
 
         public MaterialPropertyWidget(MaterialPropertyCommonInterface materialPropertyCommonInterface, MaterialView parentMaterialView)
         {

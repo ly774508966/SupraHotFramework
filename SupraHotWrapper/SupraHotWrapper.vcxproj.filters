@@ -111,6 +111,9 @@
     <ClInclude Include="MeshDataCacheCLI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MaterialCacheCLI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowEditor.cpp">
@@ -204,6 +207,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MeshDataCacheCLI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialCacheCLI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

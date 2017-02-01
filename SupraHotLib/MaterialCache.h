@@ -12,9 +12,6 @@ namespace SupraHot
 		private:
 			MaterialCache();		
 			std::unordered_map<std::string, MaterialInputsPtr> CachedMaterials;
-
-			MaterialInputsPtr MeshDefaultMaterial;
-			MaterialInputsPtr MeshBasicMaterial;
 		public:
 			static MaterialCache* GetInstance();
 			~MaterialCache();
@@ -24,6 +21,7 @@ namespace SupraHot
 			void Free(MaterialInputsPtr& material);
 			bool IsCached(std::string materialFilePath);
 			MaterialInputsPtr GetCached(std::string materialFilePath);
+			void LoadIntoCache(std::string materialFilePath);
 			void Destroy();
 
 			MaterialInputsPtr& GetMeshDefaultMaterial();
