@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "Shader.h"
 #include <vector>
+#include "TextureCache.h"
 
 namespace SupraHot
 {
@@ -17,22 +18,22 @@ namespace SupraHot
 		{
 		}
 
-		void SkyBox::SetEnvironmentMap(TextureCube* enviromentMap)
+		void SkyBox::SetEnvironmentMap(TextureCubePtr enviromentMap)
 		{
 			this->CubeMap = enviromentMap;
 		}
 
-		void SkyBox::SetEnvironmentMap(Texture2D* enviromentMap)
+		void SkyBox::SetEnvironmentMap(Texture2DPtr enviromentMap)
 		{
 			this->SphereMap = enviromentMap;
 		}
 
-		TextureCube* SkyBox::GetCubeMap()
+		TextureCubePtr SkyBox::GetCubeMap()
 		{
 			return CubeMap;
 		}
 
-		Texture2D* SkyBox::GetSphereMap()
+		Texture2DPtr SkyBox::GetSphereMap()
 		{
 			return SphereMap;
 		}
@@ -51,13 +52,13 @@ namespace SupraHot
 			shader->SetMat4(glGetUniformLocation(shaderProgramID, "ViewMatrix"), (*camera->GetViewMatrix()));
 			shader->SetMat4(glGetUniformLocation(shaderProgramID, "ProjectionMatrix"), (*camera->GetProjectionMatrix()));
 			
-			if (CubeMap != nullptr)
+			if (CubeMap != nullptr && CubeMap.get() != nullptr)
 			{
-				shader->SetTextureCube(glGetUniformLocation(shaderProgramID, "CubeMap"), CubeMap, GL_TEXTURE0);
+				shader->SetTextureCube(glGetUniformLocation(shaderProgramID, "CubeMap"), CubeMap.get(), GL_TEXTURE0);
 			}
-			else if (SphereMap != nullptr)
+			else if (SphereMap != nullptr && SphereMap.get() != nullptr)
 			{
-				shader->SetTexture2D(glGetUniformLocation(shaderProgramID, "SphereMap"), SphereMap, GL_TEXTURE0);
+				shader->SetTexture2D(glGetUniformLocation(shaderProgramID, "SphereMap"), SphereMap.get(), GL_TEXTURE0);
 			}
 			
 			// Draw the vertices
@@ -193,14 +194,14 @@ namespace SupraHot
 		{
 			if (CubeMap != nullptr)
 			{
-				CubeMap->Destroy();
-				delete CubeMap;
+				TextureCache::GetInstance()->FreeTexture(CubeMap);
+				CubeMap = nullptr;
 			}
 
 			if (SphereMap != nullptr)
 			{
-				SphereMap->Destroy();
-				delete SphereMap;
+				TextureCache::GetInstance()->FreeTexture(SphereMap);				
+				SphereMap = nullptr;
 			}
 		}
 

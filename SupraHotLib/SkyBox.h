@@ -3,21 +3,23 @@
 #include "Vec3.h"
 #include "Quat4.h"
 #include "Vec2.h"
+#include "TextureCube.h"
+#include "Texture2D.h"
 
 namespace SupraHot
 {
 	namespace Graphics
 	{
-		class Texture2D;
+		
 		class Shader;
 		class Camera;
-		class TextureCube;
+		
 
 		class SkyBox
 		{
 		private:
-			TextureCube* CubeMap = nullptr;
-			Texture2D* SphereMap = nullptr;
+			TextureCubePtr CubeMap;
+			Texture2DPtr SphereMap;
 
 			// Todo: Use this for rendering
 			Math::Quat4 Rotation;
@@ -32,10 +34,10 @@ namespace SupraHot
 			SkyBox();
 			~SkyBox();
 
-			void SetEnvironmentMap(TextureCube* enviromentMap);
-			void SetEnvironmentMap(Texture2D* enviromentMap);
-			TextureCube* GetCubeMap();
-			Texture2D* GetSphereMap();
+			void SetEnvironmentMap(TextureCubePtr enviromentMap);
+			void SetEnvironmentMap(Texture2DPtr enviromentMap);
+			TextureCubePtr GetCubeMap();
+			Texture2DPtr GetSphereMap();
 			void Render(Camera* camera, Shader* shader);
 
 			void Init();

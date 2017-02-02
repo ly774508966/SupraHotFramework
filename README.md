@@ -1,5 +1,7 @@
 SupraHotFramework
 ====
+The SHF is a cross-platform 3d rendering framework, which at the moment runs on Windows, macOS and Android.
+It is currently in it's early infancy. It features already an interesting shader and material build pipeline. 
 
 # Notes
 ## Compiling for Android

@@ -228,9 +228,6 @@
     <ClInclude Include="Utility.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="MaterialProperty.h">
-      <Filter>Header Files\Graphics\Common</Filter>
-    </ClInclude>
     <ClInclude Include="BooleanMaterialProperty.h">
       <Filter>Header Files\Graphics\Common\MaterialProperties</Filter>
     </ClInclude>
@@ -288,14 +285,23 @@
     <ClInclude Include="MeshDataCache.h">
       <Filter>Header Files\Graphics\Common</Filter>
     </ClInclude>
-    <ClInclude Include="MaterialCache.h">
-      <Filter>Header Files\Graphics\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>Header Files\Graphics\Common</Filter>
-    </ClInclude>
     <ClInclude Include="MaterialInputs.h">
       <Filter>Header Files\Graphics\Common\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Header Files\Graphics\Common\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialCache.h">
+      <Filter>Header Files\Graphics\Common\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialProperty.h">
+      <Filter>Header Files\Graphics\Common\MaterialProperties</Filter>
+    </ClInclude>
+    <ClInclude Include="AABB.h">
+      <Filter>Header Files\Graphics\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewFrustum.h">
+      <Filter>Header Files\Graphics\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -416,9 +422,6 @@
     <ClCompile Include="Utility.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="MaterialProperty.cpp">
-      <Filter>Source Files\Graphics\Common</Filter>
-    </ClCompile>
     <ClCompile Include="BooleanMaterialProperty.cpp">
       <Filter>Source Files\Graphics\Common\MaterialProperties</Filter>
     </ClCompile>
@@ -479,14 +482,23 @@
     <ClCompile Include="MeshDataCache.cpp">
       <Filter>Source Files\Graphics\Common</Filter>
     </ClCompile>
-    <ClCompile Include="MaterialCache.cpp">
-      <Filter>Source Files\Graphics\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>Source Files\Graphics\Common</Filter>
-    </ClCompile>
     <ClCompile Include="MaterialInputs.cpp">
       <Filter>Source Files\Graphics\Common\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialProperty.cpp">
+      <Filter>Source Files\Graphics\Common\MaterialProperties</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialCache.cpp">
+      <Filter>Source Files\Graphics\Common\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files\Graphics\Common\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="AABB.cpp">
+      <Filter>Source Files\Graphics\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewFrustum.cpp">
+      <Filter>Source Files\Graphics\Common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

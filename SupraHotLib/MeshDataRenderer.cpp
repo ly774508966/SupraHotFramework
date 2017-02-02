@@ -166,6 +166,14 @@ namespace SupraHot
 		}
 
 	}
+
+	void MeshDataRenderer::FrustumCulling()
+	{
+	}
+
+	void MeshDataRenderer::BucketSorting()
+	{
+	}
 	
 	MeshDataRenderer::~MeshDataRenderer()
 	{

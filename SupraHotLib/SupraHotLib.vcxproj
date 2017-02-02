@@ -275,6 +275,7 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AABB.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="BooleanMaterialProperty.h" />
     <ClInclude Include="Camera.h" />
@@ -344,6 +345,7 @@
     <ClInclude Include="Vec4.h" />
     <ClInclude Include="Vec4MaterialProperty.h" />
     <ClInclude Include="Vertex.h" />
+    <ClInclude Include="ViewFrustum.h" />
     <ClInclude Include="WindowAndroid.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -369,6 +371,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Externals\include\json11\json11.cpp" />
+    <ClCompile Include="AABB.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="BooleanMaterialProperty.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -431,6 +434,7 @@
     <ClCompile Include="Vec4.cpp" />
     <ClCompile Include="Vec4MaterialProperty.cpp" />
     <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="ViewFrustum.cpp" />
     <ClCompile Include="WindowAndroid.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>

@@ -10,7 +10,6 @@ class SandBoxApp : public SupraHot::App
 private:
 	SupraHot::FrameBufferObject* FBO;
 	SupraHot::Texture2D* Texture;
-	SupraHot::TextureCube* DdsCubeTexture;
 
 	SupraHot::SkyBox* EnvBox;
 	SupraHot::Camera* FlyCamera;

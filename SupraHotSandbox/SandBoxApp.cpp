@@ -155,11 +155,14 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	//textureCube->Destroy();
 	delete textureCube;
 
-	DdsCubeTexture = new TextureCube("DDS Cube map");
+	TextureCube* DdsCubeTexture = new TextureCube("DDS Cube map");
 	DdsCubeTexture->SetWrapS(GL_CLAMP_TO_EDGE);
 	DdsCubeTexture->SetWrapT(GL_CLAMP_TO_EDGE);
 	DdsCubeTexture->SetWrapR(GL_CLAMP_TO_EDGE);
 	DdsCubeTexture->LoadDDS("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds", true, true);
+
+	TextureCubePtr ddsCubePtr = TextureCache::GetInstance()->WrapTexture(DdsCubeTexture);
+	TextureCache::GetInstance()->CacheTexture(ddsCubePtr);
 
 	Texture2D* sphereMap = new Texture2D("sphere map");
 	sphereMap->SetWrapS(GL_CLAMP_TO_EDGE);
@@ -169,7 +172,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	delete sphereMap;
 
 	EnvBox = new SkyBox();
-	EnvBox->SetEnvironmentMap(DdsCubeTexture);
+	EnvBox->SetEnvironmentMap(ddsCubePtr);
 	//EnvBox->SetEnvironmentMap(sphereMap);
 	EnvBox->Init();
 
@@ -405,6 +408,9 @@ void SandBoxApp::Tick(float deltaTime)
 
 void SandBoxApp::Destroy()
 {
+	EnvBox->Destroy();
+	delete EnvBox;
+
 	EntityManager::GetInstance()->DestroyAndDelete();
 
 	MaterialCache::GetInstance()->Destroy();
@@ -416,12 +422,10 @@ void SandBoxApp::Destroy()
 	App::Destroy();
 
 	Texture->Destroy();
-	DdsCubeTexture->Destroy();
 	FBO->Destroy();
 	window->Destroy();
 
 	delete Texture;
-	delete DdsCubeTexture;
 	delete FBO;
 	delete window;
 	delete FlyCamera;

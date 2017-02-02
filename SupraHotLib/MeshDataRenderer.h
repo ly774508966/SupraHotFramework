@@ -27,6 +27,8 @@ namespace SupraHot
 		MeshDataRenderer();
 		std::vector<MeshComponent*> MeshComponents;
 
+		void FrustumCulling();
+		void BucketSorting();
 	public:
 		static MeshDataRenderer& GetInstance();
 
@@ -35,7 +37,6 @@ namespace SupraHot
 		void Render(Graphics::Camera* camera);
 
 		// Temp function
-		void Render(Graphics::Camera* camera, Graphics::MeshData* meshData, Graphics::Shader* shader);
 		~MeshDataRenderer();
 	};
 };
