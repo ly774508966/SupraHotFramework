@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include "Mat4.h"
+#include "Frustum.h"
 
 /**
 *	Simple mesh data renderer.
@@ -27,7 +29,10 @@ namespace SupraHot
 		MeshDataRenderer();
 		std::vector<MeshComponent*> MeshComponents;
 
+		// Frustum culling
+		Graphics::Frustum CameraFrustum;
 		void FrustumCulling();
+
 		void BucketSorting();
 	public:
 		static MeshDataRenderer& GetInstance();

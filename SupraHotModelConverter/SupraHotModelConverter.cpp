@@ -15,6 +15,18 @@
 #define BUILD_AS_TOOL 1
 
 
+void ComputeAABB(const aiMesh* mesh, aiVector3D& min, aiVector3D& max)
+{
+	min = aiVector3D(10e10f, 10e10f, 10e10f);
+	max = aiVector3D(-10e10f, -10e10f, -10e10f);
+	for (uint32 i = 0; i < mesh->mNumVertices; ++i)
+	{
+		const aiVector3D v = mesh->mVertices[i];
+		min = std::min(v, min);
+		max = std::max(v, max);
+	}
+};
+
 int _tmain(int argc, char* argv[])
 {
 	using namespace SupraHot;
@@ -84,13 +96,15 @@ int _tmain(int argc, char* argv[])
 	}
 
 	Assimp::Importer importer;
-	uint32 flags = aiProcess_CalcTangentSpace |
+	/*uint32 flags = aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
 		aiProcess_JoinIdenticalVertices |
 		//aiProcess_PreTransformVertices |
 		aiProcess_GenNormals |
 		aiProcess_RemoveRedundantMaterials |
-		aiProcess_OptimizeMeshes;
+		aiProcess_OptimizeMeshes;*/
+
+	uint32 flags = aiProcessPreset_TargetRealtime_Quality;
 
 	const aiScene* scene = importer.ReadFile(s_Name, flags);
 	std::vector<Mesh> loadedMeshes;
@@ -115,6 +129,11 @@ int _tmain(int argc, char* argv[])
 		mesh.FaceCount = assimpMesh.mNumFaces;
 		mesh.IndexCount = assimpMesh.mNumFaces * 3;
 		mesh.ElementCount = 0;
+
+		// compute bounding box
+		/*aiVector3D min;
+		aiVector3D max;
+		ComputeAABB(scene->mMeshes[i], min, max);*/
 
 		std::vector<float> floatVertexData;
 		std::vector<uint32> uint32IndexData;

@@ -33,6 +33,7 @@
 #include <MeshDataCache.h>
 #include <MaterialCache.h>
 #include <Material.h>
+#include <Octree.h>
 
 using namespace SupraHot;
 
@@ -311,6 +312,13 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	Vec3 eulerAnglesOutput = q.ToEulerAngles() * RADIANS_TO_DEGREES;
 	printf("ouput: \n");
 	eulerAnglesOutput.print();
+	
+	// Test octree
+	{
+		Octree<Vec3> octree;
+		//octree.GetRoot();
+
+	}
 }
 
 void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)

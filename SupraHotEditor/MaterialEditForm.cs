@@ -182,13 +182,8 @@ namespace SupraHotEditor
         {
             if (keyData == Keys.Escape)
             {
-                this.Dispose();
-
-                if (ActiveMaterial != null) 
-                {
-                    ActiveMaterial.Dispose();
-                }
-
+                DestroyWindowView();
+              
                 return true;
             }
             return base.ProcessCmdKey(ref msg, keyData);
@@ -196,12 +191,22 @@ namespace SupraHotEditor
 
         private void MaterialEditForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.Dispose();
+            DestroyWindowView();
+        }
+
+        private void DestroyWindowView() 
+        {
+            if(MaterialView != null) 
+            {
+                MaterialView.Dispose();
+            }
 
             if (ActiveMaterial != null)
             {
                 ActiveMaterial.Dispose();
             }
+
+            this.Dispose();
         }
     }
 }

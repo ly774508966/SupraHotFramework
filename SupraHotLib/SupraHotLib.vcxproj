@@ -291,6 +291,7 @@
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="FloatMaterialProperty.h" />
     <ClInclude Include="FrameBufferObject.h" />
+    <ClInclude Include="Frustum.h" />
     <ClInclude Include="FullScreenQuad.h" />
     <ClInclude Include="GenericSerializer.h" />
     <ClInclude Include="LuaVM.h" />
@@ -306,6 +307,7 @@
     <ClInclude Include="MeshDataCache.h" />
     <ClInclude Include="MeshDataLoader.h" />
     <ClInclude Include="MeshDataRenderer.h" />
+    <ClInclude Include="Octree.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="Publisher.h" />
     <ClInclude Include="Quat4.h" />
@@ -386,6 +388,7 @@
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="FloatMaterialProperty.cpp" />
     <ClCompile Include="FrameBufferObject.cpp" />
+    <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="FullScreenQuad.cpp" />
     <ClCompile Include="GenericSerializer.cpp" />
     <ClCompile Include="LuaVM.cpp" />
@@ -400,6 +403,7 @@
     <ClCompile Include="MeshDataCache.cpp" />
     <ClCompile Include="MeshDataLoader.cpp" />
     <ClCompile Include="MeshDataRenderer.cpp" />
+    <ClCompile Include="Octree.cpp" />
     <ClCompile Include="Publisher.cpp" />
     <ClCompile Include="Quat4.cpp" />
     <ClCompile Include="Renderer.cpp" />

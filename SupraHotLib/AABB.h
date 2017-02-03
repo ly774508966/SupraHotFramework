@@ -10,11 +10,14 @@ namespace SupraHot
 		class AABB
 		{
 		private:
-			Math::Vec3 Minimum;
-			Math::Vec3 Maximum;
+			Vec3 Minimum;
+			Vec3 Maximum;
 		public:
 			AABB(MeshDataPtr& meshDataPtr);
 			~AABB();
+
+			const Vec3& GetMinimum();
+			const Vec3& GetMaximum();
 		};
 	};
 };

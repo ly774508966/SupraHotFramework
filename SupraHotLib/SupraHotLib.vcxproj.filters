@@ -303,6 +303,12 @@
     <ClInclude Include="ViewFrustum.h">
       <Filter>Header Files\Graphics\Common</Filter>
     </ClInclude>
+    <ClInclude Include="Octree.h">
+      <Filter>Header Files\Graphics\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Frustum.h">
+      <Filter>Header Files\Graphics\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -498,6 +504,12 @@
       <Filter>Source Files\Graphics\Common</Filter>
     </ClCompile>
     <ClCompile Include="ViewFrustum.cpp">
+      <Filter>Source Files\Graphics\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Octree.cpp">
+      <Filter>Source Files\Graphics\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Frustum.cpp">
       <Filter>Source Files\Graphics\Common</Filter>
     </ClCompile>
   </ItemGroup>

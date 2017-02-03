@@ -39,15 +39,17 @@ namespace SupraHot
 	}
 
 	void MeshDataRenderer::Render(Graphics::Camera* camera)
-	{
-		// TODO: Do some frustum culling & sorting by materials here.
-
+	{		
 		Mat4 viewMatrix = *camera->GetViewMatrix();
 		Mat4 projectionMatrix = *camera->GetProjectionMatrix();
+		Mat4 viewProjectionMatrix = *camera->GetViewProjectionMatrix();
+
+		// Do frustum culling
+		CameraFrustum.Compute(viewProjectionMatrix);
+		FrustumCulling();
 
 		for (MeshComponent* meshComponent : MeshComponents)
 		{
-
 			if (meshComponent->GetMeshData().get() == nullptr || meshComponent->GetMaterial() == nullptr)
 			{
 				continue;

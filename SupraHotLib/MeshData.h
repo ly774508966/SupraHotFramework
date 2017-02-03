@@ -23,7 +23,6 @@ namespace SupraHot
 			
 			Vec3 Origin;
 			std::string Name;
-			std::vector<Face> Faces; // Indices
 
 			bool HasIndexData = false;
 			bool HasPositionData = false;

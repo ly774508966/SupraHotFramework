@@ -20,6 +20,8 @@ namespace SupraHotEditor
         private Dictionary<String, String> AvailableMaterialProperties;
         private List<MaterialPropertyWidget> ActiveMaterialProperties;
 
+        private List<MaterialStatePair> CurrentMaterialState;
+
         private TableLayoutPanel GroupTablePanel;
 
         public MaterialView(Material materialCLI, String materialFilePath)
@@ -80,6 +82,11 @@ namespace SupraHotEditor
                     AvailableMaterialPropertiesComboBox.Items.Remove(mpci.GetName());
                 }
             }
+
+            // Build material state as of it is when loaded from disk
+            // We need this to check, if the material was changed, but not saved.
+            // If this is the case, we will revert the material to it's "when-loaded state"
+            BuildCurrentMaterialState();
         }
 
         private void BuildAvailableMaterialPropertiesList()
@@ -207,6 +214,12 @@ namespace SupraHotEditor
                 gs.Serialize(ActiveMaterial);
                 gs.Dispose();
                 Console.WriteLine("Saved Material.");
+
+                // Put all material properties and their values inside a list
+                // On exit, we will set the material's properties back to this list.
+                // So, if the user modified the material, but did not save it, the material
+                // will be reset to it's previous state.
+                BuildCurrentMaterialState();
             }
         }
 
@@ -214,7 +227,8 @@ namespace SupraHotEditor
         {
             if (ActiveMaterial != null)
             {
-                ActiveMaterial.Dispose();
+                ResetMaterialIfModifiedButNotSaved();
+                ActiveMaterial.Dispose();                
             }
 
             // Dispose of unmanaged resources.
@@ -223,5 +237,113 @@ namespace SupraHotEditor
             // Suppress finalization.
             GC.SuppressFinalize(this);
         }
+
+        // Todo: Hook into window closign function
+
+        private void ResetMaterialIfModifiedButNotSaved()
+        {
+            Console.WriteLine("Material View Disposed -> {0}", ActiveMaterial);
+
+            // Check if current changes to the material were saved,
+            // if not revert them.
+
+            ActiveMaterial.RemoveAllMaterialProperties();
+            foreach(MaterialStatePair pair in CurrentMaterialState) 
+            {
+                var materialPropertyInterface = ActiveMaterial.AddMaterialProperty(pair.Name, pair.Type);
+                var type = materialPropertyInterface.GetType();
+
+                if (type == "Boolean")
+                {
+                    ((BooleanMaterialPropertyCLI)materialPropertyInterface).SetValue((bool)pair.Value);
+                }
+                else if (type == "Float")
+                {
+                    ((FloatMaterialPropertyCLI)materialPropertyInterface).SetValue((float)pair.Value);
+                }
+                else if (type == "Vec2")
+                {
+                    ((Vec2MaterialPropertyCLI)materialPropertyInterface).SetValue((Vec2CLI)pair.Value);
+                }
+                else if (type == "Vec3")
+                {
+                    ((Vec3MaterialPropertyCLI)materialPropertyInterface).SetValue((Vec3CLI)pair.Value);
+                }
+                else if (type == "Vec4")
+                {
+                    ((Vec4MaterialPropertyCLI)materialPropertyInterface).SetValue((Vec4CLI)pair.Value);
+                }
+                else if (type == "Texture2D")
+                {
+                    ((Texture2DMaterialPropertyCLI)materialPropertyInterface).SetValue((String)pair.Value);
+                }
+                else if (type == "TextureCube")
+                {
+                    ((TextureCubeMaterialPropertyCLI)materialPropertyInterface).SetValue((String)pair.Value);
+                }
+
+
+                Console.WriteLine("Reset: {0} -> {1} ", pair.Name, pair.Value.ToString());
+            }
+
+            Form1.UpdateView();
+        }
+
+        private void BuildCurrentMaterialState()
+        {
+            CurrentMaterialState = new List<MaterialStatePair>();
+            foreach (MaterialPropertyWidget mpw in ActiveMaterialProperties)
+            {
+                MaterialStatePair msp = new MaterialStatePair();
+                msp.Name  = mpw.GetName();
+                msp.Type  = mpw.GetType();
+                msp.Value = GetValueFromMaterialPropertyWidget(mpw);
+
+                CurrentMaterialState.Add(msp);
+            }
+        }
+
+        private Object GetValueFromMaterialPropertyWidget(MaterialPropertyWidget mpw) 
+        {
+            var type = mpw.GetType();
+
+            if (type == "Boolean") 
+            {
+                return ((BooleanMaterialPropertyCLI)mpw.GetMaterialPropertyCommonInterface()).GetValue();
+            }
+            else if (type == "Float") 
+            {
+                return ((FloatMaterialPropertyCLI)mpw.GetMaterialPropertyCommonInterface()).GetValue();
+            }
+            else if (type == "Vec2") 
+            {
+                return ((Vec2MaterialPropertyCLI)mpw.GetMaterialPropertyCommonInterface()).GetValue();
+            }
+            else if (type == "Vec3") 
+            {
+                return ((Vec3MaterialPropertyCLI)mpw.GetMaterialPropertyCommonInterface()).GetValue();
+            }
+            else if (type == "Vec4") 
+            {
+                return ((Vec4MaterialPropertyCLI)mpw.GetMaterialPropertyCommonInterface()).GetValue();
+            }
+            else if (type == "Texture2D") 
+            {
+                return ((Texture2DMaterialPropertyCLI)mpw.GetMaterialPropertyCommonInterface()).GetValue();
+            }
+            else if (type == "TextureCube") 
+            {
+                return ((TextureCubeMaterialPropertyCLI)mpw.GetMaterialPropertyCommonInterface()).GetValue();
+            }
+           
+            return null;
+        }
     }
+
+    class MaterialStatePair 
+    {
+        public String Name;
+        public String Type;
+        public Object Value;
+    };
 }

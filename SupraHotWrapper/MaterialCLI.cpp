@@ -127,7 +127,7 @@ namespace SupraHot
 
 			std::string materialPropertyName = msclr::interop::marshal_as<std::string>(name);
 			// Create a new NATIVE material property based on the incoming data and pass it to a CLI equivilent as an instance
-			if (type == "float")
+			if (type == "float" || type == "Float")
 			{
 				auto materialProperty = new SupraHot::Graphics::FloatMaterialProperty(materialPropertyName);
 
@@ -135,7 +135,7 @@ namespace SupraHot
 
 				return gcnew SupraHot::CLI::FloatMaterialPropertyCLI(materialProperty);
 			}
-			else if (type == "bool")
+			else if (type == "bool" || type == "Boolean")
 			{
 				auto materialProperty = new SupraHot::Graphics::BooleanMaterialProperty(materialPropertyName);
 
@@ -143,7 +143,7 @@ namespace SupraHot
 
 				return gcnew SupraHot::CLI::BooleanMaterialPropertyCLI(materialProperty);
 			}
-			else if (type == "vec2")
+			else if (type == "vec2" || type == "Vec2")
 			{
 				auto materialProperty = new SupraHot::Graphics::Vec2MaterialProperty(materialPropertyName);
 
@@ -151,7 +151,7 @@ namespace SupraHot
 
 				return gcnew SupraHot::CLI::Vec2MaterialPropertyCLI(materialProperty);
 			}
-			else if (type == "vec3")
+			else if (type == "vec3" || type == "Vec3")
 			{
 				auto materialProperty = new SupraHot::Graphics::Vec3MaterialProperty(materialPropertyName);
 
@@ -159,7 +159,7 @@ namespace SupraHot
 
 				return gcnew SupraHot::CLI::Vec3MaterialPropertyCLI(materialProperty);
 			}
-			else if (type == "vec4")
+			else if (type == "vec4" || type == "Vec4")
 			{
 				auto materialProperty = new SupraHot::Graphics::Vec4MaterialProperty(materialPropertyName);
 
@@ -167,7 +167,7 @@ namespace SupraHot
 
 				return gcnew SupraHot::CLI::Vec4MaterialPropertyCLI(materialProperty);
 			}
-			else if (type == "sampler2D")
+			else if (type == "sampler2D" || type == "Texture2D")
 			{
 				// this actually maps "sampler2D" to "Texture2D"
 				auto materialProperty = new SupraHot::Graphics::Texture2DMaterialProperty(materialPropertyName);
@@ -176,7 +176,7 @@ namespace SupraHot
 
 				return gcnew SupraHot::CLI::Texture2DMaterialPropertyCLI(materialProperty);
 			}
-			else if (type == "samplerCube")
+			else if (type == "samplerCube" || type == "TextureCube")
 			{
 				// this actually maps "samplerCube" to "TextureCube"
 				auto materialProperty = new SupraHot::Graphics::TextureCubeMaterialProperty(materialPropertyName);
