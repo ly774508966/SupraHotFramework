@@ -1,6 +1,7 @@
 #include "Frustum.h"
 #include "Mat4.h"
 #include "AABB.h"
+#include <algorithm>
 
 namespace SupraHot
 {
@@ -66,28 +67,83 @@ namespace SupraHot
 			return true;
 		}
 
-		bool Frustum::IntersectsAABB(Vec3 aabbPosition, AABB aabb)
+		bool Frustum::IntersectsAABB(AABB aabb, Vec3 position, Vec3 scale)
 		{
-			Vec3 box[] = { aabb.GetMinimum(), aabb.GetMaximum() };
+			Vec3 min = aabb.GetMinimum() * scale;
+			Vec3 max = aabb.GetMaximum() * scale;
 
-			for (uint32 i = 0; i < 6; ++i)
+			
+
+			// check box outside/inside of frustum
+			for (uint32 i = 0; i<6; i++)
 			{
-				const FrustumPlane &p = Planes[i];
+				int out = 0;
+				//out += (Planes[i].Normal.Dot(Vec3(min.x, min.y, min.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
+				out += !IntersectsSphere(position + Vec3(min.x, min.y, min.z), 0) ? 1 : 0;
 
-				const int px = static_cast<int>(p.Normal.x > 0.0f);
-				const int py = static_cast<int>(p.Normal.y > 0.0f);
-				const int pz = static_cast<int>(p.Normal.z > 0.0f);
+				//out += (Planes[i].Normal.Dot(Vec3(max.x, min.y, min.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
+				out += !IntersectsSphere(position + Vec3(max.x, min.y, min.z), 0) ? 1 : 0;
 
-				const float dp =
-					(p.Normal.x * box[px].x) +
-					(p.Normal.y * box[py].y) +
-					(p.Normal.y * box[pz].z);
+				//out += (Planes[i].Normal.Dot(Vec3(min.x, max.y, min.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
+				out += !IntersectsSphere(position + Vec3(min.x, max.y, min.z), 0) ? 1 : 0;
 
-				// Doesn't intersect if it is behind the plane
-				if (dp < -p.DistanceToOrigin) { return false; }
+				//out += (Planes[i].Normal.Dot(Vec3(max.x, max.y, min.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
+				out += !IntersectsSphere(position + Vec3(max.x, max.y, min.z), 0) ? 1 : 0;
+
+				//out += (Planes[i].Normal.Dot(Vec3(min.x, min.y, max.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
+				out += !IntersectsSphere(position + Vec3(min.x, min.y, max.z), 0) ? 1 : 0;
+
+				//out += (Planes[i].Normal.Dot(Vec3(max.x, min.y, max.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
+				out += !IntersectsSphere(position + Vec3(max.x, min.y, max.z), 0) ? 1 : 0;
+
+				//out += (Planes[i].Normal.Dot(Vec3(min.x, max.y, max.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
+				out += !IntersectsSphere(position + Vec3(min.x, max.y, max.z), 0) ? 1 : 0;
+
+				//out += (Planes[i].Normal.Dot(Vec3(max.x, max.y, max.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
+				out += !IntersectsSphere(position + Vec3(max.x, max.y, max.z), 0) ? 1 : 0;
+
+				if (out == 8) return false;
 			}
 
 			return true;
+
+
+			/*
+			
+			// Indexed for the 'index trick' later
+			vec3 box[] = { b.min, b.max };
+
+			// We have 6 planes defining the frustum
+			static const int NUM_PLANES = 6;
+			const plane3 *planes[NUM_PLANES] =
+			{ &f.n, &f.l, &f.r, &f.b, &f.t, &f.f };
+
+			// We only need to do 6 point-plane tests
+			for (int i = 0; i < NUM_PLANES; ++i)
+			{
+				// This is the current plane
+				const plane3 &p = *planes[i];
+
+				// p-vertex selection (with the index trick)
+				// According to the plane normal we can know the
+				// indices of the positive vertex
+				const int px = static_cast<int>(p.a > 0.0f);
+				const int py = static_cast<int>(p.b > 0.0f);
+				const int pz = static_cast<int>(p.c > 0.0f);
+
+				// Dot product
+				// project p-vertex on plane normal
+				// (How far is p-vertex from the origin)
+				const float dp =
+					(p.a*box[px].x) +
+					(p.b*box[py].y) +
+					(p.c*box[pz].z);
+
+				// Doesn't intersect if it is behind the plane
+				if (dp < -p.d) { return false; }
+			}
+			return true;
+			*/
 		}
 
 		FrustumPlane::FrustumPlane()
@@ -100,7 +156,7 @@ namespace SupraHot
 
 		void FrustumPlane::Normalize()
 		{
-			float scale = 1.0 / Normal.length();
+			float scale = 1.0f / Normal.length();
 			Normal.x *= scale;
 			Normal.y *= scale;
 			Normal.z *= scale;

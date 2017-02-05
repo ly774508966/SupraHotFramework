@@ -87,6 +87,8 @@ namespace SupraHot
 				meshData->FaceCount = modelMesh.FaceCount;
 				meshData->VertexCount = modelMesh.VertexCount;
 				meshData->Origin = modelMesh.CenterPosition;
+				
+				meshData->BoundingBox = AABB(modelMesh.AABBMinimum, modelMesh.AABBMaximum);
 
 				// Changed this from the stupid combos
 				// note: attri & bitfield == bitfield

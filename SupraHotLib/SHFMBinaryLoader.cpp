@@ -88,6 +88,14 @@ namespace SupraHot
 				Read(sizeof(float), 1, &mesh.CenterPosition.y, file);
 				Read(sizeof(float), 1, &mesh.CenterPosition.z, file);
 
+				Read(sizeof(float), 1, &mesh.AABBMinimum.x, file);
+				Read(sizeof(float), 1, &mesh.AABBMinimum.y, file);
+				Read(sizeof(float), 1, &mesh.AABBMinimum.z, file);
+
+				Read(sizeof(float), 1, &mesh.AABBMaximum.x, file);
+				Read(sizeof(float), 1, &mesh.AABBMaximum.y, file);
+				Read(sizeof(float), 1, &mesh.AABBMaximum.z, file);
+
 				mesh.Vertices = new float[mesh.ElementCount];
 				Read(sizeof(float), mesh.ElementCount, mesh.Vertices, file);
 

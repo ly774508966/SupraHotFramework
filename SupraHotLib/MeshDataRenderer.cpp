@@ -42,12 +42,13 @@ namespace SupraHot
 	{		
 		Mat4 viewMatrix = *camera->GetViewMatrix();
 		Mat4 projectionMatrix = *camera->GetProjectionMatrix();
-		Mat4 viewProjectionMatrix = *camera->GetViewProjectionMatrix();
+		Mat4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 
 		// Do frustum culling
 		CameraFrustum.Compute(viewProjectionMatrix);
 		FrustumCulling();
 
+		uint32 cullcount = 0;
 		for (MeshComponent* meshComponent : MeshComponents)
 		{
 			if (meshComponent->GetMeshData().get() == nullptr || meshComponent->GetMaterial() == nullptr)
@@ -73,6 +74,24 @@ namespace SupraHot
 			Mat4 modelMatrix = meshComponent->GetParent()->GetTransform().GetTransformation();
 			Mat4 modelViewMatrix = viewMatrix * modelMatrix;
 			Mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix;
+
+			Graphics::AABB& originalAABB = meshData->BoundingBox;
+			Vec3 scale = modelMatrix.GetScaleVector();
+			Vec3 scaledMaximum = originalAABB.GetMaximum() * scale;
+			Vec3 scaledMinimum = originalAABB.GetMinimum() * scale;
+			float min = std::min(scaledMinimum.x, std::min(scaledMinimum.y, scaledMinimum.z));
+			float radius = std::max(scaledMaximum.x, std::max(scaledMaximum.y, scaledMaximum.z));
+			radius = std::max(radius, std::abs(min));
+			 
+			bool intersect = CameraFrustum.IntersectsSphere(meshComponent->GetParent()->GetTransform().GetGlobalPosition(), radius);
+			//bool intersect = CameraFrustum.IntersectsSphere(modelMatrix.GetTranslationVector(), radius);
+			//bool intersect = CameraFrustum.IntersectsAABB(originalAABB, meshComponent->GetParent()->GetTransform().GetGlobalPosition(), scale);
+
+			if (!intersect)
+			{ 
+				cullcount++;
+				continue;
+			}
 
 			// Set camera matrices
 			shader->SetMat4(glGetUniformLocation(shaderProgramID, "ModelViewProjectionMatrix"), modelViewProjectionMatrix);
@@ -166,6 +185,8 @@ namespace SupraHot
 
 			shader->Detach();
 		}
+
+		//printf("Culling %d objects \n", cullcount);
 
 	}
 

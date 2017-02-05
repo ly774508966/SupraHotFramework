@@ -5,6 +5,7 @@
 #include "Vec2.h"
 #include "Face.h"
 #include <memory>
+#include "AABB.h"
 
 namespace SupraHot
 {
@@ -23,6 +24,7 @@ namespace SupraHot
 			
 			Vec3 Origin;
 			std::string Name;
+			AABB BoundingBox;
 
 			bool HasIndexData = false;
 			bool HasPositionData = false;

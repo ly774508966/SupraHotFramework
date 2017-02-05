@@ -131,9 +131,10 @@ int _tmain(int argc, char* argv[])
 		mesh.ElementCount = 0;
 
 		// compute bounding box
-		/*aiVector3D min;
-		aiVector3D max;
-		ComputeAABB(scene->mMeshes[i], min, max);*/
+		aiVector3D min(10e10f, 10e10f, 10e10f);
+		aiVector3D max(-10e10f, -10e10f, -10e10f);
+
+		//ComputeAABB(scene->mMeshes[i], min, max);
 
 		std::vector<float> floatVertexData;
 		std::vector<uint32> uint32IndexData;
@@ -165,6 +166,19 @@ int _tmain(int argc, char* argv[])
 				floatVertexData.push_back(vertex.x - meshCenter.x);
 				floatVertexData.push_back(vertex.y - meshCenter.y);
 				floatVertexData.push_back(vertex.z - meshCenter.z);
+
+				aiVector3D vec(vertex.x - meshCenter.x, vertex.y - meshCenter.y, vertex.z - meshCenter.z);
+				
+				if (vec.x < min.x) min.x = vec.x;
+				if (vec.y < min.y) min.y = vec.y;
+				if (vec.z < min.z) min.z = vec.z;
+				
+				if (vec.x > max.x) max.x = vec.x;
+				if (vec.y > max.y) max.y = vec.y;
+				if (vec.z > max.z) max.z = vec.z;
+
+				//min = std::min(vec, min);
+				//max = std::max(vec, max);
 			}
 		}
 
@@ -247,6 +261,8 @@ int _tmain(int argc, char* argv[])
 		mesh.ElementCountBytes = mesh.ElementCount * sizeof(float);
 		mesh.VertexStrideBytes = mesh.VertexStride * sizeof(float);
 		mesh.CenterPosition = meshCenter;
+		mesh.AABBMinimum = Vec3(min.x, min.y, min.z);
+		mesh.AABBMaximum = Vec3(max.x, max.y, max.z);
 
 		meshIDToVertexFloatData.push_back(floatVertexData);
 		meshIDToIndexUint32Data.push_back(uint32IndexData);

@@ -42,6 +42,11 @@ namespace SupraHot
 			return Vec3(x * s, y * s, z * s);
 		}
 
+		Vec3 Vec3::operator*(const Vec3& v) const
+		{
+			return Vec3(x * v.x, y * v.y, z * v.z);
+		}
+
 		Vec3 Vec3::operator/(float s) const
 		{
 			float invS = 1.0f / s;

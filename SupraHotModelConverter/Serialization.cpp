@@ -101,6 +101,14 @@ namespace SupraHot
 			Write(sizeof(float), 1, &mesh.CenterPosition.y);
 			Write(sizeof(float), 1, &mesh.CenterPosition.z);
 
+			Write(sizeof(float), 1, &mesh.AABBMinimum.x);
+			Write(sizeof(float), 1, &mesh.AABBMinimum.y);
+			Write(sizeof(float), 1, &mesh.AABBMinimum.z);
+
+			Write(sizeof(float), 1, &mesh.AABBMaximum.x);
+			Write(sizeof(float), 1, &mesh.AABBMaximum.y);
+			Write(sizeof(float), 1, &mesh.AABBMaximum.z);
+
 			Write(sizeof(float), mesh.ElementCount, &mesh.Vertices[0]);
 
 			Write(sizeof(uint32), mesh.IndexCount, &mesh.Indices[0]);

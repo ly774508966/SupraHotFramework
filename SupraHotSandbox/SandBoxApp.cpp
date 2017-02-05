@@ -46,7 +46,7 @@ SandBoxApp::SandBoxApp()
 SandBoxApp::~SandBoxApp()
 {
 }
-
+ 
 void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::string title)
 {
 	// First we need to initialize the filesystem
@@ -228,7 +228,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 		for (uint32 m = 0, l = static_cast<uint32>(cachedMeshes->size()); m < l; ++m)
 		{
 			MeshDataPtr meshData = cachedMeshes->at(m);
-			
+
 			Material* material = new Material(MaterialCache::GetInstance()->GetMeshDefaultMaterial());
 
 			MeshComponent* meshComponent = new MeshComponent(meshData, material, "Models/Pistol/Pistol_Model.shfm", m);
@@ -241,7 +241,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 			entity->GetTransform().SetLocalScale(Vec3(0.05f, 0.05f, 0.05f));
 			entity->GetTransform().SetRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
 
-			auto envMap = meshComponent->GetMaterial()->GetMaterialInputs()->GetMaterialPropertyByName("EnvMap");
+			/*auto envMap = meshComponent->GetMaterial()->GetMaterialInputs()->GetMaterialPropertyByName("EnvMap");
 			if (envMap != nullptr)
 			{
 				TextureCubeMaterialProperty* mp = reinterpret_cast<TextureCubeMaterialProperty*>(envMap);
@@ -268,7 +268,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 				Texture2DMaterialProperty* mp = new Texture2DMaterialProperty("DiffuseTexture");
 				mp->SetValue("Models/Pistol/albedo.png");
 				meshComponent->GetMaterial()->GetMaterialInputs()->AddMaterialProperty(mp);
-			}
+			}*/
 
 			meshComponent->UpdateShaderPermution();
 
@@ -354,6 +354,11 @@ float angle = 0.0f;
 void SandBoxApp::Update(float deltaTime)
 {
 	Entity* pistol = EntityManager::GetInstance()->GetEntities()->at(1);
+
+	MeshComponent* meshComponent = static_cast<MeshComponent*>(pistol->GetComponent("MeshComponent"));
+	Vec3 min = meshComponent->GetMeshData()->BoundingBox.GetMinimum();
+	Vec3 max = meshComponent->GetMeshData()->BoundingBox.GetMaximum();
+
 	Quat4 q;
 	q.FromEulerAngles(Vec3(-90.0f * DEGREES_TO_RADIANS, angle * DEGREES_TO_RADIANS, 0.0f));
 	pistol->GetTransform().SetRotation(q);

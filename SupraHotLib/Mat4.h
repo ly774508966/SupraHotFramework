@@ -48,7 +48,9 @@ namespace SupraHot
 			Vec3 GetUpVector() const { return Vec3(m[1][0], m[1][1], m[1][2]); }
 			Vec3 GetRightVector() const { return Vec3(m[2][0], m[2][1], m[2][2]); }
 			Vec3 GetTranslationVector() const{ return Vec3(m[3][0], m[3][1], m[3][2]); }
+			Vec3 GetScaleVector() const;
 			Mat4 ToRotationMatrix(Quat4 q);
+			float GetDeterminat() const;
 
 			Mat4 operator*(const Mat4& M) const;
 			Vec3 operator*(const Vec3& v) const;

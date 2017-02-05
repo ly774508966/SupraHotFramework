@@ -20,6 +20,11 @@ namespace SupraHot
 			this->w = w;
 		}
 
+		float Vec4::Dot(const Vec4& v)
+		{
+			return x * v.x + y * v.y + z * v.z + w * v.w;
+		}
+
 		Vec4::~Vec4()
 		{
 		}

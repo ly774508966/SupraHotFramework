@@ -23,6 +23,7 @@ namespace SupraHot
 			Vec3 operator+(const Vec3& v) const;
 			Vec3 operator-(const Vec3& v) const;
 			Vec3 operator*(float s) const;
+			Vec3 operator*(const Vec3& v) const;
 			Vec3 operator/(float s) const;
 
 			Vec3& operator+=(const Vec3& u);

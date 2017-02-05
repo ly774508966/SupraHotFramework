@@ -41,7 +41,9 @@ namespace SupraHot
 				uint32 ElementCount = 0;
 				uint32 ElementCountBytes = 0;
 				uint32 IndexCountBytes = 0;
-				Vec3 CenterPosition{};
+				Vec3 CenterPosition {};
+				Vec3 AABBMinimum {};
+				Vec3 AABBMaximum {};
 
 				float* Vertices;
 				uint32* Indices;
