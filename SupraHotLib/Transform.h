@@ -13,7 +13,6 @@ namespace SupraHot
 			Quat4 Rotation;
 			Vec3 LocalPosition;
 			Vec3 LocalScale;
-			Vec3 GlobalScale;
 
 			Mat4 Transformation;
 			Mat4 LocalTransformation;
@@ -22,6 +21,12 @@ namespace SupraHot
 
 			// This var only caches the global pos
 			Vec3 GlobalPosition;
+
+			// This var only caches the global scale
+			Vec3 GlobalScale;
+
+			// Helper function to get only the parent's scale.
+			Vec3 GetTotalScale();
 		public:
 			bool HasChanged = true;
 

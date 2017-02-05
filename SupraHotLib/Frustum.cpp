@@ -1,6 +1,7 @@
 #include "Frustum.h"
 #include "Mat4.h"
 #include "AABB.h"
+#include "Quat4.h"
 #include <algorithm>
 
 namespace SupraHot
@@ -67,43 +68,43 @@ namespace SupraHot
 			return true;
 		}
 
-		bool Frustum::IntersectsAABB(AABB aabb, Vec3 position, Vec3 scale)
+		bool Frustum::IntersectsAABB(AABB aabb, Vec3 position, Vec3 scale, Quat4 rotation)
 		{
-			Vec3 min = aabb.GetMinimum() * scale;
-			Vec3 max = aabb.GetMaximum() * scale;
-
-			
+			Vec3 min = rotation * (aabb.GetMinimum() * scale) + position;
+			Vec3 max = rotation * (aabb.GetMaximum() * scale) + position;
 
 			// check box outside/inside of frustum
 			for (uint32 i = 0; i<6; i++)
 			{
 				int out = 0;
-				//out += (Planes[i].Normal.Dot(Vec3(min.x, min.y, min.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
-				out += !IntersectsSphere(position + Vec3(min.x, min.y, min.z), 0) ? 1 : 0;
+				out += (Planes[i].Normal.Dot(Vec3(min.x, min.y, min.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
+				//out += !IntersectsSphere(position + Vec3(min.x, min.y, min.z), 0) ? 1 : 0;
 
-				//out += (Planes[i].Normal.Dot(Vec3(max.x, min.y, min.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
-				out += !IntersectsSphere(position + Vec3(max.x, min.y, min.z), 0) ? 1 : 0;
+				out += (Planes[i].Normal.Dot(Vec3(max.x, min.y, min.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
+				//out += !IntersectsSphere(position + Vec3(max.x, min.y, min.z), 0) ? 1 : 0;
 
-				//out += (Planes[i].Normal.Dot(Vec3(min.x, max.y, min.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
-				out += !IntersectsSphere(position + Vec3(min.x, max.y, min.z), 0) ? 1 : 0;
+				out += (Planes[i].Normal.Dot(Vec3(min.x, max.y, min.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
+				//out += !IntersectsSphere(position + Vec3(min.x, max.y, min.z), 0) ? 1 : 0;
 
-				//out += (Planes[i].Normal.Dot(Vec3(max.x, max.y, min.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
-				out += !IntersectsSphere(position + Vec3(max.x, max.y, min.z), 0) ? 1 : 0;
+				out += (Planes[i].Normal.Dot(Vec3(max.x, max.y, min.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
+				//out += !IntersectsSphere(position + Vec3(max.x, max.y, min.z), 0) ? 1 : 0;
 
-				//out += (Planes[i].Normal.Dot(Vec3(min.x, min.y, max.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
-				out += !IntersectsSphere(position + Vec3(min.x, min.y, max.z), 0) ? 1 : 0;
+				out += (Planes[i].Normal.Dot(Vec3(min.x, min.y, max.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
+				//out += !IntersectsSphere(position + Vec3(min.x, min.y, max.z), 0) ? 1 : 0;
 
-				//out += (Planes[i].Normal.Dot(Vec3(max.x, min.y, max.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
-				out += !IntersectsSphere(position + Vec3(max.x, min.y, max.z), 0) ? 1 : 0;
+				out += (Planes[i].Normal.Dot(Vec3(max.x, min.y, max.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
+				//out += !IntersectsSphere(position + Vec3(max.x, min.y, max.z), 0) ? 1 : 0;
 
-				//out += (Planes[i].Normal.Dot(Vec3(min.x, max.y, max.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
-				out += !IntersectsSphere(position + Vec3(min.x, max.y, max.z), 0) ? 1 : 0;
+				out += (Planes[i].Normal.Dot(Vec3(min.x, max.y, max.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
+				//out += !IntersectsSphere(position + Vec3(min.x, max.y, max.z), 0) ? 1 : 0;
 
-				//out += (Planes[i].Normal.Dot(Vec3(max.x, max.y, max.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
-				out += !IntersectsSphere(position + Vec3(max.x, max.y, max.z), 0) ? 1 : 0;
+				out += (Planes[i].Normal.Dot(Vec3(max.x, max.y, max.z)) + Planes[i].DistanceToOrigin) < 0.0 ? 1 : 0;
+				//out += !IntersectsSphere(position + Vec3(max.x, max.y, max.z), 0) ? 1 : 0;
 
 				if (out == 8) return false;
 			}
+
+			// TODO: check if the AABB goes right through the view frustum!
 
 			return true;
 
@@ -143,6 +144,98 @@ namespace SupraHot
 				if (dp < -p.d) { return false; }
 			}
 			return true;
+			*/
+
+			/*
+			Straight from one of the graphics programming gems books (can't remember which one, but I've been using this one in our games for years now)
+
+-Steve.
+
+Axis aligned bounding box is defined as follows
+(vector3 is an array of 3 floats)
+struct bbox
+{
+vector3 Min;
+vector3 Max;
+};
+
+Matrix is simply a 4x4 of floats with access operators.
+
+Enjoy.
+
+
+
+void bbox::Transform( const matrix4& M )
+
+{
+
+    vector3 AMin, AMax;
+
+    f32     a, b;
+
+    s32     i, j;
+
+
+
+    // Copy box A into min and max array.
+
+    AMin = Min;
+
+    AMax = Max;
+
+
+
+    // Begin at T.
+
+    Min = Max = M.GetTranslation();
+
+
+
+    // Find extreme points by considering product of 
+
+    // min and max with each component of M.
+
+    for( j=0; j<3; j++ )
+
+    {
+
+        for( i=0; i<3; i++ )
+
+        {
+
+            a = M(i,j) * AMin[i];
+
+            b = M(i,j) * AMax[i];
+
+
+
+            if( a < b )
+
+            {
+
+                Min[j] += a;
+
+                Max[j] += b;
+
+            }
+
+            else
+
+            {
+
+                Min[j] += b;
+
+                Max[j] += a;
+
+            }
+
+        }
+
+    }
+
+}
+
+
 			*/
 		}
 

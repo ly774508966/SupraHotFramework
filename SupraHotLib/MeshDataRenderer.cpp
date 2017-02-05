@@ -76,16 +76,23 @@ namespace SupraHot
 			Mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix;
 
 			Graphics::AABB& originalAABB = meshData->BoundingBox;
-			Vec3 scale = modelMatrix.GetScaleVector();
+			Vec3 scale = *meshComponent->GetParent()->GetTransform().GetGlobalScale();
+
+			// This could be placed and calculated somewhere else, so that we don't need to
+			// calculate it every single frame!
 			Vec3 scaledMaximum = originalAABB.GetMaximum() * scale;
 			Vec3 scaledMinimum = originalAABB.GetMinimum() * scale;
 			float min = std::min(scaledMinimum.x, std::min(scaledMinimum.y, scaledMinimum.z));
 			float radius = std::max(scaledMaximum.x, std::max(scaledMaximum.y, scaledMaximum.z));
 			radius = std::max(radius, std::abs(min));
 			 
-			bool intersect = CameraFrustum.IntersectsSphere(meshComponent->GetParent()->GetTransform().GetGlobalPosition(), radius);
-			//bool intersect = CameraFrustum.IntersectsSphere(modelMatrix.GetTranslationVector(), radius);
-			//bool intersect = CameraFrustum.IntersectsAABB(originalAABB, meshComponent->GetParent()->GetTransform().GetGlobalPosition(), scale);
+			bool intersect = CameraFrustum.IntersectsSphere(meshComponent->GetParent()->GetTransform().GetGlobalPosition(), radius);			
+
+
+			// TODO: Fix frustum culling vs aabb.
+			// float determinant; Quat4 worldRotation; Vec3 worldTranslation; Vec3 worldScale;
+			// modelMatrix.Decomposite(determinant, worldScale, worldTranslation, worldRotation);
+			// bool intersect = CameraFrustum.IntersectsAABB(originalAABB, worldTranslation, worldScale, worldRotation);
 
 			if (!intersect)
 			{ 

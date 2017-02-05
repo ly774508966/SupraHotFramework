@@ -5,6 +5,7 @@
 namespace SupraHot
 {
 	namespace Math{
+		class Quat4;
 		class Mat4;
 	}
 
@@ -40,7 +41,7 @@ namespace SupraHot
 			~Frustum();
 			void Compute(Math::Mat4& viewProjectionMatrix);
 			bool IntersectsSphere(Math::Vec3 sphereCenter, float sphereRadius);
-			bool IntersectsAABB(AABB aabb, Math::Vec3 Position, Math::Vec3 scale);
+			bool IntersectsAABB(AABB aabb, Math::Vec3 Position, Math::Vec3 scale, Math::Quat4 rotation);
 
 			FrustumPlane Planes[6];
 		};

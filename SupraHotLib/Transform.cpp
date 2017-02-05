@@ -46,9 +46,28 @@ namespace SupraHot
 			HasChanged = true;
 		}
 
+		Vec3 Transform::GetTotalScale()
+		{
+			if (HasParent())
+			{
+				return LocalScale * Parent->GetTotalScale();
+			}
+
+			return LocalScale;
+		}
+
 		void Transform::SetGlobalScale(const Vec3& scale)
 		{
-			this->GlobalScale = scale;
+			// Get Parent's Scale
+			Vec3 parentScale = GetTotalScale();
+			parentScale.x /= LocalScale.x;
+			parentScale.y /= LocalScale.y;
+			parentScale.z /= LocalScale.z;
+
+			Vec3 targetScale(scale.x / parentScale.x, scale.y / parentScale.y, scale.z / parentScale.z);
+			SetLocalScale(targetScale);
+			
+			GlobalScale = scale;			
 			HasChanged = true;
 		}
 
@@ -147,10 +166,7 @@ namespace SupraHot
 			Mat4 localScaleMatrix;
 			localScaleMatrix.SetScale(LocalScale);
 
-			Mat4 globalScaleMatrix;
-			globalScaleMatrix.SetScale(GlobalScale);
-
-			LocalTransformation = globalScaleMatrix * translationMatrix * rotationMatrix * localScaleMatrix;
+			LocalTransformation = translationMatrix * rotationMatrix * localScaleMatrix;
 		}
 
 		void Transform::UpdateTransform()
@@ -171,6 +187,7 @@ namespace SupraHot
 				Transformation = Parent->GetTransformation() * LocalTransformation;
 			}
 
+			GlobalScale = GetTotalScale();
 			GlobalPosition = Transformation * Vec3(0, 0, 0);
 		}
 
