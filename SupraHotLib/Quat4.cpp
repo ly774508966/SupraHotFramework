@@ -1,6 +1,7 @@
 #include "Quat4.h"
 #include "MathConstants.h"
 #include <cmath>
+#include "Mat4.h"
 
 namespace SupraHot
 {
@@ -245,6 +246,45 @@ namespace SupraHot
 			v.x = c1c2 * s3 + s1s2 * c3;
 			v.y = s1 * c2 * c3 + c1 * s2 * s3;
 			v.z = c1 * s2 * c3 - s1 * c2 * s3;
+		}
+
+		void Quat4::FromRotationMatrix(Mat4& rotationMatrix)
+		{
+			// assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
+			// http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
+
+			float tr = rotationMatrix.m[0][0] + rotationMatrix.m[1][1] + rotationMatrix.m[2][2];
+
+			if (tr > 0) 
+			{
+				float S = sqrt(tr + 1.0f) * 2.0f; // S=4*qw 
+				w = 0.25f * S;
+				v.x = (rotationMatrix.m[2][1] - rotationMatrix.m[1][2]) / S;
+				v.y = (rotationMatrix.m[0][2] - rotationMatrix.m[2][0]) / S;
+				v.z = (rotationMatrix.m[1][0] - rotationMatrix.m[0][1]) / S;
+			}
+			else if ((rotationMatrix.m[0][0] > rotationMatrix.m[1][1])&(rotationMatrix.m[0][0] > rotationMatrix.m[2][2]))
+			{
+				float S = sqrt(1.0f + rotationMatrix.m[0][0] - rotationMatrix.m[1][1] - rotationMatrix.m[2][2]) * 2.0f; // S=4*qx 
+				w = (rotationMatrix.m[2][1] - rotationMatrix.m[1][2]) / S;
+				v.x = 0.25f * S;
+				v.y = (rotationMatrix.m[0][1] + rotationMatrix.m[1][0]) / S;
+				v.z = (rotationMatrix.m[0][2] + rotationMatrix.m[2][0]) / S;
+			}
+			else if (rotationMatrix.m[1][1] > rotationMatrix.m[2][2]) {
+				float S = sqrt(1.0f + rotationMatrix.m[1][1] - rotationMatrix.m[0][0] - rotationMatrix.m[2][2]) * 2.0f; // S=4*qy
+				w = (rotationMatrix.m[0][2] - rotationMatrix.m[2][0]) / S;
+				v.x = (rotationMatrix.m[0][1] + rotationMatrix.m[1][0]) / S;
+				v.y = 0.25f * S;
+				v.z = (rotationMatrix.m[1][2] + rotationMatrix.m[2][1]) / S;
+			}
+			else {
+				float S = sqrt(1.0 + rotationMatrix.m[2][2] - rotationMatrix.m[0][0] - rotationMatrix.m[1][1]) * 2.0f; // S=4*qz
+				w = (rotationMatrix.m[1][0] - rotationMatrix.m[0][1]) / S;
+				v.x = (rotationMatrix.m[0][2] + rotationMatrix.m[2][0]) / S;
+				v.y = (rotationMatrix.m[1][2] + rotationMatrix.m[2][1]) / S;
+				v.z = 0.25f * S;
+			}
 		}
 	};
 };

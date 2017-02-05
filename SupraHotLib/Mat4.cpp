@@ -653,6 +653,48 @@ namespace SupraHot
 			return det;
 		}
 
+		void Mat4::Decomposite(float& determinat, Vec3& scale, Vec3& translation, Quat4& rotation) const
+		{
+			determinat = GetDeterminat();
+
+			float sx = Vec3(m[0][0], m[0][1], m[0][2]).length();
+			float sy = Vec3(m[1][0], m[1][1], m[1][2]).length();
+			float sz = Vec3(m[2][0], m[2][1], m[2][2]).length();
+
+
+			if (GetDeterminat() < 0)
+			{
+				sx = -sx;
+			}
+
+			scale.x = sx;
+			scale.y = sy;
+			scale.z = sz;
+
+			translation.x = m[3][0];
+			translation.y = m[3][1];
+			translation.z = m[3][2];
+
+			Mat4 rotationMatrix = *this;
+			float invScaleX = 1.0f / sx;
+			float invScaleY = 1.0f / sy;
+			float invScaleZ = 1.0f / sz;
+
+			rotationMatrix.m[0][0] *= invScaleX;
+			rotationMatrix.m[0][1] *= invScaleX;
+			rotationMatrix.m[0][2] *= invScaleX;
+
+			rotationMatrix.m[1][0] *= invScaleY;
+			rotationMatrix.m[1][1] *= invScaleY;
+			rotationMatrix.m[1][2] *= invScaleY;
+
+			rotationMatrix.m[2][0] *= invScaleZ;
+			rotationMatrix.m[2][1] *= invScaleZ;
+			rotationMatrix.m[2][2] *= invScaleZ;
+
+			rotation.FromRotationMatrix(rotationMatrix);
+		}
+
 		void Mat4::SetOrthographic(float left, float right, float bottom, float top, float nearPlane, float farPlane)
 		{
 			Identity();

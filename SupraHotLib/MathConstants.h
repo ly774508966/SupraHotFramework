@@ -1,3 +1,5 @@
+#pragma once
+
 namespace SupraHot
 {
 	namespace Math

@@ -51,6 +51,7 @@ namespace SupraHot
 			Vec3 GetScaleVector() const;
 			Mat4 ToRotationMatrix(Quat4 q);
 			float GetDeterminat() const;
+			void Decomposite(float& determinat, Vec3& scale, Vec3& translation, Quat4& rotation) const;
 
 			Mat4 operator*(const Mat4& M) const;
 			Vec3 operator*(const Vec3& v) const;

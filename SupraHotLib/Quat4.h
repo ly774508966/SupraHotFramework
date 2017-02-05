@@ -5,6 +5,8 @@ namespace SupraHot
 {
 	namespace Math
 	{
+		class Mat4;
+
 		class Quat4 {
 		public:
 			//members
@@ -27,6 +29,7 @@ namespace SupraHot
 			// Euler Angles (zyx ordering)
 			Vec3 ToEulerAngles();
 			void FromEulerAngles(Vec3 eulerAngles);
+			void FromRotationMatrix(Mat4& rotationMatrix);
 
 			void Normalize();
 			Quat4 Normalized() const;
