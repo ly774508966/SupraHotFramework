@@ -9,12 +9,30 @@ namespace SupraHot
 	{
 		namespace MurmurHash
 		{
-			// Platform-specific functions and macros
-#define FORCE_INLINE    __forceinline
-#define ROTL32(x,y)     _rotl(x,y)
-#define ROTL64(x,y)     _rotl64(x,y)
-#define BIG_CONSTANT(x) (x)
 
+#ifdef PLATFORM_WINDOWS
+	#define FORCE_INLINE    __forceinline
+	#define ROTL32(x,y)     _rotl(x,y)
+	#define ROTL64(x,y)     _rotl64(x,y)
+#else
+	#define FORCE_INLINE    inline
+	static FORCE_INLINE uint32_t rotl32(uint32_t x, int8_t r)
+	{
+		return (x << r) | (x >> (32 - r));
+	}
+
+	static FORCE_INLINE uint64_t rotl64(uint64_t x, int8_t r)
+	{
+		return (x << r) | (x >> (64 - r));
+	}
+
+#define ROTL32(x,y)     rotl32(x,y)
+#define ROTL64(x,y)     rotl64(x,y)
+
+#endif
+
+	#define BIG_CONSTANT(x) (x)
+			
 			std::string Hash::ToString() const
 			{
 				return std::to_string(A) + "_" + std::to_string(B);
