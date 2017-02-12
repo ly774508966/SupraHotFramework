@@ -349,24 +349,6 @@ namespace SupraHot
 				}
 			);
 
-			Vec3* globalScale = transform.GetGlobalScale();
-			obj.insert(
-			{
-				"GlobalScale", json11::Json::object
-				{
-					{
-						"X", std::to_string(globalScale->x)
-					},
-					{
-						"Y", std::to_string(globalScale->y)
-					},
-					{
-						"Z", std::to_string(globalScale->z)
-					}
-				}
-			}
-			);
-
 			Quat4* localRotation = transform.GetRotation();
 			obj.insert(
 				{
@@ -468,7 +450,7 @@ namespace SupraHot
 
 		json11::Json GenericSerializer::SerializeShaderMaterial(Graphics::MaterialInputs* shaderMaterial)
 		{
-			std::string materialName = shaderMaterial->Name;
+			std::string materialName = shaderMaterial->GetName();
 			std::string shaderDescriptionName = shaderMaterial->GetShaderDescription()->Name;
 			std::string shaderDescriptionFileName = shaderMaterial->GetShaderDescription()->FileName;
 			std::vector<Graphics::MaterialProperty*>* materialProperties = shaderMaterial->GetMaterialProperties();
@@ -526,12 +508,6 @@ namespace SupraHot
 				localScale.y = std::stof(input["LocalScale"]["Y"].string_value());
 				localScale.z = std::stof(input["LocalScale"]["Z"].string_value());
 
-				// GlobalScale
-				Vec3 globalScale;
-				globalScale.x = std::stof(input["GlobalScale"]["X"].string_value());
-				globalScale.y = std::stof(input["GlobalScale"]["Y"].string_value());
-				globalScale.z = std::stof(input["GlobalScale"]["Z"].string_value());
-
 				// Position
 				Vec3 localPosition;
 				localPosition.x = std::stof(input["LocalPosition"]["X"].string_value());
@@ -546,7 +522,6 @@ namespace SupraHot
 				rotation.w   = std::stof(input["Rotation"]["W"].string_value());
 
 				transformOutput.SetLocalScale(localScale);
-				transformOutput.SetGlobalScale(globalScale);
 				transformOutput.SetLocalPosition(localPosition);
 				transformOutput.SetRotation(rotation);
 			}
@@ -880,7 +855,7 @@ namespace SupraHot
 				}
 			}
 
-			shaderMaterial->Name = materialName;
+			shaderMaterial->SetName(materialName);
 
 		}
 	};

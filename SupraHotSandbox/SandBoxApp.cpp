@@ -34,6 +34,8 @@
 #include <MaterialCache.h>
 #include <Material.h>
 #include <Octree.h>
+#include <MurmurHash.h>
+#include <Sorting.h>
 
 using namespace SupraHot;
 
@@ -68,6 +70,10 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	
 	// Intel: 73 - 83
 	// Nvidia: ~ 450 - 460
+
+	// with culling and sorting
+	// Intel: 87 - 92, 94, 87
+	// Nvidia: 500 - ~545-555
 
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW);
@@ -125,17 +131,6 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 		EntityManager::GetInstance()->AddEntity(sponza);
 		sponza->GetTransform().SetLocalScale(Vec3(0.05f, 0.05f, 0.05f));
 
-	}
-
-	// Test WorldPosition
-	std::vector<Entity*>* children = sponza->GetChildren();
-	for (uint32 i = 0, l = children->size(); i < l; ++i)
-	{
-		Entity* e = children->at(i);
-		printf("-Pos \n");
-		e->GetTransform().GetLocalPosition()->print();
-		printf("WS-Pos \n");
-		e->GetTransform().GetGlobalPosition().print();
 	}
 
 	// Try to load a 2d .dds file
@@ -229,7 +224,8 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 		{
 			MeshDataPtr meshData = cachedMeshes->at(m);
 
-			Material* material = new Material(MaterialCache::GetInstance()->GetMeshDefaultMaterial());
+			MaterialCache::GetInstance()->LoadIntoCache("Materials/xXXxx.json");
+			Material* material = new Material(MaterialCache::GetInstance()->GetCached("Materials/xXXxx.json"));
 
 			MeshComponent* meshComponent = new MeshComponent(meshData, material, "Models/Pistol/Pistol_Model.shfm", m);
 
@@ -241,59 +237,72 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 			entity->GetTransform().SetLocalScale(Vec3(0.05f, 0.05f, 0.05f));
 			entity->GetTransform().SetRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
 
-			/*auto envMap = meshComponent->GetMaterial()->GetMaterialInputs()->GetMaterialPropertyByName("EnvMap");
-			if (envMap != nullptr)
-			{
-				TextureCubeMaterialProperty* mp = reinterpret_cast<TextureCubeMaterialProperty*>(envMap);
-				mp->SetValue("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds");
-				printf("type : %s \n", envMap->GetType().c_str());
-			}
-			else
-			{
-				TextureCubeMaterialProperty* mp = new TextureCubeMaterialProperty("EnvMap");
-				mp->SetValue("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds");
-				meshComponent->GetMaterial()->GetMaterialInputs()->AddMaterialProperty(mp);
-			}
-
-
-			auto albedo = meshComponent->GetMaterial()->GetMaterialInputs()->GetMaterialPropertyByName("DiffuseTexture");
-			if (albedo != nullptr)
-			{
-				Texture2DMaterialProperty* mp = reinterpret_cast<Texture2DMaterialProperty*>(albedo);
-				mp->SetValue("Models/Pistol/albedo.png");
-				printf("type : %s \n", albedo->GetType().c_str());
-			}
-			else
-			{
-				Texture2DMaterialProperty* mp = new Texture2DMaterialProperty("DiffuseTexture");
-				mp->SetValue("Models/Pistol/albedo.png");
-				meshComponent->GetMaterial()->GetMaterialInputs()->AddMaterialProperty(mp);
-			}*/
-
 			meshComponent->UpdateShaderPermution();
-
-			/*	if (meshComponent->GetMaterial()->GetMaterialPropertyByName("EnvMap"))
-			{
-			meshComponent->GetMaterial()->RemoveMaterialProperty(meshComponent->GetMaterial()->GetMaterialPropertyByName("EnvMap"));
-			meshComponent->UpdateShaderPermution();
-			}*/
 
 			EntityManager::GetInstance()->AddEntity(entity);
+			SHF_PRINTF("PISTOL ENTITY END \n");
+		}
 
+
+
+
+		{	// Load a test model
+			std::vector<MeshDataPtr>* cachedMeshes = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol/COPY.shfm");
+
+			for (uint32 m = 0, l = static_cast<uint32>(cachedMeshes->size()); m < l; ++m)
 			{
-				// Try loading material
-				Utils::GenericSerializer serializer("Dev/Test.json");
-				MaterialInputs deserializeTest;
-				//serializer.Deserialize(*(meshComponent->GetMaterial()));
-				//meshComponent->UpdateShaderPermution();
-				SHF_PRINTF("MaterialName : %s \n", deserializeTest.Name.c_str());
+				MeshDataPtr meshData = cachedMeshes->at(m);
 
+				MaterialCache::GetInstance()->LoadIntoCache("Materials/YYYYY.json");
+				Material* material = new Material(MaterialCache::GetInstance()->GetCached("Materials/YYYYY.json"));
+
+				MeshComponent* meshComponent = new MeshComponent(meshData, material, "Models/Pistol/COPY.shfm", m);
+
+				Entity* entity = new Entity();
+				entity->AddComponent(meshComponent);
+				entity->GetTransform().SetLocalPosition(Vec3(0.0f, 0.75f, -7.0f));
+				entity->GetTransform().SetLocalScale(Vec3(0.05f, 0.05f, 0.05f));
+				entity->GetTransform().SetRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
+
+				auto envMap = meshComponent->GetMaterial()->GetMaterialInputs()->GetMaterialPropertyByName("EnvMap");
+				if (envMap != nullptr)
+				{
+					TextureCubeMaterialProperty* mp = reinterpret_cast<TextureCubeMaterialProperty*>(envMap);
+					mp->SetValue("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds");
+					printf("type : %s \n", envMap->GetType().c_str());
+				}
+				else
+				{
+					TextureCubeMaterialProperty* mp = new TextureCubeMaterialProperty("EnvMap");
+					mp->SetValue("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds");
+					meshComponent->GetMaterial()->GetMaterialInputs()->AddMaterialProperty(mp);
+				}
+
+
+				auto albedo = meshComponent->GetMaterial()->GetMaterialInputs()->GetMaterialPropertyByName("DiffuseTexture");
+				if (albedo != nullptr)
+				{
+					Texture2DMaterialProperty* mp = reinterpret_cast<Texture2DMaterialProperty*>(albedo);
+					mp->SetValue("Models/Pistol/albedo.png");
+					printf("type : %s \n", albedo->GetType().c_str());
+				}
+				else
+				{
+					Texture2DMaterialProperty* mp = new Texture2DMaterialProperty("DiffuseTexture");
+					mp->SetValue("Models/Pistol/albedo.png");
+					meshComponent->GetMaterial()->GetMaterialInputs()->AddMaterialProperty(mp);
+				}
+				
+
+				meshComponent->UpdateShaderPermution();
+				EntityManager::GetInstance()->AddEntity(entity);
+				SHF_PRINTF("PISTOL ENTITY END \n");
 			}
 		}
+
+
+
 	}
-
-
-
 
 
 	// EulerAngles -> Quat4
@@ -319,6 +328,16 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 		//octree.GetRoot();
 
 	}
+
+	// Test murmur hash
+	{
+		std::string stringToHash = "Wurstbein";
+		Utils::MurmurHash::Hash codeHash = Utils::MurmurHash::GenerateHash_32(stringToHash.data(), int(stringToHash.length()), 0);
+		printf("Hashed value = %s \n", codeHash.ToString().c_str());
+		printf("Hashed value = %llu \n", codeHash.A);
+		printf("Hashed value = %llu \n", codeHash.B);
+		//return cacheDir + codeHash.ToString() + L".cache";
+	}
 }
 
 void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
@@ -337,7 +356,8 @@ void SandBoxApp::Render()
 
 	EnvBox->Render(FlyCamera, ShaderLibrary::GetInstance()->Skybox[uint32(ShaderLibrary::SkyboxShader::CubeMap)]);
 
-	MeshDataRenderer::GetInstance().Render(FlyCamera);
+	//MeshDataRenderer::GetInstance().Render(FlyCamera);
+	MeshDataRenderer::GetInstance().RenderMain(FlyCamera);
 
 	FBO->Detach();
 	FBO->SetReadSource(FBO->GetColorRenderTarget());

@@ -2,6 +2,7 @@
 #include "FileReader.h"
 #include "Texture2D.h"
 #include "TextureCube.h"
+#include "MurmurHash.h"
 
 namespace SupraHot
 {
@@ -44,7 +45,13 @@ namespace SupraHot
 			}
 		}
 
-		
+		void Shader::GenerateUUID()
+		{
+			std::string toHash = GetName();
+			Utils::MurmurHash::Hash hashed = Utils::MurmurHash::GenerateHash(toHash.data(), int(toHash.length()), 0);
+			UUID = hashed.A;
+		}
+
 		std::string Shader::GetName()
 		{
 			return Name;
@@ -53,6 +60,21 @@ namespace SupraHot
 		void Shader::SetName(std::string name)
 		{
 			Name = name;
+		}
+
+		uint64 Shader::GetShaderPermutationIndex()
+		{
+			return ShaderPermutationIndex;
+		}
+
+		void Shader::SetShaderPermutationIndex(uint64 shaderIndex)
+		{
+			ShaderPermutationIndex = shaderIndex;
+		}
+
+		uint64 Shader::GetUUID()
+		{
+			return UUID;
 		}
 
 		void Shader::Attach()
@@ -202,6 +224,9 @@ namespace SupraHot
 				ComputeShader = 0;
 #endif
 			}
+
+			
+			GenerateUUID();
 
 			return true;
 		}

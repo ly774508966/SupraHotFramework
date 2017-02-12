@@ -24,7 +24,7 @@ namespace SupraHot
 
 		System::String^ Material::GetName()
 		{
-			std::string& name = Instance->Name;
+			std::string& name = Instance->GetName();
 			return msclr::interop::marshal_as<System::String^>(name);
 		}
 

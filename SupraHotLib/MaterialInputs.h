@@ -16,9 +16,9 @@ namespace SupraHot
 			ShaderDescription* Description;
 			std::vector<MaterialProperty*> MaterialProperties;
 			bool HasChanged = true;
-		public:
-			std::string Name;
 
+			std::string Name;
+		public:
 			// Todo: remove this default construcotr & do some clever stuff in the CLI version
 			MaterialInputs();
 			MaterialInputs(ShaderDescription* shaderDescription);
@@ -40,6 +40,9 @@ namespace SupraHot
 
 			std::string GetMaterialFilePath();
 			void SetMaterialFilePath(std::string filePath);
+
+			void SetName(std::string name);
+			std::string GetName();
 
 			void Updated();
 			bool NeedsUpdate();

@@ -23,6 +23,8 @@ namespace SupraHot
 				   ComputeShader = 0;
 
 			uint32 ShaderProgrammID = 0;
+			uint64 ShaderPermutationIndex = 0;
+			uint64 UUID = 0;
 
 #if DEVELOPMENT == 1
 			ShaderCompileOptions Options;
@@ -32,8 +34,9 @@ namespace SupraHot
 			static void CheckError(uint32 shaderID, std::string type, std::string path);
 			static void LoadShaderInternal(std::string path, std::string &destination, ShaderCompileOptions& compileOptions);
 
+			void GenerateUUID();
 		protected:
-			std::string Name;
+			std::string Name = "";
 			
 		public:
 			uint32 LastUsedTextureSlot = 0;
@@ -52,6 +55,11 @@ namespace SupraHot
 
 			std::string GetName();
 			void SetName(std::string name);
+
+			uint64 GetShaderPermutationIndex();
+			void SetShaderPermutationIndex(uint64 shaderIndex);
+
+			uint64 GetUUID();
 
 			void Attach();
 			void Detach();

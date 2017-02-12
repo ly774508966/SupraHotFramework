@@ -97,6 +97,12 @@
     <Filter Include="Source Files\Graphics\Common\Shader">
       <UniqueIdentifier>{fe1643d9-e981-43e3-bb4e-0682b61741de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Graphics\Common\RenderCommands">
+      <UniqueIdentifier>{2f34a67d-e951-4723-8d42-a6322bf02c4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Common\RenderCommands">
+      <UniqueIdentifier>{5eb3c42d-669c-495b-a683-e26abe811919}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -309,6 +315,15 @@
     <ClInclude Include="Frustum.h">
       <Filter>Header Files\Graphics\Common</Filter>
     </ClInclude>
+    <ClInclude Include="RenderCommand.h">
+      <Filter>Header Files\Graphics\Common\RenderCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="MurmurHash.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Sorting.h">
+      <Filter>Header Files\Graphics\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -511,6 +526,15 @@
     </ClCompile>
     <ClCompile Include="Frustum.cpp">
       <Filter>Source Files\Graphics\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderCommand.cpp">
+      <Filter>Source Files\Graphics\Common\RenderCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="Sorting.cpp">
+      <Filter>Source Files\Graphics\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="MurmurHash.cpp">
+      <Filter>Source Files\Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

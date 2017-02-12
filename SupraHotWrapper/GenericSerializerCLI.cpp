@@ -61,7 +61,7 @@ namespace SupraHot
 			if (shaderDescription != nullptr)
 			{
 				SupraHot::Graphics::MaterialInputs* emptyMaterial = new SupraHot::Graphics::MaterialInputs(shaderDescription);
-				emptyMaterial->Name = msclr::interop::marshal_as<std::string>(materialName);
+				emptyMaterial->SetName(msclr::interop::marshal_as<std::string>(materialName));
 				GetHandle()->Serialize(emptyMaterial);
 				delete emptyMaterial;
 			}

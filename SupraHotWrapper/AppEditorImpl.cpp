@@ -54,7 +54,8 @@ namespace SupraHot
 			glFrontFace(GL_CCW);
 			glCullFace(GL_BACK);
 			 			 
-			MeshDataRenderer::GetInstance().Render(FlyCamera);
+			//MeshDataRenderer::GetInstance().Render(FlyCamera);
+			MeshDataRenderer::GetInstance().RenderMain(FlyCamera);
 			 
 			glDisable(GL_DEPTH_TEST);
 

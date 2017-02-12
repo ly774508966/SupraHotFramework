@@ -70,6 +70,10 @@ namespace SupraHot
 
 		bool Frustum::IntersectsAABB(AABB aabb, Vec3 position, Vec3 scale, Quat4 rotation)
 		{
+			// http://www.txutxi.com/?p=584
+			// https://www.gamedev.net/topic/347234-quickest-way-to-compute-a-new-aabb-from-an-aabb--transform/
+			// https://github.com/mrdoob/three.js/blob/dev/src/math/Frustum.js
+			// http://www.iquilezles.org/www/articles/frustumcorrect/frustumcorrect.htm
 			Vec3 min = rotation * (aabb.GetMinimum() * scale) + position;
 			Vec3 max = rotation * (aabb.GetMaximum() * scale) + position;
 

@@ -59,10 +59,10 @@ namespace SupraHot
 			Mat4 operator*=(const Mat4& t);
 
 			// perspective
-			static Mat4	ProjectPerspective(float flFOV, float flAspectRatio, float flNear, float flFar);
-			static Mat4	ProjectFrustum(float flFOV, float flAspectRatio, float flNear, float flFar);
-			static Mat4	ProjectFrustum(float flLeft, float flRight, float flBottom, float flTop, float flNear, float flFar);
-			static Mat4	ProjectOrthographic(float flLeft, float flRight, float flBottom, float flTop, float flNear, float flFar);
+			static Mat4	ProjectPerspective(float fOV, float aspectRatio, float near, float far);
+			static Mat4	ProjectFrustum(float fOV, float aspectRatio, float near, float far);
+			static Mat4	ProjectFrustum(float left, float right, float bottom, float top, float near, float far);
+			static Mat4	ProjectOrthographic(float left, float right, float bottom, float top, float nearPlane, float farPlane);
 			static Mat4	ConstructCameraView(const Vec3& vecPosition, const Vec3& vecDirection, const Vec3& vecUp);
 
 			void SetOrthographic(float flLeft, float flRight, float flBottom, float flTop, float flNear, float flFar);

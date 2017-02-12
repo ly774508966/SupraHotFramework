@@ -307,10 +307,12 @@
     <ClInclude Include="MeshDataCache.h" />
     <ClInclude Include="MeshDataLoader.h" />
     <ClInclude Include="MeshDataRenderer.h" />
+    <ClInclude Include="MurmurHash.h" />
     <ClInclude Include="Octree.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="Publisher.h" />
     <ClInclude Include="Quat4.h" />
+    <ClInclude Include="RenderCommand.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderCompileOptions.h" />
@@ -320,6 +322,7 @@
     <ClInclude Include="ShaderParser.h" />
     <ClInclude Include="SHFMBinaryLoader.h" />
     <ClInclude Include="SkyBox.h" />
+    <ClInclude Include="Sorting.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="stdafx.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">true</ExcludedFromBuild>
@@ -403,9 +406,11 @@
     <ClCompile Include="MeshDataCache.cpp" />
     <ClCompile Include="MeshDataLoader.cpp" />
     <ClCompile Include="MeshDataRenderer.cpp" />
+    <ClCompile Include="MurmurHash.cpp" />
     <ClCompile Include="Octree.cpp" />
     <ClCompile Include="Publisher.cpp" />
     <ClCompile Include="Quat4.cpp" />
+    <ClCompile Include="RenderCommand.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderCompileOptions.cpp" />
@@ -415,6 +420,7 @@
     <ClCompile Include="ShaderParser.cpp" />
     <ClCompile Include="SHFMBinaryLoader.cpp" />
     <ClCompile Include="SkyBox.cpp" />
+    <ClCompile Include="Sorting.cpp" />
     <ClCompile Include="stb_image.c" />
     <ClCompile Include="stdafx.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">true</ExcludedFromBuild>

@@ -145,6 +145,16 @@ namespace SupraHot
 			MaterialFilePath = filePath;
 		}
 
+		void MaterialInputs::SetName(std::string name)
+		{
+			this->Name = name;
+		}
+
+		std::string MaterialInputs::GetName()
+		{
+			return Name;
+		}
+
 		void MaterialInputs::Updated()
 		{
 			HasChanged = false;

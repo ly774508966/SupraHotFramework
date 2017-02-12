@@ -279,7 +279,7 @@ namespace SupraHot
 				v.z = (rotationMatrix.m[1][2] + rotationMatrix.m[2][1]) / S;
 			}
 			else {
-				float S = sqrt(1.0 + rotationMatrix.m[2][2] - rotationMatrix.m[0][0] - rotationMatrix.m[1][1]) * 2.0f; // S=4*qz
+				float S = sqrt(1.0f + rotationMatrix.m[2][2] - rotationMatrix.m[0][0] - rotationMatrix.m[1][1]) * 2.0f; // S=4*qz
 				w = (rotationMatrix.m[1][0] - rotationMatrix.m[0][1]) / S;
 				v.x = (rotationMatrix.m[0][2] + rotationMatrix.m[2][0]) / S;
 				v.y = (rotationMatrix.m[1][2] + rotationMatrix.m[2][1]) / S;

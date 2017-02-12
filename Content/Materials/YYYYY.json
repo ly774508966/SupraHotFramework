@@ -1,0 +1,1 @@
+{"MaterialName": "YYYYY", "MaterialProperties": [{"Name": "DiffuseTexture", "Type": "Texture2D", "Value": "Models/Pistol/albedo.png"}], "ShaderDescription": "MeshDefaultShader", "ShaderDescriptionFileName": "MeshDefaultShader.json"}

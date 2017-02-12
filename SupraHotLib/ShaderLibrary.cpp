@@ -40,7 +40,9 @@ namespace SupraHot
 				alreadyProcessedProperties.push_back(name);
 			}
 
+#if SHADERCOMPOSITION_OUTPUT == 1
 			SHF_PRINTF("BRDF Type: %d \n", static_cast<uint32>(description->BRDFType));
+#endif
 
 			// these values are atm hardcoded
 			// TODO: store these somewhere globally available, 
@@ -98,23 +100,31 @@ namespace SupraHot
 
 					if (isDefined)
 					{
+#if SHADERCOMPOSITION_OUTPUT == 1
 						SHF_PRINTF("Defined %s \n------\n\n", defineName.c_str());
+#endif
 						uint64 propertyBitfieldIndex = description->BitShiftedIndices[defineName];
 						shaderIndex |= propertyBitfieldIndex;
 					}
 					else
 					{
+#if SHADERCOMPOSITION_OUTPUT == 1
 						SHF_PRINTF("NOT Defined %s \n------\n\n", defineName.c_str());
+#endif
 					}
 
 				}
 			}
 
+#if SHADERCOMPOSITION_OUTPUT == 1
 			SHF_PRINTF("shaderIndex = %llu \n", shaderIndex);
+#endif
 
 			if (shadersMap->find(shaderIndex) == shadersMap->end())
 			{
+#if SHADERCOMPOSITION_OUTPUT == 1
 				SHF_PRINTF("shader is not valid \n");
+#endif
 			}
 
 			return shadersMap->at(shaderIndex);
@@ -481,6 +491,7 @@ namespace SupraHot
 
 						Shader* shader = new Shader();
 						shader->SetName(shaderDescription->Name + " [" + std::to_string(shaderIndex) + "]");
+						shader->SetShaderPermutationIndex(shaderIndex);
 						shader->LoadShaderFromFile(Shader::VERTEX_SHADER, vertexShaderPath, compileOptions);
 						shader->LoadShaderFromFile(Shader::PIXEL_SHADER, pixelShaderPath, compileOptions);
 						bool didCompile = shader->CompileShader();
@@ -499,14 +510,18 @@ namespace SupraHot
 
 							SHF_PRINTF("- - - - Current Options - - - - - \n");
 							compileOptions.Print();
+#if DEVELOPMENT == 1
 							shader->Print();
 							SHF_PRINTF("- - - - - - - - - ");
 							assert(0 == 1);
+#endif
 							while (true){};
 						}
 
+#if DEVELOPMENT == 1
 						lastCompileOptions = compileOptions;
 						lastShader = shader;
+#endif
 
 						// Store the shader inside the Shaders-Map
 						(Shaders[shaderDescription->Name])[shaderIndex] = shader;
