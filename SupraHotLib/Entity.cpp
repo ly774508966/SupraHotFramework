@@ -24,7 +24,7 @@ namespace SupraHot
 
 	Entity::~Entity()
 	{
-
+		
 	}
 
 	Transform& Entity::GetTransform()

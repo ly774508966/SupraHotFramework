@@ -247,55 +247,26 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 
 		{	// Load a test model
-			std::vector<MeshDataPtr>* cachedMeshes = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol/COPY.shfm");
+			std::vector<MeshDataPtr>* cachedMeshes2 = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol/COPY.shfm");
 
-			for (uint32 m = 0, l = static_cast<uint32>(cachedMeshes->size()); m < l; ++m)
+			for (uint32 m = 0, l = static_cast<uint32>(cachedMeshes2->size()); m < l; ++m)
 			{
-				MeshDataPtr meshData = cachedMeshes->at(m);
+				MeshDataPtr meshData = cachedMeshes2->at(m);
 
 				MaterialCache::GetInstance()->LoadIntoCache("Materials/YYYYY.json");
 				Material* material = new Material(MaterialCache::GetInstance()->GetCached("Materials/YYYYY.json"));
 
 				MeshComponent* meshComponent = new MeshComponent(meshData, material, "Models/Pistol/COPY.shfm", m);
 
-				Entity* entity = new Entity();
-				entity->AddComponent(meshComponent);
-				entity->GetTransform().SetLocalPosition(Vec3(0.0f, 0.75f, -7.0f));
-				entity->GetTransform().SetLocalScale(Vec3(0.05f, 0.05f, 0.05f));
-				entity->GetTransform().SetRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
-
-				auto envMap = meshComponent->GetMaterial()->GetMaterialInputs()->GetMaterialPropertyByName("EnvMap");
-				if (envMap != nullptr)
-				{
-					TextureCubeMaterialProperty* mp = reinterpret_cast<TextureCubeMaterialProperty*>(envMap);
-					mp->SetValue("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds");
-					printf("type : %s \n", envMap->GetType().c_str());
-				}
-				else
-				{
-					TextureCubeMaterialProperty* mp = new TextureCubeMaterialProperty("EnvMap");
-					mp->SetValue("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds");
-					meshComponent->GetMaterial()->GetMaterialInputs()->AddMaterialProperty(mp);
-				}
-
-
-				auto albedo = meshComponent->GetMaterial()->GetMaterialInputs()->GetMaterialPropertyByName("DiffuseTexture");
-				if (albedo != nullptr)
-				{
-					Texture2DMaterialProperty* mp = reinterpret_cast<Texture2DMaterialProperty*>(albedo);
-					mp->SetValue("Models/Pistol/albedo.png");
-					printf("type : %s \n", albedo->GetType().c_str());
-				}
-				else
-				{
-					Texture2DMaterialProperty* mp = new Texture2DMaterialProperty("DiffuseTexture");
-					mp->SetValue("Models/Pistol/albedo.png");
-					meshComponent->GetMaterial()->GetMaterialInputs()->AddMaterialProperty(mp);
-				}
-				
+				Entity* entity2 = new Entity();
+				entity2->SetName("2nd pistol");
+				entity2->AddComponent(meshComponent);
+				entity2->GetTransform().SetLocalPosition(Vec3(0.0f, 0.75f, -7.0f));
+				entity2->GetTransform().SetLocalScale(Vec3(0.05f, 0.05f, 0.05f));
+				entity2->GetTransform().SetRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
 
 				meshComponent->UpdateShaderPermution();
-				EntityManager::GetInstance()->AddEntity(entity);
+				EntityManager::GetInstance()->AddEntity(entity2);
 				SHF_PRINTF("PISTOL ENTITY END \n");
 			}
 		}

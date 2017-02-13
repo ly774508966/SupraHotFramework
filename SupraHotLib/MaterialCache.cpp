@@ -54,7 +54,7 @@ namespace SupraHot
 
 		void MaterialCache::Free(MaterialInputsPtr& material)
 		{
-			SHF_PRINTF("(FreeMaterial) Texture count = [%d] \n", material.use_count());
+			SHF_PRINTF("(FreeMaterial) Material count = [%d] (%s) \n", material.use_count(), material->GetMaterialFilePath().c_str());
 
 			if (material.get() != nullptr && material.use_count() <= 2 && CachedMaterials.find(material->GetMaterialFilePath()) != CachedMaterials.end())
 			{

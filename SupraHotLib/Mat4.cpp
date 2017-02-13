@@ -662,7 +662,7 @@ namespace SupraHot
 			float sz = Vec3(m[2][0], m[2][1], m[2][2]).length();
 
 
-			if (GetDeterminat() < 0)
+			if (determinat < 0)
 			{
 				sx = -sx;
 			}

@@ -70,6 +70,14 @@ namespace SupraHot
 				MeshComponents.push_back(meshComponent);
 			}
 		}
+
+
+
+		// TODO: Now that we know the position, where to insert the mesh, we can directly push it into our render command queue
+		// #1 for the start, we can just rebuild it first
+		// and later on we can do some smart things, to directly insert it.
+
+
 	}
 
 	void MeshDataRenderer::RemoveMeshComponent(MeshComponent* meshComponent)
