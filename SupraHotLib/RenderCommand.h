@@ -5,12 +5,13 @@ namespace SupraHot
 {
 	namespace Graphics
 	{
+		struct RenderCommandQueueState;
 		class RenderCommand
 		{
 		public:
 			RenderCommand();
 			virtual ~RenderCommand();
-			virtual void Execute() = 0;
+			virtual void Execute(RenderCommandQueueState* renderCommandQueueState) = 0;
 		};
 	};
 };

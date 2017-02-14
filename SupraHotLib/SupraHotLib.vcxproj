@@ -277,6 +277,8 @@
   <ItemGroup>
     <ClInclude Include="AABB.h" />
     <ClInclude Include="App.h" />
+    <ClInclude Include="BindMaterialCmd.h" />
+    <ClInclude Include="BindShaderCmd.h" />
     <ClInclude Include="BooleanMaterialProperty.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Component.h" />
@@ -313,7 +315,10 @@
     <ClInclude Include="Publisher.h" />
     <ClInclude Include="Quat4.h" />
     <ClInclude Include="RenderCommand.h" />
+    <ClInclude Include="RenderCommandQueue.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RenderMeshCmd.h" />
+    <ClInclude Include="SetCameraMatricesCmd.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderCompileOptions.h" />
     <ClInclude Include="ShaderDescription.h" />
@@ -342,6 +347,7 @@
     <ClInclude Include="TextureCubeMaterialProperty.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="UnbindShaderCmd.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Vec2MaterialProperty.h" />
@@ -378,6 +384,8 @@
     <ClCompile Include="..\Externals\include\json11\json11.cpp" />
     <ClCompile Include="AABB.cpp" />
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="BindMaterialCmd.cpp" />
+    <ClCompile Include="BindShaderCmd.cpp" />
     <ClCompile Include="BooleanMaterialProperty.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Component.cpp" />
@@ -411,7 +419,10 @@
     <ClCompile Include="Publisher.cpp" />
     <ClCompile Include="Quat4.cpp" />
     <ClCompile Include="RenderCommand.cpp" />
+    <ClCompile Include="RenderCommandQueue.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="RenderMeshCmd.cpp" />
+    <ClCompile Include="SetCameraMatricesCmd.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderCompileOptions.cpp" />
     <ClCompile Include="ShaderDescription.cpp" />
@@ -436,6 +447,7 @@
     <ClCompile Include="TextureCubeMaterialProperty.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="UnbindShaderCmd.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Vec2.cpp" />
     <ClCompile Include="Vec2MaterialProperty.cpp" />

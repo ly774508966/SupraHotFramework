@@ -324,6 +324,24 @@
     <ClInclude Include="Sorting.h">
       <Filter>Header Files\Graphics\Common</Filter>
     </ClInclude>
+    <ClInclude Include="BindShaderCmd.h">
+      <Filter>Header Files\Graphics\Common\RenderCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="UnbindShaderCmd.h">
+      <Filter>Header Files\Graphics\Common\RenderCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="BindMaterialCmd.h">
+      <Filter>Header Files\Graphics\Common\RenderCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderMeshCmd.h">
+      <Filter>Header Files\Graphics\Common\RenderCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="SetCameraMatricesCmd.h">
+      <Filter>Header Files\Graphics\Common\RenderCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderCommandQueue.h">
+      <Filter>Header Files\Graphics\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -535,6 +553,24 @@
     </ClCompile>
     <ClCompile Include="MurmurHash.cpp">
       <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="BindShaderCmd.cpp">
+      <Filter>Source Files\Graphics\Common\RenderCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="UnbindShaderCmd.cpp">
+      <Filter>Source Files\Graphics\Common\RenderCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="BindMaterialCmd.cpp">
+      <Filter>Source Files\Graphics\Common\RenderCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderMeshCmd.cpp">
+      <Filter>Source Files\Graphics\Common\RenderCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="SetCameraMatricesCmd.cpp">
+      <Filter>Source Files\Graphics\Common\RenderCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderCommandQueue.cpp">
+      <Filter>Source Files\Graphics\Common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

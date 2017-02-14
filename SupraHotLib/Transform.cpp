@@ -163,10 +163,10 @@ namespace SupraHot
 			Mat4 translationMatrix;
 			translationMatrix.SetTranslationVector(LocalPosition);
 
-			Mat4 localScaleMatrix;
-			localScaleMatrix.SetScale(LocalScale);
+			Mat4 scaleMatrix;
+			scaleMatrix.SetScale(LocalScale);
 
-			LocalTransformation = translationMatrix * rotationMatrix * localScaleMatrix;
+			LocalTransformation = translationMatrix * rotationMatrix * scaleMatrix;
 		}
 
 		void Transform::UpdateTransform()
