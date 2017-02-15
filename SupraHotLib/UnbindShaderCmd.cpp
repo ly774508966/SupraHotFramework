@@ -1,5 +1,6 @@
 #include "UnbindShaderCmd.h"
 #include "Shader.h"
+#include "RenderCommandQueue.h"
 
 namespace SupraHot
 {
@@ -16,6 +17,7 @@ namespace SupraHot
 
 		void UnbindShaderCmd::Execute(RenderCommandQueueState* renderCommandQueueState)
 		{
+			renderCommandQueueState->ActiveShader = nullptr;
 			Shader->Detach();
 		}
 	};
