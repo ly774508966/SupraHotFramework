@@ -18,7 +18,8 @@ namespace SupraHot
 		void BindMaterialCmd::Execute(RenderCommandQueueState* renderCommandQueueState)
 		{
 			renderCommandQueueState->ActiveMaterial = Material;
-			Material->GetMaterialInputs()->Apply(Material->GetShader());
+			//Material->GetMaterialInputs()->Apply(Material->GetShader());
+			Material->GetMaterialInputs()->Apply(renderCommandQueueState->ActiveShader);
 		}
 	};
 };

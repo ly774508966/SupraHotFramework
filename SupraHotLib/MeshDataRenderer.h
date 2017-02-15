@@ -21,6 +21,7 @@ namespace SupraHot
 		class Camera;
 		class Shader;
 		class MeshData;
+		class Camera;
 	}
 
 	class MeshComponent;
@@ -30,12 +31,18 @@ namespace SupraHot
 	private:
 		MeshDataRenderer();
 		std::vector<MeshComponent*> MeshComponents;
+		std::vector<MeshComponent*> TransparentComponents;
 		std::vector<Graphics::RenderCommand*> RenderCommandQueue;
 
 		// Frustum culling
 		Graphics::Frustum CameraFrustum;
+		Graphics::Camera* Camera;
+
+		void RebuildRenderCommandQueue();
+		void ClearRenderCommandQueue();
 	public:
 		static MeshDataRenderer& GetInstance();
+		void Initialize(Graphics::Camera* camera);
 
 		void AddMeshComponent(MeshComponent* meshComponent);
 		void RemoveMeshComponent(MeshComponent* meshComponent);

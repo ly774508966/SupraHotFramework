@@ -282,6 +282,7 @@
     <ClInclude Include="BooleanMaterialProperty.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ComputeFrustumCmd.h" />
     <ClInclude Include="Controls.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">true</ExcludedFromBuild>
     </ClInclude>
@@ -389,6 +390,7 @@
     <ClCompile Include="BooleanMaterialProperty.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="ComputeFrustumCmd.cpp" />
     <ClCompile Include="Controls.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">true</ExcludedFromBuild>
     </ClCompile>

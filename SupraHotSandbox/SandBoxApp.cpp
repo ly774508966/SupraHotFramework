@@ -173,6 +173,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	EnvBox->Init();
 
 	FlyCamera = new Camera(50.0f, 0.05f, 1000.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
+	MeshDataRenderer::GetInstance().Initialize(FlyCamera);
 
 
 	{	// Test smart pointer
@@ -247,7 +248,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 
 		{	// Load a test model
-			std::vector<MeshDataPtr>* cachedMeshes2 = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol/COPY.shfm");
+			std::vector<MeshDataPtr>* cachedMeshes2 = Utils::MeshDataLoader::GetInstance()->Load("Models/Pistol/Pistol_Model.shfm");
 
 			for (uint32 m = 0, l = static_cast<uint32>(cachedMeshes2->size()); m < l; ++m)
 			{
@@ -256,7 +257,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 				MaterialCache::GetInstance()->LoadIntoCache("Materials/YYYYY.json");
 				Material* material = new Material(MaterialCache::GetInstance()->GetCached("Materials/YYYYY.json"));
 
-				MeshComponent* meshComponent = new MeshComponent(meshData, material, "Models/Pistol/COPY.shfm", m);
+				MeshComponent* meshComponent = new MeshComponent(meshData, material, "Models/Pistol/Pistol_Model.shfm", m);
 
 				Entity* entity2 = new Entity();
 				entity2->SetName("2nd pistol");

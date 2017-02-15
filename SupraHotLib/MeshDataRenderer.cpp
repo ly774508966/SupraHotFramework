@@ -10,6 +10,12 @@
 
 #define BUFFEROFFSET(x) ( (char*) NULL + (x) )
 #include "Sorting.h"
+#include "BindShaderCmd.h"
+#include "SetCameraMatricesCmd.h"
+#include "BindMaterialCmd.h"
+#include "RenderMeshCmd.h"
+#include "UnbindShaderCmd.h"
+#include "ComputeFrustumCmd.h"
 
 namespace SupraHot
 {
@@ -23,6 +29,11 @@ namespace SupraHot
 		return *instance;
 	}
 
+	void MeshDataRenderer::Initialize(Graphics::Camera* camera)
+	{
+		this->Camera = camera;
+	}
+
 	void MeshDataRenderer::AddMeshComponent(MeshComponent* meshComponent)
 	{
 		// Perform sorted insert
@@ -33,6 +44,7 @@ namespace SupraHot
 		{
 			if (MeshComponents.size() > 0)
 			{
+				// The shader uuid already contains the shader permutation index!
 				uint64 shaderUUID = meshComponent->GetMaterial()->GetShader()->GetUUID();
 
 				int maxIndex = Utils::Sorting::FindMaxShaderIndex(MeshComponents, shaderUUID);
@@ -72,20 +84,76 @@ namespace SupraHot
 		}
 
 
-
-		// TODO: Now that we know the position, where to insert the mesh, we can directly push it into our render command queue
-		// #1 for the start, we can just rebuild it first
-		// and later on we can do some smart things, to directly insert it.
-
-
+		RebuildRenderCommandQueue();
 	}
 
 	void MeshDataRenderer::RemoveMeshComponent(MeshComponent* meshComponent)
 	{
+		// No bells, no whistles. Just remove the component and rebuild the CmdQueue
 		if (std::find(MeshComponents.begin(), MeshComponents.end(), meshComponent) != MeshComponents.end())
 		{
 			MeshComponents.erase(std::remove(MeshComponents.begin(), MeshComponents.end(), meshComponent), MeshComponents.end());
+			RebuildRenderCommandQueue();
 		}
+	}
+
+	void MeshDataRenderer::RebuildRenderCommandQueue()
+	{
+		// Clear queue if it is not empty
+		if (RenderCommandQueue.size() > 0)
+		{
+			ClearRenderCommandQueue();
+		}
+
+		MeshComponent* lastComponent = nullptr;
+
+		for (size_t i = 0, l = MeshComponents.size(); i < l; ++i)
+		{
+			MeshComponent* currentMeshComponent = MeshComponents[i];
+
+			if (lastComponent == nullptr)
+			{
+				RenderCommandQueue.push_back(new Graphics::BindShaderCmd(currentMeshComponent->GetMaterial()->GetShader()));
+				RenderCommandQueue.push_back(new Graphics::SetCameraMatricesCmd(this->Camera));
+				RenderCommandQueue.push_back(new Graphics::ComputeFrustumCmd(&this->CameraFrustum));
+				RenderCommandQueue.push_back(new Graphics::BindMaterialCmd(currentMeshComponent->GetMaterial()));
+				RenderCommandQueue.push_back(new Graphics::RenderMeshCmd(currentMeshComponent->GetMeshData().get()));
+
+				lastComponent = currentMeshComponent;
+			}
+			else
+			{
+				// New sub array
+				if (lastComponent->GetMaterial()->GetShader() != currentMeshComponent->GetMaterial()->GetShader())
+				{
+					RenderCommandQueue.push_back(new Graphics::UnbindShaderCmd(lastComponent->GetMaterial()->GetShader()));
+					RenderCommandQueue.push_back(new Graphics::BindShaderCmd(currentMeshComponent->GetMaterial()->GetShader()));
+					RenderCommandQueue.push_back(new Graphics::SetCameraMatricesCmd(this->Camera));
+					RenderCommandQueue.push_back(new Graphics::BindMaterialCmd(currentMeshComponent->GetMaterial()));
+					RenderCommandQueue.push_back(new Graphics::RenderMeshCmd(currentMeshComponent->GetMeshData().get()));
+				}
+				else if (lastComponent->GetMaterial() != currentMeshComponent->GetMaterial())
+				{
+					RenderCommandQueue.push_back(new Graphics::BindMaterialCmd(currentMeshComponent->GetMaterial()));
+					RenderCommandQueue.push_back(new Graphics::RenderMeshCmd(currentMeshComponent->GetMeshData().get()));
+				}
+				else
+				{
+					RenderCommandQueue.push_back(new Graphics::RenderMeshCmd(currentMeshComponent->GetMeshData().get()));
+				}
+			}
+		}
+
+		SHF_PRINTF("RenderCommandQueue size = %llu \n", RenderCommandQueue.size());
+	}
+
+	void MeshDataRenderer::ClearRenderCommandQueue()
+	{
+		for (size_t i = 0, l = RenderCommandQueue.size(); i < l; ++i)
+		{
+			delete RenderCommandQueue[i];
+		} 
+		RenderCommandQueue.clear();
 	}
 
 	void MeshDataRenderer::Render(Graphics::Camera* camera)

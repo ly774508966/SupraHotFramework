@@ -11,6 +11,7 @@ namespace SupraHot
 		class MeshData;
 		class Material;
 		class Camera;
+		class Frustum;
 
 		struct RenderCommandQueueState
 		{
@@ -18,6 +19,7 @@ namespace SupraHot
 			Graphics::MeshData* ActiveMeshData = nullptr;
 			Graphics::Material* ActiveMaterial = nullptr;
 			Graphics::Camera*   ActiveCamera = nullptr;
+			Graphics::Frustum*	ActiveFrustum = nullptr;
 		};
 
 		class RenderCommandQueue
