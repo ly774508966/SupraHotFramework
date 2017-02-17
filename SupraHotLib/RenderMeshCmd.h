@@ -4,6 +4,8 @@
 
 namespace SupraHot
 {
+	class MeshComponent;
+
 	namespace Graphics
 	{
 		class MeshData;
@@ -11,9 +13,9 @@ namespace SupraHot
 		class RenderMeshCmd : public RenderCommand
 		{
 		private:
-			Graphics::MeshData* MeshData;
+			MeshComponent* MeshComponent;
 		public:
-			RenderMeshCmd(Graphics::MeshData* rawMeshData);
+			RenderMeshCmd(SupraHot::MeshComponent* meshComponent);
 			~RenderMeshCmd();
 			void Execute(RenderCommandQueueState* renderCommandQueueState) override;
 		};

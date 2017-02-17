@@ -11,9 +11,8 @@ namespace SupraHot
 		class UnbindShaderCmd : public RenderCommand
 		{
 		private:
-			Shader* Shader;
 		public:
-			UnbindShaderCmd(Graphics::Shader* shader);
+			UnbindShaderCmd();
 			~UnbindShaderCmd();
 			void Execute(RenderCommandQueueState* renderCommandQueueState) override;
 		};

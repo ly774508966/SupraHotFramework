@@ -4,6 +4,7 @@
 #include "Frustum.h"
 #include <unordered_map>
 #include "RenderCommand.h"
+#include "RenderCommandQueue.h"
 
 /**
 *	Simple mesh data renderer.
@@ -32,7 +33,7 @@ namespace SupraHot
 		MeshDataRenderer();
 		std::vector<MeshComponent*> MeshComponents;
 		std::vector<MeshComponent*> TransparentComponents;
-		std::vector<Graphics::RenderCommand*> RenderCommandQueue;
+		Graphics::RenderCommandQueue RenderCommandQueue;
 
 		// Frustum culling
 		Graphics::Frustum CameraFrustum;
@@ -48,9 +49,12 @@ namespace SupraHot
 		void RemoveMeshComponent(MeshComponent* meshComponent);
 		void Render(Graphics::Camera* camera);
 
+		// Temp funcs
 		void RenderMain(Graphics::Camera* camera);
 		void RenderTransparency(std::vector<MeshComponent*>& transparentMeshcomponents, Graphics::Camera* camera);
 		void RenderOpaque(std::vector<MeshComponent*>& opaqueMeshComponents, Graphics::Camera* camera);
+
+		void ExecuteRenderCommandQueue();
 		
 		std::vector<MeshComponent*>& GetMeshComponents();
 

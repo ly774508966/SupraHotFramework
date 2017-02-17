@@ -14,11 +14,11 @@ namespace SupraHot
 		{
 		}
 
-		RenderCommandQueue& RenderCommandQueue::GetInstance()
+	/*	RenderCommandQueue& RenderCommandQueue::GetInstance()
 		{
 			static RenderCommandQueue* instance(new RenderCommandQueue);
 			return *instance;
-		}
+		}*/
 
 		void RenderCommandQueue::AddCommand(RenderCommand* renderCommand)
 		{
@@ -43,6 +43,11 @@ namespace SupraHot
 				delete RenderCommands[i];
 			}
 			RenderCommands.clear();
+		}
+
+		size_t RenderCommandQueue::Size()
+		{
+			return RenderCommands.size();
 		}
 	};
 };

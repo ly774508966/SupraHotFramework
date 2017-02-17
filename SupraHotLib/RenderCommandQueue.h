@@ -4,11 +4,12 @@
 
 namespace SupraHot
 {
+	class MeshComponent;
+
 	namespace Graphics
 	{
 		class RenderCommand;
 		class Shader;
-		class MeshData;
 		class Material;
 		class Camera;
 		class Frustum;
@@ -16,7 +17,7 @@ namespace SupraHot
 		struct RenderCommandQueueState
 		{
 			Graphics::Shader*   ActiveShader = nullptr;
-			Graphics::MeshData* ActiveMeshData = nullptr;
+			MeshComponent*	    ActiveMeshComponent = nullptr;
 			Graphics::Material* ActiveMaterial = nullptr;
 			Graphics::Camera*   ActiveCamera = nullptr;
 			Graphics::Frustum*	ActiveFrustum = nullptr;
@@ -25,19 +26,18 @@ namespace SupraHot
 		class RenderCommandQueue
 		{
 		private:
-			RenderCommandQueue();
 			std::vector<RenderCommand*> RenderCommands;
 
 			RenderCommandQueueState State;
-
-			
 		public:			
+			RenderCommandQueue();
 			~RenderCommandQueue();
-			static RenderCommandQueue& GetInstance();
+			// static RenderCommandQueue& GetInstance();
 
 			void AddCommand(RenderCommand* renderCommand);
 			void Execute();
 			void Clear();
+			size_t Size();
 		};
 	};
 };

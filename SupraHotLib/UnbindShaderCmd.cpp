@@ -6,9 +6,8 @@ namespace SupraHot
 {
 	namespace Graphics
 	{
-		UnbindShaderCmd::UnbindShaderCmd(Graphics::Shader* shader)
+		UnbindShaderCmd::UnbindShaderCmd()
 		{
-			this->Shader = shader;
 		}
 
 		UnbindShaderCmd::~UnbindShaderCmd()
@@ -17,8 +16,8 @@ namespace SupraHot
 
 		void UnbindShaderCmd::Execute(RenderCommandQueueState* renderCommandQueueState)
 		{
-			renderCommandQueueState->ActiveShader = nullptr;
-			Shader->Detach();
+			renderCommandQueueState->ActiveShader->Detach();
+			renderCommandQueueState->ActiveShader = nullptr;			
 		}
 	};
 };

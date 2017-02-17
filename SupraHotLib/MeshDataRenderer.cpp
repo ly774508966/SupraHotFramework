@@ -7,8 +7,6 @@
 #include "Transform.h"
 #include "MeshComponent.h"
 #include "Entity.h"
-
-#define BUFFEROFFSET(x) ( (char*) NULL + (x) )
 #include "Sorting.h"
 #include "BindShaderCmd.h"
 #include "SetCameraMatricesCmd.h"
@@ -16,6 +14,8 @@
 #include "RenderMeshCmd.h"
 #include "UnbindShaderCmd.h"
 #include "ComputeFrustumCmd.h"
+
+#define BUFFEROFFSET(x) ( (char*) NULL + (x) )
 
 namespace SupraHot
 {
@@ -100,7 +100,7 @@ namespace SupraHot
 	void MeshDataRenderer::RebuildRenderCommandQueue()
 	{
 		// Clear queue if it is not empty
-		if (RenderCommandQueue.size() > 0)
+		if (RenderCommandQueue.Size() > 0)
 		{
 			ClearRenderCommandQueue();
 		}
@@ -113,47 +113,44 @@ namespace SupraHot
 
 			if (lastComponent == nullptr)
 			{
-				RenderCommandQueue.push_back(new Graphics::BindShaderCmd(currentMeshComponent->GetMaterial()->GetShader()));
-				RenderCommandQueue.push_back(new Graphics::SetCameraMatricesCmd(this->Camera));
-				RenderCommandQueue.push_back(new Graphics::ComputeFrustumCmd(&this->CameraFrustum));
-				RenderCommandQueue.push_back(new Graphics::BindMaterialCmd(currentMeshComponent->GetMaterial()));
-				RenderCommandQueue.push_back(new Graphics::RenderMeshCmd(currentMeshComponent->GetMeshData().get()));
-
-				lastComponent = currentMeshComponent;
+				RenderCommandQueue.AddCommand(new Graphics::BindShaderCmd(currentMeshComponent->GetMaterial()->GetShader()));
+				RenderCommandQueue.AddCommand(new Graphics::SetCameraMatricesCmd(this->Camera));
+				RenderCommandQueue.AddCommand(new Graphics::ComputeFrustumCmd(&this->CameraFrustum));
+				RenderCommandQueue.AddCommand(new Graphics::BindMaterialCmd(currentMeshComponent->GetMaterial()));
+				RenderCommandQueue.AddCommand(new Graphics::RenderMeshCmd(currentMeshComponent));
 			}
 			else
 			{
 				// New sub array
 				if (lastComponent->GetMaterial()->GetShader() != currentMeshComponent->GetMaterial()->GetShader())
 				{
-					RenderCommandQueue.push_back(new Graphics::UnbindShaderCmd(lastComponent->GetMaterial()->GetShader()));
-					RenderCommandQueue.push_back(new Graphics::BindShaderCmd(currentMeshComponent->GetMaterial()->GetShader()));
-					RenderCommandQueue.push_back(new Graphics::SetCameraMatricesCmd(this->Camera));
-					RenderCommandQueue.push_back(new Graphics::BindMaterialCmd(currentMeshComponent->GetMaterial()));
-					RenderCommandQueue.push_back(new Graphics::RenderMeshCmd(currentMeshComponent->GetMeshData().get()));
+					RenderCommandQueue.AddCommand(new Graphics::UnbindShaderCmd());
+					RenderCommandQueue.AddCommand(new Graphics::BindShaderCmd(currentMeshComponent->GetMaterial()->GetShader()));
+					RenderCommandQueue.AddCommand(new Graphics::SetCameraMatricesCmd(this->Camera));
+					RenderCommandQueue.AddCommand(new Graphics::BindMaterialCmd(currentMeshComponent->GetMaterial()));
+					RenderCommandQueue.AddCommand(new Graphics::RenderMeshCmd(currentMeshComponent));
 				}
 				else if (lastComponent->GetMaterial() != currentMeshComponent->GetMaterial())
 				{
-					RenderCommandQueue.push_back(new Graphics::BindMaterialCmd(currentMeshComponent->GetMaterial()));
-					RenderCommandQueue.push_back(new Graphics::RenderMeshCmd(currentMeshComponent->GetMeshData().get()));
+					RenderCommandQueue.AddCommand(new Graphics::BindMaterialCmd(currentMeshComponent->GetMaterial()));
+					RenderCommandQueue.AddCommand(new Graphics::RenderMeshCmd(currentMeshComponent));
 				}
 				else
 				{
-					RenderCommandQueue.push_back(new Graphics::RenderMeshCmd(currentMeshComponent->GetMeshData().get()));
+					RenderCommandQueue.AddCommand(new Graphics::RenderMeshCmd(currentMeshComponent));
 				}
+
 			}
+
+			lastComponent = currentMeshComponent;
 		}
 
-		SHF_PRINTF("RenderCommandQueue size = %llu \n", RenderCommandQueue.size());
+		SHF_PRINTF("RenderCommandQueue size = %llu \n", RenderCommandQueue.Size());
 	}
 
 	void MeshDataRenderer::ClearRenderCommandQueue()
 	{
-		for (size_t i = 0, l = RenderCommandQueue.size(); i < l; ++i)
-		{
-			delete RenderCommandQueue[i];
-		} 
-		RenderCommandQueue.clear();
+		RenderCommandQueue.Clear();
 	}
 
 	void MeshDataRenderer::Render(Graphics::Camera* camera)
@@ -628,6 +625,11 @@ namespace SupraHot
 		shader->Detach();
 	}
 
+	void MeshDataRenderer::ExecuteRenderCommandQueue()
+	{
+		RenderCommandQueue.Execute();
+	}
+
 	std::vector<MeshComponent*>& MeshDataRenderer::GetMeshComponents()
 	{
 		return MeshComponents;
@@ -635,5 +637,6 @@ namespace SupraHot
 
 	MeshDataRenderer::~MeshDataRenderer()
 	{
+		RenderCommandQueue.Clear();
 	}
 };

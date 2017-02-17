@@ -73,7 +73,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 	// with culling and sorting
 	// Intel: 87 - 92, 94, 87
-	// Nvidia: 500 - ~545-555
+	// Nvidia: 500 - ~545-555 || 600 - 750
 
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW);
@@ -97,41 +97,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	// Try loading a lua script and run it.
 	Scripting::LuaVM::GetInstance()->RunFile("Scripts/test.lua");
 
-	{
-		std::string path;
-#if SPONZA == 1
-		path = "Models/Sponza/Sponza_M.shfm";
-#else 
-		path = "Models/ParisApartment/ParisApartment.shfm";
-#endif
-
-		std::vector<MeshDataPtr>* cachedMeshes = Utils::MeshDataLoader::GetInstance()->Load(path);
-
-		sponza = new Entity();
-		sponza->SetName("Sponza Root");
-
-		for (uint32 m = 0, l = static_cast<uint32>(cachedMeshes->size()); m < l; ++m)
-		{
-			MeshDataPtr meshData = cachedMeshes->at(m);
-			
-			Material* material = new Material(MaterialCache::GetInstance()->GetMeshDefaultMaterial());
-
-			MeshComponent* meshComponent = new MeshComponent(meshData, material, path, m);			
-
-			Entity* entity = new Entity();
-
-#if SPONZA == 0
-			entity->GetTransform().SetLocalRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
-#endif
-			sponza->AddChild(entity);
-			entity->AddComponent(meshComponent);
-			entity->SetName(meshComponent->GetMeshData()->Name);
-		}
-
-		EntityManager::GetInstance()->AddEntity(sponza);
-		sponza->GetTransform().SetLocalScale(Vec3(0.05f, 0.05f, 0.05f));
-
-	}
+	
 
 	// Try to load a 2d .dds file
 	Texture2D* ddsTexture = new Texture2D("DDS Test");
@@ -174,6 +140,42 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 	FlyCamera = new Camera(50.0f, 0.05f, 1000.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
 	MeshDataRenderer::GetInstance().Initialize(FlyCamera);
+
+	{
+		std::string path;
+#if SPONZA == 1
+		path = "Models/Sponza/Sponza_M.shfm";
+#else 
+		path = "Models/ParisApartment/ParisApartment.shfm";
+#endif
+
+		std::vector<MeshDataPtr>* cachedMeshes = Utils::MeshDataLoader::GetInstance()->Load(path);
+
+		sponza = new Entity();
+		sponza->SetName("Sponza Root");
+
+		for (uint32 m = 0, l = static_cast<uint32>(cachedMeshes->size()); m < l; ++m)
+		{
+			MeshDataPtr meshData = cachedMeshes->at(m);
+
+			Material* material = new Material(MaterialCache::GetInstance()->GetMeshDefaultMaterial());
+
+			MeshComponent* meshComponent = new MeshComponent(meshData, material, path, m);
+
+			Entity* entity = new Entity();
+
+#if SPONZA == 0
+			entity->GetTransform().SetLocalRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
+#endif
+			sponza->AddChild(entity);
+			entity->AddComponent(meshComponent);
+			entity->SetName(meshComponent->GetMeshData()->Name);
+		}
+
+		EntityManager::GetInstance()->AddEntity(sponza);
+		sponza->GetTransform().SetLocalScale(Vec3(0.05f, 0.05f, 0.05f));
+
+	}
 
 
 	{	// Test smart pointer
@@ -272,8 +274,6 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 			}
 		}
 
-
-
 	}
 
 
@@ -328,8 +328,9 @@ void SandBoxApp::Render()
 
 	EnvBox->Render(FlyCamera, ShaderLibrary::GetInstance()->Skybox[uint32(ShaderLibrary::SkyboxShader::CubeMap)]);
 
-	//MeshDataRenderer::GetInstance().Render(FlyCamera);
-	MeshDataRenderer::GetInstance().RenderMain(FlyCamera);
+	// MeshDataRenderer::GetInstance().Render(FlyCamera);
+	// MeshDataRenderer::GetInstance().RenderMain(FlyCamera);
+	MeshDataRenderer::GetInstance().ExecuteRenderCommandQueue();
 
 	FBO->Detach();
 	FBO->SetReadSource(FBO->GetColorRenderTarget());
