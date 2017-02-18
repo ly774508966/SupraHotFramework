@@ -103,6 +103,12 @@
     <Filter Include="Source Files\Graphics\Common\RenderCommands">
       <UniqueIdentifier>{5eb3c42d-669c-495b-a683-e26abe811919}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Graphics\Common\Lighting">
+      <UniqueIdentifier>{a3527ae9-d0de-46c8-9e51-65301bcb699c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Common\Lighting">
+      <UniqueIdentifier>{52946c52-1bea-4ad9-ac74-09390890a701}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -345,6 +351,15 @@
     <ClInclude Include="ComputeFrustumCmd.h">
       <Filter>Header Files\Graphics\Common\RenderCommands</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files\Graphics\Common\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>Header Files\Graphics\Common\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>Header Files\Graphics\Common\Lighting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -577,6 +592,15 @@
     </ClCompile>
     <ClCompile Include="ComputeFrustumCmd.cpp">
       <Filter>Source Files\Graphics\Common\RenderCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files\Graphics\Common\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp">
+      <Filter>Source Files\Graphics\Common\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>Source Files\Graphics\Common\Lighting</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -287,6 +287,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="DDSUtil.h" />
+    <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="Face.h" />
@@ -297,6 +298,7 @@
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="FullScreenQuad.h" />
     <ClInclude Include="GenericSerializer.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="LuaVM.h" />
     <ClInclude Include="Mat4.h" />
     <ClInclude Include="Material.h" />
@@ -313,6 +315,7 @@
     <ClInclude Include="MurmurHash.h" />
     <ClInclude Include="Octree.h" />
     <ClInclude Include="Platform.h" />
+    <ClInclude Include="PointLight.h" />
     <ClInclude Include="Publisher.h" />
     <ClInclude Include="Quat4.h" />
     <ClInclude Include="RenderCommand.h" />
@@ -394,6 +397,7 @@
     <ClCompile Include="Controls.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Tegra-Android'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="Face.cpp" />
@@ -404,6 +408,7 @@
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="FullScreenQuad.cpp" />
     <ClCompile Include="GenericSerializer.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="LuaVM.cpp" />
     <ClCompile Include="Mat4.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -418,6 +423,7 @@
     <ClCompile Include="MeshDataRenderer.cpp" />
     <ClCompile Include="MurmurHash.cpp" />
     <ClCompile Include="Octree.cpp" />
+    <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Publisher.cpp" />
     <ClCompile Include="Quat4.cpp" />
     <ClCompile Include="RenderCommand.cpp" />
