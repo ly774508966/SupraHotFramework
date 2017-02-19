@@ -10,8 +10,6 @@
 #include <MeshDataRenderer.h>
 #include <ShaderLibrary.h>
 #include <TextureCache.h>
-#include <TextureCubeMaterialProperty.h>
-#include <Texture2DMaterialProperty.h>
 #include <EntityManager.h>
 #include <GenericSerializer.h>
 
@@ -139,7 +137,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	EnvBox->Init();
 
 	FlyCamera = new Camera(50.0f, 0.05f, 1000.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
-	MeshDataRenderer::GetInstance().Initialize(FlyCamera);
+	MeshDataRenderer::GetInstance().Initialize(FBO, FlyCamera);
 
 	{
 		std::string path;
@@ -328,8 +326,6 @@ void SandBoxApp::Render()
 
 	EnvBox->Render(FlyCamera, ShaderLibrary::GetInstance()->Skybox[uint32(ShaderLibrary::SkyboxShader::CubeMap)]);
 
-	// MeshDataRenderer::GetInstance().Render(FlyCamera);
-	// MeshDataRenderer::GetInstance().RenderMain(FlyCamera);
 	MeshDataRenderer::GetInstance().ExecuteRenderCommandQueue();
 
 	FBO->Detach();

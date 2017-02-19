@@ -109,6 +109,12 @@
     <Filter Include="Source Files\Graphics\Common\Lighting">
       <UniqueIdentifier>{52946c52-1bea-4ad9-ac74-09390890a701}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Graphics\Common\DeferredRendering">
+      <UniqueIdentifier>{05a40931-7b35-4059-b683-9af9c06485e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\Common\DeferredRendering">
+      <UniqueIdentifier>{0968bab6-83f6-4768-a532-07bf78aff0e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -360,6 +366,9 @@
     <ClInclude Include="PointLight.h">
       <Filter>Header Files\Graphics\Common\Lighting</Filter>
     </ClInclude>
+    <ClInclude Include="GBuffer.h">
+      <Filter>Header Files\Graphics\Common\DeferredRendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -601,6 +610,9 @@
     </ClCompile>
     <ClCompile Include="PointLight.cpp">
       <Filter>Source Files\Graphics\Common\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="GBuffer.cpp">
+      <Filter>Source Files\Graphics\Common\DeferredRendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

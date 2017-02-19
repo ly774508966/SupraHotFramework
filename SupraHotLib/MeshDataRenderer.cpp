@@ -14,6 +14,8 @@
 #include "RenderMeshCmd.h"
 #include "UnbindShaderCmd.h"
 #include "ComputeFrustumCmd.h"
+#include "FrameBufferObject.h"
+#include "GBuffer.h"
 
 #define BUFFEROFFSET(x) ( (char*) NULL + (x) )
 
@@ -29,9 +31,11 @@ namespace SupraHot
 		return *instance;
 	}
 
-	void MeshDataRenderer::Initialize(Graphics::Camera* camera)
+	void MeshDataRenderer::Initialize(Graphics::FrameBufferObject* fbo, Graphics::Camera* camera)
 	{
 		this->Camera = camera;
+		this->FrameBufferObject = fbo;
+		this->GBuffer = new Graphics::GBuffer(fbo->GetWidth(), fbo->GetHeight());
 	}
 
 	void MeshDataRenderer::AddMeshComponent(MeshComponent* meshComponent)
@@ -624,6 +628,7 @@ namespace SupraHot
 
 		shader->Detach();
 	}
+
 
 	void MeshDataRenderer::ExecuteRenderCommandQueue()
 	{

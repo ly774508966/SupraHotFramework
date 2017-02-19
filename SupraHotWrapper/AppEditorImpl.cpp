@@ -33,6 +33,8 @@ namespace SupraHot
 
 			SHF_PRINTF("AppEditorImpl:: FBO->SetClearColor \n");
 			FBO->SetClearColor(0.8f, 0.8f, 0.8f);
+
+			MeshDataRenderer::GetInstance().Initialize(FBO, FlyCamera);
 		}
 
 		void AppEditorImpl::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
@@ -54,7 +56,7 @@ namespace SupraHot
 			glFrontFace(GL_CCW);
 			glCullFace(GL_BACK);
 			 			 
-			//MeshDataRenderer::GetInstance().Render(FlyCamera);
+			// MeshDataRenderer::GetInstance().ExecuteRenderCommandQueue();
 			MeshDataRenderer::GetInstance().RenderMain(FlyCamera);
 			 
 			glDisable(GL_DEPTH_TEST);

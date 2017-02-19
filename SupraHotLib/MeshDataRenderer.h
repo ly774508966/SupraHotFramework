@@ -19,10 +19,12 @@ namespace SupraHot
 
 	namespace Graphics
 	{
+		class FrameBufferObject;
 		class Camera;
 		class Shader;
 		class MeshData;
 		class Camera;
+		class GBuffer;
 	}
 
 	class MeshComponent;
@@ -39,11 +41,15 @@ namespace SupraHot
 		Graphics::Frustum CameraFrustum;
 		Graphics::Camera* Camera;
 
+		// Graphics pipeline
+		Graphics::FrameBufferObject* FrameBufferObject;
+		Graphics::GBuffer* GBuffer;
+
 		void RebuildRenderCommandQueue();
 		void ClearRenderCommandQueue();
 	public:
 		static MeshDataRenderer& GetInstance();
-		void Initialize(Graphics::Camera* camera);
+		void Initialize(Graphics::FrameBufferObject* fbo, Graphics::Camera* camera);
 
 		void AddMeshComponent(MeshComponent* meshComponent);
 		void RemoveMeshComponent(MeshComponent* meshComponent);
@@ -53,6 +59,7 @@ namespace SupraHot
 		void RenderMain(Graphics::Camera* camera);
 		void RenderTransparency(std::vector<MeshComponent*>& transparentMeshcomponents, Graphics::Camera* camera);
 		void RenderOpaque(std::vector<MeshComponent*>& opaqueMeshComponents, Graphics::Camera* camera);
+
 
 		void ExecuteRenderCommandQueue();
 		

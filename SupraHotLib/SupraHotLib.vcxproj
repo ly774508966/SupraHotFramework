@@ -297,6 +297,7 @@
     <ClInclude Include="FrameBufferObject.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="FullScreenQuad.h" />
+    <ClInclude Include="GBuffer.h" />
     <ClInclude Include="GenericSerializer.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LuaVM.h" />
@@ -407,6 +408,7 @@
     <ClCompile Include="FrameBufferObject.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="FullScreenQuad.cpp" />
+    <ClCompile Include="GBuffer.cpp" />
     <ClCompile Include="GenericSerializer.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LuaVM.cpp" />
