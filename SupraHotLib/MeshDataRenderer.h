@@ -1,15 +1,9 @@
 #pragma once
 #include <vector>
-#include "Mat4.h"
 #include "Frustum.h"
-#include <unordered_map>
-#include "RenderCommand.h"
 #include "RenderCommandQueue.h"
+#include "Texture2D.h"
 
-/**
-*	Simple mesh data renderer.
-*	(Temporary)
-*/
 namespace SupraHot
 {
 	namespace Math
@@ -42,14 +36,16 @@ namespace SupraHot
 		Graphics::Camera* Camera;
 
 		// Graphics pipeline
-		Graphics::FrameBufferObject* FrameBufferObject;
 		Graphics::GBuffer* GBuffer;
+		std::vector<Graphics::Texture2DPtr> RenderTargetQueue;
+		uint32 RenderTargetQueueSize = 4;
 
 		void RebuildRenderCommandQueue();
 		void ClearRenderCommandQueue();
 	public:
 		static MeshDataRenderer& GetInstance();
-		void Initialize(Graphics::FrameBufferObject* fbo, Graphics::Camera* camera);
+		void Initialize(Graphics::Camera* camera, uint32 width, uint32 height);
+		void Resize(uint32 width, uint32 height);
 
 		void AddMeshComponent(MeshComponent* meshComponent);
 		void RemoveMeshComponent(MeshComponent* meshComponent);
@@ -59,7 +55,6 @@ namespace SupraHot
 		void RenderMain(Graphics::Camera* camera);
 		void RenderTransparency(std::vector<MeshComponent*>& transparentMeshcomponents, Graphics::Camera* camera);
 		void RenderOpaque(std::vector<MeshComponent*>& opaqueMeshComponents, Graphics::Camera* camera);
-
 
 		void ExecuteRenderCommandQueue();
 		

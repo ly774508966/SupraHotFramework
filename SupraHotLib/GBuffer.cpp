@@ -1,5 +1,6 @@
 #include "GBuffer.h"
 #include "Shader.h"
+#include "Publisher.h"
 
 namespace SupraHot
 {
@@ -111,6 +112,9 @@ namespace SupraHot
 
 			AlbedoRT->Destroy();
 			AlbedoRT->Init(width, height);
+
+			SHF_PRINTF("GBuffer::Resize(%d, %d) \n", width, height);
 		}
+
 	};
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include "Platform.h"
 #include "Texture2D.h"
+#include "Subscriber.h"
 
 namespace SupraHot
 {

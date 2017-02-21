@@ -34,6 +34,7 @@
 #include <Octree.h>
 #include <MurmurHash.h>
 #include <Sorting.h>
+#include <Publisher.h>
 
 using namespace SupraHot;
 
@@ -137,7 +138,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	EnvBox->Init();
 
 	FlyCamera = new Camera(50.0f, 0.05f, 1000.0f, static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()));
-	MeshDataRenderer::GetInstance().Initialize(FBO, FlyCamera);
+	MeshDataRenderer::GetInstance().Initialize(FlyCamera, window->GetWidth(), window->GetHeight());
 
 	{
 		std::string path;
@@ -318,6 +319,12 @@ void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
 
 	FBO->Resize(width, height);
 	FlyCamera->AspectRatio = static_cast<float>(width) / static_cast<float>(height);
+
+	MeshDataRenderer::GetInstance().Resize(width, height);
+
+	Vec2* resizeInformation = new Vec2(static_cast<float>(width), static_cast<float>(height));
+	PubSub::Publisher::GetSystemPublisher().Publish("AppResize", resizeInformation);
+	delete resizeInformation;
 }
 
 void SandBoxApp::Render()

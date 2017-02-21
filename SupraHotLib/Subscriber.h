@@ -12,7 +12,8 @@ namespace SupraHot
 			Subscriber();
 			virtual ~Subscriber();
 			virtual bool OnMessage(std::string message, void* data) = 0;
-			void Subscribe(const Publisher& publisher, std::string message);
+			void Subscribe(Publisher& publisher, std::string message);
+			void Unsubscribe(Publisher& publisher, std::string message);
 		};
 	};
 };

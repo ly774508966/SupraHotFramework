@@ -311,7 +311,7 @@ namespace SupraHot
 			std::string baseDirectoryPath = "Shaders/Description/";
 
 			// use dirent.h here to iterate over all files inside this directory
-			std::vector<std::string> shaderDescriptions = { "MeshBasicShader.json", "MeshDefaultShader.json" };
+			std::vector<std::string> shaderDescriptions = { "MeshBasicShader.json", "MeshDefaultShader.json", "MeshGBufferShader.json" };
 
 			for (size_t i = 0, l = shaderDescriptions.size(); i < l; ++i)
 			{
@@ -500,13 +500,15 @@ namespace SupraHot
 						{
 							// Print current Compile options and last!
 							SHF_PRINTF("- - - - DID NOT COMPILED - - - - - \n");
-							/*
+							
 							SHF_PRINTF("- - - - Last Options - - - - - \n");
+#if DEVELOPMENT == 1
 							lastCompileOptions.Print();
 							if (lastShader != nullptr)
 							{
-							lastShader->Print();
-							}*/
+								lastShader->Print();
+							}
+#endif 
 
 							SHF_PRINTF("- - - - Current Options - - - - - \n");
 							compileOptions.Print();

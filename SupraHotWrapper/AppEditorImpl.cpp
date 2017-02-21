@@ -7,6 +7,7 @@
 #include <EntityManager.h>
 #include <MeshDataCache.h>
 #include <MaterialCache.h>
+#include <Publisher.h>
 
 namespace SupraHot
 {
@@ -34,13 +35,18 @@ namespace SupraHot
 			SHF_PRINTF("AppEditorImpl:: FBO->SetClearColor \n");
 			FBO->SetClearColor(0.8f, 0.8f, 0.8f);
 
-			MeshDataRenderer::GetInstance().Initialize(FBO, FlyCamera);
+			MeshDataRenderer::GetInstance().Initialize(FlyCamera, width, height);
 		}
 
 		void AppEditorImpl::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
 		{
 			FBO->Resize(width, height);
 			FlyCamera->AspectRatio = static_cast<float>(width) / static_cast<float>(height);
+			MeshDataRenderer::GetInstance().Resize(width, height);
+
+			Vec2* resizeInformation = new Vec2(static_cast<float>(width), static_cast<float>(height));
+			PubSub::Publisher::GetSystemPublisher().Publish("AppResize", resizeInformation);
+			delete resizeInformation;
 		}
 
 		void AppEditorImpl::Render()

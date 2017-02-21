@@ -31,11 +31,22 @@ namespace SupraHot
 		return *instance;
 	}
 
-	void MeshDataRenderer::Initialize(Graphics::FrameBufferObject* fbo, Graphics::Camera* camera)
+	void MeshDataRenderer::Initialize(Graphics::Camera* camera, uint32 width, uint32 height)
 	{
 		this->Camera = camera;
-		this->FrameBufferObject = fbo;
-		this->GBuffer = new Graphics::GBuffer(fbo->GetWidth(), fbo->GetHeight());
+		this->GBuffer = new Graphics::GBuffer(width, height);
+
+		for (uint32 i = 0; i < RenderTargetQueueSize; ++i)
+		{
+			Graphics::Texture2DPtr renderTarget = std::make_shared<Graphics::Texture2D>(GL_RGBA, GL_RGBA8, GL_FLOAT, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_LINEAR);
+			renderTarget->SetName("RenderTarget | " + i);
+			RenderTargetQueue.push_back(renderTarget);
+		}
+	}
+
+	void MeshDataRenderer::Resize(uint32 width, uint32 height)
+	{
+		this->GBuffer->Resize(width, height);
 	}
 
 	void MeshDataRenderer::AddMeshComponent(MeshComponent* meshComponent)
@@ -629,7 +640,6 @@ namespace SupraHot
 		shader->Detach();
 	}
 
-
 	void MeshDataRenderer::ExecuteRenderCommandQueue()
 	{
 		RenderCommandQueue.Execute();
@@ -643,5 +653,7 @@ namespace SupraHot
 	MeshDataRenderer::~MeshDataRenderer()
 	{
 		RenderCommandQueue.Clear();
+		RenderTargetQueue.clear();
+		delete GBuffer;
 	}
 };

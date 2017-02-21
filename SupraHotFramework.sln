@@ -19,6 +19,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SupraHotWrapper", "SupraHot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupraHotEditor", "SupraHotEditor\SupraHotEditor.csproj", "{14C17548-FE5C-4BC4-88AE-D83EA892B112}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SupraHotShaderValidator", "SupraHotShaderValidator\SupraHotShaderValidator.vcxproj", "{DF5D55B7-9066-4F07-A454-D8D6E89400F6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{804C2451-08E5-44C6-8D9B-B21000756D35} = {804C2451-08E5-44C6-8D9B-B21000756D35}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,7 +80,6 @@ Global
 		{35FA7A7B-41DF-4C75-97CD-629125AE9961}.Debug|Tegra-Android.ActiveCfg = Debug|x64
 		{35FA7A7B-41DF-4C75-97CD-629125AE9961}.Debug|Win32.ActiveCfg = Debug|x64
 		{35FA7A7B-41DF-4C75-97CD-629125AE9961}.Debug|x64.ActiveCfg = Debug|x64
-		{35FA7A7B-41DF-4C75-97CD-629125AE9961}.Debug|x64.Build.0 = Debug|x64
 		{35FA7A7B-41DF-4C75-97CD-629125AE9961}.Release|Any CPU.ActiveCfg = Release|x64
 		{35FA7A7B-41DF-4C75-97CD-629125AE9961}.Release|Mixed Platforms.ActiveCfg = Release|x64
 		{35FA7A7B-41DF-4C75-97CD-629125AE9961}.Release|Mixed Platforms.Build.0 = Release|x64
@@ -112,6 +116,21 @@ Global
 		{14C17548-FE5C-4BC4-88AE-D83EA892B112}.Release|Win32.ActiveCfg = Release|x86
 		{14C17548-FE5C-4BC4-88AE-D83EA892B112}.Release|x64.ActiveCfg = Release|x64
 		{14C17548-FE5C-4BC4-88AE-D83EA892B112}.Release|x64.Build.0 = Release|x64
+		{DF5D55B7-9066-4F07-A454-D8D6E89400F6}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{DF5D55B7-9066-4F07-A454-D8D6E89400F6}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{DF5D55B7-9066-4F07-A454-D8D6E89400F6}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{DF5D55B7-9066-4F07-A454-D8D6E89400F6}.Debug|Tegra-Android.ActiveCfg = Debug|Win32
+		{DF5D55B7-9066-4F07-A454-D8D6E89400F6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DF5D55B7-9066-4F07-A454-D8D6E89400F6}.Debug|Win32.Build.0 = Debug|Win32
+		{DF5D55B7-9066-4F07-A454-D8D6E89400F6}.Debug|x64.ActiveCfg = Debug|Win32
+		{DF5D55B7-9066-4F07-A454-D8D6E89400F6}.Release|Any CPU.ActiveCfg = Release|Win32
+		{DF5D55B7-9066-4F07-A454-D8D6E89400F6}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{DF5D55B7-9066-4F07-A454-D8D6E89400F6}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{DF5D55B7-9066-4F07-A454-D8D6E89400F6}.Release|Tegra-Android.ActiveCfg = Release|Win32
+		{DF5D55B7-9066-4F07-A454-D8D6E89400F6}.Release|Win32.ActiveCfg = Release|Win32
+		{DF5D55B7-9066-4F07-A454-D8D6E89400F6}.Release|Win32.Build.0 = Release|Win32
+		{DF5D55B7-9066-4F07-A454-D8D6E89400F6}.Release|x64.ActiveCfg = Release|x64
+		{DF5D55B7-9066-4F07-A454-D8D6E89400F6}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

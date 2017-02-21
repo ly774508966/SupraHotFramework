@@ -1,0 +1,67 @@
+{
+	"Description" : 
+	{
+		"Name" : "MeshGBufferShader",
+		"Description" : "Used for filling GBuffer"
+	},
+
+	"Files" : 
+	{
+		"GL" : 
+		{
+			"VertexShader" : "../GL/mesh_gbuffer.vs.glsl",
+			"PixelShader" : "../GL/mesh_gbuffer.fs.glsl"
+		},
+
+		"GLES3" : 
+		{
+			"VertexShader" : "Shaders/GLES3/mesh_gbuffer.vs.glsl",
+			"PixelShader" : "Shaders/GLES3/mesh_gbuffer.fs.glsl"
+		}	
+	},
+
+	"BRDF" : "None",
+
+	"Inject" : 
+	[
+	],
+ 
+	"Defines" :
+	{
+		"BuildAllUniformDefines" : false,
+
+		"DefinedWhen" : 
+		{
+			"_AlbedoMap" : 
+			[
+				"AlbedoMap"
+			],
+
+            "_NormalMap" : 
+            [
+                "NormalMap"
+            ]
+		}
+	},
+
+	"Dependencies" : 
+	{
+		"_AlbedoMap" : 
+		[
+			"_UV"
+		],
+
+        "_NormalMap" : 
+        [
+			"_UV",
+			"_Normals",
+            "_TangentsBiTangents"
+        ],
+		
+		"_TangentsBiTangents" : 
+		[
+			"_UV", 
+			"_Normals"
+		]
+	}
+}
