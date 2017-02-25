@@ -361,15 +361,17 @@ namespace SupraHot
 
 					for (ShaderMapLevel1Iterator iteratorLevel1 = shaderMapLevel1.begin(); iteratorLevel1 != shaderMapLevel1.end(); ++iteratorLevel1)
 					{
+						
 						Shader* shader = iteratorLevel1->second;
 						shader->Destroy();
 						delete shader;
+
 					} shaderMapLevel1.clear();
-				}
+				} Shaders.clear();
 			}
 		}
 
-		void ShaderLibrary::ProcessShaderDescription(ShaderDescription* shaderDescription)
+		bool ShaderLibrary::ProcessShaderDescription(ShaderDescription* shaderDescription)
 		{
 #if DEVELOPMENT == 1
 			ShaderCompileOptions lastCompileOptions;
@@ -516,6 +518,9 @@ namespace SupraHot
 							shader->Print();
 							SHF_PRINTF("- - - - - - - - - ");
 							assert(0 == 1);
+
+							SHF_PRINTF("BREAK \n");
+							return false;
 #endif
 							while (true){};
 						}
@@ -537,6 +542,7 @@ namespace SupraHot
 			}
 
 			SHF_PRINTF("Created %llu permutations for %s\n\n", shaderCounter, shaderDescription->Name.c_str());
+			return true;
 		}
 
 		ShaderLibrary* ShaderLibrary::GetInstance()

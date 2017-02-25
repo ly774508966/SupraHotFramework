@@ -60,7 +60,7 @@ namespace SupraHot
 			void Initialize();
 			void Destroy();
 
-			void ProcessShaderDescription(ShaderDescription* shaderDescription);
+			bool ProcessShaderDescription(ShaderDescription* shaderDescription);
 
 		private:
 			std::unordered_map<std::string, ShaderDescription*> ShaderDescriptions;

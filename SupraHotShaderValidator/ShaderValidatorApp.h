@@ -7,7 +7,21 @@ namespace SupraHot
 	class ShaderValidatorApp : public SupraHot::App
 	{
 	private:
+		FILETIME ShaderDescriptionDate = {};
+		FILETIME VertexShaderDate = {};
+		FILETIME PixelShaderDate = {};
+
 		std::string ShaderDescriptionFileName;
+		std::string VertexShaderFilePath;
+		std::string PixelShaderFilePath;
+
+		void Recompile();
+		void CheckJson();
+		void CheckVertexShader();
+		void CheckPixelShader();
+
+		FILETIME CheckFileTime(std::string pathToFile);
+
 	public:
 		ShaderValidatorApp();
 		~ShaderValidatorApp();
