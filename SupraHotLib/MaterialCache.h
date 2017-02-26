@@ -26,6 +26,7 @@ namespace SupraHot
 
 			MaterialInputsPtr& GetMeshDefaultMaterial();
 			MaterialInputsPtr& GetMeshBasicMaterial();
+			MaterialInputsPtr& GetMeshBasicGBufferMaterial();
 		};
 	};
 };

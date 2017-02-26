@@ -158,6 +158,7 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 			MeshDataPtr meshData = cachedMeshes->at(m);
 
 			Material* material = new Material(MaterialCache::GetInstance()->GetMeshDefaultMaterial());
+			//Material* material = new Material(MaterialCache::GetInstance()->GetMeshBasicGBufferMaterial());
 
 			MeshComponent* meshComponent = new MeshComponent(meshData, material, path, m);
 
@@ -333,7 +334,7 @@ void SandBoxApp::Render()
 
 	EnvBox->Render(FlyCamera, ShaderLibrary::GetInstance()->Skybox[uint32(ShaderLibrary::SkyboxShader::CubeMap)]);
 
-	MeshDataRenderer::GetInstance().ExecuteRenderCommandQueue();
+	MeshDataRenderer::GetInstance().ExecuteRenderCommandQueue(FBO);
 
 	FBO->Detach();
 	FBO->SetReadSource(FBO->GetColorRenderTarget());

@@ -369,6 +369,12 @@
     <ClInclude Include="GBuffer.h">
       <Filter>Header Files\Graphics\Common\DeferredRendering</Filter>
     </ClInclude>
+    <ClInclude Include="BindGBufferCmd.h">
+      <Filter>Header Files\Graphics\Common\RenderCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="UnbindGBufferCmd.h">
+      <Filter>Header Files\Graphics\Common\RenderCommands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -613,6 +619,12 @@
     </ClCompile>
     <ClCompile Include="GBuffer.cpp">
       <Filter>Source Files\Graphics\Common\DeferredRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="BindGBufferCmd.cpp">
+      <Filter>Source Files\Graphics\Common\RenderCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="UnbindGBufferCmd.cpp">
+      <Filter>Source Files\Graphics\Common\RenderCommands</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

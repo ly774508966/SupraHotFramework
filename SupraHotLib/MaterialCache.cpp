@@ -42,6 +42,10 @@ namespace SupraHot
 
 					LoadIntoCache("Materials/MeshBasicMaterial.json");
 				}
+
+				{
+					LoadIntoCache("Materials/MeshGBufferMaterial.json");
+				}
 		}
 
 		void MaterialCache::Cache(MaterialInputsPtr material)
@@ -106,6 +110,11 @@ namespace SupraHot
 		MaterialInputsPtr& MaterialCache::GetMeshBasicMaterial()
 		{
 			return CachedMaterials["Materials/MeshBasicMaterial.json"];
+		}
+
+		MaterialInputsPtr& MaterialCache::GetMeshBasicGBufferMaterial()
+		{
+			return CachedMaterials["Materials/MeshGBufferMaterial.json"];
 		}
 	};
 };

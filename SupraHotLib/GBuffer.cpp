@@ -27,6 +27,8 @@ namespace SupraHot
 			AlbedoRT = std::make_shared<Texture2D>(GL_RGB, GL_RGB8, GL_FLOAT, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_LINEAR);
 			AlbedoRT->SetName("GBuffer | Albedo");
 
+			Resize(width, height);
+
 			BindDefaultRenderTargets();
 			CheckStatus();
 
@@ -64,6 +66,9 @@ namespace SupraHot
 		{
 			glBindFramebuffer(GL_FRAMEBUFFER, FrameBufferHandle);
 			BindDefaultRenderTargets();
+
+			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		}
 
 		void GBuffer::Detach()

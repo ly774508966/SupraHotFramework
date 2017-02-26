@@ -18,6 +18,8 @@
 #include "GBuffer.h"
 
 #define BUFFEROFFSET(x) ( (char*) NULL + (x) )
+#include "BindGBufferCmd.h"
+#include "UnbindGBufferCmd.h"
 
 namespace SupraHot
 {
@@ -35,11 +37,12 @@ namespace SupraHot
 	{
 		this->Camera = camera;
 		this->GBuffer = new Graphics::GBuffer(width, height);
-
+		
 		for (uint32 i = 0; i < RenderTargetQueueSize; ++i)
 		{
 			Graphics::Texture2DPtr renderTarget = std::make_shared<Graphics::Texture2D>(GL_RGBA, GL_RGBA8, GL_FLOAT, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_LINEAR);
-			renderTarget->SetName("RenderTarget | " + i);
+			renderTarget->SetName("RenderTarget | " + std::to_string(i));
+			renderTarget->Init(width, height);
 			RenderTargetQueue.push_back(renderTarget);
 		}
 	}
@@ -47,6 +50,12 @@ namespace SupraHot
 	void MeshDataRenderer::Resize(uint32 width, uint32 height)
 	{
 		this->GBuffer->Resize(width, height);
+
+		for (uint32 i = 0; i < RenderTargetQueueSize; ++i)
+		{
+			RenderTargetQueue[i]->Destroy();
+			RenderTargetQueue[i]->Init(width, height);
+		}
 	}
 
 	void MeshDataRenderer::AddMeshComponent(MeshComponent* meshComponent)
@@ -120,6 +129,11 @@ namespace SupraHot
 			ClearRenderCommandQueue();
 		}
 
+		// Inject here the gbuffer binding for the selected BRDF.
+		// TODO: When we gonna use the cmd q like this, we also need to sort by BRDF-type!
+
+		//RenderCommandQueue.AddCommand(new Graphics::BindGBufferCmd(GBuffer));
+
 		MeshComponent* lastComponent = nullptr;
 
 		for (size_t i = 0, l = MeshComponents.size(); i < l; ++i)
@@ -160,6 +174,8 @@ namespace SupraHot
 			lastComponent = currentMeshComponent;
 		}
 
+		//RenderCommandQueue.AddCommand(new Graphics::UnbindGBufferCmd(GBuffer));
+
 		SHF_PRINTF("RenderCommandQueue size = %llu \n", RenderCommandQueue.Size());
 	}
 
@@ -168,6 +184,7 @@ namespace SupraHot
 		RenderCommandQueue.Clear();
 	}
 
+	// Old methods
 	void MeshDataRenderer::Render(Graphics::Camera* camera)
 	{
 		Mat4 viewMatrix = *camera->GetViewMatrix();
@@ -640,9 +657,11 @@ namespace SupraHot
 		shader->Detach();
 	}
 
-	void MeshDataRenderer::ExecuteRenderCommandQueue()
+	// New method.
+	void MeshDataRenderer::ExecuteRenderCommandQueue(Graphics::FrameBufferObject* framebuffer)
 	{
 		RenderCommandQueue.Execute();
+		// framebuffer->SetReadSource( GBuffer->GetPositionsRT().get() );
 	}
 
 	std::vector<MeshComponent*>& MeshDataRenderer::GetMeshComponents()
@@ -654,6 +673,6 @@ namespace SupraHot
 	{
 		RenderCommandQueue.Clear();
 		RenderTargetQueue.clear();
-		delete GBuffer;
+		delete GBuffer;		
 	}
 };

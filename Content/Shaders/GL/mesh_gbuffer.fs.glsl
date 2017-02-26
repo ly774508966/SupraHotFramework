@@ -32,7 +32,6 @@ void main() {
 		vec3 normal = normalize(TBNMatrix * ( texture(NormalMap, UVCoord).rgb * 2.0 - 1.0));
 		FragColor[1] = vec4(normal, 1.0);
 	#else
-		
 		#if _Normals
 			FragColor[1] = vec4(NormalVS, 1);
 		#else

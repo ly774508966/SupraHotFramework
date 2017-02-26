@@ -277,6 +277,7 @@
   <ItemGroup>
     <ClInclude Include="AABB.h" />
     <ClInclude Include="App.h" />
+    <ClInclude Include="BindGBufferCmd.h" />
     <ClInclude Include="BindMaterialCmd.h" />
     <ClInclude Include="BindShaderCmd.h" />
     <ClInclude Include="BooleanMaterialProperty.h" />
@@ -352,6 +353,7 @@
     <ClInclude Include="TextureCubeMaterialProperty.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="UnbindGBufferCmd.h" />
     <ClInclude Include="UnbindShaderCmd.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Vec2.h" />
@@ -389,6 +391,7 @@
     <ClCompile Include="..\Externals\include\json11\json11.cpp" />
     <ClCompile Include="AABB.cpp" />
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="BindGBufferCmd.cpp" />
     <ClCompile Include="BindMaterialCmd.cpp" />
     <ClCompile Include="BindShaderCmd.cpp" />
     <ClCompile Include="BooleanMaterialProperty.cpp" />
@@ -457,6 +460,7 @@
     <ClCompile Include="TextureCubeMaterialProperty.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="UnbindGBufferCmd.cpp" />
     <ClCompile Include="UnbindShaderCmd.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Vec2.cpp" />
