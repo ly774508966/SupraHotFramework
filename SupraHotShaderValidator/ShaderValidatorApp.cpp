@@ -30,6 +30,7 @@ namespace SupraHot
 		window->Init(width, height, title);
 		window->SetClearColor(0.0f, 0.75f, 0.0f, 1.0f);
 		glfwSwapInterval(0);
+		SetMainApp(this);
 	}
 
 	void ShaderValidatorApp::Resize(uint32 width, uint32 height)

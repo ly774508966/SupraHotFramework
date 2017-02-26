@@ -28,10 +28,16 @@ void main() {
 
 	FragColor[0] = vec4(VertexPositionVS, 1.0);
 
-	#if _NormalMap
-		FragColor[1] = vec4(NormalVS, 1);
+	#if _NormalMap		
+		vec3 normal = normalize(TBNMatrix * ( texture(NormalMap, UVCoord).rgb * 2.0 - 1.0));
+		FragColor[1] = vec4(normal, 1.0);
 	#else
-		FragColor[1] = vec4(0, 0, 0, 1);
+		
+		#if _Normals
+			FragColor[1] = vec4(NormalVS, 1);
+		#else
+			FragColor[1] = vec4(0, 0, 0, 1);
+		#endif
 	#endif
 
 	#if _AlbedoMap

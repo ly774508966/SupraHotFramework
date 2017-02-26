@@ -2,7 +2,7 @@
 	"Description" : 
 	{
 		"Name" : "MeshGBufferShader",
-		"Description" : "Used for filling GBuffer"
+		"Description" : "Used for filling up the GBuffer"
 	},
 
 	"Files" : 

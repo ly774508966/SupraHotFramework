@@ -33,6 +33,11 @@ namespace SupraHot
 		return MainApp;
 	}
 
+	void App::SetMainApp(App* app)
+	{
+		MainApp = app;
+	}
+
 	uint32 App::GetFPS()
 	{
 		return FPS;
