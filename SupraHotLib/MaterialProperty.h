@@ -18,6 +18,7 @@ namespace SupraHot
 			virtual void Apply(Shader* shader) = 0;
 			virtual void Unbind(Shader* shader) = 0;
 			void SetLocation(Shader* shader);
+			uint32 GetLocation();
 			std::string GetName();
 			std::string GetType();
 		};

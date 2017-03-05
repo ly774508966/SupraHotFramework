@@ -22,6 +22,11 @@ namespace SupraHot
 			}
 		}
 
+		uint32 MaterialProperty::GetLocation()
+		{
+			return GLLocation;
+		}
+
 		std::string MaterialProperty::GetName()
 		{
 			return Name;

@@ -35,26 +35,8 @@ uniform mat4 ViewMatrix;
 
 void main() {
 	#if _DiffuseTexture
-
-		vec3 dirVS = (ViewMatrix * vec4(DirLight, 0.0)).xyz;
-		float nDotL = max(dot(NormalVS, normalize(dirVS)), 0.0);
-
 		vec4 albedoColor = texture(DiffuseTexture, UVCoord);
-		vec3 diffuseColor = albedoColor.rgb;
-
-		#if _EnvMap
-			vec3 r = normalize(NormalWS);
-			vec4 diffuseEnv = texture(EnvMap, r);
-			
-			vec3 p3 = vec3(1.0 / 2.2);
-			diffuseEnv.rgb = pow(diffuseEnv.rgb, p3);
-
-			FragColor = vec4(diffuseColor.rgb * diffuseEnv.rgb + (nDotL * LightColor) , 1.0);
-		#else
-			FragColor = vec4(diffuseColor.rgb * nDotL * LightColor, albedoColor.a);
-		#endif
-
-
+		FragColor = albedoColor;
 	#else
 		#if _Normals
 			//vec3 dirVS = (ViewMatrix * vec4(DirLight, 0)).xyz;

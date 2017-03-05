@@ -35,6 +35,7 @@
 #include <MurmurHash.h>
 #include <Sorting.h>
 #include <Publisher.h>
+#include <TextureCubeMaterialProperty.h>
 
 using namespace SupraHot;
 
@@ -263,6 +264,27 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 
 				MeshComponent* meshComponent = new MeshComponent(meshData, material, "Models/Pistol/Pistol_Model.shfm", m);
 
+				auto envMap = meshComponent->GetMaterial()->GetMaterialInputs()->GetMaterialPropertyByName("EnvMap");
+				if (envMap != nullptr)
+				{
+					TextureCubeMaterialProperty* mp = reinterpret_cast<TextureCubeMaterialProperty*>(envMap);
+					mp->SetValue("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds");
+					printf("type : %s \n", envMap->GetType().c_str());
+				}
+				else
+				{
+					TextureCubeMaterialProperty* mp = new TextureCubeMaterialProperty("EnvMap");
+					mp->SetValue("Textures/MonValley_G_DirtRoad_3k/Diffuse.dds");
+					meshComponent->GetMaterial()->GetMaterialInputs()->AddMaterialProperty(mp);
+				}
+
+				// This must be called before adding the mesh component to the entity, because
+				// when the component gets registered, it also gets inserted into the mesh component vector by it's shader id.
+				// So if we just change the id, the renderer will not change it's order of rendering and inputs
+				// Either we call the update shader before adding the component,
+				// OR we call meshdatarenderer.getinstance().rebuildcmdqueue() -> This will also fix the issue.
+				meshComponent->UpdateShaderPermution(); 
+
 				Entity* entity2 = new Entity();
 				entity2->SetName("2nd pistol");
 				entity2->AddComponent(meshComponent);
@@ -270,7 +292,6 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 				entity2->GetTransform().SetLocalScale(Vec3(0.05f, 0.05f, 0.05f));
 				entity2->GetTransform().SetRotation(Quat4(Vec3(0, 0, 1), 90) * Quat4(Vec3(0, 1, 0), 90));
 
-				meshComponent->UpdateShaderPermution();
 				EntityManager::GetInstance()->AddEntity(entity2);
 				SHF_PRINTF("PISTOL ENTITY END \n");
 			}
@@ -327,7 +348,7 @@ void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
 
 	Vec2* resizeInformation = new Vec2(static_cast<float>(width), static_cast<float>(height));
 	PubSub::Publisher::GetSystemPublisher().Publish("AppResize", resizeInformation);
-	delete resizeInformation;
+	delete resizeInformation; 
 }
 
 void SandBoxApp::Render()
@@ -337,6 +358,7 @@ void SandBoxApp::Render()
 	EnvBox->Render(FlyCamera, ShaderLibrary::GetInstance()->Skybox[uint32(ShaderLibrary::SkyboxShader::CubeMap)]);
 
 	MeshDataRenderer::GetInstance().ExecuteRenderCommandQueue(FBO);
+	//MeshDataRenderer::GetInstance().RenderMain(FlyCamera);
 
 	FBO->Detach();
 	FBO->SetReadSource(FBO->GetColorRenderTarget());

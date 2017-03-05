@@ -13,6 +13,7 @@
 #include "BindMaterialCmd.h"
 #include "RenderMeshCmd.h"
 #include "UnbindShaderCmd.h"
+#include "BindBRDFRenderTargetsCmd.h"
 #include "ComputeFrustumCmd.h"
 #include "FrameBufferObject.h"
 #include "GBuffer.h"
@@ -140,7 +141,7 @@ namespace SupraHot
 
 	void MeshDataRenderer::RebuildRenderCommandQueue()
 	{
-		// Clear queue if it is not empty
+		// Clear queue if it is not empty 
 		if (RenderCommandQueue.Size() > 0)
 		{
 			ClearRenderCommandQueue();
@@ -159,6 +160,7 @@ namespace SupraHot
 
 			if (lastComponent == nullptr)
 			{
+				RenderCommandQueue.AddCommand(new Graphics::BindBRDFRenderTargetsCmd(currentMeshComponent->GetMaterial()->GetShader()->GetBRDF()));
 				RenderCommandQueue.AddCommand(new Graphics::BindShaderCmd(currentMeshComponent->GetMaterial()->GetShader()));
 				RenderCommandQueue.AddCommand(new Graphics::SetCameraMatricesCmd(this->Camera));
 				RenderCommandQueue.AddCommand(new Graphics::ComputeFrustumCmd(&this->CameraFrustum));
@@ -167,8 +169,16 @@ namespace SupraHot
 			}
 			else
 			{
-				// New sub array
-				if (lastComponent->GetMaterial()->GetShader() != currentMeshComponent->GetMaterial()->GetShader())
+				if (lastComponent->GetMaterial()->GetShader()->GetBRDF() != currentMeshComponent->GetMaterial()->GetShader()->GetBRDF())
+				{
+					// RenderCommandQueue.AddCommand(new Graphics::UnbindBRDFRenderTargetsCmd());
+					RenderCommandQueue.AddCommand(new Graphics::UnbindShaderCmd());
+					RenderCommandQueue.AddCommand(new Graphics::BindShaderCmd(currentMeshComponent->GetMaterial()->GetShader()));
+					RenderCommandQueue.AddCommand(new Graphics::SetCameraMatricesCmd(this->Camera));
+					RenderCommandQueue.AddCommand(new Graphics::BindMaterialCmd(currentMeshComponent->GetMaterial()));
+					RenderCommandQueue.AddCommand(new Graphics::RenderMeshCmd(currentMeshComponent));
+				}
+				else if (lastComponent->GetMaterial()->GetShader() != currentMeshComponent->GetMaterial()->GetShader())
 				{
 					RenderCommandQueue.AddCommand(new Graphics::UnbindShaderCmd());
 					RenderCommandQueue.AddCommand(new Graphics::BindShaderCmd(currentMeshComponent->GetMaterial()->GetShader()));
