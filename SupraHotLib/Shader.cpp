@@ -72,6 +72,16 @@ namespace SupraHot
 			ShaderPermutationIndex = shaderIndex;
 		}
 
+		void Shader::SetBRDF(BRDFType brdf)
+		{
+			BRDF = brdf;
+		}
+
+		Shader::BRDFType Shader::GetBRDF()
+		{
+			return BRDF;
+		}
+
 		uint64 Shader::GetUUID()
 		{
 			return UUID;

@@ -375,6 +375,9 @@
     <ClInclude Include="UnbindGBufferCmd.h">
       <Filter>Header Files\Graphics\Common\RenderCommands</Filter>
     </ClInclude>
+    <ClInclude Include="BindBRDFRenderTargetsCmd.h">
+      <Filter>Header Files\Graphics\Common\RenderCommands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -624,6 +627,9 @@
       <Filter>Source Files\Graphics\Common\RenderCommands</Filter>
     </ClCompile>
     <ClCompile Include="UnbindGBufferCmd.cpp">
+      <Filter>Source Files\Graphics\Common\RenderCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="BindBRDFRenderTargetsCmd.cpp">
       <Filter>Source Files\Graphics\Common\RenderCommands</Filter>
     </ClCompile>
   </ItemGroup>

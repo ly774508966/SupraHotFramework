@@ -74,6 +74,8 @@ void SandBoxApp::Init(SupraHot::uint32 width, SupraHot::uint32 height, std::stri
 	// Intel: 87 - 92, 94, 87
 	// Nvidia: 500 - ~545-555 || 600 - 750
 
+	// intel: 158 - 213 mb ram
+
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
@@ -400,6 +402,22 @@ void SandBoxApp::Update(float deltaTime)
 	{
 		FlyCamera->Position += FlyCamera->GetQuaternion().GetDown().Normalized() * deltaTime * FlyCamera->MoveSpeed;
 	}
+
+	/*if (Controls::GetInstance()->IsKeyDown(GLFW_KEY_P))
+	{
+		FILE* file = Utils::FileSystem::GetInstance()->GetFile("Dev", "output.txt", "w");
+
+		std::vector<MeshComponent*>& meshComponents = MeshDataRenderer::GetInstance().GetMeshComponents();
+		for (size_t i = 0, l = meshComponents.size(); i < l; ++i)
+		{
+			MeshComponent* meshComp = meshComponents.at(i);
+			fprintf(file, "BRDF: %d | Shader: %llu | Material: %llu \n", meshComp->GetMaterial()->GetShader()->GetBRDF(), meshComp->GetMaterial()->GetShader()->GetUUID(), meshComp->GetMaterial()->GetUUID());
+			//printf("BRDF: %d | Shader: %llu | Material: %llu \n", meshComp->GetMaterial()->GetShader()->GetBRDF(), meshComp->GetMaterial()->GetShader()->GetUUID(), meshComp->GetMaterial()->GetUUID());
+		}
+
+		fclose(file);
+
+	}*/
 #endif
 
 	EntityManager::GetInstance()->Update(deltaTime);

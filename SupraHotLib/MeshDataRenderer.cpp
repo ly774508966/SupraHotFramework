@@ -62,42 +62,59 @@ namespace SupraHot
 	{
 		// Perform sorted insert
 
-		// Sort-in the mesh component
-		// First find a valid place for the shader being used and then look for a spot for the material!
+		// Check if mesh vector is empty or not
 		if (std::find(MeshComponents.begin(), MeshComponents.end(), meshComponent) == MeshComponents.end())
 		{
 			if (MeshComponents.size() > 0)
 			{
-				// The shader uuid already contains the shader permutation index!
-				uint64 shaderUUID = meshComponent->GetMaterial()->GetShader()->GetUUID();
 
-				int maxIndex = Utils::Sorting::FindMaxShaderIndex(MeshComponents, shaderUUID);
+				// Sort first by Shader-BRDF type
+				Graphics::Shader::BRDFType brdfType = meshComponent->GetMaterial()->GetShader()->GetBRDF();
+				int maxBRDFIndex = Utils::Sorting::FindMaxBRDFIndex(MeshComponents, 0, static_cast<int>(MeshComponents.size()) - 1, brdfType);
 
-				if (maxIndex == -1)
+				if (maxBRDFIndex == -1)
 				{
 					// Find spot to insert the shader.
-					int insertionIndex = Utils::Sorting::FindShaderInsertionIndex(MeshComponents, shaderUUID);
-					MeshComponents.insert(MeshComponents.begin() + insertionIndex, meshComponent);					
+					int insertionIndex = Utils::Sorting::FindBRDFInsertionIndex(MeshComponents, 0, static_cast<int>(MeshComponents.size()), brdfType);
+					MeshComponents.insert(MeshComponents.begin() + insertionIndex + 1, meshComponent);
 				}
 				else
 				{
-					int minIndex = Utils::Sorting::FindMinShaderIndex(MeshComponents, 0, maxIndex, shaderUUID);
+					
+					int minBRDFIndex = Utils::Sorting::FindMinBRDFIndex(MeshComponents, 0, maxBRDFIndex, brdfType);
 
-					// Now we need to sort in the mesh component into the sub array of [minIndex, maxIndex] by it's material UUID
-					// #1 Check the max index of the given material uuid,
-					// if the max index is -1, then we just insert the new material at the maxIndex of the Shader
-					// If it is > -1, then we insert it at the max material index
+					// Sort-in the mesh component
+					// First find a valid place for the shader being used and then look for a spot for the material!
+					// The shader uuid already contains the shader permutation index!
+					uint64 shaderUUID = meshComponent->GetMaterial()->GetShader()->GetUUID();
 
-					uint64 materialUUID = meshComponent->GetMaterial()->GetUUID(); 
-					int maxMaterialIndex = Utils::Sorting::FindMaxMaterialIndex(MeshComponents, minIndex, maxIndex, materialUUID);
+					int maxShaderIndex = Utils::Sorting::FindMaxShaderIndex(MeshComponents, minBRDFIndex, maxBRDFIndex, shaderUUID);
 
-					if (maxMaterialIndex == -1)
+					if (maxShaderIndex == -1)
 					{
-						MeshComponents.insert(MeshComponents.begin() + maxIndex, meshComponent);
+						// Find spot to insert the shader.
+						int insertionIndex = Utils::Sorting::FindShaderInsertionIndex(MeshComponents, minBRDFIndex, maxBRDFIndex, shaderUUID);
+						MeshComponents.insert(MeshComponents.begin() + insertionIndex + 1, meshComponent);
 					}
 					else
 					{
-						MeshComponents.insert(MeshComponents.begin() + maxMaterialIndex, meshComponent);
+						int minShaderIndex = Utils::Sorting::FindMinShaderIndex(MeshComponents, minBRDFIndex, maxShaderIndex, shaderUUID);
+
+						// Now we need to sort in the mesh component into the sub array of [minShaderIndex, maxShaderIndex] by it's material UUID
+						// #1 Check the max index of the given material uuid,
+						// if the max index is -1, then we just insert the new material at the maxShaderIndex of the Shader
+						// If it is > -1, then we insert it at the max material index
+						uint64 materialUUID = meshComponent->GetMaterial()->GetUUID();
+						int maxMaterialIndex = Utils::Sorting::FindMaxMaterialIndex(MeshComponents, minShaderIndex, maxShaderIndex, materialUUID);
+
+						if (maxMaterialIndex == -1)
+						{
+							MeshComponents.insert(MeshComponents.begin() + maxShaderIndex + 1, meshComponent);
+						}
+						else
+						{
+							MeshComponents.insert(MeshComponents.begin() + maxMaterialIndex + 1, meshComponent);
+						}
 					}
 				}
 			}
@@ -168,7 +185,6 @@ namespace SupraHot
 				{
 					RenderCommandQueue.AddCommand(new Graphics::RenderMeshCmd(currentMeshComponent));
 				}
-
 			}
 
 			lastComponent = currentMeshComponent;
@@ -176,7 +192,7 @@ namespace SupraHot
 
 		//RenderCommandQueue.AddCommand(new Graphics::UnbindGBufferCmd(GBuffer));
 
-		SHF_PRINTF("RenderCommandQueue size = %llu \n", RenderCommandQueue.Size());
+		// SHF_PRINTF("RenderCommandQueue size = %llu \n", RenderCommandQueue.Size());
 	}
 
 	void MeshDataRenderer::ClearRenderCommandQueue()

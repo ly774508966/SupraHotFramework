@@ -79,29 +79,29 @@ namespace SupraHot
 			std::string shaderDescription = json["Description"]["Description"].string_value();
 
 			std::string brdfType = json["BRDF"].string_value();
-			ShaderLibrary::BRDFType brdf = ShaderLibrary::BRDFType::None;
+			Shader::BRDFType brdf = Shader::BRDFType::None;
 
 			if (brdfType.length() > 0)
 			{
 				if (brdfType.find("GGX") != -1)
 				{
-					brdf = ShaderLibrary::BRDFType::GGX;
+					brdf = Shader::BRDFType::GGX;
 				}
 				else if (brdfType.find("Skin") != -1)
 				{
-					brdf = ShaderLibrary::BRDFType::Skin;
+					brdf = Shader::BRDFType::Skin;
 				}
 				else if (brdfType.find("Cloth") != -1)
 				{
-					brdf = ShaderLibrary::BRDFType::Cloth;
+					brdf = Shader::BRDFType::Cloth;
 				}
 				else if (brdfType.find("Hair") != -1)
 				{
-					brdf = ShaderLibrary::BRDFType::Hair;
+					brdf = Shader::BRDFType::Hair;
 				}
 				else if (brdfType.find("Eye") != -1)
 				{
-					brdf = ShaderLibrary::BRDFType::Eye;
+					brdf = Shader::BRDFType::Eye;
 				}
 			}
 

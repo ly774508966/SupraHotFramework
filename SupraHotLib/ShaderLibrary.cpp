@@ -387,6 +387,8 @@ namespace SupraHot
 				std::string vertexShaderPath = shaderDescription->VertexShaderPath;
 				std::string pixelShaderPath = shaderDescription->PixelShaderPath;
 
+				Shader::BRDFType BRDFType = shaderDescription->BRDFType;
+
 				std::unordered_map<std::string, std::vector<std::string>>* definedWhen = &shaderDescription->DefinedWhen;
 				std::unordered_map<std::string, std::vector<std::string>>* dependencies = &shaderDescription->Dependencies;
 				std::unordered_map<std::string, std::string>* uniforms = &shaderDescription->Uniforms;
@@ -493,6 +495,7 @@ namespace SupraHot
 
 						Shader* shader = new Shader();
 						shader->SetName(shaderDescription->Name + " [" + std::to_string(shaderIndex) + "]");
+						shader->SetBRDF(BRDFType);
 						shader->SetShaderPermutationIndex(shaderIndex);
 						shader->LoadShaderFromFile(Shader::VERTEX_SHADER, vertexShaderPath, compileOptions);
 						shader->LoadShaderFromFile(Shader::PIXEL_SHADER, pixelShaderPath, compileOptions);
@@ -533,15 +536,19 @@ namespace SupraHot
 						// Store the shader inside the Shaders-Map
 						(Shaders[shaderDescription->Name])[shaderIndex] = shader;
 
+#if DEVELOPMENT == 1
 						SHF_PRINTF("Shader index = %llu \n", shaderIndex);
 						SHF_PRINTF("----------\n");
+#endif
 
 						shaderCounter++;
 					}
 				}
 			}
 
+#if DEVELOPMENT == 1
 			SHF_PRINTF("Created %llu permutations for %s\n\n", shaderCounter, shaderDescription->Name.c_str());
+#endif
 			return true;
 		}
 

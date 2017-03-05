@@ -1,6 +1,7 @@
 #pragma once
 #include "Platform.h"
 #include <vector>
+#include "Shader.h"
 
 namespace SupraHot
 {
@@ -29,10 +30,13 @@ namespace SupraHot
 			static int FindMinShaderIndex(std::vector<MeshComponent*>& meshcomponentVector, int leftPivot, int rightPivot, uint64 shaderUUID);
 			static int FindShaderInsertionIndex(std::vector<MeshComponent*>& meshcomponentVector, int leftPivot, int rightPivot, uint64 shaderUUID);
 			
-
 			static int FindMaxMaterialIndex(std::vector<MeshComponent*>& meshcomponentVector, int leftPivot, int rightPivot, uint64 materialUUID);
 			static int FindMinMaterialIndex(std::vector<MeshComponent*>& meshcomponentVector, int leftPivot, int rightPivot, uint64 materialUUID);
 			static int FindMaterialInsertionIndex(std::vector<MeshComponent*>& meshcomponentVector, int leftPivot, int rightPivot, uint64 materialUUID);
+
+			static int FindMaxBRDFIndex(std::vector<MeshComponent*>& meshcomponentVector, int leftPivot, int rightPivot, Graphics::Shader::BRDFType brdfType);
+			static int FindMinBRDFIndex(std::vector<MeshComponent*>& meshcomponentVector, int leftPivot, int rightPivot, Graphics::Shader::BRDFType brdfType);
+			static int FindBRDFInsertionIndex(std::vector<MeshComponent*>& meshcomponentVector, int leftPivot, int rightPivot, Graphics::Shader::BRDFType brdfType);
 		};
 	};
 };

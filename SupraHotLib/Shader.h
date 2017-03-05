@@ -5,6 +5,7 @@
 #include "Vec3.h"
 #include "Vec4.h"
 #include "Mat4.h"
+#include "Utility.h"
 
 namespace SupraHot
 {
@@ -16,6 +17,18 @@ namespace SupraHot
 
 		class Shader
 		{
+		public:
+			// This BRDF-Types dictate how the given material should be rendererd
+			// and through which post-processing passses it needs to go.
+			enum class BRDFType
+			{
+				None  = 0x0,
+				GGX   = BITSHIFT(0),
+				Skin  = BITSHIFT(1),
+				Cloth = BITSHIFT(2),
+				Hair  = BITSHIFT(3),
+				Eye   = BITSHIFT(4)
+			};
 		private:
 			uint32 VertexShader = 0, 
 				   PixelShader = 0, 
@@ -25,6 +38,8 @@ namespace SupraHot
 			uint32 ShaderProgrammID = 0;
 			uint64 ShaderPermutationIndex = 0;
 			uint64 UUID = 0;
+
+			BRDFType BRDF = BRDFType::None;
 
 #if DEVELOPMENT == 1
 			ShaderCompileOptions Options;
@@ -58,6 +73,9 @@ namespace SupraHot
 
 			uint64 GetShaderPermutationIndex();
 			void SetShaderPermutationIndex(uint64 shaderIndex);
+
+			void SetBRDF(BRDFType brdf);
+			BRDFType GetBRDF();
 
 			uint64 GetUUID();
 

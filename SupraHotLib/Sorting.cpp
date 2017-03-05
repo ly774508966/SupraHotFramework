@@ -310,5 +310,114 @@ namespace SupraHot
 
 			return rightPivot;
 		}
+
+		int Sorting::FindMaxBRDFIndex(std::vector<MeshComponent*>& meshcomponentVector, int leftPivot, int rightPivot, Graphics::Shader::BRDFType brdfType)
+		{
+			int centerPivot = leftPivot + floor((rightPivot - leftPivot) / 2);
+			Graphics::Shader::BRDFType elementAtCenter = meshcomponentVector[centerPivot]->GetMaterial()->GetShader()->GetBRDF();
+			int maxIndex = -1;
+
+			if (leftPivot > rightPivot)
+			{
+				return -1;
+			}
+
+			if ((rightPivot - leftPivot) == 2
+				|| centerPivot == leftPivot
+				|| centerPivot == rightPivot)
+			{
+				if (meshcomponentVector[leftPivot]->GetMaterial()->GetShader()->GetBRDF() == brdfType)
+				{
+					maxIndex = leftPivot;
+				}
+
+				if (meshcomponentVector[centerPivot]->GetMaterial()->GetShader()->GetBRDF() == brdfType)
+				{
+					maxIndex = centerPivot;
+				}
+
+				if (meshcomponentVector[rightPivot]->GetMaterial()->GetShader()->GetBRDF() == brdfType)
+				{
+					maxIndex = rightPivot;
+				}
+
+				return maxIndex;
+			}
+
+			if (elementAtCenter <= brdfType)
+			{
+
+				return FindMaxBRDFIndex(meshcomponentVector, centerPivot, rightPivot, brdfType);
+			}
+			else if (elementAtCenter > brdfType)
+			{
+				return FindMaxBRDFIndex(meshcomponentVector, leftPivot, centerPivot, brdfType);
+			}
+
+			return -1;
+		}
+
+		int Sorting::FindMinBRDFIndex(std::vector<MeshComponent*>& meshcomponentVector, int leftPivot, int rightPivot, Graphics::Shader::BRDFType brdfType)
+		{
+			int centerPivot = leftPivot + floor((rightPivot - leftPivot) / 2);
+			Graphics::Shader::BRDFType elementAtCenter = meshcomponentVector[centerPivot]->GetMaterial()->GetShader()->GetBRDF();
+			int maxIndex = -1;
+
+			if (leftPivot > rightPivot)
+			{
+				return -1;
+			}
+
+			if ((rightPivot - leftPivot) == 2
+				|| centerPivot == leftPivot
+				|| centerPivot == rightPivot)
+			{
+
+
+				if (meshcomponentVector[rightPivot]->GetMaterial()->GetShader()->GetBRDF() == brdfType)
+				{
+					maxIndex = rightPivot;
+				}
+
+				if (meshcomponentVector[centerPivot]->GetMaterial()->GetShader()->GetBRDF() == brdfType)
+				{
+					maxIndex = centerPivot;
+				}
+
+				if (meshcomponentVector[leftPivot]->GetMaterial()->GetShader()->GetBRDF() == brdfType)
+				{
+					maxIndex = leftPivot;
+				}
+
+				return maxIndex;
+			}
+
+			if (elementAtCenter < brdfType)
+			{
+				return FindMinBRDFIndex(meshcomponentVector, centerPivot, rightPivot, brdfType);
+			}
+			else if (elementAtCenter >= brdfType)
+			{
+				return FindMinBRDFIndex(meshcomponentVector, leftPivot, centerPivot, brdfType);
+			}
+
+			return -1;
+		}
+
+		int Sorting::FindBRDFInsertionIndex(std::vector<MeshComponent*>& meshcomponentVector, int leftPivot, int rightPivot, Graphics::Shader::BRDFType brdfType)
+		{
+			// Here we need to find an index at which 
+			// the left element is smaller and the right element is bigger than the given shader uuid.
+
+			// Todo: improve this!
+			// We do not want to do a linear search.
+			for (int i = leftPivot; i < rightPivot; ++i) {
+				if (meshcomponentVector[i]->GetMaterial()->GetShader()->GetBRDF() > brdfType) {
+					return i;
+				}
+			}
+
+			return rightPivot;
+		}
 	};
 };

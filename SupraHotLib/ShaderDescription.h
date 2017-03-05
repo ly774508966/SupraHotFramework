@@ -17,7 +17,7 @@ namespace SupraHot
 			std::string Description = "";
 			std::string VertexShaderPath = "";
 			std::string PixelShaderPath = "";
-			ShaderLibrary::BRDFType BRDFType = ShaderLibrary::BRDFType::None;
+			Shader::BRDFType BRDFType = Shader::BRDFType::None;
 			std::unordered_map<std::string, std::vector<std::string>> DefinedWhen;
 			std::unordered_map<std::string, std::vector<std::string>> Dependencies;
 			std::unordered_map<std::string, std::string> Uniforms;

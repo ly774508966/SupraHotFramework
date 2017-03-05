@@ -277,6 +277,7 @@
   <ItemGroup>
     <ClInclude Include="AABB.h" />
     <ClInclude Include="App.h" />
+    <ClInclude Include="BindBRDFRenderTargetsCmd.h" />
     <ClInclude Include="BindGBufferCmd.h" />
     <ClInclude Include="BindMaterialCmd.h" />
     <ClInclude Include="BindShaderCmd.h" />
@@ -391,6 +392,7 @@
     <ClCompile Include="..\Externals\include\json11\json11.cpp" />
     <ClCompile Include="AABB.cpp" />
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="BindBRDFRenderTargetsCmd.cpp" />
     <ClCompile Include="BindGBufferCmd.cpp" />
     <ClCompile Include="BindMaterialCmd.cpp" />
     <ClCompile Include="BindShaderCmd.cpp" />

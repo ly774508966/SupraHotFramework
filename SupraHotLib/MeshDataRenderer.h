@@ -58,8 +58,10 @@ namespace SupraHot
 		void RenderTransparency(std::vector<MeshComponent*>& transparentMeshcomponents, Graphics::Camera* camera);
 		void RenderOpaque(std::vector<MeshComponent*>& opaqueMeshComponents, Graphics::Camera* camera);
 
-		void ExecuteRenderCommandQueue(Graphics::FrameBufferObject* framebuffer);
-		
+
+
+		// The real deal
+		void ExecuteRenderCommandQueue(Graphics::FrameBufferObject* framebuffer);		
 		std::vector<MeshComponent*>& GetMeshComponents();
 
 		// Temp function

@@ -1,7 +1,6 @@
 #pragma once
 #include "Platform.h"
 #include "Shader.h"
-#include "Utility.h"
 #include <unordered_map>
 
 namespace SupraHot
@@ -30,18 +29,6 @@ namespace SupraHot
 				RenderToScreen = 0,
 				
 				Count
-			};
-
-			// This BRDF-Types dictate how the given material should be rendererd
-			// and through which post-processing passses it needs to go.
-			enum class BRDFType
-			{
-				None	= 0x0,
-				GGX		= BITSHIFT(0),
-				Skin	= BITSHIFT(1),
-				Cloth	= BITSHIFT(2),
-				Hair	= BITSHIFT(3),
-				Eye		= BITSHIFT(4)
 			};
 
 			static ShaderLibrary* GetInstance();
