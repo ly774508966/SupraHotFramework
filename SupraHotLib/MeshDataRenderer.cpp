@@ -14,6 +14,7 @@
 #include "RenderMeshCmd.h"
 #include "UnbindShaderCmd.h"
 #include "BindBRDFRenderTargetsCmd.h"
+#include "ResetRenderCommandQueueStateCmd.h"
 #include "ComputeFrustumCmd.h"
 #include "FrameBufferObject.h"
 #include "GBuffer.h"
@@ -201,6 +202,8 @@ namespace SupraHot
 		}
 
 		//RenderCommandQueue.AddCommand(new Graphics::UnbindGBufferCmd(GBuffer));
+
+		RenderCommandQueue.AddCommand(new Graphics::ResetRenderCommandQueueStateCmd());
 
 		// SHF_PRINTF("RenderCommandQueue size = %llu \n", RenderCommandQueue.Size());
 	}

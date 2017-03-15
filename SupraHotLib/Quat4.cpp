@@ -131,6 +131,21 @@ namespace SupraHot
 			return v;
 		}
 
+		float Quat4::GetAngleRadians()
+		{
+			return acosf(w) * 2.0;
+		}
+
+		float Quat4::GetAngleDegrees()
+		{
+			return GetAngleRadians() * RADIANS_TO_DEGREES;
+		}
+
+		float Quat4::GetRotationComponent()
+		{
+			return w;
+		}
+
 		void Quat4::Conjugate()
 		{
 			v.Negate();
@@ -141,11 +156,6 @@ namespace SupraHot
 			Quat4 q = *this;
 			q.Conjugate();
 			return q;
-		}
-
-		float Quat4::GetAngle()
-		{
-			return w;
 		}
 
 		Vec3 Quat4::GetForward() const

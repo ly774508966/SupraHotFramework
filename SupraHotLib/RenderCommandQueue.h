@@ -1,6 +1,7 @@
 #pragma once
 #include "Platform.h"
 #include <vector>
+#include "Shader.h"
 
 namespace SupraHot
 {
@@ -9,18 +10,19 @@ namespace SupraHot
 	namespace Graphics
 	{
 		class RenderCommand;
-		class Shader;
+		//class Shader;
 		class Material;
 		class Camera;
 		class Frustum;
 
 		struct RenderCommandQueueState
 		{
-			Graphics::Shader*   ActiveShader = nullptr;
-			MeshComponent*	    ActiveMeshComponent = nullptr;
-			Graphics::Material* ActiveMaterial = nullptr;
-			Graphics::Camera*   ActiveCamera = nullptr;
-			Graphics::Frustum*	ActiveFrustum = nullptr;
+			Graphics::Shader*		   ActiveShader         = nullptr;
+			MeshComponent*			   ActiveMeshComponent  = nullptr;
+			Graphics::Material*		   ActiveMaterial		= nullptr;
+			Graphics::Camera*		   ActiveCamera			= nullptr;
+			Graphics::Frustum*		   ActiveFrustum		= nullptr;
+			Graphics::Shader::BRDFType ActiveBRDF			= Graphics::Shader::BRDFType::None;
 		};
 
 		class RenderCommandQueue

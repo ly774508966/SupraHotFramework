@@ -353,15 +353,15 @@ void SandBoxApp::Resize(SupraHot::uint32 width, SupraHot::uint32 height)
 
 void SandBoxApp::Render()
 {
-	FBO->Attach();
+	FBO->Attach(); // Comment this for gbuff
 
 	EnvBox->Render(FlyCamera, ShaderLibrary::GetInstance()->Skybox[uint32(ShaderLibrary::SkyboxShader::CubeMap)]);
 
 	MeshDataRenderer::GetInstance().ExecuteRenderCommandQueue(FBO);
 	//MeshDataRenderer::GetInstance().RenderMain(FlyCamera);
 
-	FBO->Detach();
-	FBO->SetReadSource(FBO->GetColorRenderTarget());
+	FBO->Detach(); // Comment this for gbuff
+	FBO->SetReadSource(FBO->GetColorRenderTarget()); // Comment this for gbuff
 
 	FBO->RenderToScreen(
 		ShaderLibrary::GetInstance()->ScreenSpace

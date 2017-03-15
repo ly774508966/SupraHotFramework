@@ -324,6 +324,7 @@
     <ClInclude Include="RenderCommandQueue.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RenderMeshCmd.h" />
+    <ClInclude Include="ResetRenderCommandQueueStateCmd.h" />
     <ClInclude Include="SetCameraMatricesCmd.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderCompileOptions.h" />
@@ -436,6 +437,7 @@
     <ClCompile Include="RenderCommandQueue.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RenderMeshCmd.cpp" />
+    <ClCompile Include="ResetRenderCommandQueueStateCmd.cpp" />
     <ClCompile Include="SetCameraMatricesCmd.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderCompileOptions.cpp" />

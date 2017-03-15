@@ -35,8 +35,10 @@ namespace SupraHot
 			Quat4 Normalized() const;
 
 			Vec3 GetAxis();
-			float GetAngle();
-
+			float GetRotationComponent();
+			float GetAngleRadians();
+			float GetAngleDegrees();
+			
 			void Conjugate();
 			Quat4 Conjugated() const;
 
